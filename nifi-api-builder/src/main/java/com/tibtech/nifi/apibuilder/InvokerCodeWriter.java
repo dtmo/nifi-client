@@ -120,6 +120,8 @@ public class InvokerCodeWriter
 			final Annotation paramAnnotation = parameterJaxRsAnnotations.parallelStream()
 					.filter(a -> a.annotationType().getName().endsWith("Param")).findFirst().orElse(null);
 
+			final TypeName parameterTypeName = ClassUtils.getParameterTypeName(parameter);
+			
 			if (paramAnnotation != null)
 			{
 				final ApiParam apiParam = parameter.getAnnotation(ApiParam.class);
@@ -131,7 +133,7 @@ public class InvokerCodeWriter
 					final PathParam pathParam = (PathParam) paramAnnotation;
 					final String name = pathParam.value();
 					
-					invokerTypeSpecBuilder.addPathParameter(name, parameter.getType(), comment);
+					invokerTypeSpecBuilder.addPathParameter(name, parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof QueryParam)
 				{
@@ -139,7 +141,7 @@ public class InvokerCodeWriter
 					final QueryParam queryParam = (QueryParam) paramAnnotation;
 					final String name = queryParam.value();
 					
-					invokerTypeSpecBuilder.addQueryParameter(name, parameter.getType(), comment);
+					invokerTypeSpecBuilder.addQueryParameter(name, parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormParam)
 				{
@@ -147,7 +149,7 @@ public class InvokerCodeWriter
 					final FormParam formParam = (FormParam) paramAnnotation;
 					final String name = formParam.value();
 					
-					invokerTypeSpecBuilder.addFormParameter(name, parameter.getType(), comment);
+					invokerTypeSpecBuilder.addFormParameter(name, parameterTypeName, comment);
 				}
 				else
 				{

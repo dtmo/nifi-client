@@ -21,6 +21,7 @@ import org.apache.nifi.web.api.dto.RevisionDTO;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 import com.tibtech.nifi.client.ComponentEntityInvoker;
@@ -42,9 +43,9 @@ public class InvokerTypeSpecBuilder
 
 	private String httpMethod;
 
-	private List<InvokerProperty> pathParameters = new ArrayList<>();
-	private List<InvokerProperty> queryParameters = new ArrayList<>();
-	private List<InvokerProperty> formParameters = new ArrayList<>();
+	private List<BuilderProperty> pathParameters = new ArrayList<>();
+	private List<BuilderProperty> queryParameters = new ArrayList<>();
+	private List<BuilderProperty> formParameters = new ArrayList<>();
 
 	private Class<?> requestEntityType = null;
 
@@ -138,19 +139,19 @@ public class InvokerTypeSpecBuilder
 		this.httpMethod = httpMethod;
 	}
 
-	public void addPathParameter(final String name, final Class<?> type, final String comment)
+	public void addPathParameter(final String name, final TypeName typeName, final String comment)
 	{
-		pathParameters.add(new InvokerProperty(name, type, comment));
+		pathParameters.add(new BuilderProperty(name, typeName, comment));
 	}
 
-	public void addQueryParameter(final String name, final Class<?> type, final String comment)
+	public void addQueryParameter(final String name, final TypeName typeName, final String comment)
 	{
-		queryParameters.add(new InvokerProperty(name, type, comment));
+		queryParameters.add(new BuilderProperty(name, typeName, comment));
 	}
 
-	public void addFormParameter(final String name, final Class<?> type, final String comment)
+	public void addFormParameter(final String name, final TypeName typeName, final String comment)
 	{
-		formParameters.add(new InvokerProperty(name, type, comment));
+		formParameters.add(new BuilderProperty(name, typeName, comment));
 	}
 
 	public void setRequestEntityType(final Class<?> requestEntityType)
@@ -158,29 +159,31 @@ public class InvokerTypeSpecBuilder
 		this.requestEntityType = requestEntityType;
 	}
 
-	private void addProperty(final TypeSpec.Builder typeSpecBuilder, final String restName, final Class<?> propertyType,
-			final String comment)
+	private void addProperty(final TypeSpec.Builder typeSpecBuilder, final String restName,
+			final TypeName propertyTypeName, final String comment)
 	{
 		final List<String> propertyNameComponents = NameUtils.getNameComponents(restName);
 		final String propertyName = NameUtils.componentsToCamelCase(propertyNameComponents, true);
 
-		typeSpecBuilder.addField(FieldSpec.builder(propertyType, propertyName, Modifier.PRIVATE).build());
+		typeSpecBuilder.addField(FieldSpec.builder(propertyTypeName, propertyName, Modifier.PRIVATE).build());
 
 		final String getterMethodName = "get" + NameUtils.componentsToCamelCase(propertyNameComponents, false);
-		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(getterMethodName).returns(propertyType)
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(getterMethodName).returns(propertyTypeName)
 				.addModifiers(Modifier.PUBLIC, Modifier.FINAL).addJavadoc(comment)
 				.addStatement("return $L", propertyName).build());
 
 		final TypeVariableName invokerTypeName = TypeVariableName.get(invokerName);
 		final String setterMethodName = "set" + NameUtils.componentsToCamelCase(propertyNameComponents, false);
 		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(setterMethodName).returns(invokerTypeName)
-				.addParameter(propertyType, propertyName, Modifier.FINAL).addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-				.addJavadoc(comment).addStatement("this.$L = $L", propertyName, propertyName)
-				.addStatement("return this").build());
+				.addParameter(propertyTypeName, propertyName, Modifier.FINAL)
+				.addModifiers(Modifier.PUBLIC, Modifier.FINAL).addJavadoc(comment)
+				.addStatement("this.$L = $L", propertyName, propertyName).addStatement("return this").build());
 	}
 
-	private void addEntity(final TypeSpec.Builder typeSpecBuilder) throws IntrospectionException
+	private void addEntity(final TypeSpec.Builder typeSpecBuilder)
+			throws IntrospectionException, NoSuchFieldException, SecurityException
 	{
+		System.out.println(requestEntityType);
 		final BeanInfo beanInfo = Introspector.getBeanInfo(requestEntityType);
 
 		final PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
@@ -190,7 +193,10 @@ public class InvokerTypeSpecBuilder
 			{
 				if (RevisionDTO.class.isAssignableFrom(propertyDescriptor.getPropertyType()) == false)
 				{
-					addProperty(typeSpecBuilder, propertyDescriptor.getName(), propertyDescriptor.getPropertyType(), "");
+					// TODO: Handle parameterised types here.
+					// TODO: Create separate entity builders.
+					final TypeName fieldTypeName = TypeVariableName.get(propertyDescriptor.getPropertyType());
+					addProperty(typeSpecBuilder, propertyDescriptor.getName(), fieldTypeName, "");
 				}
 			}
 		}
@@ -223,7 +229,7 @@ public class InvokerTypeSpecBuilder
 			}
 		}
 
-		for (final InvokerProperty invokerProperty : queryParameters)
+		for (final BuilderProperty invokerProperty : queryParameters)
 		{
 			// clientId and version are special parameters that get set by the
 			// invoker framework.
@@ -305,7 +311,7 @@ public class InvokerTypeSpecBuilder
 		typeSpecBuilder.addMethod(invokeMethodBuilder.build());
 	}
 
-	public TypeSpec build() throws IntrospectionException
+	public TypeSpec build() throws IntrospectionException, NoSuchFieldException, SecurityException
 	{
 		final TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(invokerName)
 				.addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -315,27 +321,27 @@ public class InvokerTypeSpecBuilder
 		typeSpecBuilder.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC)
 				.addParameter(Transport.class, "transport", Modifier.FINAL).addStatement("super(transport)").build());
 
-		for (final InvokerProperty invokerProperty : pathParameters)
+		for (final BuilderProperty invokerProperty : pathParameters)
 		{
-			addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getType(),
+			addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 					invokerProperty.getComment());
 		}
 
-		for (final InvokerProperty invokerProperty : queryParameters)
+		for (final BuilderProperty invokerProperty : queryParameters)
 		{
 			// clientId and version are special properties that get set by the
 			// invoker framework.
 			if (invokerProperty.getName().equalsIgnoreCase("version") == false
 					&& invokerProperty.getName().equalsIgnoreCase("clientId") == false)
 			{
-				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getType(),
+				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 						invokerProperty.getComment());
 			}
 		}
 
-		for (final InvokerProperty invokerProperty : formParameters)
+		for (final BuilderProperty invokerProperty : formParameters)
 		{
-			addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getType(),
+			addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 					invokerProperty.getComment());
 		}
 
@@ -347,36 +353,5 @@ public class InvokerTypeSpecBuilder
 		addInvokeMethod(typeSpecBuilder);
 
 		return typeSpecBuilder.build();
-	}
-
-	public static class InvokerProperty
-	{
-		private final String name;
-
-		private final Class<?> type;
-
-		private final String comment;
-
-		public InvokerProperty(final String name, final Class<?> type, final String comment)
-		{
-			this.name = name;
-			this.type = type;
-			this.comment = comment;
-		}
-
-		public String getName()
-		{
-			return name;
-		}
-
-		public Class<?> getType()
-		{
-			return type;
-		}
-
-		public String getComment()
-		{
-			return comment;
-		}
 	}
 }

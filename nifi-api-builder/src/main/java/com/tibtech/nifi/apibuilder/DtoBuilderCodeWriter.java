@@ -10,9 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -26,16 +23,10 @@ import org.reflections.scanners.SubTypesScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.TypeSpec.Builder;
-import com.squareup.javapoet.TypeVariableName;
 
 public class DtoBuilderCodeWriter
 {
@@ -50,28 +41,6 @@ public class DtoBuilderCodeWriter
 		return propertyTypeName;
 	}
 
-	public static Map<Class<?>, Set<Class<?>>> getClassSubclasses(final Collection<Class<?>> classes)
-	{
-		final Map<Class<?>, Set<Class<?>>> classSubclasses = new HashMap<>();
-		for (final Class<?> dtoClass : classes)
-		{
-			final Class<?> superclass = dtoClass.getSuperclass();
-			if (superclass != Object.class)
-			{
-				Set<Class<?>> subclasses = classSubclasses.get(superclass);
-				if (subclasses == null)
-				{
-					subclasses = new HashSet<>();
-					classSubclasses.put(superclass, subclasses);
-				}
-
-				subclasses.add(dtoClass);
-			}
-		}
-
-		return classSubclasses;
-	}
-
 	public static MethodSpec createGetterMethod(final PropertyDescriptor propertyDescriptor,
 			final TypeName propertyTypeName)
 	{
@@ -84,35 +53,10 @@ public class DtoBuilderCodeWriter
 	public static TypeSpec createAbstractDtoBuilderTypeSpec(final Class<?> dtoClass, final Class<?> superclass)
 			throws IntrospectionException, NoSuchFieldException, SecurityException
 	{
-		// final String className =
-		// NameUtils.componentsToCamelCase(NameUtils.getNameComponents(dtoClass.getSimpleName()),
-		// false);
-		final String className = dtoClass.getSimpleName();
-
-		// Convert the simple class name into a variable name.
-		final String objectName = Character.toLowerCase(className.charAt(0)) + className.substring(1);
-
-		final String dtoBuilderName = "Abstract" + className + "Builder";
-
-		final Builder typeBuilder = TypeSpec.classBuilder(dtoBuilderName)
-				.addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT).addTypeVariable(TypeVariableName.get("T",
-						ParameterizedTypeName.get(ClassName.bestGuess(dtoBuilderName), TypeVariableName.get("T"))));
-
-		if (superclass != null)
-		{
-			final String superclassName = "Abstract" + superclass.getSimpleName() + "Builder";
-			typeBuilder.superclass(
-					ParameterizedTypeName.get(ClassName.bestGuess(superclassName), TypeVariableName.get("T")));
-		}
-
-		final MethodSpec.Builder setPropertyValuesMethodSpecBuilder = MethodSpec.methodBuilder("setPropertyValues")
-				.addModifiers(Modifier.PUBLIC)
-				.addParameter(ParameterSpec.builder(dtoClass, objectName, Modifier.FINAL).build()).returns(void.class);
-
-		if (superclass != null)
-		{
-			setPropertyValuesMethodSpecBuilder.addStatement("super.setPropertyValues($L)", objectName);
-		}
+		final ObjectBuilderBuilder objectBuilderBuilder = new ObjectBuilderBuilder();
+		objectBuilderBuilder.setAbstractBuilder(true);
+		objectBuilderBuilder.setBuiltType(dtoClass);
+		objectBuilderBuilder.setSuperclass(superclass);
 
 		final Set<String> declaredFieldNames = Arrays.stream(dtoClass.getDeclaredFields()).map(df -> df.getName())
 				.collect(Collectors.toSet());
@@ -132,65 +76,22 @@ public class DtoBuilderCodeWriter
 					// handle.
 					final TypeName fieldTypeName = getFieldTypeName(dtoClass, propertyDescriptor.getName());
 
-					typeBuilder.addField(
-							FieldSpec.builder(fieldTypeName, propertyDescriptor.getName(), Modifier.PRIVATE).build());
-
-					// Getter method
-					typeBuilder.addMethod(createGetterMethod(propertyDescriptor, fieldTypeName));
-
-					// Setter method
-					final String setterMethodName = "set" + NameUtils
-							.componentsToCamelCase(NameUtils.getNameComponents(propertyDescriptor.getName()), false);
-					typeBuilder.addMethod(MethodSpec.methodBuilder(setterMethodName).addModifiers(Modifier.PUBLIC)
-							.returns(TypeVariableName.get("T"))
-							.addParameter(fieldTypeName, propertyDescriptor.getName(), Modifier.FINAL)
-							.addStatement("this.$L = $L", propertyDescriptor.getName(), propertyDescriptor.getName())
-							.addStatement("return (T) this").build());
-
-					// Add the related set line to the builder method.
-					setPropertyValuesMethodSpecBuilder.addStatement("$L.$L($L)", objectName, writeMethod.getName(),
-							propertyDescriptor.getName());
+					objectBuilderBuilder
+							.addBuilderProperty(new BuilderProperty(propertyDescriptor.getName(), fieldTypeName, ""));
 				}
 			}
 		}
 
-		typeBuilder.addMethod(setPropertyValuesMethodSpecBuilder.build());
-
-		return typeBuilder.build();
+		return objectBuilderBuilder.build();
 	}
 
 	public static TypeSpec createDtoBuilderTypeSpec(final Class<?> dtoClass, final Class<?> superclass)
 			throws IntrospectionException, NoSuchFieldException, SecurityException
 	{
-		// final String className =
-		// NameUtils.componentsToCamelCase(NameUtils.getNameComponents(dtoClass.getSimpleName()),
-		// false);
-		final String className = dtoClass.getSimpleName();
-
-		// Convert the simple class name into a variable name.
-		final String objectName = Character.toLowerCase(className.charAt(0)) + className.substring(1);
-
-		final String dtoBuilderName = className + "Builder";
-		final TypeName dtoBuilderTypeName = TypeVariableName.get(dtoBuilderName);
-
-		final Builder typeBuilder = TypeSpec.classBuilder(dtoBuilderName).addModifiers(Modifier.PUBLIC, Modifier.FINAL);
-
-		if (superclass != null)
-		{
-			final String superclassName = "Abstract" + superclass.getSimpleName() + "Builder";
-
-			typeBuilder.superclass(ParameterizedTypeName.get(ClassName.bestGuess(superclassName),
-					TypeVariableName.get(dtoBuilderName)));
-		}
-
-		final MethodSpec.Builder buildMethodSpecBuilder = MethodSpec.methodBuilder("build")
-				.addModifiers(Modifier.PUBLIC).returns(dtoClass)
-				.addStatement("final $T $L = new $T()", dtoClass, objectName, dtoClass);
-
-		if (superclass != null)
-		{
-			buildMethodSpecBuilder.addStatement("super.setPropertyValues($L)", objectName);
-		}
+		final ObjectBuilderBuilder objectBuilderBuilder = new ObjectBuilderBuilder();
+		objectBuilderBuilder.setAbstractBuilder(false);
+		objectBuilderBuilder.setBuiltType(dtoClass);
+		objectBuilderBuilder.setSuperclass(superclass);
 
 		if (superclass != dtoClass)
 		{
@@ -214,36 +115,14 @@ public class DtoBuilderCodeWriter
 						// handle.
 						final TypeName fieldTypeName = getFieldTypeName(dtoClass, propertyDescriptor.getName());
 
-						typeBuilder.addField(FieldSpec
-								.builder(fieldTypeName, propertyDescriptor.getName(), Modifier.PRIVATE).build());
-
-						// Getter method
-						typeBuilder.addMethod(createGetterMethod(propertyDescriptor, fieldTypeName));
-
-						// Setter method
-						final String setterMethodName = "set" + NameUtils.componentsToCamelCase(
-								NameUtils.getNameComponents(propertyDescriptor.getName()), false);
-						typeBuilder.addMethod(MethodSpec.methodBuilder(setterMethodName).addModifiers(Modifier.PUBLIC)
-								.returns(dtoBuilderTypeName)
-								.addParameter(fieldTypeName, propertyDescriptor.getName(), Modifier.FINAL)
-								.addStatement("this.$L = $L", propertyDescriptor.getName(),
-										propertyDescriptor.getName())
-								.addStatement("return this").build());
-
-						// Add the related set line to the builder method.
-						buildMethodSpecBuilder.addStatement("$L.$L($L)", objectName, writeMethod.getName(),
-								propertyDescriptor.getName());
+						objectBuilderBuilder.addBuilderProperty(
+								new BuilderProperty(propertyDescriptor.getName(), fieldTypeName, ""));
 					}
 				}
 			}
 		}
 
-		// When all properties have been handled, return the built DTO.
-		buildMethodSpecBuilder.addStatement("return $L", objectName);
-
-		typeBuilder.addMethod(buildMethodSpecBuilder.build());
-
-		return typeBuilder.build();
+		return objectBuilderBuilder.build();
 	}
 
 	public static void main(final String[] args) throws Exception
@@ -265,7 +144,10 @@ public class DtoBuilderCodeWriter
 			}
 		}
 
-		final Map<Class<?>, Set<Class<?>>> classSubclasses = getClassSubclasses(classes);
+		final Map<Class<?>, Set<Class<?>>> classSubclasses = ClassUtils.groupBySuperclass(classes);
+
+		// We aren't building an abstract builder for Object...
+		classSubclasses.remove(Object.class);
 
 		final Path generatedJavaPath = Paths.get("src/generated/java");
 
