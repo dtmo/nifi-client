@@ -1,9 +1,6 @@
 package com.tibtech.nifi.apibuilder;
 
-import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
@@ -14,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.lang.model.element.Modifier;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Path;
@@ -24,17 +20,16 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.nifi.web.api.ApplicationResource;
-import org.apache.nifi.web.api.dto.RevisionDTO;
-import org.apache.nifi.web.api.entity.ComponentEntity;
 import org.apache.nifi.web.api.entity.Entity;
+import org.apache.nifi.web.api.request.IntegerParameter;
+import org.apache.nifi.web.api.request.LongParameter;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
-import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
-import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.squareup.javapoet.TypeVariableName;
 import com.sun.jersey.multipart.FormDataParam;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
@@ -53,62 +48,6 @@ public class InvokerCodeWriter
 		return Arrays.stream(mediaTypeStrings).map(s -> MediaType.valueOf(s)).collect(Collectors.toList());
 	}
 
-	public static void addEntity(final Class<?> entityType, final TypeSpec.Builder invokerTypeSpecBuilder,
-			final TypeName invokerTypeName, final MethodSpec.Builder invokeMethodBuilder, final MediaType mediaType)
-			throws IntrospectionException
-	{
-		System.out.println("Adding entity: " + entityType);
-
-		final BeanInfo beanInfo = Introspector.getBeanInfo(entityType);
-
-		final String entityVariable = NameUtils
-				.componentsToCamelCase(NameUtils.getNameComponents(entityType.getSimpleName()), true);
-
-		invokeMethodBuilder.addStatement("final $T $L = new $T()", entityType, entityVariable, entityType);
-
-		final PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-		for (final PropertyDescriptor propertyDescriptor : propertyDescriptors)
-		{
-			if (propertyDescriptor.getWriteMethod() != null)
-			{
-				if (RevisionDTO.class.isAssignableFrom(propertyDescriptor.getPropertyType()) == false)
-				{
-					addProperty(propertyDescriptor.getName(), propertyDescriptor.getPropertyType(),
-							invokerTypeSpecBuilder, invokerTypeName);
-
-					invokeMethodBuilder.addStatement("$L.$L($L)", entityVariable,
-							propertyDescriptor.getWriteMethod().getName(), propertyDescriptor.getName());
-				}
-				else
-				{
-					invokeMethodBuilder.addStatement("$L.$L(createRevisionDto())", entityVariable,
-							propertyDescriptor.getWriteMethod().getName());
-				}
-			}
-		}
-
-		invokeMethodBuilder.addStatement("final $T<$T> entity = $T.entity($L, $S)", javax.ws.rs.client.Entity.class,
-				entityType, javax.ws.rs.client.Entity.class, entityVariable, mediaType);
-	}
-
-	public static void addProperty(final String restPropertyName, final Class<?> propertyType,
-			final TypeSpec.Builder invokerTypeSpecBuilder, final TypeName invokerTypeName)
-	{
-		final List<String> propertyNameComponents = NameUtils.getNameComponents(restPropertyName);
-		final String propertyName = NameUtils.componentsToCamelCase(propertyNameComponents, true);
-
-		invokerTypeSpecBuilder.addField(FieldSpec.builder(propertyType, propertyName, Modifier.PRIVATE).build());
-
-		final String getterMethodName = "get" + NameUtils.componentsToCamelCase(propertyNameComponents, false);
-		invokerTypeSpecBuilder.addMethod(MethodSpec.methodBuilder(getterMethodName).returns(propertyType)
-				.addModifiers(Modifier.PUBLIC, Modifier.FINAL).addStatement("return $L", propertyName).build());
-
-		final String setterMethodName = "set" + NameUtils.componentsToCamelCase(propertyNameComponents, false);
-		invokerTypeSpecBuilder.addMethod(MethodSpec.methodBuilder(setterMethodName).returns(invokerTypeName)
-				.addParameter(propertyType, propertyName, Modifier.FINAL).addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-				.addStatement("this.$L = $L", propertyName, propertyName).addStatement("return this").build());
-	}
-
 	public static void addInvokerProperties(final InvokerTypeSpecBuilder invokerTypeSpecBuilder,
 			final Method resourceMethod) throws IntrospectionException
 	{
@@ -122,7 +61,23 @@ public class InvokerCodeWriter
 			final Annotation paramAnnotation = parameterJaxRsAnnotations.parallelStream()
 					.filter(a -> a.annotationType().getName().endsWith("Param")).findFirst().orElse(null);
 
-			final TypeName parameterTypeName = ClassUtils.getParameterTypeName(parameter);
+			final TypeName parameterTypeName;
+			final Class<?> parameterType;
+			if (IntegerParameter.class.isAssignableFrom(parameter.getType()))
+			{
+				parameterTypeName = TypeVariableName.get(int.class);
+				parameterType = int.class;
+			}
+			else if (LongParameter.class.isAssignableFrom(parameter.getType()))
+			{
+				parameterTypeName = TypeVariableName.get(long.class);
+				parameterType = long.class;
+			}
+			else
+			{
+				parameterTypeName = ClassUtils.getParameterTypeName(parameter);
+				parameterType = parameter.getType();
+			}
 
 			final ApiParam apiParam = parameter.getAnnotation(ApiParam.class);
 			final String comment = apiParam != null ? apiParam.value() : "";
@@ -135,7 +90,8 @@ public class InvokerCodeWriter
 					final PathParam pathParam = (PathParam) paramAnnotation;
 					final String name = pathParam.value();
 
-					invokerTypeSpecBuilder.addPathParameter(name, parameter.getType(), parameterTypeName, comment);
+					final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(name), true);
+					invokerTypeSpecBuilder.addPathParameter(propertyName, parameterType, parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof QueryParam)
 				{
@@ -143,7 +99,8 @@ public class InvokerCodeWriter
 					final QueryParam queryParam = (QueryParam) paramAnnotation;
 					final String name = queryParam.value();
 
-					invokerTypeSpecBuilder.addQueryParameter(name, parameter.getType(), parameterTypeName, comment);
+					final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(name), true);
+					invokerTypeSpecBuilder.addQueryParameter(propertyName, parameter.getType(), parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormParam)
 				{
@@ -151,15 +108,17 @@ public class InvokerCodeWriter
 					final FormParam formParam = (FormParam) paramAnnotation;
 					final String name = formParam.value();
 
-					invokerTypeSpecBuilder.addFormParameter(name, parameter.getType(), parameterTypeName, comment);
+					final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(name), true);
+					invokerTypeSpecBuilder.addFormParameter(propertyName, parameter.getType(), parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormDataParam)
 				{
 					// Add form data parameter.
 					final FormDataParam formDataParam = (FormDataParam) paramAnnotation;
 					final String name = formDataParam.value();
-					
-					invokerTypeSpecBuilder.addFormDataParameter(name, parameter.getType(), parameterTypeName, comment);
+
+					final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(name), true);
+					invokerTypeSpecBuilder.addFormDataParameter(propertyName, parameter.getType(), parameterTypeName, comment);
 				}
 				else
 				{
@@ -179,7 +138,6 @@ public class InvokerCodeWriter
 				}
 			}
 
-			System.out.println("param: " + parameter);
 			parameterJaxRsAnnotations.stream().forEach(a -> System.out.println(a));
 		}
 	}
@@ -292,20 +250,8 @@ public class InvokerCodeWriter
 					final ApiOperation apiOperation = restApiMethod.getAnnotation(ApiOperation.class);
 					final Class<?> invokerResponseType = apiOperation.response();
 
-					TypeSpec invokerTypeSpec;
-
-					if (ComponentEntity.class.isAssignableFrom(invokerResponseType))
-					{
-						invokerTypeSpec = createComponentEntityInvokerTypeSpec(applicationResourceClass, restApiMethod,
-								invokerResponseType);
-					}
-					else
-					{
-						// TODO: Replace this with a non-component-entity
-						// invoker building method.
-						invokerTypeSpec = createComponentEntityInvokerTypeSpec(applicationResourceClass, restApiMethod,
-								invokerResponseType);
-					}
+					final TypeSpec invokerTypeSpec = createComponentEntityInvokerTypeSpec(applicationResourceClass,
+							restApiMethod, invokerResponseType);
 
 					final String applicationResourcePackageName = applicationResourceClass.getPackage().getName();
 					final String builderPackageName = applicationResourcePackageName.replaceFirst("org\\.apache",

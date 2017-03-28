@@ -39,4 +39,21 @@ public class BuilderProperty
 	{
 		return comment;
 	}
+
+	@Override
+	public String toString()
+	{
+		StringBuilder builder = new StringBuilder();
+		builder.append(super.toString());
+		builder.append(" [name=");
+		builder.append(name);
+		builder.append(", propertyClass=");
+		builder.append(propertyClass);
+		builder.append(", typeName=");
+		builder.append(typeName);
+		builder.append(", comment=");
+		builder.append(comment);
+		builder.append("]");
+		return builder.toString();
+	}
 }

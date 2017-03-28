@@ -20,6 +20,7 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import com.tibtech.nifi.client.AbstractInvoker;
 import com.tibtech.nifi.client.ComponentEntityInvoker;
 import com.tibtech.nifi.client.InvokerException;
 import com.tibtech.nifi.client.Transport;
@@ -142,6 +143,11 @@ public class InvokerTypeSpecBuilder
 		pathParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
 	}
 
+	public BuilderProperty findPathParameter(final String name)
+	{
+		return pathParameters.stream().filter(p -> p.getName().equals(name)).findFirst().orElse(null);
+	}
+
 	public void addQueryParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
 			final String comment)
 	{
@@ -205,7 +211,19 @@ public class InvokerTypeSpecBuilder
 			{
 				final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(pathComponent),
 						true);
-				invokeMethodBuilder.addStatement("target = target.path($L)", propertyName);
+				final BuilderProperty pathParameter = findPathParameter(propertyName);
+				if (pathParameter.getPropertyClass() == int.class)
+				{
+					invokeMethodBuilder.addStatement("target = target.path(Integer.toString($L))", propertyName);
+				}
+				else if (pathParameter.getPropertyClass() == long.class)
+				{
+					invokeMethodBuilder.addStatement("target = target.path(Long.toString($L))", propertyName);
+				}
+				else
+				{
+					invokeMethodBuilder.addStatement("target = target.path($L)", propertyName);
+				}
 			}
 			else
 			{
@@ -268,7 +286,14 @@ public class InvokerTypeSpecBuilder
 		}
 
 		invokeMethodBuilder.beginControlFlow("try");
-		invokeMethodBuilder.addStatement("return handleComponentEntityResponse(response, $T.class)", responseType);
+		if (ComponentEntity.class.isAssignableFrom(responseType))
+		{
+			invokeMethodBuilder.addStatement("return handleComponentEntityResponse(response, $T.class)", responseType);
+		}
+		else
+		{
+			invokeMethodBuilder.addStatement("return handleResponse(response, $T.class)", responseType);
+		}
 		invokeMethodBuilder.endControlFlow();
 		invokeMethodBuilder.beginControlFlow("finally");
 		invokeMethodBuilder.addStatement("response.close()");
@@ -279,9 +304,17 @@ public class InvokerTypeSpecBuilder
 
 	public TypeSpec build()
 	{
-		final TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(invokerName)
-				.addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-				.superclass(ParameterizedTypeName.get(ComponentEntityInvoker.class, responseType));
+		final TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(invokerName).addModifiers(Modifier.PUBLIC,
+				Modifier.FINAL);
+
+		if (ComponentEntity.class.isAssignableFrom(responseType))
+		{
+			typeSpecBuilder.superclass(ParameterizedTypeName.get(ComponentEntityInvoker.class, responseType));
+		}
+		else
+		{
+			typeSpecBuilder.superclass(ParameterizedTypeName.get(AbstractInvoker.class, responseType));
+		}
 
 		// Add a constructor
 		typeSpecBuilder.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC)
