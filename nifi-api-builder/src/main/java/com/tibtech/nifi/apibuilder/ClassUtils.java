@@ -1,8 +1,11 @@
 package com.tibtech.nifi.apibuilder;
 
+import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -54,5 +57,23 @@ public class ClassUtils
 		final Type genericType = parameter.getParameterizedType();
 		final TypeName propertyTypeName = TypeName.get(genericType);
 		return propertyTypeName;
+	}
+
+	public static Method getReadMethod(final Class<?> beanClass, final PropertyDescriptor propertyDescriptor)
+	{
+		Method readMethod;
+
+		readMethod = propertyDescriptor.getReadMethod();
+		if (readMethod == null && propertyDescriptor.getPropertyType() == Boolean.class)
+		{
+			final String readMethodName = "is" + propertyDescriptor.getName();
+			Method[] methods = beanClass.getMethods();
+			readMethod = Arrays
+					.stream(methods).filter(m -> m.getName().equalsIgnoreCase(readMethodName)
+							&& m.getParameterCount() == 0 && m.getReturnType() == Boolean.class)
+					.findFirst().orElse(null);
+		}
+
+		return readMethod;
 	}
 }

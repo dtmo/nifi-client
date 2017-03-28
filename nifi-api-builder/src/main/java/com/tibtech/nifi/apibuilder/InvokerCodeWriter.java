@@ -121,18 +121,18 @@ public class InvokerCodeWriter
 					.filter(a -> a.annotationType().getName().endsWith("Param")).findFirst().orElse(null);
 
 			final TypeName parameterTypeName = ClassUtils.getParameterTypeName(parameter);
-			
+
+			final ApiParam apiParam = parameter.getAnnotation(ApiParam.class);
+			final String comment = apiParam != null ? apiParam.value() : "";
+
 			if (paramAnnotation != null)
 			{
-				final ApiParam apiParam = parameter.getAnnotation(ApiParam.class);
-				final String comment = apiParam != null ? apiParam.value() : "";
-				
 				if (paramAnnotation instanceof PathParam)
 				{
 					// Add path parameter.
 					final PathParam pathParam = (PathParam) paramAnnotation;
 					final String name = pathParam.value();
-					
+
 					invokerTypeSpecBuilder.addPathParameter(name, parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof QueryParam)
@@ -140,7 +140,7 @@ public class InvokerCodeWriter
 					// Add query parameter.
 					final QueryParam queryParam = (QueryParam) paramAnnotation;
 					final String name = queryParam.value();
-					
+
 					invokerTypeSpecBuilder.addQueryParameter(name, parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormParam)
@@ -148,7 +148,7 @@ public class InvokerCodeWriter
 					// Add form parameter.
 					final FormParam formParam = (FormParam) paramAnnotation;
 					final String name = formParam.value();
-					
+
 					invokerTypeSpecBuilder.addFormParameter(name, parameterTypeName, comment);
 				}
 				else
@@ -162,7 +162,10 @@ public class InvokerCodeWriter
 				// invoker properties.
 				if (Entity.class.isAssignableFrom(parameter.getType()))
 				{
-					invokerTypeSpecBuilder.setRequestEntityType(parameter.getType());
+					final String entityPropertyName = NameUtils.componentsToCamelCase(
+							NameUtils.getNameComponents(parameter.getType().getSimpleName()), true);
+					invokerTypeSpecBuilder
+							.setRequestEntity(new BuilderProperty(entityPropertyName, parameterTypeName, comment));
 				}
 			}
 

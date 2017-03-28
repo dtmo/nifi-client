@@ -1,9 +1,5 @@
 package com.tibtech.nifi.apibuilder;
 
-import java.beans.BeanInfo;
-import java.beans.IntrospectionException;
-import java.beans.Introspector;
-import java.beans.PropertyDescriptor;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,8 +11,6 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.apache.nifi.web.api.dto.RevisionDTO;
 
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
@@ -47,7 +41,7 @@ public class InvokerTypeSpecBuilder
 	private List<BuilderProperty> queryParameters = new ArrayList<>();
 	private List<BuilderProperty> formParameters = new ArrayList<>();
 
-	private Class<?> requestEntityType = null;
+	private BuilderProperty requestEntity = null;
 
 	public String getInvokerName()
 	{
@@ -154,9 +148,9 @@ public class InvokerTypeSpecBuilder
 		formParameters.add(new BuilderProperty(name, typeName, comment));
 	}
 
-	public void setRequestEntityType(final Class<?> requestEntityType)
+	public void setRequestEntity(final BuilderProperty requestEntity)
 	{
-		this.requestEntityType = requestEntityType;
+		this.requestEntity = requestEntity;
 	}
 
 	private void addProperty(final TypeSpec.Builder typeSpecBuilder, final String restName,
@@ -180,29 +174,7 @@ public class InvokerTypeSpecBuilder
 				.addStatement("this.$L = $L", propertyName, propertyName).addStatement("return this").build());
 	}
 
-	private void addEntity(final TypeSpec.Builder typeSpecBuilder)
-			throws IntrospectionException, NoSuchFieldException, SecurityException
-	{
-		System.out.println(requestEntityType);
-		final BeanInfo beanInfo = Introspector.getBeanInfo(requestEntityType);
-
-		final PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-		for (final PropertyDescriptor propertyDescriptor : propertyDescriptors)
-		{
-			if (propertyDescriptor.getWriteMethod() != null)
-			{
-				if (RevisionDTO.class.isAssignableFrom(propertyDescriptor.getPropertyType()) == false)
-				{
-					// TODO: Handle parameterised types here.
-					// TODO: Create separate entity builders.
-					final TypeName fieldTypeName = TypeVariableName.get(propertyDescriptor.getPropertyType());
-					addProperty(typeSpecBuilder, propertyDescriptor.getName(), fieldTypeName, "");
-				}
-			}
-		}
-	}
-
-	private void addInvokeMethod(final TypeSpec.Builder typeSpecBuilder) throws IntrospectionException
+	private void addInvokeMethod(final TypeSpec.Builder typeSpecBuilder)
 	{
 		final MethodSpec.Builder invokeMethodBuilder = MethodSpec.methodBuilder("invoke").returns(responseType)
 				.addModifiers(Modifier.PUBLIC, Modifier.FINAL).addException(InvokerException.class);
@@ -260,37 +232,15 @@ public class InvokerTypeSpecBuilder
 		invokeMethodBuilder.addStatement("final $T invocationBuilder = target.request($S)", Invocation.Builder.class,
 				mediaTypesString);
 
-		if (requestEntityType != null)
+		if (requestEntity != null)
 		{
-			final String entityVariable = NameUtils
-					.componentsToCamelCase(NameUtils.getNameComponents(requestEntityType.getSimpleName()), true);
-			invokeMethodBuilder.addStatement("final $T $L = new $T()", requestEntityType, entityVariable,
-					requestEntityType);
-
-			final BeanInfo beanInfo = Introspector.getBeanInfo(requestEntityType);
-			final PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-			for (final PropertyDescriptor propertyDescriptor : propertyDescriptors)
-			{
-				if (propertyDescriptor.getWriteMethod() != null)
-				{
-					if (RevisionDTO.class.isAssignableFrom(propertyDescriptor.getPropertyType()) == false)
-					{
-						invokeMethodBuilder.addStatement("$L.$L($L)", entityVariable,
-								propertyDescriptor.getWriteMethod().getName(), propertyDescriptor.getName());
-					}
-					else
-					{
-						invokeMethodBuilder.addStatement("$L.$L(createRevisionDto())", entityVariable,
-								propertyDescriptor.getWriteMethod().getName());
-					}
-				}
-			}
+			invokeMethodBuilder.addStatement("$L.setRevision(createRevisionDto())", requestEntity.getName());
 
 			final MediaType mediaType = consumesMediaTypes.isEmpty() ? MediaType.TEXT_PLAIN_TYPE
 					: consumesMediaTypes.get(0);
 
 			invokeMethodBuilder.addStatement("final $T<$T> entity = $T.entity($L, $S)", javax.ws.rs.client.Entity.class,
-					requestEntityType, javax.ws.rs.client.Entity.class, entityVariable, mediaType);
+					requestEntity.getTypeName(), javax.ws.rs.client.Entity.class, requestEntity.getName(), mediaType);
 
 			invokeMethodBuilder.addStatement("final $T response = invocationBuilder.method($S, entity)", Response.class,
 					httpMethod);
@@ -311,7 +261,7 @@ public class InvokerTypeSpecBuilder
 		typeSpecBuilder.addMethod(invokeMethodBuilder.build());
 	}
 
-	public TypeSpec build() throws IntrospectionException, NoSuchFieldException, SecurityException
+	public TypeSpec build()
 	{
 		final TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(invokerName)
 				.addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -345,9 +295,10 @@ public class InvokerTypeSpecBuilder
 					invokerProperty.getComment());
 		}
 
-		if (requestEntityType != null)
+		if (requestEntity != null)
 		{
-			addEntity(typeSpecBuilder);
+			addProperty(typeSpecBuilder, requestEntity.getName(), requestEntity.getTypeName(),
+					requestEntity.getComment());
 		}
 
 		addInvokeMethod(typeSpecBuilder);
