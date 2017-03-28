@@ -36,11 +36,14 @@ dependencies {
     compile 'org.apache.nifi:nifi-jetty-bundle:1.1.2'
 //    compile 'org.apache.nifi:nifi-standard-nar:1.1.2'
 	
-	compile 'org.jboss.resteasy:resteasy-jaxrs:3.1.1.Final'
-	compile 'org.jboss.resteasy:resteasy-jaxb-provider:3.1.1.Final'
+//	compile 'org.jboss.resteasy:resteasy-jaxrs:3.1.1.Final'
+//	compile 'org.jboss.resteasy:resteasy-jaxb-provider:3.1.1.Final'
 
-//    compile 'org.glassfish.jersey.core:jersey-client:2.25.1'
-//    compile 'org.glassfish.jersey.core:jersey-json:2.25.1'
+	compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
+	
+    compile 'com.sun.jersey:jersey-client:1.19.3'
+    compile 'com.sun.jersey:jersey-json:1.19.3'
+    compile 'com.sun.jersey.contribs:jersey-multipart:1.19.3'
 	
     compile 'com.squareup:javapoet:1.8.0'
     compile 'org.reflections:reflections:0.9.10'
