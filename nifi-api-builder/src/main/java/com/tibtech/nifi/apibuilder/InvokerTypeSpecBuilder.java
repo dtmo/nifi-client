@@ -12,6 +12,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.nifi.web.api.entity.ComponentEntity;
+
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
@@ -40,6 +42,7 @@ public class InvokerTypeSpecBuilder
 	private List<BuilderProperty> pathParameters = new ArrayList<>();
 	private List<BuilderProperty> queryParameters = new ArrayList<>();
 	private List<BuilderProperty> formParameters = new ArrayList<>();
+	private List<BuilderProperty> formDataParameters = new ArrayList<>();
 
 	private BuilderProperty requestEntity = null;
 
@@ -133,19 +136,28 @@ public class InvokerTypeSpecBuilder
 		this.httpMethod = httpMethod;
 	}
 
-	public void addPathParameter(final String name, final TypeName typeName, final String comment)
+	public void addPathParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
+			final String comment)
 	{
-		pathParameters.add(new BuilderProperty(name, typeName, comment));
+		pathParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
 	}
 
-	public void addQueryParameter(final String name, final TypeName typeName, final String comment)
+	public void addQueryParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
+			final String comment)
 	{
-		queryParameters.add(new BuilderProperty(name, typeName, comment));
+		queryParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
 	}
 
-	public void addFormParameter(final String name, final TypeName typeName, final String comment)
+	public void addFormParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
+			final String comment)
 	{
-		formParameters.add(new BuilderProperty(name, typeName, comment));
+		formParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
+	}
+
+	public void addFormDataParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
+			final String comment)
+	{
+		formDataParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
 	}
 
 	public void setRequestEntity(final BuilderProperty requestEntity)
@@ -226,6 +238,7 @@ public class InvokerTypeSpecBuilder
 		}
 
 		// TODO: Add Form parameters
+		// TODO: Add FormData parameters
 
 		final String mediaTypesString = producesMediaTypes.stream().map(mediaType -> mediaType.toString())
 				.collect(Collectors.joining(", "));
@@ -234,7 +247,10 @@ public class InvokerTypeSpecBuilder
 
 		if (requestEntity != null)
 		{
-			invokeMethodBuilder.addStatement("$L.setRevision(createRevisionDto())", requestEntity.getName());
+			if (ComponentEntity.class.isAssignableFrom(requestEntity.getPropertyClass()))
+			{
+				invokeMethodBuilder.addStatement("$L.setRevision(createRevisionDto())", requestEntity.getName());
+			}
 
 			final MediaType mediaType = consumesMediaTypes.isEmpty() ? MediaType.TEXT_PLAIN_TYPE
 					: consumesMediaTypes.get(0);

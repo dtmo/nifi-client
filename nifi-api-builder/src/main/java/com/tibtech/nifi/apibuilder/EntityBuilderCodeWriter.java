@@ -46,10 +46,11 @@ public class EntityBuilderCodeWriter
 				{
 					// Get the parameterized type name for the property to
 					// handle.
-					final TypeName fieldTypeName = ClassUtils.getFieldTypeName(entityClass, propertyDescriptor.getName());
+					final TypeName fieldTypeName = ClassUtils.getFieldTypeName(entityClass,
+							propertyDescriptor.getName());
 
-					objectBuilderBuilder
-							.addBuilderProperty(new BuilderProperty(propertyDescriptor.getName(), fieldTypeName, ""));
+					objectBuilderBuilder.addBuilderProperty(new BuilderProperty(propertyDescriptor.getName(),
+							propertyDescriptor.getPropertyType(), fieldTypeName, ""));
 				}
 			}
 		}
@@ -67,8 +68,8 @@ public class EntityBuilderCodeWriter
 
 		if (superclass != entityClass)
 		{
-			final Set<String> declaredFieldNames = Arrays.stream(entityClass.getDeclaredFields()).map(df -> df.getName())
-					.collect(Collectors.toSet());
+			final Set<String> declaredFieldNames = Arrays.stream(entityClass.getDeclaredFields())
+					.map(df -> df.getName()).collect(Collectors.toSet());
 
 			final PropertyDescriptor[] propertyDescriptors = Introspector.getBeanInfo(entityClass)
 					.getPropertyDescriptors();
@@ -85,10 +86,11 @@ public class EntityBuilderCodeWriter
 					{
 						// Get the parameterized type name for the property to
 						// handle.
-						final TypeName fieldTypeName = ClassUtils.getFieldTypeName(entityClass, propertyDescriptor.getName());
+						final TypeName fieldTypeName = ClassUtils.getFieldTypeName(entityClass,
+								propertyDescriptor.getName());
 
-						objectBuilderBuilder.addBuilderProperty(
-								new BuilderProperty(propertyDescriptor.getName(), fieldTypeName, ""));
+						objectBuilderBuilder.addBuilderProperty(new BuilderProperty(propertyDescriptor.getName(),
+								propertyDescriptor.getPropertyType(), fieldTypeName, ""));
 					}
 				}
 			}
@@ -96,7 +98,7 @@ public class EntityBuilderCodeWriter
 
 		return objectBuilderBuilder.build();
 	}
-	
+
 	public static void main(final String[] args) throws Exception
 	{
 		final Reflections reflections = new Reflections(Entity.class.getPackage().getName(),
@@ -112,8 +114,8 @@ public class EntityBuilderCodeWriter
 
 		for (final Class<?> entityClass : classSubclasses.keySet())
 		{
-			final Class<?> superclass = classSubclasses.containsKey(entityClass.getSuperclass()) ? entityClass.getSuperclass()
-					: null;
+			final Class<?> superclass = classSubclasses.containsKey(entityClass.getSuperclass())
+					? entityClass.getSuperclass() : null;
 
 			final TypeSpec abstractDtoBuilderTypeSpec = createAbstractBuilderTypeSpec(entityClass, superclass);
 

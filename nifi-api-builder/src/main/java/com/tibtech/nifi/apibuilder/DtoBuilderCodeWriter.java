@@ -54,8 +54,8 @@ public class DtoBuilderCodeWriter
 					// handle.
 					final TypeName fieldTypeName = ClassUtils.getFieldTypeName(dtoClass, propertyDescriptor.getName());
 
-					objectBuilderBuilder.addBuilderProperty(
-							new BuilderProperty(propertyDescriptor.getName(), fieldTypeName, comment));
+					objectBuilderBuilder.addBuilderProperty(new BuilderProperty(propertyDescriptor.getName(),
+							propertyDescriptor.getPropertyType(), fieldTypeName, comment));
 				}
 			}
 		}
@@ -98,8 +98,8 @@ public class DtoBuilderCodeWriter
 						final TypeName fieldTypeName = ClassUtils.getFieldTypeName(dtoClass,
 								propertyDescriptor.getName());
 
-						objectBuilderBuilder.addBuilderProperty(
-								new BuilderProperty(propertyDescriptor.getName(), fieldTypeName, comment));
+						objectBuilderBuilder.addBuilderProperty(new BuilderProperty(propertyDescriptor.getName(),
+								propertyDescriptor.getPropertyType(), fieldTypeName, comment));
 					}
 				}
 			}

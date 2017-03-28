@@ -6,13 +6,16 @@ public class BuilderProperty
 {
 	private final String name;
 
+	private final Class<?> propertyClass;
+	
 	private final TypeName typeName;
 
 	private final String comment;
 
-	public BuilderProperty(final String name, final TypeName typeName, final String comment)
+	public BuilderProperty(final String name, final Class<?> propertyClass, final TypeName typeName, final String comment)
 	{
 		this.name = name;
+		this.propertyClass = propertyClass;
 		this.typeName = typeName;
 		this.comment = comment;
 	}
@@ -20,6 +23,11 @@ public class BuilderProperty
 	public String getName()
 	{
 		return name;
+	}
+
+	public Class<?> getPropertyClass()
+	{
+		return propertyClass;
 	}
 
 	public TypeName getTypeName()

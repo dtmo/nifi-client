@@ -35,6 +35,7 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
+import com.sun.jersey.multipart.FormDataParam;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -43,7 +44,8 @@ public class InvokerCodeWriter
 	public static List<Annotation> getJaxRsAnnotations(final AnnotatedElement annotatedElement)
 	{
 		return Arrays.stream(annotatedElement.getAnnotations())
-				.filter(a -> a.annotationType().getName().matches("javax\\.ws\\.rs.*")).collect(Collectors.toList());
+				.filter(a -> a.annotationType().getName().matches("javax\\.ws\\.rs\\..*|com\\.sun\\.jersey\\..*"))
+				.collect(Collectors.toList());
 	}
 
 	public static List<MediaType> stringsToMediaTypes(final String[] mediaTypeStrings)
@@ -133,7 +135,7 @@ public class InvokerCodeWriter
 					final PathParam pathParam = (PathParam) paramAnnotation;
 					final String name = pathParam.value();
 
-					invokerTypeSpecBuilder.addPathParameter(name, parameterTypeName, comment);
+					invokerTypeSpecBuilder.addPathParameter(name, parameter.getType(), parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof QueryParam)
 				{
@@ -141,7 +143,7 @@ public class InvokerCodeWriter
 					final QueryParam queryParam = (QueryParam) paramAnnotation;
 					final String name = queryParam.value();
 
-					invokerTypeSpecBuilder.addQueryParameter(name, parameterTypeName, comment);
+					invokerTypeSpecBuilder.addQueryParameter(name, parameter.getType(), parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormParam)
 				{
@@ -149,7 +151,15 @@ public class InvokerCodeWriter
 					final FormParam formParam = (FormParam) paramAnnotation;
 					final String name = formParam.value();
 
-					invokerTypeSpecBuilder.addFormParameter(name, parameterTypeName, comment);
+					invokerTypeSpecBuilder.addFormParameter(name, parameter.getType(), parameterTypeName, comment);
+				}
+				else if (paramAnnotation instanceof FormDataParam)
+				{
+					// Add form data parameter.
+					final FormDataParam formDataParam = (FormDataParam) paramAnnotation;
+					final String name = formDataParam.value();
+					
+					invokerTypeSpecBuilder.addFormDataParameter(name, parameter.getType(), parameterTypeName, comment);
 				}
 				else
 				{
@@ -164,8 +174,8 @@ public class InvokerCodeWriter
 				{
 					final String entityPropertyName = NameUtils.componentsToCamelCase(
 							NameUtils.getNameComponents(parameter.getType().getSimpleName()), true);
-					invokerTypeSpecBuilder
-							.setRequestEntity(new BuilderProperty(entityPropertyName, parameterTypeName, comment));
+					invokerTypeSpecBuilder.setRequestEntity(
+							new BuilderProperty(entityPropertyName, parameter.getType(), parameterTypeName, comment));
 				}
 			}
 
