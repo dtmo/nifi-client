@@ -90,8 +90,7 @@ public class InvokerCodeWriter
 					final PathParam pathParam = (PathParam) paramAnnotation;
 					final String name = pathParam.value();
 
-					final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(name), true);
-					invokerTypeSpecBuilder.addPathParameter(propertyName, parameterType, parameterTypeName, comment);
+					invokerTypeSpecBuilder.addPathParameter(name, parameterType, parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof QueryParam)
 				{
@@ -99,8 +98,7 @@ public class InvokerCodeWriter
 					final QueryParam queryParam = (QueryParam) paramAnnotation;
 					final String name = queryParam.value();
 
-					final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(name), true);
-					invokerTypeSpecBuilder.addQueryParameter(propertyName, parameter.getType(), parameterTypeName, comment);
+					invokerTypeSpecBuilder.addQueryParameter(name, parameter.getType(), parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormParam)
 				{
@@ -108,8 +106,7 @@ public class InvokerCodeWriter
 					final FormParam formParam = (FormParam) paramAnnotation;
 					final String name = formParam.value();
 
-					final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(name), true);
-					invokerTypeSpecBuilder.addFormParameter(propertyName, parameter.getType(), parameterTypeName, comment);
+					invokerTypeSpecBuilder.addFormParameter(name, parameter.getType(), parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormDataParam)
 				{
@@ -117,8 +114,7 @@ public class InvokerCodeWriter
 					final FormDataParam formDataParam = (FormDataParam) paramAnnotation;
 					final String name = formDataParam.value();
 
-					final String propertyName = NameUtils.componentsToCamelCase(NameUtils.getNameComponents(name), true);
-					invokerTypeSpecBuilder.addFormDataParameter(propertyName, parameter.getType(), parameterTypeName, comment);
+					invokerTypeSpecBuilder.addFormDataParameter(name, parameter.getType(), parameterTypeName, comment);
 				}
 				else
 				{
@@ -137,8 +133,6 @@ public class InvokerCodeWriter
 							new BuilderProperty(entityPropertyName, parameter.getType(), parameterTypeName, comment));
 				}
 			}
-
-			parameterJaxRsAnnotations.stream().forEach(a -> System.out.println(a));
 		}
 	}
 
