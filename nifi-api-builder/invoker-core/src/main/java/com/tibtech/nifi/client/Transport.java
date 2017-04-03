@@ -5,7 +5,6 @@ import javax.ws.rs.client.WebTarget;
 
 public class Transport
 {
-	private final Client client;
 	private final WebTarget baseWebTarget;
 
 	private String clientId = null;
@@ -13,7 +12,6 @@ public class Transport
 
 	public Transport(final Client client, final String baseUri)
 	{
-		this.client = client;
 		this.baseWebTarget = client.target(baseUri);
 	}
 	
