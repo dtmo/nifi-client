@@ -17,4 +17,4 @@ include 'services:webservice'
 
 rootProject.name = 'nifi-api-builder'
 
-include 'invoker-core', 'builder-gen'
+include 'invoker-core', 'builder-core', 'builder-gen', 'invoker-api'
