@@ -1,3 +1,7 @@
+dependencies {
+	compile project(':builder-gen')
+}
+
 apply plugin: GreetingPlugin
 
 class GreetingPlugin implements Plugin<Project> {

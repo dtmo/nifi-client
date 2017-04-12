@@ -53,7 +53,9 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 		final String getterName = "get" + componentsToCamelCase(propertyDescriptorNameComponents, false);
 		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(getterName)
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
-				.returns(String.class).addStatement("return properties.get($L)", propertyConstantName).build());
+				.returns(String.class)
+				.addStatement("return properties.get($L)", propertyConstantName)
+				.build());
 
 		// Add a setter method.
 		final String setterName = "set" + componentsToCamelCase(propertyDescriptorNameComponents, false);
@@ -61,7 +63,8 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
 				.returns(TypeVariableName.get(propertiesBuilderClassName))
 				.addParameter(String.class, propertyName, javax.lang.model.element.Modifier.FINAL)
-				.addStatement("properties.put($L, $L)", propertyConstantName, propertyName).addStatement("return this")
+				.addStatement("properties.put($L, $L)", propertyConstantName, propertyName)
+				.addStatement("return this")
 				.build());
 
 		// Add a remove method.
@@ -69,7 +72,36 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(removeName)
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
 				.returns(TypeVariableName.get(propertiesBuilderClassName))
-				.addStatement("properties.remove($L)", propertyConstantName).addStatement("return this").build());
+				.addStatement("properties.remove($L)", propertyConstantName)
+				.addStatement("return this")
+				.build());
+		
+		// Add a getter for dynamic properties
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("getProperty")
+				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
+				.returns(String.class)
+				.addParameter(String.class, "name", javax.lang.model.element.Modifier.FINAL)
+				.addStatement("return properties.get($L)", "name")
+				.build());
+		
+		// Add a setter for dynamic properties
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("setProperty")
+				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
+				.returns(TypeVariableName.get(propertiesBuilderClassName))
+				.addParameter(String.class, "name", javax.lang.model.element.Modifier.FINAL)
+				.addParameter(String.class, "value", javax.lang.model.element.Modifier.FINAL)
+				.addStatement("properties.put($L, $L)", "name", "value")
+				.addStatement("return this")
+				.build());
+
+		// Add a remove method for dynamic properties.
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("removeProperty")
+				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
+				.returns(TypeVariableName.get(propertiesBuilderClassName))
+				.addParameter(String.class, "name", javax.lang.model.element.Modifier.FINAL)
+				.addStatement("properties.remove($L)", "name")
+				.addStatement("return this")
+				.build());
 	}
 
 	public static TypeSpec createConfigurableComponentPropertiesBuilderTypeSpec(
