@@ -12,10 +12,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.nifi.web.api.dto.AboutDTO;
+import org.apache.nifi.web.api.entity.Entity;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
@@ -24,9 +26,9 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.wordnik.swagger.annotations.ApiModelProperty;
 
-public class DtoBuilderCodeWriter
+public class JavaBeanBuilderCodeWriter
 {
-	public static TypeSpec createDtoBuilderTypeSpec(final Class<?> dtoClass, final Class<?> superclass,
+	public static TypeSpec createBuilderTypeSpec(final Class<?> dtoClass, final Class<?> superclass,
 			final boolean abstractBuilder) throws IntrospectionException, NoSuchFieldException, SecurityException
 	{
 		final ObjectBuilderBuilder objectBuilderBuilder = new ObjectBuilderBuilder();
@@ -65,71 +67,70 @@ public class DtoBuilderCodeWriter
 		return objectBuilderBuilder.build();
 	}
 
-	public static Collection<Pair<String, TypeSpec>> getDtoPackagesAndTypeSpecs()
+	public static Collection<Pair<String, TypeSpec>> getPackagesAndTypeSpecs(final String packageName,
+			final Predicate<String> classNameFilter)
 			throws NoSuchFieldException, SecurityException, IntrospectionException
 	{
-		final Reflections reflections = new Reflections(AboutDTO.class.getPackage().getName(),
-				new SubTypesScanner(false));
+		final Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
 
-		// For each classname ending with DTO, convert it to the class object
-		// and then group them by superclass.
-		final Set<Class<?>> dtoClasses = reflections.getAllTypes().parallelStream().filter(s -> s.endsWith("DTO"))
-				.map(s ->
-				{
-					try
-					{
-						return Class.forName(s);
-					}
-					catch (ClassNotFoundException e)
-					{
-						throw new RuntimeException("Could not find class for name: " + s);
-					}
-				}).collect(Collectors.toSet());
+		// For each class name that passes filtering, convert it to the
+		// corresponding class object and then group them all by superclass.
+		final Set<Class<?>> beanClasses = reflections.getAllTypes().parallelStream().filter(classNameFilter).map(s ->
+		{
+			try
+			{
+				return Class.forName(s);
+			}
+			catch (ClassNotFoundException e)
+			{
+				throw new RuntimeException("Could not find class for name: " + s);
+			}
+		}).collect(Collectors.toSet());
 
-		final Map<Class<?>, List<Class<?>>> classSubclasses = dtoClasses.parallelStream()
+		final Map<Class<?>, List<Class<?>>> classSubclasses = beanClasses.parallelStream()
 				.collect(Collectors.groupingBy(c -> c.getSuperclass()));
 
-		// We aren't building an abstract builder for Object...
+		// We aren't building an abstract builder for Object
 		classSubclasses.remove(Object.class);
 
 		final List<Pair<String, TypeSpec>> typeSpecs = new ArrayList<>();
 
 		// Classes in the key set are classes that are extended and therefore
 		// require an abstract builder.
-		for (final Class<?> dtoClass : classSubclasses.keySet())
+		for (final Class<?> beanClass : classSubclasses.keySet())
 		{
-			final Class<?> superclass = classSubclasses.containsKey(dtoClass.getSuperclass()) ? dtoClass.getSuperclass()
-					: null;
+			final Class<?> superclass = classSubclasses.containsKey(beanClass.getSuperclass())
+					? beanClass.getSuperclass() : null;
 
-			final TypeSpec abstractDtoBuilderTypeSpec = createDtoBuilderTypeSpec(dtoClass, superclass, true);
+			final TypeSpec abstractDtoBuilderTypeSpec = createBuilderTypeSpec(beanClass, superclass, true);
 
-			final String dtoPackageName = dtoClass.getPackage().getName();
+			final String beanPackageName = beanClass.getPackage().getName();
 
-			typeSpecs.add(Pair.of(dtoPackageName, abstractDtoBuilderTypeSpec));
+			typeSpecs.add(Pair.of(beanPackageName, abstractDtoBuilderTypeSpec));
 		}
 
-		// All classes are DTOs and therefore require concrete DTO builders.
-		for (final Class<?> dtoClass : dtoClasses)
+		// All classes are Entities and therefore require concrete builders.
+		for (final Class<?> beanClass : beanClasses)
 		{
 			final Class<?> superclass;
-			if (classSubclasses.containsKey(dtoClass))
+			if (classSubclasses.containsKey(beanClass))
 			{
-				superclass = dtoClass;
+				superclass = beanClass;
 			}
-			else if (classSubclasses.containsKey(dtoClass.getSuperclass()))
+			else if (classSubclasses.containsKey(beanClass.getSuperclass()))
 			{
-				superclass = dtoClass.getSuperclass();
+				superclass = beanClass.getSuperclass();
 			}
 			else
 			{
 				superclass = null;
 			}
 
-			final TypeSpec dtoBuilderTypeSpec = createDtoBuilderTypeSpec(dtoClass, superclass, false);
+			final TypeSpec beanBuilderTypeSpec = createBuilderTypeSpec(beanClass, superclass, false);
 
-			final String dtoPackageName = dtoClass.getPackage().getName();
+			final String beanPackageName = beanClass.getPackage().getName();
 
-			typeSpecs.add(Pair.of(dtoPackageName, dtoBuilderTypeSpec));
+			typeSpecs.add(Pair.of(beanPackageName, beanBuilderTypeSpec));
 		}
 
 		return typeSpecs;
@@ -137,9 +138,14 @@ public class DtoBuilderCodeWriter
 
 	public static void main(final String[] args) throws Exception
 	{
+		final List<Pair<String, TypeSpec>> packageTypeSpecs = new ArrayList<>();
+		packageTypeSpecs.addAll(getPackagesAndTypeSpecs(AboutDTO.class.getPackage().getName(), s -> s.endsWith("DTO")));
+		packageTypeSpecs
+				.addAll(getPackagesAndTypeSpecs(Entity.class.getPackage().getName(), s -> s.endsWith("Entity")));
+
 		final Path generatedJavaPath = Paths.get("src/generated/java");
 
-		for (Pair<String, TypeSpec> pair : getDtoPackagesAndTypeSpecs())
+		for (Pair<String, TypeSpec> pair : packageTypeSpecs)
 		{
 			final String builderPackageName = pair.getLeft().replaceFirst("org\\.apache", "com.tibtech");
 			final JavaFile javaFile = JavaFile.builder(builderPackageName, pair.getRight()).build();
