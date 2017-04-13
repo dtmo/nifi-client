@@ -27,7 +27,7 @@ allprojects {
 		testImplementation 'junit:junit:4.12'
 
 		compile 'org.slf4j:slf4j-api:1.7.24'
-
+		
 		compile 'org.apache.nifi:nifi-client-dto:1.1.2'
 		compile 'org.apache.nifi:nifi-api:1.1.2'
 		//    compile 'org.apache.nifi:nifi-web-api:1.1.2'

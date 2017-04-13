@@ -227,9 +227,17 @@ public class InvokerTypeSpecBuilder
 				{
 					invokeMethodBuilder.addStatement("target = target.path(Integer.toString($L))", propertyName);
 				}
+				else if (pathBuilderParameter.getPropertyClass() == Integer.class)
+				{
+					invokeMethodBuilder.addStatement("target = target.path($L.toString())", propertyName);
+				}
 				else if (pathBuilderParameter.getPropertyClass() == long.class)
 				{
 					invokeMethodBuilder.addStatement("target = target.path(Long.toString($L))", propertyName);
+				}
+				else if (pathBuilderParameter.getPropertyClass() == Long.class)
+				{
+					invokeMethodBuilder.addStatement("target = target.path($L.toString())", propertyName);
 				}
 				else
 				{

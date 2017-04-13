@@ -7,8 +7,10 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
@@ -19,8 +21,14 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.nifi.connectable.ConnectableType;
 import org.apache.nifi.web.api.ApplicationResource;
 import org.apache.nifi.web.api.entity.Entity;
+import org.apache.nifi.web.api.request.BulletinBoardPatternParameter;
+import org.apache.nifi.web.api.request.ClientIdParameter;
+import org.apache.nifi.web.api.request.ConnectableTypeParameter;
+import org.apache.nifi.web.api.request.DateTimeParameter;
+import org.apache.nifi.web.api.request.DoubleParameter;
 import org.apache.nifi.web.api.request.IntegerParameter;
 import org.apache.nifi.web.api.request.LongParameter;
 import org.reflections.Reflections;
@@ -63,15 +71,40 @@ public class InvokerCodeWriter
 
 			final TypeName parameterTypeName;
 			final Class<?> parameterType;
-			if (IntegerParameter.class.isAssignableFrom(parameter.getType()))
+			if (BulletinBoardPatternParameter.class.isAssignableFrom(parameter.getType()))
 			{
-				parameterTypeName = TypeVariableName.get(int.class);
-				parameterType = int.class;
+				parameterTypeName = TypeVariableName.get(Pattern.class);
+				parameterType = Pattern.class;
+			}
+			else if (ClientIdParameter.class.isAssignableFrom(parameter.getType()))
+			{
+				parameterTypeName = TypeVariableName.get(String.class);
+				parameterType = String.class;
+			}
+			else if (ConnectableTypeParameter.class.isAssignableFrom(parameter.getType()))
+			{
+				parameterTypeName = TypeVariableName.get(ConnectableType.class);
+				parameterType = ConnectableType.class;
+			}
+			else if (DateTimeParameter.class.isAssignableFrom(parameter.getType()))
+			{
+				parameterTypeName = TypeVariableName.get(Date.class);
+				parameterType = Date.class;
+			}
+			else if (DoubleParameter.class.isAssignableFrom(parameter.getType()))
+			{
+				parameterTypeName = TypeVariableName.get(Double.class);
+				parameterType = Double.class;
+			}
+			else if (IntegerParameter.class.isAssignableFrom(parameter.getType()))
+			{
+				parameterTypeName = TypeVariableName.get(Integer.class);
+				parameterType = Integer.class;
 			}
 			else if (LongParameter.class.isAssignableFrom(parameter.getType()))
 			{
-				parameterTypeName = TypeVariableName.get(long.class);
-				parameterType = long.class;
+				parameterTypeName = TypeVariableName.get(Long.class);
+				parameterType = Long.class;
 			}
 			else
 			{
@@ -98,7 +131,7 @@ public class InvokerCodeWriter
 					final QueryParam queryParam = (QueryParam) paramAnnotation;
 					final String name = queryParam.value();
 
-					invokerTypeSpecBuilder.addQueryParameter(name, parameter.getType(), parameterTypeName, comment);
+					invokerTypeSpecBuilder.addQueryParameter(name, parameterType, parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormParam)
 				{
@@ -106,7 +139,7 @@ public class InvokerCodeWriter
 					final FormParam formParam = (FormParam) paramAnnotation;
 					final String name = formParam.value();
 
-					invokerTypeSpecBuilder.addFormParameter(name, parameter.getType(), parameterTypeName, comment);
+					invokerTypeSpecBuilder.addFormParameter(name, parameterType, parameterTypeName, comment);
 				}
 				else if (paramAnnotation instanceof FormDataParam)
 				{
@@ -114,7 +147,7 @@ public class InvokerCodeWriter
 					final FormDataParam formDataParam = (FormDataParam) paramAnnotation;
 					final String name = formDataParam.value();
 
-					invokerTypeSpecBuilder.addFormDataParameter(name, parameter.getType(), parameterTypeName, comment);
+					invokerTypeSpecBuilder.addFormDataParameter(name, parameterType, parameterTypeName, comment);
 				}
 				else
 				{
@@ -138,7 +171,7 @@ public class InvokerCodeWriter
 
 	public static TypeSpec createComponentEntityInvokerTypeSpec(
 			final Class<? extends ApplicationResource> resourceClass, final Method resourceMethod,
-			final Class<?> responseType) throws Exception
+			final Class<?> responseType) throws IntrospectionException
 	{
 		final InvokerTypeSpecBuilder invokerTypeSpecBuilder = new InvokerTypeSpecBuilder();
 		invokerTypeSpecBuilder.setResponseType(responseType);
