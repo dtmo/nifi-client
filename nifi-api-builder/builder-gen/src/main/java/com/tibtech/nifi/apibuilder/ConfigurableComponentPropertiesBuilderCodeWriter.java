@@ -75,7 +75,10 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 				.addStatement("properties.remove($L)", propertyConstantName)
 				.addStatement("return this")
 				.build());
-		
+	}
+	
+	public static void addDynamicPropertyMethods(final TypeSpec.Builder typeSpecBuilder, final String propertiesBuilderClassName)
+	{
 		// Add a getter for dynamic properties
 		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("getProperty")
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
@@ -126,6 +129,8 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 					propertiesBuilderClassName);
 		}
 
+		addDynamicPropertyMethods(propertyBuilderTypeSpecBuilder, propertiesBuilderClassName);
+		
 		// build method
 		propertyBuilderTypeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
