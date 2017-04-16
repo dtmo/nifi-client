@@ -34,7 +34,7 @@ public class JavaBeanBuilderCodeWriter
 		final ObjectBuilderBuilder objectBuilderBuilder = new ObjectBuilderBuilder();
 		objectBuilderBuilder.setAbstractBuilder(abstractBuilder);
 		objectBuilderBuilder.setBuiltType(dtoClass);
-		objectBuilderBuilder.setSuperclass(superclass);
+		objectBuilderBuilder.setBuiltTypeSuperclass(superclass);
 
 		final Set<String> declaredFieldNames = Arrays.stream(dtoClass.getDeclaredFields()).map(df -> df.getName())
 				.collect(Collectors.toSet());
@@ -145,7 +145,7 @@ public class JavaBeanBuilderCodeWriter
 
 		final Path generatedJavaPath = Paths.get("src/generated/java");
 
-		for (Pair<String, TypeSpec> pair : packageTypeSpecs)
+		for (final Pair<String, TypeSpec> pair : packageTypeSpecs)
 		{
 			final String builderPackageName = pair.getLeft().replaceFirst("org\\.apache", "com.tibtech");
 			final JavaFile javaFile = JavaFile.builder(builderPackageName, pair.getRight()).build();
