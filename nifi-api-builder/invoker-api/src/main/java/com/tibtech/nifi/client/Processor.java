@@ -10,8 +10,8 @@ import org.apache.nifi.web.api.dto.ProcessorDTO;
 import org.apache.nifi.web.api.dto.RelationshipDTO;
 import org.apache.nifi.web.api.entity.ProcessorEntity;
 
-import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
-import com.tibtech.nifi.web.api.processors.UpdateProcessorInvoker;
+import com.tibtech.nifi.web.api.processors.DeleteProcessorInvoker;
+import com.tibtech.nifi.web.api.processors.GetProcessorInvoker;
 
 public class Processor extends Component
 {
@@ -103,14 +103,31 @@ public class Processor extends Component
 	{
 		return processorDTO.getValidationErrors();
 	}
-	
+
 	public String getDescription()
 	{
 		return processorDTO.getDescription();
 	}
 
-	public ProcessorUpdater update()
+	public ProcessorUpdater startUpdate()
 	{
-		return new ProcessorUpdater(getTransport(), processorDTO);
+		return new ProcessorUpdater(getTransport(), this, processorDTO);
+	}
+
+	protected void setProcessorDTO(final ProcessorDTO processorDTO)
+	{
+		this.processorDTO = processorDTO;
+	}
+
+	public void refresh() throws InvokerException
+	{
+		final ProcessorEntity processorEntity = new GetProcessorInvoker(getTransport()).setId(processorDTO.getId())
+				.invoke();
+		this.processorDTO = processorEntity.getComponent();
+	}
+
+	public void delete() throws InvokerException
+	{
+		new DeleteProcessorInvoker(getTransport()).setId(processorDTO.getId()).invoke();
 	}
 }

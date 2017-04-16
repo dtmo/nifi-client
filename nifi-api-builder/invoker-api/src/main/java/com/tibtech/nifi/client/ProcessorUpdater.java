@@ -7,22 +7,35 @@ import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
 import com.tibtech.nifi.web.api.process.groups.CreateProcessorInvoker;
 
-public class ProcessorUpdater extends ProcessorBuilder
+public class ProcessorUpdater extends ProcessorBuilder<ProcessorUpdater>
 {
-	public ProcessorUpdater(final Transport transport, final ProcessorDTO processorDTO)
+	private final Transport transport;
+
+	private final Processor processorToUpdate;
+
+	public ProcessorUpdater(final Transport transport, final Processor processorToUpdate,
+			final ProcessorDTO processorDTO)
 	{
-		super(transport, ProcessorDTOBuilder.of(processorDTO));
+		super(ProcessorDTOBuilder.of(processorDTO));
+
+		this.transport = transport;
+		this.processorToUpdate = processorToUpdate;
 	}
 
-	@Override
-	public Processor commit() throws InvokerException
+	public ProcessorUpdater setParentGroupId(String parentGroupId)
+	{
+		getProcessorDTOBuilder().setParentGroupId(parentGroupId);
+		return this;
+	}
+
+	public void commit() throws InvokerException
 	{
 		final ProcessorDTO processorDTO = getProcessorDTOBuilder().build();
 
-		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport())
+		final ProcessorEntity processorEntity = new CreateProcessorInvoker(transport)
 				.setId(processorDTO.getParentGroupId())
 				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(processorDTO).build()).invoke();
 
-		return new Processor(getTransport(), processorEntity.getComponent());
+		processorToUpdate.setProcessorDTO(processorEntity.getComponent());
 	}
 }
