@@ -13,18 +13,18 @@ public class Test
 	{
 		ProcessGroup processGroup = null;
 
-		final ProcessGroup myProcessGroup = processGroup.createProcessGroup().setName("My process group").create();
-		myProcessGroup.startUpdate().setPosition(new PositionDTO(100.0, 100.0)).commit();
+		final ProcessGroup myProcessGroup = processGroup.createProcessGroup(p -> p.setName("My process group"));
+		myProcessGroup.update(p -> p.setPosition(new PositionDTO(100.0, 100.0)));
 
-		final Processor processor = myProcessGroup.createProcessor().setName("My processor")
+		final Processor processor = myProcessGroup.createProcessor(p -> p.setName("My processor")
 				.setDescription("My processor's description")
 				.setConfig(new ProcessorConfigDTOBuilder()
 						.setProperties(
 								new DBCPConnectionPoolPropertiesBuilder().setDatabaseConnectionUrl("jdbc:blah").build())
-						.setSchedulingStrategy(SchedulingStrategy.CRON_DRIVEN.name()).build())
-				.create();
+						.setSchedulingStrategy(SchedulingStrategy.TIMER_DRIVEN.name()).setSchedulingPeriod("1 sec")
+						.build()));
 
-		processor.startUpdate().setDescription("A different description").commit();
+		processor.update(p -> p.setDescription("A different description"));
 
 		processor.refresh();
 	}

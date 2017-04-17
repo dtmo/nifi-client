@@ -4,17 +4,3 @@ dependencies
 	compile 'org.apache.nifi:nifi-client-dto:1.1.2'
 	compile 'org.apache.nifi:nifi-api:1.1.2'
 }
-
-apply plugin: GreetingPlugin
-
-class GreetingPlugin implements Plugin<Project>
-{
-	void apply(Project project)
-	{
-		project.task('hello')
-		{
-			doLast
-			{ println "Hello from the GreetingPlugin" }
-		}
-	}
-}

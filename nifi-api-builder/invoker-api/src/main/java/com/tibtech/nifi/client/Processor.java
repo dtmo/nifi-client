@@ -3,6 +3,7 @@ package com.tibtech.nifi.client;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessorConfigDTO;
@@ -10,6 +11,9 @@ import org.apache.nifi.web.api.dto.ProcessorDTO;
 import org.apache.nifi.web.api.dto.RelationshipDTO;
 import org.apache.nifi.web.api.entity.ProcessorEntity;
 
+import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
+import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
+import com.tibtech.nifi.web.api.process.groups.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processors.DeleteProcessorInvoker;
 import com.tibtech.nifi.web.api.processors.GetProcessorInvoker;
 
@@ -109,9 +113,15 @@ public class Processor extends Component
 		return processorDTO.getDescription();
 	}
 
-	public ProcessorUpdater startUpdate()
+	public void update(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> function) throws InvokerException
 	{
-		return new ProcessorUpdater(getTransport(), this, processorDTO);
+		final ProcessorDTO updatedProcessorDTO = function.apply(ProcessorDTOBuilder.of(processorDTO)).build();
+
+		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport())
+				.setId(updatedProcessorDTO.getParentGroupId())
+				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(updatedProcessorDTO).build()).invoke();
+
+		this.processorDTO = processorEntity.getComponent();
 	}
 
 	protected void setProcessorDTO(final ProcessorDTO processorDTO)

@@ -1,10 +1,21 @@
 package com.tibtech.nifi.client;
 
-import org.apache.nifi.web.api.dto.ProcessGroupDTO;
-import org.apache.nifi.web.api.entity.ProcessGroupEntity;
+import java.util.function.Function;
 
+import org.apache.nifi.web.api.dto.ProcessGroupDTO;
+import org.apache.nifi.web.api.dto.ProcessorDTO;
+import org.apache.nifi.web.api.entity.ProcessGroupEntity;
+import org.apache.nifi.web.api.entity.ProcessorEntity;
+
+import com.tibtech.nifi.web.api.dto.ProcessGroupDTOBuilder;
+import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
+import com.tibtech.nifi.web.api.entity.ProcessGroupEntityBuilder;
+import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
+import com.tibtech.nifi.web.api.process.groups.CreateProcessGroupInvoker;
+import com.tibtech.nifi.web.api.process.groups.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.process.groups.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.process.groups.RemoveProcessGroupInvoker;
+import com.tibtech.nifi.web.api.process.groups.UpdateProcessGroupInvoker;
 
 public class ProcessGroup extends Component
 {
@@ -17,24 +28,43 @@ public class ProcessGroup extends Component
 		this.processGroupDTO = processGroupDTO;
 	}
 
-	public ProcessorCreator createProcessor()
+	public Processor createProcessor(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> function)
+			throws InvokerException
 	{
-		return new ProcessorCreator(getTransport(), this);
+		final ProcessorDTO processorDTO = function
+				.apply(new ProcessorDTOBuilder().setParentGroupId(processGroupDTO.getParentGroupId())).build();
+		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport())
+				.setId(processorDTO.getParentGroupId())
+				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(processorDTO).build()).invoke();
+
+		return new Processor(getTransport(), processorEntity.getComponent());
 	}
 
-	public ProcessGroupCreator createProcessGroup()
+	public ProcessGroup createProcessGroup(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> function)
+			throws InvokerException
 	{
-		return new ProcessGroupCreator(getTransport(), this);
+		final ProcessGroupDTO childProcessGroup = function
+				.apply(new ProcessGroupDTOBuilder().setParentGroupId(processGroupDTO.getParentGroupId())).build();
+
+		final ProcessGroupEntity processGroupEntity = new CreateProcessGroupInvoker(getTransport())
+				.setId(childProcessGroup.getParentGroupId())
+				.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(childProcessGroup).build())
+				.invoke();
+
+		return new ProcessGroup(getTransport(), processGroupEntity.getComponent());
 	}
 
-	public ProcessGroupUpdater startUpdate()
+	public void update(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> function) throws InvokerException
 	{
-		return new ProcessGroupUpdater(getTransport(), this, processGroupDTO);
-	}
+		final ProcessGroupDTO updatedProcessGroupDTO = function.apply(ProcessGroupDTOBuilder.of(processGroupDTO))
+				.build();
 
-	protected void setProcessGroupDTO(final ProcessGroupDTO processGroupDTO)
-	{
-		this.processGroupDTO = processGroupDTO;
+		final ProcessGroupEntity processGroupEntity = new UpdateProcessGroupInvoker(getTransport())
+				.setId(updatedProcessGroupDTO.getId())
+				.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(updatedProcessGroupDTO).build())
+				.invoke();
+
+		this.processGroupDTO = processGroupEntity.getComponent();
 	}
 
 	public void refresh() throws InvokerException
