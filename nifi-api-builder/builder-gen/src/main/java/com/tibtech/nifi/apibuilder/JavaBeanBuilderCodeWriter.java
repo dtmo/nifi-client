@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -109,28 +110,30 @@ public class JavaBeanBuilderCodeWriter
 			typeSpecs.add(Pair.of(beanPackageName, abstractDtoBuilderTypeSpec));
 		}
 
-		// All classes are Entities and therefore require concrete builders.
 		for (final Class<?> beanClass : beanClasses)
 		{
-			final Class<?> superclass;
-			if (classSubclasses.containsKey(beanClass))
+			if (Modifier.isAbstract(beanClass.getModifiers()) == false)
 			{
-				superclass = beanClass;
-			}
-			else if (classSubclasses.containsKey(beanClass.getSuperclass()))
-			{
-				superclass = beanClass.getSuperclass();
-			}
-			else
-			{
-				superclass = null;
-			}
+				final Class<?> superclass;
+				if (classSubclasses.containsKey(beanClass))
+				{
+					superclass = beanClass;
+				}
+				else if (classSubclasses.containsKey(beanClass.getSuperclass()))
+				{
+					superclass = beanClass.getSuperclass();
+				}
+				else
+				{
+					superclass = null;
+				}
 
-			final TypeSpec beanBuilderTypeSpec = createBuilderTypeSpec(beanClass, superclass, false);
+				final TypeSpec beanBuilderTypeSpec = createBuilderTypeSpec(beanClass, superclass, false);
 
-			final String beanPackageName = beanClass.getPackage().getName();
+				final String beanPackageName = beanClass.getPackage().getName();
 
-			typeSpecs.add(Pair.of(beanPackageName, beanBuilderTypeSpec));
+				typeSpecs.add(Pair.of(beanPackageName, beanBuilderTypeSpec));
+			}
 		}
 
 		return typeSpecs;
