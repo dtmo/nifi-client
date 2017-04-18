@@ -73,8 +73,8 @@ public class InvokerCodeWriter
 			final Class<?> parameterType;
 			if (BulletinBoardPatternParameter.class.isAssignableFrom(parameter.getType()))
 			{
-				parameterTypeName = TypeVariableName.get(Pattern.class);
-				parameterType = Pattern.class;
+				parameterTypeName = TypeVariableName.get(String.class);
+				parameterType = String.class;
 			}
 			else if (ClientIdParameter.class.isAssignableFrom(parameter.getType()))
 			{
