@@ -77,6 +77,7 @@ public class NameUtils
 
 	public static String componentsToPackageName(final List<String> components)
 	{
-		return components.stream().map(s -> s.toLowerCase()).collect(Collectors.joining("."));
+		return components.stream().map(s -> s.toLowerCase()).map(s -> Character.isDigit(s.charAt(0)) ? "_" + s : s)
+				.collect(Collectors.joining("."));
 	}
 }
