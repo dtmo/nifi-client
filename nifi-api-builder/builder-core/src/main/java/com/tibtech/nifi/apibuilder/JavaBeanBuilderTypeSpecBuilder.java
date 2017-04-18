@@ -5,11 +5,10 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.lang.model.element.Modifier;
-
-import org.codehaus.jackson.map.util.ClassUtil;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
@@ -20,15 +19,28 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 
-public class ObjectBuilderBuilder
+public class JavaBeanBuilderTypeSpecBuilder
 {
+	private static final String SET_BUILDER_VALUES_METHOD_NAME = "setBuilderValues";
+	private static final String SET_PROPERTY_VALUES_METHOD_NAME = "setPropertyValues";
+
+	private Class<?> beanType;
+
 	private Class<?> builtTypeSuperclass;
 
 	private boolean abstractBuilder;
 
 	private List<BuilderProperty> builderProperties = new ArrayList<>();
 
-	private Class<?> builtType;
+	public Class<?> getBeanType()
+	{
+		return beanType;
+	}
+
+	public void setBeanType(Class<?> builtType)
+	{
+		this.beanType = builtType;
+	}
 
 	public Class<?> getBuiltTypeSuperclass()
 	{
@@ -65,16 +77,6 @@ public class ObjectBuilderBuilder
 		this.builderProperties.add(builderProperty);
 	}
 
-	public Class<?> getBuiltType()
-	{
-		return builtType;
-	}
-
-	public void setBuiltType(Class<?> builtType)
-	{
-		this.builtType = builtType;
-	}
-
 	protected void addProperty(final TypeSpec.Builder typeSpecBuilder, final String builderName,
 			final String propertyName, final TypeName propertyTypeName, final String comment)
 	{
@@ -105,16 +107,16 @@ public class ObjectBuilderBuilder
 	protected void addSetPropertyValuesMethod(final TypeSpec.Builder typeSpecBuilder)
 	{
 		// Convert the simple class name into a variable name.
-		final String objectName = Character.toLowerCase(builtType.getSimpleName().charAt(0))
-				+ builtType.getSimpleName().substring(1);
+		final String beanName = Character.toLowerCase(beanType.getSimpleName().charAt(0))
+				+ beanType.getSimpleName().substring(1);
 
-		final MethodSpec.Builder setPropertyValuesMethodSpecBuilder = MethodSpec.methodBuilder("setPropertyValues")
-				.addModifiers(Modifier.PROTECTED)
-				.addParameter(ParameterSpec.builder(builtType, objectName, Modifier.FINAL).build()).returns(void.class);
+		final MethodSpec.Builder setPropertyValuesMethodSpecBuilder = MethodSpec
+				.methodBuilder(SET_PROPERTY_VALUES_METHOD_NAME).addModifiers(Modifier.PROTECTED)
+				.addParameter(ParameterSpec.builder(beanType, beanName, Modifier.FINAL).build()).returns(void.class);
 
 		if (builtTypeSuperclass != null)
 		{
-			setPropertyValuesMethodSpecBuilder.addStatement("super.setPropertyValues($L)", objectName);
+			setPropertyValuesMethodSpecBuilder.addStatement("super.$L($L)", SET_PROPERTY_VALUES_METHOD_NAME, beanName);
 		}
 
 		for (final BuilderProperty builderProperty : builderProperties)
@@ -123,7 +125,7 @@ public class ObjectBuilderBuilder
 					+ builderProperty.getName().substring(1);
 
 			// Add the related set line to the builder method.
-			setPropertyValuesMethodSpecBuilder.addStatement("$L.$L($L)", objectName, setterMethod,
+			setPropertyValuesMethodSpecBuilder.addStatement("$L.$L($L)", beanName, setterMethod,
 					builderProperty.getName());
 		}
 
@@ -134,24 +136,24 @@ public class ObjectBuilderBuilder
 			final String builderSuperclassName)
 	{
 		// Convert the simple class name into a variable name.
-		final String objectName = Character.toLowerCase(builtType.getSimpleName().charAt(0))
-				+ builtType.getSimpleName().substring(1);
+		final String beanName = Character.toLowerCase(beanType.getSimpleName().charAt(0))
+				+ beanType.getSimpleName().substring(1);
 
 		final String builderObjectName = Character.toLowerCase(builderClassName.charAt(0))
 				+ builderClassName.substring(1);
 
-		final MethodSpec.Builder setPropertyValuesMethodSpecBuilder = MethodSpec.methodBuilder("setBuilderValues")
-				.addModifiers(Modifier.STATIC, Modifier.PROTECTED)
+		final MethodSpec.Builder setPropertyValuesMethodSpecBuilder = MethodSpec
+				.methodBuilder(SET_BUILDER_VALUES_METHOD_NAME).addModifiers(Modifier.STATIC, Modifier.PROTECTED)
 				// TODO: parameter type should be {builderClass}<? extends
 				// {superBuilderClass}<?>>
 				.addParameter(ParameterSpec
 						.builder(TypeVariableName.get(builderClassName), builderObjectName, Modifier.FINAL).build())
-				.addParameter(ParameterSpec.builder(builtType, objectName, Modifier.FINAL).build()).returns(void.class);
+				.addParameter(ParameterSpec.builder(beanType, beanName, Modifier.FINAL).build()).returns(void.class);
 
 		if (builtTypeSuperclass != null)
 		{
-			setPropertyValuesMethodSpecBuilder.addStatement("$L.setBuilderValues($L, $L)", builderSuperclassName,
-					builderObjectName, objectName);
+			setPropertyValuesMethodSpecBuilder.addStatement("$L.$L($L, $L)", builderSuperclassName,
+					SET_BUILDER_VALUES_METHOD_NAME, builderObjectName, beanName);
 		}
 
 		for (final BuilderProperty builderProperty : builderProperties)
@@ -162,8 +164,8 @@ public class ObjectBuilderBuilder
 					+ builderProperty.getName().substring(1);
 
 			// Add the related set line to the builder method.
-			setPropertyValuesMethodSpecBuilder.addStatement("$L.$L($L.$L())", builderObjectName, setterMethod,
-					objectName, getterMethod);
+			setPropertyValuesMethodSpecBuilder.addStatement("$L.$L($L.$L())", builderObjectName, setterMethod, beanName,
+					getterMethod);
 		}
 
 		typeSpecBuilder.addMethod(setPropertyValuesMethodSpecBuilder.build());
@@ -172,50 +174,40 @@ public class ObjectBuilderBuilder
 	protected void addBuildMethod(final TypeSpec.Builder typeSpecBuilder) throws IntrospectionException
 	{
 		// Convert the simple class name into a variable name.
-		final String objectName = Character.toLowerCase(builtType.getSimpleName().charAt(0))
-				+ builtType.getSimpleName().substring(1);
+		final String beanName = Character.toLowerCase(beanType.getSimpleName().charAt(0))
+				+ beanType.getSimpleName().substring(1);
 
 		final MethodSpec.Builder buildMethodSpecBuilder = MethodSpec.methodBuilder("build")
-				.addModifiers(Modifier.PUBLIC).returns(builtType)
-				.addStatement("final $T $L = new $T()", builtType, objectName, builtType);
+				.addModifiers(Modifier.PUBLIC).returns(beanType)
+				.addStatement("final $T $L = new $T()", beanType, beanName, beanType);
 
 		if (builtTypeSuperclass != null)
 		{
-			buildMethodSpecBuilder.addStatement("super.setPropertyValues($L)", objectName);
+			buildMethodSpecBuilder.addStatement("super.$L($L)", SET_PROPERTY_VALUES_METHOD_NAME, beanName);
 		}
 
 		for (final BuilderProperty builderProperty : builderProperties)
 		{
-			final BeanInfo beanInfo = Introspector.getBeanInfo(builtType);
-			final PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-			PropertyDescriptor propertyDescriptor = null;
-			int index = 0;
-			while (index < propertyDescriptors.length && propertyDescriptor == null)
-			{
-				if (propertyDescriptors[index].getName().equals(builderProperty.getName()))
-				{
-					propertyDescriptor = propertyDescriptors[index];
-				}
-
-				index++;
-			}
+			final BeanInfo beanInfo = Introspector.getBeanInfo(beanType);
+			final PropertyDescriptor propertyDescriptor = Arrays.stream(beanInfo.getPropertyDescriptors())
+					.filter(d -> d.getName().equals(builderProperty.getName())).findFirst().orElse(null);
 
 			if (propertyDescriptor != null)
 			{
 				// Add the related set line to the builder method.
 				final String setterMethod = propertyDescriptor.getWriteMethod().getName();
 
-				buildMethodSpecBuilder.addStatement("$L.$L($L)", objectName, setterMethod, builderProperty.getName());
+				buildMethodSpecBuilder.addStatement("$L.$L($L)", beanName, setterMethod, builderProperty.getName());
 			}
 			else
 			{
-				throw new IllegalStateException("Could not find property descriptor for property: "
-						+ builtType.getName() + "." + builderProperty.getName());
+				throw new IllegalStateException("Could not find property descriptor for property: " + beanType.getName()
+						+ "." + builderProperty.getName());
 			}
 		}
 
 		// When all properties have been handled, return the built DTO.
-		buildMethodSpecBuilder.addStatement("return $L", objectName);
+		buildMethodSpecBuilder.addStatement("return $L", beanName);
 
 		typeSpecBuilder.addMethod(buildMethodSpecBuilder.build());
 	}
@@ -237,35 +229,25 @@ public class ObjectBuilderBuilder
 		final String builderName = Character.toLowerCase(builderClassName.charAt(0)) + builderClassName.substring(1);
 
 		// Convert the simple class name into a variable name.
-		final String objectName = Character.toLowerCase(builtType.getSimpleName().charAt(0))
-				+ builtType.getSimpleName().substring(1);
+		final String beanName = Character.toLowerCase(beanType.getSimpleName().charAt(0))
+				+ beanType.getSimpleName().substring(1);
 
 		final MethodSpec.Builder buildMethodSpecBuilder = MethodSpec.methodBuilder("of")
 				.addModifiers(Modifier.PUBLIC, Modifier.STATIC).returns(builderTypeName)
-				.addParameter(builtType, objectName, Modifier.FINAL)
+				.addParameter(beanType, beanName, Modifier.FINAL)
 				.addStatement("final $T $L = new $T()", builderTypeName, builderName, builderTypeName);
 
 		if (builtTypeSuperclass != null)
 		{
-			buildMethodSpecBuilder.addStatement("$T.setBuilderValues($L, $L)",
-					TypeVariableName.get(builderSuperclassName), builderName, objectName);
+			buildMethodSpecBuilder.addStatement("$T.$L($L, $L)", TypeVariableName.get(builderSuperclassName),
+					SET_BUILDER_VALUES_METHOD_NAME, builderName, beanName);
 		}
 
 		for (final BuilderProperty builderProperty : builderProperties)
 		{
-			final BeanInfo beanInfo = Introspector.getBeanInfo(builtType);
-			final PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
-			PropertyDescriptor propertyDescriptor = null;
-			int index = 0;
-			while (index < propertyDescriptors.length && propertyDescriptor == null)
-			{
-				if (propertyDescriptors[index].getName().equals(builderProperty.getName()))
-				{
-					propertyDescriptor = propertyDescriptors[index];
-				}
-
-				index++;
-			}
+			final BeanInfo beanInfo = Introspector.getBeanInfo(beanType);
+			final PropertyDescriptor propertyDescriptor = Arrays.stream(beanInfo.getPropertyDescriptors())
+					.filter(d -> d.getName().equals(builderProperty.getName())).findFirst().orElse(null);
 
 			if (propertyDescriptor != null)
 			{
@@ -274,13 +256,13 @@ public class ObjectBuilderBuilder
 				final String setterName = "set" + Character.toUpperCase(propertyName.charAt(0))
 						+ propertyName.substring(1);
 
-				buildMethodSpecBuilder.addStatement("$L.$L($L.$L())", builderName, setterName, objectName,
-						ClassUtils.getReadMethod(builtType, propertyDescriptor).getName());
+				buildMethodSpecBuilder.addStatement("$L.$L($L.$L())", builderName, setterName, beanName,
+						ClassUtils.getReadMethod(beanType, propertyDescriptor).getName());
 			}
 			else
 			{
-				throw new IllegalStateException("Could not find property descriptor for property: "
-						+ builtType.getName() + "." + builderProperty.getName());
+				throw new IllegalStateException("Could not find property descriptor for property: " + beanType.getName()
+						+ "." + builderProperty.getName());
 			}
 		}
 
@@ -297,7 +279,7 @@ public class ObjectBuilderBuilder
 		{
 			builderNameBuilder.append("Abstract");
 		}
-		builderNameBuilder.append(builtType.getSimpleName());
+		builderNameBuilder.append(beanType.getSimpleName());
 		builderNameBuilder.append("Builder");
 		final String builderClassName = builderNameBuilder.toString();
 

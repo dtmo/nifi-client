@@ -32,9 +32,9 @@ public class JavaBeanBuilderCodeWriter
 	public static TypeSpec createBuilderTypeSpec(final Class<?> dtoClass, final Class<?> superclass,
 			final boolean abstractBuilder) throws IntrospectionException, NoSuchFieldException, SecurityException
 	{
-		final ObjectBuilderBuilder objectBuilderBuilder = new ObjectBuilderBuilder();
+		final JavaBeanBuilderTypeSpecBuilder objectBuilderBuilder = new JavaBeanBuilderTypeSpecBuilder();
 		objectBuilderBuilder.setAbstractBuilder(abstractBuilder);
-		objectBuilderBuilder.setBuiltType(dtoClass);
+		objectBuilderBuilder.setBeanType(dtoClass);
 		objectBuilderBuilder.setBuiltTypeSuperclass(superclass);
 
 		final Set<String> declaredFieldNames = Arrays.stream(dtoClass.getDeclaredFields()).map(df -> df.getName())
