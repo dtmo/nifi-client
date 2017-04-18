@@ -278,12 +278,23 @@ public class InvokerTypeSpecBuilder
 		{
 			invokeMethodBuilder.addStatement("final $T form = new $T()", Form.class, Form.class);
 
-			for (final BuilderProperty builderProperty : formParameters)
+			for (final BuilderProperty invokerProperty : formParameters)
 			{
-				final String formParamName = builderProperty.getName();
-				final String formParamValue = NameUtils
-						.componentsToCamelCase(NameUtils.getNameComponents(builderProperty.getName()), true);
-				invokeMethodBuilder.addStatement("form.param($S, $L)", formParamName, formParamValue);
+				final String formParamName = invokerProperty.getName();
+				if (formParamName.equalsIgnoreCase("clientId"))
+				{
+					invokeMethodBuilder.addStatement("form.param($S, getClientId())", invokerProperty.getName());
+				}
+				else if (formParamName.equalsIgnoreCase("version"))
+				{
+					invokeMethodBuilder.addStatement("form.param($S, getVersion().toString())", invokerProperty.getName());
+				}
+				else
+				{
+					final String formParamValue = NameUtils
+							.componentsToCamelCase(NameUtils.getNameComponents(invokerProperty.getName()), true);
+					invokeMethodBuilder.addStatement("form.param($S, $L)", formParamName, formParamValue);
+				}
 			}
 
 			invokeMethodBuilder.addStatement("final $T<$T> entity = $T.form(form)", Entity.class, Form.class,
@@ -314,8 +325,21 @@ public class InvokerTypeSpecBuilder
 				}
 				else
 				{
-					invokeMethodBuilder.addStatement("formDataMultiPart.field($S, $L)", formDataParameter.getName(),
-							propertyName);
+					if (propertyName.equalsIgnoreCase("clientId"))
+					{
+						invokeMethodBuilder.addStatement("formDataMultiPart.field($S, getClientId())",
+								formDataParameter.getName());
+					}
+					else if (propertyName.equalsIgnoreCase("version"))
+					{
+						invokeMethodBuilder.addStatement("formDataMultiPart.field($S, getVersion())",
+								formDataParameter.getName());
+					}
+					else
+					{
+						invokeMethodBuilder.addStatement("formDataMultiPart.field($S, $L)", formDataParameter.getName(),
+								propertyName);
+					}
 				}
 			}
 
@@ -429,14 +453,26 @@ public class InvokerTypeSpecBuilder
 
 		for (final BuilderProperty invokerProperty : formParameters)
 		{
-			addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
-					invokerProperty.getComment());
+			// clientId and version are special properties that get set by the
+			// invoker framework.
+			if (invokerProperty.getName().equalsIgnoreCase("version") == false
+					&& invokerProperty.getName().equalsIgnoreCase("clientId") == false)
+			{
+				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
+						invokerProperty.getComment());
+			}
 		}
 
 		for (final BuilderProperty invokerProperty : formDataParameters)
 		{
-			addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
-					invokerProperty.getComment());
+			// clientId and version are special properties that get set by the
+			// invoker framework.
+			if (invokerProperty.getName().equalsIgnoreCase("version") == false
+					&& invokerProperty.getName().equalsIgnoreCase("clientId") == false)
+			{
+				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
+						invokerProperty.getComment());
+			}
 		}
 
 		if (requestEntity != null)
