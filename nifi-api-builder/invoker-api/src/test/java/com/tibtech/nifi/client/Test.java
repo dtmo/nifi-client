@@ -1,5 +1,7 @@
 package com.tibtech.nifi.client;
 
+import javax.ws.rs.client.ClientBuilder;
+
 import org.apache.nifi.scheduling.SchedulingStrategy;
 import org.apache.nifi.web.api.dto.PositionDTO;
 
@@ -8,12 +10,18 @@ import com.tibtech.nifi.web.api.dto.ProcessorConfigDTOBuilder;
 
 public class Test
 {
-	@SuppressWarnings("null")
 	public void test() throws InvokerException
 	{
-		ProcessGroup processGroup = null;
+		final Transport transport = new Transport(ClientBuilder.newBuilder().build(),
+				"https://localhost:8443/nifi-api");
 
-		final ProcessGroup myProcessGroup = processGroup.createProcessGroup(p -> p.setName("My process group"));
+		final Flow flow = new Flow(transport);
+
+		final ControllerService controllerService = flow.createControllerService(c -> c.setType(""));
+		controllerService.enable();
+		
+		final ProcessGroup myProcessGroup = flow.getRootProcessGroup()
+				.createProcessGroup(p -> p.setName("My process group"));
 		myProcessGroup.update(p -> p.setPosition(new PositionDTO(100.0, 100.0)));
 
 		final Processor processor = myProcessGroup.createProcessor(p -> p.setName("My processor")
