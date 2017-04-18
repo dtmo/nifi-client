@@ -33,17 +33,22 @@ import org.apache.nifi.web.api.request.IntegerParameter;
 import org.apache.nifi.web.api.request.LongParameter;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 import com.sun.jersey.multipart.FormDataParam;
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 public class InvokerCodeWriter
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(InvokerCodeWriter.class);
+
 	public static List<Annotation> getJaxRsAnnotations(final AnnotatedElement annotatedElement)
 	{
 		return Arrays.stream(annotatedElement.getAnnotations())
@@ -272,22 +277,40 @@ public class InvokerCodeWriter
 
 				final java.nio.file.Path generatedJavaPath = Paths.get("src/generated/java");
 
-				for (Method restApiMethod : restApiMethods)
+				for (final Method restApiMethod : restApiMethods)
 				{
 					final ApiOperation apiOperation = restApiMethod.getAnnotation(ApiOperation.class);
-					final Class<?> invokerResponseType = apiOperation.response();
+					if (apiOperation != null)
+					{
+						final Class<?> invokerResponseType = apiOperation.response();
 
-					final TypeSpec invokerTypeSpec = createComponentEntityInvokerTypeSpec(applicationResourceClass,
-							restApiMethod, invokerResponseType);
+						final Api responseApi = invokerResponseType.getAnnotation(Api.class);
+						if (responseApi == null || responseApi.hidden() == false)
+						{
+							final TypeSpec invokerTypeSpec = createComponentEntityInvokerTypeSpec(
+									applicationResourceClass, restApiMethod, invokerResponseType);
 
-					final String applicationResourcePackageName = applicationResourceClass.getPackage().getName();
-					final String builderPackageName = applicationResourcePackageName.replaceFirst("org\\.apache",
-							"com.tibtech") + "." + NameUtils.componentsToPackageName(classResourcePathNameComponents);
+							final String applicationResourcePackageName = applicationResourceClass.getPackage()
+									.getName();
+							final String builderPackageName = applicationResourcePackageName
+									.replaceFirst("org\\.apache", "com.tibtech") + "."
+									+ NameUtils.componentsToPackageName(classResourcePathNameComponents);
 
-					final JavaFile javaFile = JavaFile.builder(builderPackageName, invokerTypeSpec).build();
-					javaFile.writeTo(generatedJavaPath);
+							final JavaFile javaFile = JavaFile.builder(builderPackageName, invokerTypeSpec).build();
+							javaFile.writeTo(generatedJavaPath);
+						}
+						else
+						{
+							LOGGER.info("Method returns a hidden response type: {}", restApiMethod);
+						}
+					}
+					else
+					{
+						LOGGER.warn("Could not find API operation for method: {}", restApiMethod);
+					}
 				}
 			}
+
 		}
 	}
 }
