@@ -1,11 +1,14 @@
 
 //// Apply the java-library plugin to add support for Java Library
-//apply plugin: 'java-library'
+//apply plugin: "java-library"
+
+ext { nifiVersion = "1.1.2" }
 
 allprojects {
-	apply plugin: 'java'
-	group = 'com.tibtech.nifi'
-	version = '1.0.0'
+	
+	apply plugin: "java"
+	group = "com.tibtech.nifi"
+	version = "1.0.0"
 
 	// In this section you declare where to find the dependencies of your project
 	repositories {
@@ -18,28 +21,28 @@ allprojects {
 
 	dependencies {
 		//    // This dependency is exported to consumers, that is to say found on their compile classpath.
-		//    api 'org.apache.commons:commons-math3:3.6.1'
+		//    api "org.apache.commons:commons-math3:3.6.1"
 		//
 		//    // This dependency is used internally, and not exposed to consumers on their own compile classpath.
-		//    implementation 'com.google.guava:guava:20.0'
+		//    implementation "com.google.guava:guava:20.0"
 
 		// Use JUnit test framework
-		testImplementation 'junit:junit:4.12'
+		testImplementation "junit:junit:4.12"
 
-		compile 'org.slf4j:slf4j-api:1.7.24'
-		
-		compile 'org.apache.nifi:nifi-client-dto:1.1.2'
-		compile 'org.apache.nifi:nifi-api:1.1.2'
-		//    compile 'org.apache.nifi:nifi-web-api:1.1.2'
-		compile 'org.apache.nifi:nifi-dbcp-service:1.1.2'
-		compile 'org.apache.nifi:nifi-jetty-bundle:1.1.2'
-		//    compile 'org.apache.nifi:nifi-standard-nar:1.1.2'
-		
-		compile 'javax.ws.rs:javax.ws.rs-api:2.0.1'
+		compile "org.slf4j:slf4j-api:1.7.24"
 
-		compile 'com.sun.jersey:jersey-client:1.19.3'
-		compile 'com.sun.jersey:jersey-json:1.19.3'
-		compile 'com.sun.jersey.contribs:jersey-multipart:1.19.3'
+		compile "org.apache.nifi:nifi-client-dto:${nifiVersion}"
+		compile "org.apache.nifi:nifi-api:${nifiVersion}"
+		//    compile "org.apache.nifi:nifi-web-api:${nifiVersion}"
+		compile "org.apache.nifi:nifi-dbcp-service:${nifiVersion}"
+		compile "org.apache.nifi:nifi-jetty-bundle:${nifiVersion}"
+		//    compile "org.apache.nifi:nifi-standard-nar:${nifiVersion}"
+
+		compile "javax.ws.rs:javax.ws.rs-api:2.0.1"
+
+		compile "com.sun.jersey:jersey-client:1.19.3"
+		compile "com.sun.jersey:jersey-json:1.19.3"
+		compile "com.sun.jersey.contribs:jersey-multipart:1.19.3"
 	}
 }
 

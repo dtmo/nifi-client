@@ -1,6 +1,6 @@
 dependencies
 {
-	compile project(':invoker-core')
-	compile 'org.apache.nifi:nifi-client-dto:1.1.2'
-	compile 'org.apache.nifi:nifi-api:1.1.2'
+	compile project(":invoker-core")
+	compile "org.apache.nifi:nifi-client-dto:${nifiVersion}"
+	compile "org.apache.nifi:nifi-api:${nifiVersion}"
 }
