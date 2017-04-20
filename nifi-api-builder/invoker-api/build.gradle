@@ -1,6 +1,9 @@
+apply plugin: 'groovy'
+
 dependencies
 {
 	compile project(":invoker-core")
 	compile "org.apache.nifi:nifi-client-dto:${nifiVersion}"
 	compile "org.apache.nifi:nifi-framework-core-api:${nifiVersion}"
+	compile "org.codehaus.groovy:groovy-all:2.4.10"
 }

@@ -149,7 +149,7 @@ public class InvokerTypeSpecBuilder
 	public void addPathParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
 			final String comment)
 	{
-		pathParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
+		pathParameters.add(new BuilderProperty(name, propertyClass, typeName, comment, false, null));
 	}
 
 	public BuilderProperty findPathParameter(final String name)
@@ -160,19 +160,19 @@ public class InvokerTypeSpecBuilder
 	public void addQueryParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
 			final String comment)
 	{
-		queryParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
+		queryParameters.add(new BuilderProperty(name, propertyClass, typeName, comment, false, null));
 	}
 
 	public void addFormParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
 			final String comment)
 	{
-		formParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
+		formParameters.add(new BuilderProperty(name, propertyClass, typeName, comment, false, null));
 	}
 
 	public void addFormDataParameter(final String name, final Class<?> propertyClass, final TypeName typeName,
 			final String comment)
 	{
-		formDataParameters.add(new BuilderProperty(name, propertyClass, typeName, comment));
+		formDataParameters.add(new BuilderProperty(name, propertyClass, typeName, comment, false, null));
 	}
 
 	public void setRequestEntity(final BuilderProperty requestEntity)
@@ -287,7 +287,8 @@ public class InvokerTypeSpecBuilder
 				}
 				else if (formParamName.equalsIgnoreCase("version"))
 				{
-					invokeMethodBuilder.addStatement("form.param($S, getVersion().toString())", invokerProperty.getName());
+					invokeMethodBuilder.addStatement("form.param($S, getVersion().toString())",
+							invokerProperty.getName());
 				}
 				else
 				{

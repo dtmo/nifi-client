@@ -10,7 +10,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
@@ -167,8 +166,8 @@ public class InvokerCodeWriter
 				{
 					final String entityPropertyName = NameUtils.componentsToCamelCase(
 							NameUtils.getNameComponents(parameter.getType().getSimpleName()), true);
-					invokerTypeSpecBuilder.setRequestEntity(
-							new BuilderProperty(entityPropertyName, parameter.getType(), parameterTypeName, comment));
+					invokerTypeSpecBuilder.setRequestEntity(new BuilderProperty(entityPropertyName, parameter.getType(),
+							parameterTypeName, comment, false, null));
 				}
 			}
 		}

@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -22,6 +23,7 @@ import org.apache.nifi.web.api.entity.Entity;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
@@ -30,7 +32,8 @@ import com.wordnik.swagger.annotations.ApiModelProperty;
 public class JavaBeanBuilderCodeWriter
 {
 	public static TypeSpec createBuilderTypeSpec(final Class<?> dtoClass, final Class<?> superclass,
-			final boolean abstractBuilder) throws IntrospectionException, NoSuchFieldException, SecurityException
+			final boolean abstractBuilder, final Map<Class<?>, ClassName> beanBuilders)
+			throws IntrospectionException, NoSuchFieldException, SecurityException
 	{
 		final JavaBeanBuilderTypeSpecBuilder objectBuilderBuilder = new JavaBeanBuilderTypeSpecBuilder();
 		objectBuilderBuilder.setAbstractBuilder(abstractBuilder);
@@ -53,14 +56,16 @@ public class JavaBeanBuilderCodeWriter
 				{
 					final Method readMethod = ClassUtils.getReadMethod(dtoClass, propertyDescriptor);
 					final ApiModelProperty apiModelProperty = readMethod.getAnnotation(ApiModelProperty.class);
-					final String comment = apiModelProperty != null ? apiModelProperty.value() : "";
+					final String comment = apiModelProperty != null ? apiModelProperty.value() + "\n" : "";
 
 					// Get the parameterized type name for the property to
 					// handle.
 					final TypeName fieldTypeName = ClassUtils.getFieldTypeName(dtoClass, propertyDescriptor.getName());
 
-					objectBuilderBuilder.addBuilderProperty(new BuilderProperty(propertyDescriptor.getName(),
-							propertyDescriptor.getPropertyType(), fieldTypeName, comment));
+					final Class<?> propertyType = propertyDescriptor.getPropertyType();
+					objectBuilderBuilder.addBuilderProperty(
+							new BuilderProperty(propertyDescriptor.getName(), propertyType, fieldTypeName, comment,
+									beanBuilders.keySet().contains(propertyType), beanBuilders.get(propertyType)));
 				}
 			}
 		}
@@ -69,25 +74,28 @@ public class JavaBeanBuilderCodeWriter
 	}
 
 	public static Collection<Pair<String, TypeSpec>> getPackagesAndTypeSpecs(final String packageName,
-			final Predicate<String> classNameFilter)
+			final Predicate<String> classNameFilter, final Function<String, String> packageNameMapper)
 			throws NoSuchFieldException, SecurityException, IntrospectionException
 	{
 		final Reflections reflections = new Reflections(packageName, new SubTypesScanner(false));
 
 		// For each class name that passes filtering, convert it to the
 		// corresponding class object and then group them all by superclass.
-		final Set<Class<?>> beanClasses = reflections.getAllTypes().parallelStream().filter(classNameFilter).map(s ->
-		{
-			try
-			{
-				return Class.forName(s);
-			}
-			catch (ClassNotFoundException e)
-			{
-				throw new RuntimeException("Could not find class for name: " + s);
-			}
-		}).collect(Collectors.toSet());
+		final Map<Class<?>, ClassName> beanBuilders = reflections.getAllTypes().parallelStream().filter(classNameFilter)
+				.map(s ->
+				{
+					try
+					{
+						return Class.forName(s);
+					}
+					catch (ClassNotFoundException e)
+					{
+						throw new RuntimeException("Could not find class for name: " + s);
+					}
+				}).collect(Collectors.toMap(c -> c, c -> ClassName
+						.get(packageNameMapper.apply(c.getPackage().getName()), c.getSimpleName() + "Builder")));
 
+		final Set<Class<?>> beanClasses = beanBuilders.keySet();
 		final Map<Class<?>, List<Class<?>>> classSubclasses = beanClasses.parallelStream()
 				.collect(Collectors.groupingBy(c -> c.getSuperclass()));
 
@@ -103,9 +111,10 @@ public class JavaBeanBuilderCodeWriter
 			final Class<?> superclass = classSubclasses.containsKey(beanClass.getSuperclass())
 					? beanClass.getSuperclass() : null;
 
-			final TypeSpec abstractDtoBuilderTypeSpec = createBuilderTypeSpec(beanClass, superclass, true);
+			final TypeSpec abstractDtoBuilderTypeSpec = createBuilderTypeSpec(beanClass, superclass, true,
+					beanBuilders);
 
-			final String beanPackageName = beanClass.getPackage().getName();
+			final String beanPackageName = packageNameMapper.apply(beanClass.getPackage().getName());
 
 			typeSpecs.add(Pair.of(beanPackageName, abstractDtoBuilderTypeSpec));
 		}
@@ -128,9 +137,9 @@ public class JavaBeanBuilderCodeWriter
 					superclass = null;
 				}
 
-				final TypeSpec beanBuilderTypeSpec = createBuilderTypeSpec(beanClass, superclass, false);
+				final TypeSpec beanBuilderTypeSpec = createBuilderTypeSpec(beanClass, superclass, false, beanBuilders);
 
-				final String beanPackageName = beanClass.getPackage().getName();
+				final String beanPackageName = packageNameMapper.apply(beanClass.getPackage().getName());
 
 				typeSpecs.add(Pair.of(beanPackageName, beanBuilderTypeSpec));
 			}
@@ -142,16 +151,18 @@ public class JavaBeanBuilderCodeWriter
 	public static void main(final String[] args) throws Exception
 	{
 		final List<Pair<String, TypeSpec>> packageTypeSpecs = new ArrayList<>();
-		packageTypeSpecs.addAll(getPackagesAndTypeSpecs(AboutDTO.class.getPackage().getName(), s -> s.endsWith("DTO")));
-		packageTypeSpecs
-				.addAll(getPackagesAndTypeSpecs(Entity.class.getPackage().getName(), s -> s.endsWith("Entity")));
+		final Function<String, String> packageNameMapper = (s) -> s.replaceFirst("org\\.apache", "com.tibtech");
+
+		packageTypeSpecs.addAll(getPackagesAndTypeSpecs(AboutDTO.class.getPackage().getName(), s -> s.endsWith("DTO"),
+				packageNameMapper));
+		packageTypeSpecs.addAll(getPackagesAndTypeSpecs(Entity.class.getPackage().getName(), s -> s.endsWith("Entity"),
+				packageNameMapper));
 
 		final Path generatedJavaPath = Paths.get("src/generated/java");
 
 		for (final Pair<String, TypeSpec> pair : packageTypeSpecs)
 		{
-			final String builderPackageName = pair.getLeft().replaceFirst("org\\.apache", "com.tibtech");
-			final JavaFile javaFile = JavaFile.builder(builderPackageName, pair.getRight()).build();
+			final JavaFile javaFile = JavaFile.builder(pair.getLeft(), pair.getRight()).build();
 
 			javaFile.writeTo(generatedJavaPath);
 		}

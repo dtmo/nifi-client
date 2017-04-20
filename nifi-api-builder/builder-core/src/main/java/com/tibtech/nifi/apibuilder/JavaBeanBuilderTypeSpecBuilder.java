@@ -7,9 +7,11 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.lang.model.element.Modifier;
 
+import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
@@ -18,6 +20,9 @@ import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
 
 public class JavaBeanBuilderTypeSpecBuilder
 {
@@ -77,18 +82,28 @@ public class JavaBeanBuilderTypeSpecBuilder
 		this.builderProperties.add(builderProperty);
 	}
 
-	protected void addProperty(final TypeSpec.Builder typeSpecBuilder, final String builderName,
-			final String propertyName, final TypeName propertyTypeName, final String comment)
+	protected void addPropertyGetterMethod(final TypeSpec.Builder typeSpecBuilder,
+			final BuilderProperty builderProperty)
 	{
+		final TypeName propertyTypeName = builderProperty.getTypeName();
+		final String propertyName = builderProperty.getName();
+
 		typeSpecBuilder.addField(FieldSpec.builder(propertyTypeName, propertyName, Modifier.PRIVATE).build());
 		final String getterName = "get" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
-		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(getterName).returns(propertyTypeName)
-				.addModifiers(Modifier.PUBLIC).addJavadoc(comment).addStatement("return $L", propertyName).build());
+		typeSpecBuilder
+				.addMethod(MethodSpec.methodBuilder(getterName).returns(propertyTypeName).addModifiers(Modifier.PUBLIC)
+						.addJavadoc(builderProperty.getComment()).addStatement("return $L", propertyName).build());
+	}
+
+	protected void addPropertySetterMethod(final TypeSpec.Builder typeSpecBuilder, final String builderName,
+			final BuilderProperty builderProperty)
+	{
+		final String propertyName = builderProperty.getName();
 
 		final String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
 		final MethodSpec.Builder setterMethodBuilder = MethodSpec.methodBuilder(setterName)
-				.addParameter(propertyTypeName, propertyName, Modifier.FINAL).addModifiers(Modifier.PUBLIC)
-				.addJavadoc(comment).addStatement("this.$L = $L", propertyName, propertyName);
+				.addParameter(builderProperty.getTypeName(), propertyName, Modifier.FINAL).addModifiers(Modifier.PUBLIC)
+				.addJavadoc(builderProperty.getComment()).addStatement("this.$L = $L", propertyName, propertyName);
 		if (abstractBuilder)
 		{
 			setterMethodBuilder.returns(TypeVariableName.get("T"));
@@ -102,6 +117,69 @@ public class JavaBeanBuilderTypeSpecBuilder
 		}
 
 		typeSpecBuilder.addMethod(setterMethodBuilder.build());
+	}
+
+	protected void addConfiguratorFunctionMethod(final TypeSpec.Builder typeSpecBuilder, final String builderName,
+			final BuilderProperty builderProperty)
+	{
+		final String propertyName = builderProperty.getName();
+		final ClassName propertyTypeBuilder = builderProperty.getTypeBuilder();
+
+		final String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+		final MethodSpec.Builder configuratorFunctionMethod = MethodSpec.methodBuilder(setterName)
+				.returns(TypeVariableName.get(builderName))
+				.addModifiers(Modifier.PUBLIC)
+				.addJavadoc(builderProperty.getComment())
+				.addParameter(ParameterSpec
+						.builder(ParameterizedTypeName.get(ClassName.get(Function.class), propertyTypeBuilder, propertyTypeBuilder),
+								"configurator", Modifier.FINAL)
+						.build())
+				.addStatement("return $L(configurator.apply(new $T()).build())", setterName, propertyTypeBuilder);
+
+		typeSpecBuilder.addMethod(configuratorFunctionMethod.build());
+	}
+	
+	protected void addConfiguratorClosureMethod(final TypeSpec.Builder typeSpecBuilder, final String builderName,
+			final BuilderProperty builderProperty)
+	{
+		final String propertyName = builderProperty.getName();
+		final ClassName propertyTypeBuilder = builderProperty.getTypeBuilder();
+
+		final String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
+		final MethodSpec.Builder configuratorClosureMethod = MethodSpec.methodBuilder(setterName)
+				.returns(TypeVariableName.get(builderName))
+				.addModifiers(Modifier.PUBLIC)
+				.addJavadoc(builderProperty.getComment())
+				.addParameter(ParameterSpec
+						.builder(ParameterizedTypeName.get(ClassName.get(Closure.class), propertyTypeBuilder),
+								"closure", Modifier.FINAL)
+						.addAnnotation(
+								AnnotationSpec.builder(DelegatesTo.class).addMember("strategy", "Closure.DELEGATE_ONLY")
+										.addMember("value", "$T.class", propertyTypeBuilder).build())
+						.build())
+				.beginControlFlow("return $L(c ->", setterName)
+				.addStatement("final Closure<$T> code = closure.rehydrate(c, this, this)", propertyTypeBuilder)
+				.addStatement("code.setResolveStrategy(Closure.DELEGATE_ONLY)")
+				.addStatement("code.call()")
+				.addStatement("return c", setterName)
+				.endControlFlow(")");
+
+		typeSpecBuilder.addMethod(configuratorClosureMethod.build());
+	}
+
+	protected void addProperty(final TypeSpec.Builder typeSpecBuilder, final String builderName,
+			final BuilderProperty builderProperty)
+	{
+		addPropertyGetterMethod(typeSpecBuilder, builderProperty);
+
+		addPropertySetterMethod(typeSpecBuilder, builderName, builderProperty);
+
+		if (builderProperty.isBuildableType())
+		{
+			// Add lambda and Closure methods
+			addConfiguratorFunctionMethod(typeSpecBuilder, builderName, builderProperty);
+			addConfiguratorClosureMethod(typeSpecBuilder, builderName, builderProperty);
+		}
 	}
 
 	protected void addSetPropertyValuesMethod(final TypeSpec.Builder typeSpecBuilder)
@@ -316,8 +394,7 @@ public class JavaBeanBuilderTypeSpecBuilder
 
 		for (final BuilderProperty builderProperty : builderProperties)
 		{
-			addProperty(typeSpecBuilder, builderClassName, builderProperty.getName(), builderProperty.getTypeName(),
-					builderProperty.getComment());
+			addProperty(typeSpecBuilder, builderClassName, builderProperty);
 		}
 
 		if (abstractBuilder)
