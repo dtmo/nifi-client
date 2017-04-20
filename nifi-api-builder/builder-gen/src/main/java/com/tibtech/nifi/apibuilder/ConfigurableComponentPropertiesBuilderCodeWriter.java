@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.apache.nifi.components.ConfigurableComponent;
@@ -20,12 +21,19 @@ import org.apache.nifi.components.PropertyDescriptor;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeSpec.Builder;
+
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
 import com.squareup.javapoet.TypeVariableName;
 
 public class ConfigurableComponentPropertiesBuilderCodeWriter
@@ -53,9 +61,7 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 		final String getterName = "get" + componentsToCamelCase(propertyDescriptorNameComponents, false);
 		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(getterName)
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
-				.returns(String.class)
-				.addStatement("return properties.get($L)", propertyConstantName)
-				.build());
+				.returns(String.class).addStatement("return properties.get($L)", propertyConstantName).build());
 
 		// Add a setter method.
 		final String setterName = "set" + componentsToCamelCase(propertyDescriptorNameComponents, false);
@@ -63,8 +69,7 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
 				.returns(TypeVariableName.get(propertiesBuilderClassName))
 				.addParameter(String.class, propertyName, javax.lang.model.element.Modifier.FINAL)
-				.addStatement("properties.put($L, $L)", propertyConstantName, propertyName)
-				.addStatement("return this")
+				.addStatement("properties.put($L, $L)", propertyConstantName, propertyName).addStatement("return this")
 				.build());
 
 		// Add a remove method.
@@ -72,39 +77,80 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(removeName)
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
 				.returns(TypeVariableName.get(propertiesBuilderClassName))
-				.addStatement("properties.remove($L)", propertyConstantName)
-				.addStatement("return this")
-				.build());
+				.addStatement("properties.remove($L)", propertyConstantName).addStatement("return this").build());
 	}
-	
-	public static void addDynamicPropertyMethods(final TypeSpec.Builder typeSpecBuilder, final String propertiesBuilderClassName)
+
+	public static void addDynamicPropertyMethods(final TypeSpec.Builder typeSpecBuilder,
+			final String propertiesBuilderClassName)
 	{
 		// Add a getter for dynamic properties
-		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("getProperty")
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("getDynamicProperty")
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
-				.returns(String.class)
-				.addParameter(String.class, "name", javax.lang.model.element.Modifier.FINAL)
-				.addStatement("return properties.get($L)", "name")
-				.build());
-		
+				.returns(String.class).addParameter(String.class, "name", javax.lang.model.element.Modifier.FINAL)
+				.addStatement("return properties.get($L)", "name").build());
+
 		// Add a setter for dynamic properties
-		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("setProperty")
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("setDynamicProperty")
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
 				.returns(TypeVariableName.get(propertiesBuilderClassName))
 				.addParameter(String.class, "name", javax.lang.model.element.Modifier.FINAL)
 				.addParameter(String.class, "value", javax.lang.model.element.Modifier.FINAL)
-				.addStatement("properties.put($L, $L)", "name", "value")
-				.addStatement("return this")
-				.build());
+				.addStatement("properties.put($L, $L)", "name", "value").addStatement("return this").build());
 
 		// Add a remove method for dynamic properties.
-		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("removeProperty")
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("removeDynamicProperty")
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
 				.returns(TypeVariableName.get(propertiesBuilderClassName))
 				.addParameter(String.class, "name", javax.lang.model.element.Modifier.FINAL)
-				.addStatement("properties.remove($L)", "name")
-				.addStatement("return this")
+				.addStatement("properties.remove($L)", "name").addStatement("return this").build());
+	}
+
+	public static void addConfiguratorFactoryMethods(final TypeSpec.Builder typeSpecBuilder,
+			final Class<?> concreteConfigurableComponentClass, final String propertiesBuilderClassName)
+	{
+		// Add a lambda based configurator factory method
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
+				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.STATIC,
+						javax.lang.model.element.Modifier.FINAL)
+				.returns(
+						ParameterizedTypeName.get(Map.class, String.class,
+								String.class))
+				.addParameter(ParameterSpec.builder(
+						ParameterizedTypeName.get(ClassName.get(Function.class),
+								TypeVariableName.get(propertiesBuilderClassName),
+								TypeVariableName.get(propertiesBuilderClassName)),
+						"configurator", javax.lang.model.element.Modifier.FINAL).build())
+				.addStatement("return configurator.apply(new $T()).build()",
+						TypeVariableName.get(propertiesBuilderClassName))
 				.build());
+
+		// Add a Closure based configurator factory method
+
+		typeSpecBuilder
+				.addMethod(
+						MethodSpec.methodBuilder("build")
+								.addModifiers(javax.lang.model.element.Modifier.PUBLIC,
+										javax.lang.model.element.Modifier.STATIC,
+										javax.lang.model.element.Modifier.FINAL)
+								.returns(
+										ParameterizedTypeName.get(Map.class, String.class, String.class))
+								.addParameter(ParameterSpec
+										.builder(
+												ParameterizedTypeName.get(ClassName.get(Closure.class),
+														TypeVariableName.get(propertiesBuilderClassName)),
+												"closure", javax.lang.model.element.Modifier.FINAL)
+										.addAnnotation(AnnotationSpec.builder(DelegatesTo.class)
+												.addMember("strategy", "Closure.DELEGATE_ONLY")
+												.addMember("value", "$T.class",
+														TypeVariableName.get(propertiesBuilderClassName))
+												.build())
+										.build())
+								.beginControlFlow("return build(c ->")
+								.addStatement("final Closure<$L> code = closure.rehydrate(c, $L.class, $L.class)",
+										propertiesBuilderClassName, propertiesBuilderClassName,
+										propertiesBuilderClassName)
+								.addStatement("code.setResolveStrategy(Closure.DELEGATE_ONLY)")
+								.addStatement("code.call()").addStatement("return c").endControlFlow(")").build());
 	}
 
 	public static TypeSpec createConfigurableComponentPropertiesBuilderTypeSpec(
@@ -130,12 +176,15 @@ public class ConfigurableComponentPropertiesBuilderCodeWriter
 		}
 
 		addDynamicPropertyMethods(propertyBuilderTypeSpecBuilder, propertiesBuilderClassName);
-		
+
 		// build method
 		propertyBuilderTypeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
 				.addModifiers(javax.lang.model.element.Modifier.PUBLIC, javax.lang.model.element.Modifier.FINAL)
 				.returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
 				.addStatement("return properties").build());
+
+		addConfiguratorFactoryMethods(propertyBuilderTypeSpecBuilder, configurableComponentClass,
+				propertiesBuilderClassName);
 
 		return propertyBuilderTypeSpecBuilder.build();
 	}
