@@ -17,6 +17,9 @@ import com.tibtech.nifi.web.api.process.groups.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.process.groups.RemoveProcessGroupInvoker;
 import com.tibtech.nifi.web.api.process.groups.UpdateProcessGroupInvoker;
 
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
 public class ProcessGroup extends Component
 {
 	private ProcessGroupDTO processGroupDTO;
@@ -32,12 +35,25 @@ public class ProcessGroup extends Component
 			throws InvokerException
 	{
 		final ProcessorDTO processorDTO = function
-				.apply(new ProcessorDTOBuilder().setParentGroupId(processGroupDTO.getParentGroupId())).build();
+				.apply(new ProcessorDTOBuilder().setParentGroupId(processGroupDTO.getId())).build();
 		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport())
 				.setId(processorDTO.getParentGroupId())
 				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(processorDTO).build()).invoke();
 
 		return new Processor(getTransport(), processorEntity.getComponent());
+	}
+
+	public Processor createProcessor(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
+			throws InvokerException
+	{
+		return createProcessor(p ->
+		{
+			final Closure<ProcessorDTOBuilder> code = closure.rehydrate(p, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			code.call();
+			return p;
+		});
 	}
 
 	public ProcessGroup createProcessGroup(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> function)
