@@ -2,6 +2,9 @@ dependencies
 {
 	compile project(":builder-core")
 	compile project(":invoker-core")
+	
+	compile "com.sun.jersey:jersey-client:1.19.3"
+	compile "com.sun.jersey.contribs:jersey-multipart:1.19.3"
 
 	compile "org.apache.nifi:nifi-framework-core-api:${nifiVersion}"
 

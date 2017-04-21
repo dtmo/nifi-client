@@ -45,7 +45,7 @@ public class Transport
 
 	public void updateVersion(final Long version)
 	{
-		if (version == null)
+		if (this.version == null)
 		{
 			this.version = version;
 		}

@@ -7,8 +7,9 @@ import javax.ws.rs.client.ClientBuilder;
 
 import com.tibtech.nifi.web.api.controller.CreateControllerServiceInvoker;
 import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
-import com.tibtech.nifi.web.api.dto.ProcessGroupDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
+import com.tibtech.nifi.web.api.flow.GenerateClientIdInvoker;
+import com.tibtech.nifi.web.api.process.groups.GetProcessGroupInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -24,7 +25,7 @@ public class Flow
 
 	public ProcessGroup getRootProcessGroup() throws InvokerException
 	{
-		return new ProcessGroup(transport, new GetProcessGroupInvoker(transport).setId("ROOT").invoke().getComponent());
+		return new ProcessGroup(transport, new GetProcessGroupInvoker(transport).setId("root").invoke().getComponent());
 	}
 
 	public ControllerService createControllerService(
@@ -50,12 +51,15 @@ public class Flow
 						.invoke().getComponent());
 	}
 
-	public static Flow connect(final String baseUri)
+	public static Flow connect(final String baseUri) throws InvokerException
 	{
 		final ClientBuilder clientBuilder = ClientBuilder.newBuilder();
 		final Client client = clientBuilder.build();
 
 		final Transport transport = new Transport(client, baseUri);
+		
+		new GenerateClientIdInvoker(transport).invoke();
+		
 		final Flow flow = new Flow(transport);
 		return flow;
 	}
