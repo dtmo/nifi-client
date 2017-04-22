@@ -2,3 +2,6 @@
 **/bin/
 **/build/
 **/src/generated/
+**/.classpath
+**/.project
+**/.settings/
