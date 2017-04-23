@@ -15,8 +15,8 @@ public final class UpdateAccessPolicyInvoker extends ComponentEntityInvoker<Acce
 
   private AccessPolicyEntity accessPolicyEntity;
 
-  public UpdateAccessPolicyInvoker(final Transport transport) {
-    super(transport);
+  public UpdateAccessPolicyInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

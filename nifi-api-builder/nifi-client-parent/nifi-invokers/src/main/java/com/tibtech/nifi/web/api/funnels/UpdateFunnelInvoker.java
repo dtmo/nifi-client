@@ -15,8 +15,8 @@ public final class UpdateFunnelInvoker extends ComponentEntityInvoker<FunnelEnti
 
   private FunnelEntity funnelEntity;
 
-  public UpdateFunnelInvoker(final Transport transport) {
-    super(transport);
+  public UpdateFunnelInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

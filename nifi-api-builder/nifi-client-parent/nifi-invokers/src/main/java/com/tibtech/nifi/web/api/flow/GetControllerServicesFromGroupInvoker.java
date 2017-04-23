@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerServicesEntity;
 public final class GetControllerServicesFromGroupInvoker extends AbstractInvoker<ControllerServicesEntity> {
   private String id;
 
-  public GetControllerServicesFromGroupInvoker(final Transport transport) {
-    super(transport);
+  public GetControllerServicesFromGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

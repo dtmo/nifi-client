@@ -15,8 +15,8 @@ public final class UpdateUserInvoker extends ComponentEntityInvoker<UserEntity> 
 
   private UserEntity userEntity;
 
-  public UpdateUserInvoker(final Transport transport) {
-    super(transport);
+  public UpdateUserInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

@@ -1,25 +1,30 @@
 package com.tibtech.nifi.client;
 
-import org.apache.nifi.web.api.dto.ComponentDTO;
-
-public class Component
+public abstract class Component
 {
 	private final Transport transport;
-	private final ComponentDTO componentDTO;
+	private long version;
 
-	public Component(final Transport transport, final ComponentDTO componentDTO)
+	public Component(final Transport transport, final long version)
 	{
 		this.transport = transport;
-		this.componentDTO = componentDTO;
+		this.version = version;
 	}
-	
+
 	protected Transport getTransport()
 	{
 		return transport;
 	}
 
-	public String getId()
+	public long getVersion()
 	{
-		return componentDTO.getId();
+		return version;
 	}
+
+	protected void setVersion(long version)
+	{
+		this.version = version;
+	}
+	
+	public abstract void delete() throws InvokerException;
 }

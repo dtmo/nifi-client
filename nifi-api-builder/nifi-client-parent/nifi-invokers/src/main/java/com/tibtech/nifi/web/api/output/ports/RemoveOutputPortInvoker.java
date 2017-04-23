@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.PortEntity;
 public final class RemoveOutputPortInvoker extends ComponentEntityInvoker<PortEntity> {
   private String id;
 
-  public RemoveOutputPortInvoker(final Transport transport) {
-    super(transport);
+  public RemoveOutputPortInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

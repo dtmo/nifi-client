@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ProvenanceOptionsEntity;
 
 public final class GetSearchOptionsInvoker extends AbstractInvoker<ProvenanceOptionsEntity> {
-  public GetSearchOptionsInvoker(final Transport transport) {
-    super(transport);
+  public GetSearchOptionsInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final ProvenanceOptionsEntity invoke() throws InvokerException {

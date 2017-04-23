@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.AboutEntity;
 
 public final class GetAboutInfoInvoker extends AbstractInvoker<AboutEntity> {
-  public GetAboutInfoInvoker(final Transport transport) {
-    super(transport);
+  public GetAboutInfoInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final AboutEntity invoke() throws InvokerException {

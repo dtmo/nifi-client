@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.TemplatesEntity;
 
 public final class GetTemplatesInvoker extends AbstractInvoker<TemplatesEntity> {
-  public GetTemplatesInvoker(final Transport transport) {
-    super(transport);
+  public GetTemplatesInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final TemplatesEntity invoke() throws InvokerException {

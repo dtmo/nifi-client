@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.StatusHistoryEntity;
 public final class GetRemoteProcessGroupStatusHistoryInvoker extends AbstractInvoker<StatusHistoryEntity> {
   private String id;
 
-  public GetRemoteProcessGroupStatusHistoryInvoker(final Transport transport) {
-    super(transport);
+  public GetRemoteProcessGroupStatusHistoryInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

@@ -9,8 +9,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 public final class CreateUiExtensionTokenInvoker extends AbstractInvoker<String> {
-  public CreateUiExtensionTokenInvoker(final Transport transport) {
-    super(transport);
+  public CreateUiExtensionTokenInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final String invoke() throws InvokerException {

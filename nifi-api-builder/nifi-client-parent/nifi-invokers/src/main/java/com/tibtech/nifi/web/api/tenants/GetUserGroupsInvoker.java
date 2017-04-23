@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.UserGroupsEntity;
 
 public final class GetUserGroupsInvoker extends AbstractInvoker<UserGroupsEntity> {
-  public GetUserGroupsInvoker(final Transport transport) {
-    super(transport);
+  public GetUserGroupsInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final UserGroupsEntity invoke() throws InvokerException {

@@ -18,9 +18,9 @@ public abstract class ComponentEntityInvoker<T extends ComponentEntity> extends 
 	private PermissionsDTO permissions;
 	private List<BulletinEntity> bulletins;
 
-	public ComponentEntityInvoker(final Transport transport)
+	public ComponentEntityInvoker(final Transport transport, final long version)
 	{
-		super(transport);
+		super(transport, version);
 	}
 
 	protected void setEntityValues(T componentEntity)
@@ -42,7 +42,6 @@ public abstract class ComponentEntityInvoker<T extends ComponentEntity> extends 
 		if (revision != null)
 		{
 			registerClientId(revision.getClientId());
-			updateVersion(revision.getVersion());
 		}
 
 		return entity;

@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.UserEntity;
 public final class CreateUserInvoker extends ComponentEntityInvoker<UserEntity> {
   private UserEntity userEntity;
 
-  public CreateUserInvoker(final Transport transport) {
-    super(transport);
+  public CreateUserInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

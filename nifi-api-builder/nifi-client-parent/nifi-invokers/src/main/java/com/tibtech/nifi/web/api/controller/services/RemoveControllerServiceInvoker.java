@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerServiceEntity;
 public final class RemoveControllerServiceInvoker extends ComponentEntityInvoker<ControllerServiceEntity> {
   private String id;
 
-  public RemoveControllerServiceInvoker(final Transport transport) {
-    super(transport);
+  public RemoveControllerServiceInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

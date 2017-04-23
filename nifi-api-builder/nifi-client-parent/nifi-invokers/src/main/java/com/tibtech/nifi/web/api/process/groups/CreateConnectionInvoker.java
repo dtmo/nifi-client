@@ -15,8 +15,8 @@ public final class CreateConnectionInvoker extends ComponentEntityInvoker<Connec
 
   private ConnectionEntity connectionEntity;
 
-  public CreateConnectionInvoker(final Transport transport) {
-    super(transport);
+  public CreateConnectionInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

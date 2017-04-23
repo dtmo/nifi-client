@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerBulletinsEntity;
 
 public final class GetBulletinsInvoker extends AbstractInvoker<ControllerBulletinsEntity> {
-  public GetBulletinsInvoker(final Transport transport) {
-    super(transport);
+  public GetBulletinsInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final ControllerBulletinsEntity invoke() throws InvokerException {

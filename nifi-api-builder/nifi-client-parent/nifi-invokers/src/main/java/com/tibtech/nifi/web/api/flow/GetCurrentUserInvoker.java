@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.CurrentUserEntity;
 
 public final class GetCurrentUserInvoker extends AbstractInvoker<CurrentUserEntity> {
-  public GetCurrentUserInvoker(final Transport transport) {
-    super(transport);
+  public GetCurrentUserInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final CurrentUserEntity invoke() throws InvokerException {

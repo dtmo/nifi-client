@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.TemplateEntity;
 public final class RemoveTemplateInvoker extends ComponentEntityInvoker<TemplateEntity> {
   private String id;
 
-  public RemoveTemplateInvoker(final Transport transport) {
-    super(transport);
+  public RemoveTemplateInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

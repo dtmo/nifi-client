@@ -9,8 +9,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 public final class GenerateClientIdInvoker extends AbstractInvoker<String> {
-  public GenerateClientIdInvoker(final Transport transport) {
-    super(transport);
+  public GenerateClientIdInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final String invoke() throws InvokerException {

@@ -17,8 +17,8 @@ public final class GetProcessorStatusInvoker extends AbstractInvoker<ProcessorSt
 
   private String clusterNodeId;
 
-  public GetProcessorStatusInvoker(final Transport transport) {
-    super(transport);
+  public GetProcessorStatusInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

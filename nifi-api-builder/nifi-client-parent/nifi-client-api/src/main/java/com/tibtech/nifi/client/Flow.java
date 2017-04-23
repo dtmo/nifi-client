@@ -7,6 +7,9 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
 import org.apache.nifi.web.api.dto.DocumentedTypeDTO;
+import org.apache.nifi.web.api.entity.ControllerServiceEntity;
+import org.apache.nifi.web.api.entity.ProcessGroupEntity;
+import org.apache.nifi.web.api.entity.ReportingTaskEntity;
 
 import com.tibtech.nifi.web.api.controller.CreateControllerServiceInvoker;
 import com.tibtech.nifi.web.api.controller.CreateReportingTaskInvoker;
@@ -34,18 +37,21 @@ public class Flow
 
 	public ProcessGroup getRootProcessGroup() throws InvokerException
 	{
-		return new ProcessGroup(transport, new GetProcessGroupInvoker(transport).setId("root").invoke().getComponent());
+		final ProcessGroupEntity processGroupEntity = new GetProcessGroupInvoker(transport, 0).setId("root").invoke();
+		return new ProcessGroup(transport, processGroupEntity.getRevision().getVersion(),
+				processGroupEntity.getComponent());
 	}
 
 	public ControllerService createControllerService(
 			final Function<ControllerServiceDTOBuilder, ControllerServiceDTOBuilder> configurator)
 			throws InvokerException
 	{
-		return new ControllerService(transport,
-				new CreateControllerServiceInvoker(transport)
-						.setControllerServiceEntity(new ControllerServiceEntityBuilder()
-								.setComponent(configurator.apply(new ControllerServiceDTOBuilder()).build()).build())
-						.invoke().getComponent());
+		final ControllerServiceEntity controllerServiceEntity = new CreateControllerServiceInvoker(transport, 0)
+				.setControllerServiceEntity(new ControllerServiceEntityBuilder()
+						.setComponent(configurator.apply(new ControllerServiceDTOBuilder()).build()).build())
+				.invoke();
+		return new ControllerService(transport, controllerServiceEntity.getRevision().getVersion(),
+				controllerServiceEntity.getComponent());
 	}
 
 	public ControllerService createControllerService(
@@ -63,27 +69,28 @@ public class Flow
 
 	public Set<DocumentedTypeDTO> getControllerServiceTypes() throws InvokerException
 	{
-		return new GetControllerServiceTypesInvoker(transport).invoke().getControllerServiceTypes();
+		return new GetControllerServiceTypesInvoker(transport, 0).invoke().getControllerServiceTypes();
 	}
 
 	public Set<DocumentedTypeDTO> getProcessorTypes() throws InvokerException
 	{
-		return new GetProcessorTypesInvoker(transport).invoke().getProcessorTypes();
+		return new GetProcessorTypesInvoker(transport, 0).invoke().getProcessorTypes();
 	}
 
 	public Set<DocumentedTypeDTO> getReportingTaskTypes() throws InvokerException
 	{
-		return new GetReportingTaskTypesInvoker(transport).invoke().getReportingTaskTypes();
+		return new GetReportingTaskTypesInvoker(transport, 0).invoke().getReportingTaskTypes();
 	}
 
 	public ReportingTask createReportingTask(
 			final Function<ReportingTaskDTOBuilder, ReportingTaskDTOBuilder> configurator) throws InvokerException
 	{
-		return new ReportingTask(transport,
-				new CreateReportingTaskInvoker(transport)
-						.setReportingTaskEntity(new ReportingTaskEntityBuilder()
-								.setComponent(configurator.apply(new ReportingTaskDTOBuilder()).build()).build())
-						.invoke().getComponent());
+		final ReportingTaskEntity reporingTaskEntity = new CreateReportingTaskInvoker(transport, 0)
+				.setReportingTaskEntity(new ReportingTaskEntityBuilder()
+						.setComponent(configurator.apply(new ReportingTaskDTOBuilder()).build()).build())
+				.invoke();
+		return new ReportingTask(transport, reporingTaskEntity.getRevision().getVersion(),
+				reporingTaskEntity.getComponent());
 	}
 
 	public ReportingTask createReportingTask(
@@ -106,7 +113,7 @@ public class Flow
 
 		final Transport transport = new Transport(client, baseUri);
 
-		new GenerateClientIdInvoker(transport).invoke();
+		new GenerateClientIdInvoker(transport, 0).invoke();
 
 		final Flow flow = new Flow(transport);
 		return flow;

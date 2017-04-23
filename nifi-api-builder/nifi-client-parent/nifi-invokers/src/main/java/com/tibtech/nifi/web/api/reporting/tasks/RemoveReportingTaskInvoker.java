@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ReportingTaskEntity;
 public final class RemoveReportingTaskInvoker extends ComponentEntityInvoker<ReportingTaskEntity> {
   private String id;
 
-  public RemoveReportingTaskInvoker(final Transport transport) {
-    super(transport);
+  public RemoveReportingTaskInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

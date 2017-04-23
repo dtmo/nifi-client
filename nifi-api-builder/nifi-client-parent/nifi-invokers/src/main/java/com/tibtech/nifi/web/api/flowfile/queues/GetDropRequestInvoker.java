@@ -14,8 +14,8 @@ public final class GetDropRequestInvoker extends AbstractInvoker<DropRequestEnti
 
   private String dropRequestId;
 
-  public GetDropRequestInvoker(final Transport transport) {
-    super(transport);
+  public GetDropRequestInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

@@ -15,8 +15,8 @@ public final class UpdateProcessorInvoker extends ComponentEntityInvoker<Process
 
   private ProcessorEntity processorEntity;
 
-  public UpdateProcessorInvoker(final Transport transport) {
-    super(transport);
+  public UpdateProcessorInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

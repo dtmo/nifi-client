@@ -15,8 +15,8 @@ public final class UpdateRemoteProcessGroupInvoker extends ComponentEntityInvoke
 
   private RemoteProcessGroupEntity remoteProcessGroupEntity;
 
-  public UpdateRemoteProcessGroupInvoker(final Transport transport) {
-    super(transport);
+  public UpdateRemoteProcessGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

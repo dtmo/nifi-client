@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.AccessConfigurationEntity;
 
 public final class GetLoginConfigInvoker extends AbstractInvoker<AccessConfigurationEntity> {
-  public GetLoginConfigInvoker(final Transport transport) {
-    super(transport);
+  public GetLoginConfigInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final AccessConfigurationEntity invoke() throws InvokerException {

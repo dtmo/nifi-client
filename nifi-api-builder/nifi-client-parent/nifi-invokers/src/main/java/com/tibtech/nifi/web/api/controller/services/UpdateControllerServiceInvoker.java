@@ -15,8 +15,8 @@ public final class UpdateControllerServiceInvoker extends ComponentEntityInvoker
 
   private ControllerServiceEntity controllerServiceEntity;
 
-  public UpdateControllerServiceInvoker(final Transport transport) {
-    super(transport);
+  public UpdateControllerServiceInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

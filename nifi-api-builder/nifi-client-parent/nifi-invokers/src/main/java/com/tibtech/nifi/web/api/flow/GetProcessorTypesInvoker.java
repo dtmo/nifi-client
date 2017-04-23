@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ProcessorTypesEntity;
 
 public final class GetProcessorTypesInvoker extends AbstractInvoker<ProcessorTypesEntity> {
-  public GetProcessorTypesInvoker(final Transport transport) {
-    super(transport);
+  public GetProcessorTypesInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final ProcessorTypesEntity invoke() throws InvokerException {

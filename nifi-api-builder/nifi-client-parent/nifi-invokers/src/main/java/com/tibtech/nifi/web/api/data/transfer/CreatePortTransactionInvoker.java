@@ -14,8 +14,8 @@ public final class CreatePortTransactionInvoker extends AbstractInvoker<Transact
 
   private String portId;
 
-  public CreatePortTransactionInvoker(final Transport transport) {
-    super(transport);
+  public CreatePortTransactionInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.PeersEntity;
 
 public final class GetPeersInvoker extends AbstractInvoker<PeersEntity> {
-  public GetPeersInvoker(final Transport transport) {
-    super(transport);
+  public GetPeersInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final PeersEntity invoke() throws InvokerException {

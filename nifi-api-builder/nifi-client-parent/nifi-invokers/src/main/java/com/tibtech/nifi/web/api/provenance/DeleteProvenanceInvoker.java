@@ -14,8 +14,8 @@ public final class DeleteProvenanceInvoker extends AbstractInvoker<ProvenanceEnt
 
   private String clusterNodeId;
 
-  public DeleteProvenanceInvoker(final Transport transport) {
-    super(transport);
+  public DeleteProvenanceInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

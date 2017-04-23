@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerStatusEntity;
 
 public final class GetControllerStatusInvoker extends AbstractInvoker<ControllerStatusEntity> {
-  public GetControllerStatusInvoker(final Transport transport) {
-    super(transport);
+  public GetControllerStatusInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final ControllerStatusEntity invoke() throws InvokerException {

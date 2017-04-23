@@ -16,15 +16,14 @@ import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
 import com.tibtech.nifi.web.api.process.groups.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processors.DeleteProcessorInvoker;
 import com.tibtech.nifi.web.api.processors.GetProcessorInvoker;
-import com.tibtech.nifi.web.api.processors.GetPropertyDescriptorInvoker;
 
 public class Processor extends Component
 {
 	private ProcessorDTO processorDTO;
 
-	public Processor(final Transport transport, final ProcessorDTO processorDTO)
+	public Processor(final Transport transport, final long version, final ProcessorDTO processorDTO)
 	{
-		super(transport, processorDTO);
+		super(transport, version);
 
 		this.processorDTO = processorDTO;
 	}
@@ -118,10 +117,11 @@ public class Processor extends Component
 	{
 		final ProcessorDTO updatedProcessorDTO = function.apply(ProcessorDTOBuilder.of(processorDTO)).build();
 
-		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport())
+		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport(), 0)
 				.setId(updatedProcessorDTO.getParentGroupId())
 				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(updatedProcessorDTO).build()).invoke();
 
+		this.setVersion(processorEntity.getRevision().getVersion());
 		this.processorDTO = processorEntity.getComponent();
 	}
 
@@ -132,13 +132,13 @@ public class Processor extends Component
 
 	public void refresh() throws InvokerException
 	{
-		final ProcessorEntity processorEntity = new GetProcessorInvoker(getTransport()).setId(processorDTO.getId())
+		final ProcessorEntity processorEntity = new GetProcessorInvoker(getTransport(), 0).setId(processorDTO.getId())
 				.invoke();
 		this.processorDTO = processorEntity.getComponent();
 	}
 
 	public void delete() throws InvokerException
 	{
-		new DeleteProcessorInvoker(getTransport()).setId(processorDTO.getId()).invoke();
+		new DeleteProcessorInvoker(getTransport(), getVersion()).setId(processorDTO.getId()).invoke();
 	}
 }

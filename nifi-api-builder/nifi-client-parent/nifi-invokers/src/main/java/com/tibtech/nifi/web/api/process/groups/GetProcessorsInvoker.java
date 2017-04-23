@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ProcessorsEntity;
 public final class GetProcessorsInvoker extends AbstractInvoker<ProcessorsEntity> {
   private String id;
 
-  public GetProcessorsInvoker(final Transport transport) {
-    super(transport);
+  public GetProcessorsInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

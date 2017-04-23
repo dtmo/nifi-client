@@ -12,11 +12,11 @@ import com.tibtech.nifi.web.api.reporting.tasks.RemoveReportingTaskInvoker;
 public class ReportingTask extends Component
 {
 	private final ReportingTaskDTO reportingTaskDTO;
-	
-	public ReportingTask(final Transport transport, final ReportingTaskDTO reportingTaskDTO)
+
+	public ReportingTask(final Transport transport, final long version, final ReportingTaskDTO reportingTaskDTO)
 	{
-		super(transport, reportingTaskDTO);
-		
+		super(transport, version);
+
 		this.reportingTaskDTO = reportingTaskDTO;
 	}
 
@@ -109,9 +109,9 @@ public class ReportingTask extends Component
 	{
 		return reportingTaskDTO.getActiveThreadCount();
 	}
-	
-	public void remove() throws InvokerException
+
+	public void delete() throws InvokerException
 	{
-		new RemoveReportingTaskInvoker(getTransport()).setId(getId()).invoke();
+		new RemoveReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
 }

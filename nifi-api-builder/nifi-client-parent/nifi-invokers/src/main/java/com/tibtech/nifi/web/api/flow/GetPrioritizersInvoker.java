@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.PrioritizerTypesEntity;
 
 public final class GetPrioritizersInvoker extends AbstractInvoker<PrioritizerTypesEntity> {
-  public GetPrioritizersInvoker(final Transport transport) {
-    super(transport);
+  public GetPrioritizersInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final PrioritizerTypesEntity invoke() throws InvokerException {

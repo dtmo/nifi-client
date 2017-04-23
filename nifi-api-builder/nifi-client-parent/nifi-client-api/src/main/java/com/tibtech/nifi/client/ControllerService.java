@@ -9,23 +9,23 @@ import org.apache.nifi.controller.service.ControllerServiceState;
 import org.apache.nifi.web.api.dto.ControllerServiceDTO;
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
+import org.apache.nifi.web.api.entity.ControllerServiceEntity;
 import org.apache.nifi.web.api.entity.ControllerServiceReferencingComponentEntity;
 
-import com.tibtech.nifi.web.api.controller.services.GetControllerServiceInvoker;
 import com.tibtech.nifi.web.api.controller.services.RemoveControllerServiceInvoker;
 import com.tibtech.nifi.web.api.controller.services.UpdateControllerServiceInvoker;
 import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
 
-public class ControllerService
+public class ControllerService extends Component
 {
-	private final Transport transport;
-
 	private ControllerServiceDTO controllerServiceDTO;
 
-	public ControllerService(final Transport transport, final ControllerServiceDTO controllerServiceDTO)
+	public ControllerService(final Transport transport, final long version,
+			final ControllerServiceDTO controllerServiceDTO)
 	{
-		this.transport = transport;
+		super(transport, version);
+
 		this.controllerServiceDTO = controllerServiceDTO;
 	}
 
@@ -107,21 +107,26 @@ public class ControllerService
 	public void update(final Function<ControllerServiceDTOBuilder, ControllerServiceDTOBuilder> function)
 			throws InvokerException
 	{
-		this.controllerServiceDTO = new UpdateControllerServiceInvoker(transport).setId(controllerServiceDTO.getId())
+		final ControllerServiceEntity controllerServiceEntity = new UpdateControllerServiceInvoker(getTransport(), getVersion())
+				.setId(controllerServiceDTO.getId())
 				.setControllerServiceEntity(new ControllerServiceEntityBuilder().setId(controllerServiceDTO.getId())
 						.setComponent(function.apply(ControllerServiceDTOBuilder.of(controllerServiceDTO)).build())
 						.build())
-				.invoke().getComponent();
+				.invoke();
+		
+		this.setVersion(controllerServiceEntity.getRevision().getVersion());
+		
+		this.controllerServiceDTO = controllerServiceEntity.getComponent();
 	}
 
 	public void enable() throws InvokerException
 	{
 		setEnabled(true);
 	}
-	
-	public void remove() throws InvokerException
+
+	public void delete() throws InvokerException
 	{
-		new RemoveControllerServiceInvoker(transport).setId(getId()).invoke();
+		new RemoveControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
 
 	public void disable() throws InvokerException
@@ -134,21 +139,6 @@ public class ControllerService
 		final String controllerServiceState = enabled ? ControllerServiceState.ENABLED.name()
 				: ControllerServiceState.DISABLED.name();
 
-		ControllerServiceDTO updatedControllerServiceDTO = new UpdateControllerServiceInvoker(transport)
-				.setId(controllerServiceDTO
-						.getId())
-				.setControllerServiceEntity(new ControllerServiceEntityBuilder().setId(controllerServiceDTO.getId())
-						.setComponent(ControllerServiceDTOBuilder.of(controllerServiceDTO)
-								.setState(controllerServiceState).build())
-						.build())
-				.invoke().getComponent();
-
-		while (ControllerServiceState.ENABLED.name().equalsIgnoreCase(updatedControllerServiceDTO.getState()) == false)
-		{
-			updatedControllerServiceDTO = new GetControllerServiceInvoker(transport).setId(controllerServiceDTO.getId())
-					.invoke().getComponent();
-		}
-
-		this.controllerServiceDTO = updatedControllerServiceDTO;
+		update(c -> c.setState(controllerServiceState));
 	}
 }

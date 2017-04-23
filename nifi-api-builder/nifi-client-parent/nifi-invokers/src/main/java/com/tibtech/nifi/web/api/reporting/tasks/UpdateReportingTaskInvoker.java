@@ -15,8 +15,8 @@ public final class UpdateReportingTaskInvoker extends ComponentEntityInvoker<Rep
 
   private ReportingTaskEntity reportingTaskEntity;
 
-  public UpdateReportingTaskInvoker(final Transport transport) {
-    super(transport);
+  public UpdateReportingTaskInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

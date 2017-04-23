@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerServicesEntity;
 
 public final class GetControllerServicesFromControllerInvoker extends AbstractInvoker<ControllerServicesEntity> {
-  public GetControllerServicesFromControllerInvoker(final Transport transport) {
-    super(transport);
+  public GetControllerServicesFromControllerInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final ControllerServicesEntity invoke() throws InvokerException {

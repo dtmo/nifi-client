@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.RemoteProcessGroupEntity;
 public final class GetRemoteProcessGroupInvoker extends ComponentEntityInvoker<RemoteProcessGroupEntity> {
   private String id;
 
-  public GetRemoteProcessGroupInvoker(final Transport transport) {
-    super(transport);
+  public GetRemoteProcessGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

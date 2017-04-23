@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerServiceTypesEntity;
 public final class GetControllerServiceTypesInvoker extends AbstractInvoker<ControllerServiceTypesEntity> {
   private String serviceType;
 
-  public GetControllerServiceTypesInvoker(final Transport transport) {
-    super(transport);
+  public GetControllerServiceTypesInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

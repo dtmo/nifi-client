@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ClusteSummaryEntity;
 
 public final class GetClusterSummaryInvoker extends AbstractInvoker<ClusteSummaryEntity> {
-  public GetClusterSummaryInvoker(final Transport transport) {
-    super(transport);
+  public GetClusterSummaryInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final ClusteSummaryEntity invoke() throws InvokerException {

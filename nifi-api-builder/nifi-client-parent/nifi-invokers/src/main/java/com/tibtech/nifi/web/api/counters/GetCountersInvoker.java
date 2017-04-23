@@ -15,8 +15,8 @@ public final class GetCountersInvoker extends AbstractInvoker<CountersEntity> {
 
   private String clusterNodeId;
 
-  public GetCountersInvoker(final Transport transport) {
-    super(transport);
+  public GetCountersInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

@@ -24,8 +24,8 @@ public final class GetBulletinBoardInvoker extends AbstractInvoker<BulletinBoard
 
   private Integer limit;
 
-  public GetBulletinBoardInvoker(final Transport transport) {
-    super(transport);
+  public GetBulletinBoardInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

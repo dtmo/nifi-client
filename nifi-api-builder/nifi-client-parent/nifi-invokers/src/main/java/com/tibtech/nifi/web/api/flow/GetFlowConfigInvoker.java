@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.FlowConfigurationEntity;
 
 public final class GetFlowConfigInvoker extends AbstractInvoker<FlowConfigurationEntity> {
-  public GetFlowConfigInvoker(final Transport transport) {
-    super(transport);
+  public GetFlowConfigInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final FlowConfigurationEntity invoke() throws InvokerException {

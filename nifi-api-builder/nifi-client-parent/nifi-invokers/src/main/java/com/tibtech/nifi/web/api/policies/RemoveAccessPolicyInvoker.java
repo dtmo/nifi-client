@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.AccessPolicyEntity;
 public final class RemoveAccessPolicyInvoker extends ComponentEntityInvoker<AccessPolicyEntity> {
   private String id;
 
-  public RemoveAccessPolicyInvoker(final Transport transport) {
-    super(transport);
+  public RemoveAccessPolicyInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

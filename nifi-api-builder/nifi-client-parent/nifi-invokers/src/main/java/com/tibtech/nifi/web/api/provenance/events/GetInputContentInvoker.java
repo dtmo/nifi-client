@@ -15,8 +15,8 @@ public final class GetInputContentInvoker extends AbstractInvoker<Void> {
 
   private String clusterNodeId;
 
-  public GetInputContentInvoker(final Transport transport) {
-    super(transport);
+  public GetInputContentInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

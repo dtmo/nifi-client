@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.SnippetEntity;
 public final class DeleteSnippetInvoker extends AbstractInvoker<SnippetEntity> {
   private String id;
 
-  public DeleteSnippetInvoker(final Transport transport) {
-    super(transport);
+  public DeleteSnippetInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.UserGroupEntity;
 public final class CreateUserGroupInvoker extends ComponentEntityInvoker<UserGroupEntity> {
   private UserGroupEntity userGroupEntity;
 
-  public CreateUserGroupInvoker(final Transport transport) {
-    super(transport);
+  public CreateUserGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

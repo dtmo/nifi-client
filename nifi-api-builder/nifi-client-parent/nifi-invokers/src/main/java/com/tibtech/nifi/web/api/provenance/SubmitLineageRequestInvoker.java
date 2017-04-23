@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.LineageEntity;
 public final class SubmitLineageRequestInvoker extends AbstractInvoker<LineageEntity> {
   private LineageEntity lineageEntity;
 
-  public SubmitLineageRequestInvoker(final Transport transport) {
-    super(transport);
+  public SubmitLineageRequestInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

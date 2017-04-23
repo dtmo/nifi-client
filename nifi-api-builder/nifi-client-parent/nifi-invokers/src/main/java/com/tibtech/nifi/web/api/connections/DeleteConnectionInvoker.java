@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ConnectionEntity;
 public final class DeleteConnectionInvoker extends ComponentEntityInvoker<ConnectionEntity> {
   private String id;
 
-  public DeleteConnectionInvoker(final Transport transport) {
-    super(transport);
+  public DeleteConnectionInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

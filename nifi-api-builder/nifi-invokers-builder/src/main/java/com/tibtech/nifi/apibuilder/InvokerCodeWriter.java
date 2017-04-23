@@ -274,7 +274,7 @@ public class InvokerCodeWriter
 						.filter(m -> Arrays.stream(m.getAnnotations()).anyMatch(a -> a instanceof Path))
 						.collect(Collectors.toList());
 
-				final java.nio.file.Path generatedJavaPath = Paths.get("src/generated/java");
+				final java.nio.file.Path generatedJavaPath = Paths.get("../nifi-client-parent/nifi-invokers/src/main/java");
 
 				for (final Method restApiMethod : restApiMethods)
 				{

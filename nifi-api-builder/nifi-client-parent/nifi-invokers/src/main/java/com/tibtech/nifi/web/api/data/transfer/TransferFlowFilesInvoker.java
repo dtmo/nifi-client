@@ -14,8 +14,8 @@ public final class TransferFlowFilesInvoker extends AbstractInvoker<StreamingOut
 
   private String transactionId;
 
-  public TransferFlowFilesInvoker(final Transport transport) {
-    super(transport);
+  public TransferFlowFilesInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

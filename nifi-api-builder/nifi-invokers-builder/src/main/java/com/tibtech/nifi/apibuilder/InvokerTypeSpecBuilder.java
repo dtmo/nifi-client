@@ -432,7 +432,8 @@ public class InvokerTypeSpecBuilder
 
 		// Add a constructor
 		typeSpecBuilder.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC)
-				.addParameter(Transport.class, "transport", Modifier.FINAL).addStatement("super(transport)").build());
+				.addParameter(Transport.class, "transport", Modifier.FINAL)
+				.addParameter(long.class, "version", Modifier.FINAL).addStatement("super(transport, version)").build());
 
 		for (final BuilderProperty invokerProperty : pathParameters)
 		{

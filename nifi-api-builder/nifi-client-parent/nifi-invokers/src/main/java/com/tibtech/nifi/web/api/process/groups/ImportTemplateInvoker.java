@@ -15,8 +15,8 @@ public final class ImportTemplateInvoker extends ComponentEntityInvoker<Template
 
   private TemplateEntity templateEntity;
 
-  public ImportTemplateInvoker(final Transport transport) {
-    super(transport);
+  public ImportTemplateInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

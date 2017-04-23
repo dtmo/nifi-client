@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.CounterEntity;
 public final class UpdateCounterInvoker extends AbstractInvoker<CounterEntity> {
   private String id;
 
-  public UpdateCounterInvoker(final Transport transport) {
-    super(transport);
+  public UpdateCounterInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

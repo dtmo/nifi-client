@@ -13,8 +13,8 @@ public final class ReceiveFlowFilesInvoker extends AbstractInvoker<String> {
 
   private String transactionId;
 
-  public ReceiveFlowFilesInvoker(final Transport transport) {
-    super(transport);
+  public ReceiveFlowFilesInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

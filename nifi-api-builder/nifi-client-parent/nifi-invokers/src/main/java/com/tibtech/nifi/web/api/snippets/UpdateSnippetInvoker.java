@@ -15,8 +15,8 @@ public final class UpdateSnippetInvoker extends AbstractInvoker<SnippetEntity> {
 
   private SnippetEntity snippetEntity;
 
-  public UpdateSnippetInvoker(final Transport transport) {
-    super(transport);
+  public UpdateSnippetInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

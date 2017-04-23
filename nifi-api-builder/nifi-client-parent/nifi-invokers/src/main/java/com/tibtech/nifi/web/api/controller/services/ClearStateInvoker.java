@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.dto.ComponentStateDTO;
 public final class ClearStateInvoker extends AbstractInvoker<ComponentStateDTO> {
   private String id;
 
-  public ClearStateInvoker(final Transport transport) {
-    super(transport);
+  public ClearStateInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

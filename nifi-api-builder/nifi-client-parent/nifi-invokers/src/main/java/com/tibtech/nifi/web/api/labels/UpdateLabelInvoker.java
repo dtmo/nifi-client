@@ -15,8 +15,8 @@ public final class UpdateLabelInvoker extends ComponentEntityInvoker<LabelEntity
 
   private LabelEntity labelEntity;
 
-  public UpdateLabelInvoker(final Transport transport) {
-    super(transport);
+  public UpdateLabelInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

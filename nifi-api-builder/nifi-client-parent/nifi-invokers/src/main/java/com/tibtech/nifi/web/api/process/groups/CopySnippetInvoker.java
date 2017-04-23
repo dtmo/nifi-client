@@ -16,8 +16,8 @@ public final class CopySnippetInvoker extends AbstractInvoker<FlowSnippetEntity>
 
   private CopySnippetRequestEntity copySnippetRequestEntity;
 
-  public CopySnippetInvoker(final Transport transport) {
-    super(transport);
+  public CopySnippetInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

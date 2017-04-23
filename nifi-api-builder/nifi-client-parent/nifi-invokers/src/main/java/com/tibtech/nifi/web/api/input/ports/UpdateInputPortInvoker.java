@@ -15,8 +15,8 @@ public final class UpdateInputPortInvoker extends ComponentEntityInvoker<PortEnt
 
   private PortEntity portEntity;
 
-  public UpdateInputPortInvoker(final Transport transport) {
-    super(transport);
+  public UpdateInputPortInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

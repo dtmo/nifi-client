@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ReportingTasksEntity;
 
 public final class GetReportingTasksInvoker extends AbstractInvoker<ReportingTasksEntity> {
-  public GetReportingTasksInvoker(final Transport transport) {
-    super(transport);
+  public GetReportingTasksInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final ReportingTasksEntity invoke() throws InvokerException {

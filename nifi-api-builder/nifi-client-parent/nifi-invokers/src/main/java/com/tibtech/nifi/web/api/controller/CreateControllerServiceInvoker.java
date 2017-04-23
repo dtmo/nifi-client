@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerServiceEntity;
 public final class CreateControllerServiceInvoker extends ComponentEntityInvoker<ControllerServiceEntity> {
   private ControllerServiceEntity controllerServiceEntity;
 
-  public CreateControllerServiceInvoker(final Transport transport) {
-    super(transport);
+  public CreateControllerServiceInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**
@@ -36,7 +36,6 @@ public final class CreateControllerServiceInvoker extends ComponentEntityInvoker
     target = target.path("controller-services");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     controllerServiceEntity.setRevision(createRevisionDto());
-    controllerServiceEntity.getRevision().setVersion(0L);
     final Entity<ControllerServiceEntity> entity = Entity.entity(controllerServiceEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

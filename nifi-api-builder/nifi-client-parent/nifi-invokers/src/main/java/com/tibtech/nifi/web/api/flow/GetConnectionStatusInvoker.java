@@ -17,8 +17,8 @@ public final class GetConnectionStatusInvoker extends AbstractInvoker<Connection
 
   private String clusterNodeId;
 
-  public GetConnectionStatusInvoker(final Transport transport) {
-    super(transport);
+  public GetConnectionStatusInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

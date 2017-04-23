@@ -15,8 +15,8 @@ public final class CreateRemoteProcessGroupInvoker extends ComponentEntityInvoke
 
   private RemoteProcessGroupEntity remoteProcessGroupEntity;
 
-  public CreateRemoteProcessGroupInvoker(final Transport transport) {
-    super(transport);
+  public CreateRemoteProcessGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

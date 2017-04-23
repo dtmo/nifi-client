@@ -2,6 +2,8 @@ package com.tibtech.nifi.client;
 
 import java.util.function.Function;
 
+import org.apache.nifi.web.api.dto.FlowSnippetDTO;
+import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
 import org.apache.nifi.web.api.dto.ProcessorDTO;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
@@ -24,11 +26,81 @@ public class ProcessGroup extends Component
 {
 	private ProcessGroupDTO processGroupDTO;
 
-	public ProcessGroup(final Transport transport, final ProcessGroupDTO processGroupDTO)
+	public ProcessGroup(final Transport transport, final long version, final ProcessGroupDTO processGroupDTO)
 	{
-		super(transport, processGroupDTO);
+		super(transport, version);
 
 		this.processGroupDTO = processGroupDTO;
+	}
+
+	public String getId()
+	{
+		return processGroupDTO.getId();
+	}
+
+	public String getParentGroupId()
+	{
+		return processGroupDTO.getParentGroupId();
+	}
+
+	public String getName()
+	{
+		return processGroupDTO.getName();
+	}
+
+	public PositionDTO getPosition()
+	{
+		return processGroupDTO.getPosition();
+	}
+
+	public String getComments()
+	{
+		return processGroupDTO.getComments();
+	}
+
+	public FlowSnippetDTO getContents()
+	{
+		return processGroupDTO.getContents();
+	}
+
+	public Integer getInputPortCount()
+	{
+		return processGroupDTO.getInputPortCount();
+	}
+
+	public Integer getInvalidCount()
+	{
+		return processGroupDTO.getInvalidCount();
+	}
+
+	public Integer getOutputPortCount()
+	{
+		return processGroupDTO.getOutputPortCount();
+	}
+
+	public Integer getRunningCount()
+	{
+		return processGroupDTO.getRunningCount();
+	}
+
+	public Integer getStoppedCount()
+	{
+		return processGroupDTO.getStoppedCount();
+	}
+
+	public Integer getDisabledCount()
+	{
+		return processGroupDTO.getDisabledCount();
+	}
+
+	public Integer getActiveRemotePortCount()
+	{
+		return processGroupDTO.getActiveRemotePortCount();
+	}
+
+	public Integer getInactiveRemotePortCount()
+	{
+		return processGroupDTO.getInactiveRemotePortCount();
 	}
 
 	public Processor createProcessor(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> function)
@@ -36,11 +108,12 @@ public class ProcessGroup extends Component
 	{
 		final ProcessorDTO processorDTO = function
 				.apply(new ProcessorDTOBuilder().setParentGroupId(processGroupDTO.getId())).build();
-		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport())
+		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport(), 0)
 				.setId(processorDTO.getParentGroupId())
 				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(processorDTO).build()).invoke();
 
-		return new Processor(getTransport(), processorEntity.getComponent());
+		return new Processor(getTransport(), processorEntity.getRevision().getVersion(),
+				processorEntity.getComponent());
 	}
 
 	public Processor createProcessor(
@@ -62,12 +135,13 @@ public class ProcessGroup extends Component
 		final ProcessGroupDTO childProcessGroup = function
 				.apply(new ProcessGroupDTOBuilder().setParentGroupId(processGroupDTO.getParentGroupId())).build();
 
-		final ProcessGroupEntity processGroupEntity = new CreateProcessGroupInvoker(getTransport())
+		final ProcessGroupEntity processGroupEntity = new CreateProcessGroupInvoker(getTransport(), 0)
 				.setId(childProcessGroup.getParentGroupId())
 				.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(childProcessGroup).build())
 				.invoke();
 
-		return new ProcessGroup(getTransport(), processGroupEntity.getComponent());
+		return new ProcessGroup(getTransport(), processGroupEntity.getRevision().getVersion(),
+				processGroupEntity.getComponent());
 	}
 
 	public void update(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> function) throws InvokerException
@@ -75,23 +149,25 @@ public class ProcessGroup extends Component
 		final ProcessGroupDTO updatedProcessGroupDTO = function.apply(ProcessGroupDTOBuilder.of(processGroupDTO))
 				.build();
 
-		final ProcessGroupEntity processGroupEntity = new UpdateProcessGroupInvoker(getTransport())
+		final ProcessGroupEntity processGroupEntity = new UpdateProcessGroupInvoker(getTransport(), getVersion())
 				.setId(updatedProcessGroupDTO.getId())
 				.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(updatedProcessGroupDTO).build())
 				.invoke();
+		
+		this.setVersion(processGroupEntity.getRevision().getVersion());
 
 		this.processGroupDTO = processGroupEntity.getComponent();
 	}
 
 	public void refresh() throws InvokerException
 	{
-		final ProcessGroupEntity processGroupEntity = new GetProcessGroupInvoker(getTransport()).setId(getId())
+		final ProcessGroupEntity processGroupEntity = new GetProcessGroupInvoker(getTransport(), 0).setId(getId())
 				.invoke();
 		this.processGroupDTO = processGroupEntity.getComponent();
 	}
 
 	public void delete() throws InvokerException
 	{
-		new RemoveProcessGroupInvoker(getTransport()).setId(getId()).invoke();
+		new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
 }

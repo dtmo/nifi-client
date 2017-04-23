@@ -14,8 +14,8 @@ public final class GetListingRequestInvoker extends AbstractInvoker<ListingReque
 
   private String listingRequestId;
 
-  public GetListingRequestInvoker(final Transport transport) {
-    super(transport);
+  public GetListingRequestInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

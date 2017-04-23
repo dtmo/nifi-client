@@ -15,8 +15,8 @@ public final class CreateControllerServiceInvoker extends ComponentEntityInvoker
 
   private ControllerServiceEntity controllerServiceEntity;
 
-  public CreateControllerServiceInvoker(final Transport transport) {
-    super(transport);
+  public CreateControllerServiceInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

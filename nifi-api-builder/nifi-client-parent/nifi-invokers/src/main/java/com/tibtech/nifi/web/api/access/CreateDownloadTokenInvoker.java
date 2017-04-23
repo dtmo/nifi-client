@@ -9,8 +9,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 public final class CreateDownloadTokenInvoker extends AbstractInvoker<String> {
-  public CreateDownloadTokenInvoker(final Transport transport) {
-    super(transport);
+  public CreateDownloadTokenInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final String invoke() throws InvokerException {

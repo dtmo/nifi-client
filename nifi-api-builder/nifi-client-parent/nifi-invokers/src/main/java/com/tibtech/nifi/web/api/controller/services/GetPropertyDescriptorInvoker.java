@@ -14,8 +14,8 @@ public final class GetPropertyDescriptorInvoker extends AbstractInvoker<Property
 
   private String propertyName;
 
-  public GetPropertyDescriptorInvoker(final Transport transport) {
-    super(transport);
+  public GetPropertyDescriptorInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

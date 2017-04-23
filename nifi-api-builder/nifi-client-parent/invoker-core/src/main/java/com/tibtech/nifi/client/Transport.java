@@ -8,7 +8,6 @@ public class Transport
 	private final WebTarget baseWebTarget;
 
 	private String clientId = null;
-	private Long version = 0L;
 
 	public Transport(final Client client, final String baseUri)
 	{
@@ -35,28 +34,6 @@ public class Transport
 		{
 			throw new IllegalStateException("Cannot register an inconsistent client ID. Current client ID: "
 					+ this.clientId + ", inconsistent client ID: " + clientId);
-		}
-	}
-
-	public Long getVersion()
-	{
-		return version;
-	}
-
-	public void updateVersion(final Long version)
-	{
-		if (this.version == null)
-		{
-			this.version = version;
-		}
-		else if (version >= this.version)
-		{
-			this.version = version;
-		}
-		else
-		{
-			throw new IllegalStateException("Cannot update the flow version to a lower value. Current version: "
-					+ this.version + ", new value: " + version);
 		}
 	}
 }

@@ -15,8 +15,8 @@ public final class ScheduleComponentsInvoker extends AbstractInvoker<ScheduleCom
 
   private ScheduleComponentsEntity scheduleComponentsEntity;
 
-  public ScheduleComponentsInvoker(final Transport transport) {
-    super(transport);
+  public ScheduleComponentsInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

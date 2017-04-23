@@ -15,8 +15,8 @@ public final class UpdateUserGroupInvoker extends ComponentEntityInvoker<UserGro
 
   private UserGroupEntity userGroupEntity;
 
-  public UpdateUserGroupInvoker(final Transport transport) {
-    super(transport);
+  public UpdateUserGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.dto.TemplateDTO;
 public final class ExportTemplateInvoker extends AbstractInvoker<TemplateDTO> {
   private String id;
 
-  public ExportTemplateInvoker(final Transport transport) {
-    super(transport);
+  public ExportTemplateInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

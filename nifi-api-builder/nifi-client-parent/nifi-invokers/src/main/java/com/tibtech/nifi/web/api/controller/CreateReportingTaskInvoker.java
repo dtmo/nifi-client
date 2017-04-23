@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ReportingTaskEntity;
 public final class CreateReportingTaskInvoker extends ComponentEntityInvoker<ReportingTaskEntity> {
   private ReportingTaskEntity reportingTaskEntity;
 
-  public CreateReportingTaskInvoker(final Transport transport) {
-    super(transport);
+  public CreateReportingTaskInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**
@@ -36,7 +36,6 @@ public final class CreateReportingTaskInvoker extends ComponentEntityInvoker<Rep
     target = target.path("reporting-tasks");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     reportingTaskEntity.setRevision(createRevisionDto());
-    reportingTaskEntity.getRevision().setVersion(0L);
     final Entity<ReportingTaskEntity> entity = Entity.entity(reportingTaskEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ProcessGroupFlowEntity;
 public final class GetFlowInvoker extends AbstractInvoker<ProcessGroupFlowEntity> {
   private String id;
 
-  public GetFlowInvoker(final Transport transport) {
-    super(transport);
+  public GetFlowInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

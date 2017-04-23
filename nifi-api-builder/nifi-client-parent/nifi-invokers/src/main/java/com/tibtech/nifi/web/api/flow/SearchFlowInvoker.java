@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.SearchResultsEntity;
 public final class SearchFlowInvoker extends AbstractInvoker<SearchResultsEntity> {
   private String q;
 
-  public SearchFlowInvoker(final Transport transport) {
-    super(transport);
+  public SearchFlowInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final String getQ() {

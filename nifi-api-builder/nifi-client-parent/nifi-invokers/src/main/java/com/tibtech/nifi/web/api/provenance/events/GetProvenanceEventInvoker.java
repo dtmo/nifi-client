@@ -15,8 +15,8 @@ public final class GetProvenanceEventInvoker extends AbstractInvoker<ProvenanceE
 
   private String clusterNodeId;
 
-  public GetProvenanceEventInvoker(final Transport transport) {
-    super(transport);
+  public GetProvenanceEventInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

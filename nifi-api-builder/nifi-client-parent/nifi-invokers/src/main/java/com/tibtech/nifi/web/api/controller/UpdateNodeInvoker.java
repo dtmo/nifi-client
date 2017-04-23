@@ -15,8 +15,8 @@ public final class UpdateNodeInvoker extends AbstractInvoker<NodeEntity> {
 
   private NodeEntity nodeEntity;
 
-  public UpdateNodeInvoker(final Transport transport) {
-    super(transport);
+  public UpdateNodeInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

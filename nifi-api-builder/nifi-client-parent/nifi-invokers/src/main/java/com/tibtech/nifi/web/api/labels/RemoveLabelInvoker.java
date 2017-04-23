@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.LabelEntity;
 public final class RemoveLabelInvoker extends ComponentEntityInvoker<LabelEntity> {
   private String id;
 
-  public RemoveLabelInvoker(final Transport transport) {
-    super(transport);
+  public RemoveLabelInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.FunnelsEntity;
 public final class GetFunnelsInvoker extends AbstractInvoker<FunnelsEntity> {
   private String id;
 
-  public GetFunnelsInvoker(final Transport transport) {
-    super(transport);
+  public GetFunnelsInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

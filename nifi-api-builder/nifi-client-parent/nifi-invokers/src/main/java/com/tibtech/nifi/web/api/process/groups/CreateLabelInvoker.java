@@ -15,8 +15,8 @@ public final class CreateLabelInvoker extends ComponentEntityInvoker<LabelEntity
 
   private LabelEntity labelEntity;
 
-  public CreateLabelInvoker(final Transport transport) {
-    super(transport);
+  public CreateLabelInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

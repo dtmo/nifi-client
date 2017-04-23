@@ -19,8 +19,8 @@ public final class CommitOutputPortTransactionInvoker extends AbstractInvoker<Tr
 
   private String checksum;
 
-  public CommitOutputPortTransactionInvoker(final Transport transport) {
-    super(transport);
+  public CommitOutputPortTransactionInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

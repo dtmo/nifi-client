@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.AccessStatusEntity;
 
 public final class GetAccessStatusInvoker extends AbstractInvoker<AccessStatusEntity> {
-  public GetAccessStatusInvoker(final Transport transport) {
-    super(transport);
+  public GetAccessStatusInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final AccessStatusEntity invoke() throws InvokerException {

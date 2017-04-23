@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.HistoryEntity;
 public final class DeleteHistoryInvoker extends AbstractInvoker<HistoryEntity> {
   private Date endDate;
 
-  public DeleteHistoryInvoker(final Transport transport) {
-    super(transport);
+  public DeleteHistoryInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

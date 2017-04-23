@@ -15,8 +15,8 @@ public final class CreateAccessTokenInvoker extends AbstractInvoker<String> {
 
   private String password;
 
-  public CreateAccessTokenInvoker(final Transport transport) {
-    super(transport);
+  public CreateAccessTokenInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final String getUsername() {

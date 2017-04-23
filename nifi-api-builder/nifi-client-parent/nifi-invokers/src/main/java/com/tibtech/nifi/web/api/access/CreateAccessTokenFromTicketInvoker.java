@@ -9,8 +9,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 public final class CreateAccessTokenFromTicketInvoker extends AbstractInvoker<String> {
-  public CreateAccessTokenFromTicketInvoker(final Transport transport) {
-    super(transport);
+  public CreateAccessTokenFromTicketInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final String invoke() throws InvokerException {

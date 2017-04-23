@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ProcessorEntity;
 public final class DeleteProcessorInvoker extends ComponentEntityInvoker<ProcessorEntity> {
   private String id;
 
-  public DeleteProcessorInvoker(final Transport transport) {
-    super(transport);
+  public DeleteProcessorInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

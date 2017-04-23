@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.LabelsEntity;
 public final class GetLabelsInvoker extends AbstractInvoker<LabelsEntity> {
   private String id;
 
-  public GetLabelsInvoker(final Transport transport) {
-    super(transport);
+  public GetLabelsInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

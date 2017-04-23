@@ -17,8 +17,8 @@ public final class UpdateRemoteProcessGroupInputPortInvoker extends ComponentEnt
 
   private RemoteProcessGroupPortEntity remoteProcessGroupPortEntity;
 
-  public UpdateRemoteProcessGroupInputPortInvoker(final Transport transport) {
-    super(transport);
+  public UpdateRemoteProcessGroupInputPortInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

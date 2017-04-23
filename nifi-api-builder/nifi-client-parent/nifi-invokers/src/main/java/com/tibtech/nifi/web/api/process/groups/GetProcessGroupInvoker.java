@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 public final class GetProcessGroupInvoker extends ComponentEntityInvoker<ProcessGroupEntity> {
   private String id;
 
-  public GetProcessGroupInvoker(final Transport transport) {
-    super(transport);
+  public GetProcessGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

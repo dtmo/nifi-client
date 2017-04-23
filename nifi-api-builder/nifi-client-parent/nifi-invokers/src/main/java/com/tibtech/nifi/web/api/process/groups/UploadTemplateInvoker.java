@@ -19,8 +19,8 @@ public final class UploadTemplateInvoker extends ComponentEntityInvoker<Template
 
   private InputStream template;
 
-  public UploadTemplateInvoker(final Transport transport) {
-    super(transport);
+  public UploadTemplateInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

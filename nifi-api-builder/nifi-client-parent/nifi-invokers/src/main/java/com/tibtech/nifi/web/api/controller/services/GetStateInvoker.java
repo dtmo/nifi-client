@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.dto.ComponentStateDTO;
 public final class GetStateInvoker extends AbstractInvoker<ComponentStateDTO> {
   private String id;
 
-  public GetStateInvoker(final Transport transport) {
-    super(transport);
+  public GetStateInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

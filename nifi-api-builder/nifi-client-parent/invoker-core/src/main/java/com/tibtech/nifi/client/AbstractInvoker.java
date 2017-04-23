@@ -10,10 +10,13 @@ import org.apache.nifi.web.api.dto.RevisionDTO;
 public abstract class AbstractInvoker<T>
 {
 	private final Transport transport;
-	
-	public AbstractInvoker(final Transport transport)
+
+	private final long version;
+
+	public AbstractInvoker(final Transport transport, final long version)
 	{
 		this.transport = transport;
+		this.version = version;
 	}
 
 	public WebTarget getBaseWebTarget()
@@ -33,14 +36,9 @@ public abstract class AbstractInvoker<T>
 
 	public Long getVersion()
 	{
-		return transport.getVersion();
+		return version;
 	}
 
-	protected void updateVersion(Long version)
-	{
-		transport.updateVersion(version);
-	}
-	
 	protected RevisionDTO createRevisionDto()
 	{
 		final RevisionDTO revision = new RevisionDTO();
@@ -51,8 +49,7 @@ public abstract class AbstractInvoker<T>
 
 	public abstract T invoke() throws InvokerException;
 
-	protected T handleResponse(final Response response, final Class<T> entityClass)
-			throws InvokerException
+	protected T handleResponse(final Response response, final Class<T> entityClass) throws InvokerException
 	{
 		StatusType statusInfo = response.getStatusInfo();
 		if (statusInfo.getFamily() == Family.SUCCESSFUL)

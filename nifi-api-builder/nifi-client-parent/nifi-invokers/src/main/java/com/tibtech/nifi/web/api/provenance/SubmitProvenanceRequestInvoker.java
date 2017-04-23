@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ProvenanceEntity;
 public final class SubmitProvenanceRequestInvoker extends AbstractInvoker<ProvenanceEntity> {
   private ProvenanceEntity provenanceEntity;
 
-  public SubmitProvenanceRequestInvoker(final Transport transport) {
-    super(transport);
+  public SubmitProvenanceRequestInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

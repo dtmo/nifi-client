@@ -15,8 +15,8 @@ public final class UpdateProcessGroupInvoker extends ComponentEntityInvoker<Proc
 
   private ProcessGroupEntity processGroupEntity;
 
-  public UpdateProcessGroupInvoker(final Transport transport) {
-    super(transport);
+  public UpdateProcessGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

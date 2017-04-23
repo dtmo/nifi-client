@@ -9,8 +9,8 @@ import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerConfigurationEntity;
 
 public final class GetControllerConfigInvoker extends AbstractInvoker<ControllerConfigurationEntity> {
-  public GetControllerConfigInvoker(final Transport transport) {
-    super(transport);
+  public GetControllerConfigInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   public final ControllerConfigurationEntity invoke() throws InvokerException {

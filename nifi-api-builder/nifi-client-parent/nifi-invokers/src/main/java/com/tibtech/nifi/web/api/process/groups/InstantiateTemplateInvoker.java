@@ -16,8 +16,8 @@ public final class InstantiateTemplateInvoker extends AbstractInvoker<FlowEntity
 
   private InstantiateTemplateRequestEntity instantiateTemplateRequestEntity;
 
-  public InstantiateTemplateInvoker(final Transport transport) {
-    super(transport);
+  public InstantiateTemplateInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

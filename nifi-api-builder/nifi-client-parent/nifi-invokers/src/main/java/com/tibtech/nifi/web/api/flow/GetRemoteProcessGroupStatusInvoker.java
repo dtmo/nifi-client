@@ -17,8 +17,8 @@ public final class GetRemoteProcessGroupStatusInvoker extends AbstractInvoker<Pr
 
   private String clusterNodeId;
 
-  public GetRemoteProcessGroupStatusInvoker(final Transport transport) {
-    super(transport);
+  public GetRemoteProcessGroupStatusInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

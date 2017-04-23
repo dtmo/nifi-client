@@ -16,8 +16,8 @@ public final class GetFlowFileInvoker extends AbstractInvoker<FlowFileEntity> {
 
   private String clusterNodeId;
 
-  public GetFlowFileInvoker(final Transport transport) {
-    super(transport);
+  public GetFlowFileInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

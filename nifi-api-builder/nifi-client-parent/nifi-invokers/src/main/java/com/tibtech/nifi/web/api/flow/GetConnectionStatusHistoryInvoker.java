@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.StatusHistoryEntity;
 public final class GetConnectionStatusHistoryInvoker extends AbstractInvoker<StatusHistoryEntity> {
   private String id;
 
-  public GetConnectionStatusHistoryInvoker(final Transport transport) {
-    super(transport);
+  public GetConnectionStatusHistoryInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

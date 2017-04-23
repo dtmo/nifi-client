@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.FunnelEntity;
 public final class RemoveFunnelInvoker extends ComponentEntityInvoker<FunnelEntity> {
   private String id;
 
-  public RemoveFunnelInvoker(final Transport transport) {
-    super(transport);
+  public RemoveFunnelInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

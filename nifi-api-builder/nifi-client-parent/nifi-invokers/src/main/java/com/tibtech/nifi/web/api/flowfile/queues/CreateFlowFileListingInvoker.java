@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ListingRequestEntity;
 public final class CreateFlowFileListingInvoker extends AbstractInvoker<ListingRequestEntity> {
   private String id;
 
-  public CreateFlowFileListingInvoker(final Transport transport) {
-    super(transport);
+  public CreateFlowFileListingInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

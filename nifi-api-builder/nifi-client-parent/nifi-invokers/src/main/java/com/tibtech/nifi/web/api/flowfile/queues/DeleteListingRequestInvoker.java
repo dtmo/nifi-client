@@ -14,8 +14,8 @@ public final class DeleteListingRequestInvoker extends AbstractInvoker<DropReque
 
   private String listingRequestId;
 
-  public DeleteListingRequestInvoker(final Transport transport) {
-    super(transport);
+  public DeleteListingRequestInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**

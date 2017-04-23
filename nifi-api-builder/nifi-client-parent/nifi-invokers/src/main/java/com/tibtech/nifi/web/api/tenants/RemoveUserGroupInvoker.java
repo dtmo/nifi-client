@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.UserGroupEntity;
 public final class RemoveUserGroupInvoker extends ComponentEntityInvoker<UserGroupEntity> {
   private String id;
 
-  public RemoveUserGroupInvoker(final Transport transport) {
-    super(transport);
+  public RemoveUserGroupInvoker(final Transport transport, final long version) {
+    super(transport, version);
   }
 
   /**
