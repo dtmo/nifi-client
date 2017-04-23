@@ -2,16 +2,25 @@ package com.tibtech.nifi.client;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.function.Function;
 
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
 import org.apache.nifi.web.api.dto.ReportingTaskDTO;
+import org.apache.nifi.web.api.entity.ReportingTaskEntity;
 
+import com.tibtech.nifi.web.api.dto.ReportingTaskDTOBuilder;
+import com.tibtech.nifi.web.api.entity.ReportingTaskEntityBuilder;
+import com.tibtech.nifi.web.api.reporting.tasks.GetReportingTaskInvoker;
 import com.tibtech.nifi.web.api.reporting.tasks.RemoveReportingTaskInvoker;
+import com.tibtech.nifi.web.api.reporting.tasks.UpdateReportingTaskInvoker;
 
-public class ReportingTask extends Component
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
+public class ReportingTask extends EditableComponent<ReportingTask, ReportingTaskDTOBuilder>
 {
-	private final ReportingTaskDTO reportingTaskDTO;
+	private ReportingTaskDTO reportingTaskDTO;
 
 	public ReportingTask(final Transport transport, final long version, final ReportingTaskDTO reportingTaskDTO)
 	{
@@ -110,8 +119,39 @@ public class ReportingTask extends Component
 		return reportingTaskDTO.getActiveThreadCount();
 	}
 
+	@Override
 	public void delete() throws InvokerException
 	{
 		new RemoveReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+	}
+
+	@Override
+	public ReportingTask refresh() throws InvokerException
+	{
+		reportingTaskDTO = new GetReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke()
+				.getComponent();
+		return this;
+	}
+
+	@Override
+	public ReportingTask update(final Function<ReportingTaskDTOBuilder, ReportingTaskDTOBuilder> configurator)
+			throws InvokerException
+	{
+		final ReportingTaskEntity reportingTaskEntity = new UpdateReportingTaskInvoker(getTransport(), getVersion())
+				.setId(getId())
+				.setReportingTaskEntity(new ReportingTaskEntityBuilder()
+						.setComponent(configurator.apply(new ReportingTaskDTOBuilder().setId(getId())).build()).build())
+				.invoke();
+		setVersion(reportingTaskEntity.getRevision().getVersion());
+		reportingTaskDTO = reportingTaskEntity.getComponent();
+		return this;
+	}
+
+	@Override
+	public ReportingTask update(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReportingTaskDTOBuilder.class) final Closure<ReportingTaskDTOBuilder> closure)
+			throws InvokerException
+	{
+		return super.update(closure);
 	}
 }

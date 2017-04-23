@@ -17,7 +17,10 @@ import com.tibtech.nifi.web.api.process.groups.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processors.DeleteProcessorInvoker;
 import com.tibtech.nifi.web.api.processors.GetProcessorInvoker;
 
-public class Processor extends Component
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
+public class Processor extends EditableComponent<Processor, ProcessorDTOBuilder>
 {
 	private ProcessorDTO processorDTO;
 
@@ -113,7 +116,22 @@ public class Processor extends Component
 		return processorDTO.getDescription();
 	}
 
-	public void update(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> function) throws InvokerException
+	@Override
+	public void delete() throws InvokerException
+	{
+		new DeleteProcessorInvoker(getTransport(), getVersion()).setId(processorDTO.getId()).invoke();
+	}
+
+	@Override
+	public Processor refresh() throws InvokerException
+	{
+		this.processorDTO = new GetProcessorInvoker(getTransport(), 0).setId(processorDTO.getId()).invoke()
+				.getComponent();
+		return this;
+	}
+
+	@Override
+	public Processor update(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> function) throws InvokerException
 	{
 		final ProcessorDTO updatedProcessorDTO = function.apply(ProcessorDTOBuilder.of(processorDTO)).build();
 
@@ -123,22 +141,15 @@ public class Processor extends Component
 
 		this.setVersion(processorEntity.getRevision().getVersion());
 		this.processorDTO = processorEntity.getComponent();
+
+		return this;
 	}
 
-	protected void setProcessorDTO(final ProcessorDTO processorDTO)
+	@Override
+	public Processor update(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
+			throws InvokerException
 	{
-		this.processorDTO = processorDTO;
-	}
-
-	public void refresh() throws InvokerException
-	{
-		final ProcessorEntity processorEntity = new GetProcessorInvoker(getTransport(), 0).setId(processorDTO.getId())
-				.invoke();
-		this.processorDTO = processorEntity.getComponent();
-	}
-
-	public void delete() throws InvokerException
-	{
-		new DeleteProcessorInvoker(getTransport(), getVersion()).setId(processorDTO.getId()).invoke();
+		return super.update(closure);
 	}
 }

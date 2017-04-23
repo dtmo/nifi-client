@@ -1,4 +1,7 @@
 apply plugin: "groovy"
+apply plugin: "application"
+
+mainClassName = "com.tibtech.nifi.apibuilder.RestComponentPropertiesBuildersGenerator"
 
 dependencies {
 	compile project(":builder-core")

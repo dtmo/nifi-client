@@ -1,3 +1,5 @@
+#!/usr/bin/env groovy
+
 package com.tibtech.nifi.apibuilder
 
 //@Grapes([
@@ -51,7 +53,7 @@ for (def controllerServiceType : controllerServiceTypes)
 	{
 		def controllerService = flow.createControllerService {type = controllerServiceType.getType()}
 		def propertyDescriptors = controllerService.getDescriptors().values()
-		controllerService.remove()
+		controllerService.delete()
 		propertyDescriptors
 	}
 
@@ -83,7 +85,7 @@ for (def reportingTaskType : reportingTaskTypes)
 	{
 		def reportingTask = flow.createReportingTask {type = reportingTaskType.getType()}
 		def propertyDescriptors = reportingTask.getDescriptors().values()
-		reportingTask.remove()
+		reportingTask.delete()
 		propertyDescriptors
 	}
 

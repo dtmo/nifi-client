@@ -12,12 +12,16 @@ import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
 import org.apache.nifi.web.api.entity.ControllerServiceEntity;
 import org.apache.nifi.web.api.entity.ControllerServiceReferencingComponentEntity;
 
+import com.tibtech.nifi.web.api.controller.services.GetControllerServiceInvoker;
 import com.tibtech.nifi.web.api.controller.services.RemoveControllerServiceInvoker;
 import com.tibtech.nifi.web.api.controller.services.UpdateControllerServiceInvoker;
 import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
 
-public class ControllerService extends Component
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
+public class ControllerService extends EditableComponent<ControllerService, ControllerServiceDTOBuilder>
 {
 	private ControllerServiceDTO controllerServiceDTO;
 
@@ -104,29 +108,53 @@ public class ControllerService extends Component
 		return controllerServiceDTO.getValidationErrors();
 	}
 
-	public void update(final Function<ControllerServiceDTOBuilder, ControllerServiceDTOBuilder> function)
+	@Override
+	public void delete() throws InvokerException
+	{
+		new RemoveControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+	}
+
+	@Override
+	public ControllerService refresh() throws InvokerException
+	{
+		controllerServiceDTO = new GetControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke()
+				.getComponent();
+		return this;
+	}
+
+	@Override
+	public ControllerService update(
+			final Function<ControllerServiceDTOBuilder, ControllerServiceDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final ControllerServiceEntity controllerServiceEntity = new UpdateControllerServiceInvoker(getTransport(), getVersion())
-				.setId(controllerServiceDTO.getId())
-				.setControllerServiceEntity(new ControllerServiceEntityBuilder().setId(controllerServiceDTO.getId())
-						.setComponent(function.apply(ControllerServiceDTOBuilder.of(controllerServiceDTO)).build())
-						.build())
-				.invoke();
-		
+		final ControllerServiceEntity controllerServiceEntity = new UpdateControllerServiceInvoker(getTransport(),
+				getVersion())
+						.setId(controllerServiceDTO.getId())
+						.setControllerServiceEntity(
+								new ControllerServiceEntityBuilder().setId(controllerServiceDTO.getId())
+										.setComponent(configurator
+												.apply(ControllerServiceDTOBuilder.of(controllerServiceDTO)).build())
+										.build())
+						.invoke();
+
 		this.setVersion(controllerServiceEntity.getRevision().getVersion());
-		
+
 		this.controllerServiceDTO = controllerServiceEntity.getComponent();
+
+		return this;
+	}
+
+	@Override
+	public ControllerService update(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
+			throws InvokerException
+	{
+		return super.update(closure);
 	}
 
 	public void enable() throws InvokerException
 	{
 		setEnabled(true);
-	}
-
-	public void delete() throws InvokerException
-	{
-		new RemoveControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
 
 	public void disable() throws InvokerException

@@ -22,7 +22,7 @@ import com.tibtech.nifi.web.api.process.groups.UpdateProcessGroupInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class ProcessGroup extends Component
+public class ProcessGroup extends EditableComponent<ProcessGroup, ProcessGroupDTOBuilder>
 {
 	private ProcessGroupDTO processGroupDTO;
 
@@ -144,7 +144,22 @@ public class ProcessGroup extends Component
 				processGroupEntity.getComponent());
 	}
 
-	public void update(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> function) throws InvokerException
+	@Override
+	public void delete() throws InvokerException
+	{
+		new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+	}
+
+	@Override
+	public ProcessGroup refresh() throws InvokerException
+	{
+		this.processGroupDTO = new GetProcessGroupInvoker(getTransport(), 0).setId(getId()).invoke().getComponent();
+		return this;
+	}
+
+	@Override
+	public ProcessGroup update(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> function)
+			throws InvokerException
 	{
 		final ProcessGroupDTO updatedProcessGroupDTO = function.apply(ProcessGroupDTOBuilder.of(processGroupDTO))
 				.build();
@@ -153,21 +168,19 @@ public class ProcessGroup extends Component
 				.setId(updatedProcessGroupDTO.getId())
 				.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(updatedProcessGroupDTO).build())
 				.invoke();
-		
+
 		this.setVersion(processGroupEntity.getRevision().getVersion());
 
 		this.processGroupDTO = processGroupEntity.getComponent();
+
+		return this;
 	}
 
-	public void refresh() throws InvokerException
+	@Override
+	public ProcessGroup update(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupDTOBuilder.class) final Closure<ProcessGroupDTOBuilder> closure)
+			throws InvokerException
 	{
-		final ProcessGroupEntity processGroupEntity = new GetProcessGroupInvoker(getTransport(), 0).setId(getId())
-				.invoke();
-		this.processGroupDTO = processGroupEntity.getComponent();
-	}
-
-	public void delete() throws InvokerException
-	{
-		new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+		return super.update(closure);
 	}
 }
