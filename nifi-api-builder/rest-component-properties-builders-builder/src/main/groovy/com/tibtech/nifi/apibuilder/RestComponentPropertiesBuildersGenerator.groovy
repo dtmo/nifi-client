@@ -15,15 +15,13 @@ import org.apache.nifi.web.api.dto.DocumentedTypeDTO
 import org.apache.nifi.web.api.dto.PropertyDescriptorDTO
 
 import com.squareup.javapoet.JavaFile
-import com.tibtech.nifi.apibuilder.ConfigurableComponentPropertiesBuilderTypeSpecBuilder
-import com.tibtech.nifi.apibuilder.ConfigurableComponentProperty
 import com.tibtech.nifi.client.Flow
 
 def flow = Flow.connect "http://localhost:8080/nifi-api"
 
 def root = flow.rootProcessGroup
 
-def outputPath = Paths.get("../nifi-client-parent/component-properties-builders/src/main/java/")
+def outputPath = Paths.get("../nifi-client-parent/nifi-component-properties-builders/src/main/java/")
 def packageNameMapper = {String s -> s.replaceFirst("org\\.apache", "com.tibtech")}
 
 def writeComponentPropertiesBuilder(Flow flow, Closure packageNameMapper, Closure propertyDescriptorsProducer, Path outputPath, DocumentedTypeDTO docmentedTypeDTO)
@@ -48,6 +46,7 @@ println "Controller service types:"
 def controllerServiceTypes = flow.getControllerServiceTypes()
 for (def controllerServiceType : controllerServiceTypes)
 {
+	println "\t" + controllerServiceType.getType()
 	def propertyDescriptorsProducer =
 	{
 		def controllerService = flow.createControllerService {type = controllerServiceType.getType()}
@@ -59,10 +58,11 @@ for (def controllerServiceType : controllerServiceTypes)
 	writeComponentPropertiesBuilder(flow, packageNameMapper, propertyDescriptorsProducer, outputPath, controllerServiceType)
 }
 
-println "Processor types: "
+println "\nProcessor types: "
 def processorTypes = flow.getProcessorTypes()
 for (def processorType : processorTypes)
 {
+	println "\t" + processorType.getType()
 	def propertyDescriptorsProducer =
 	{
 		def processor = root.createProcessor {type = processorType.getType()}
@@ -72,4 +72,20 @@ for (def processorType : processorTypes)
 	}
 
 	writeComponentPropertiesBuilder(flow, packageNameMapper, propertyDescriptorsProducer, outputPath, processorType)
+}
+
+println "\nReporting Task types: "
+def reportingTaskTypes = flow.getReportingTaskTypes()
+for (def reportingTaskType : reportingTaskTypes)
+{
+	println "\t" + reportingTaskType.getType()
+	def propertyDescriptorsProducer =
+	{
+		def reportingTask = flow.createReportingTask {type = reportingTaskType.getType()}
+		def propertyDescriptors = reportingTask.getDescriptors().values()
+		reportingTask.remove()
+		propertyDescriptors
+	}
+
+	writeComponentPropertiesBuilder(flow, packageNameMapper, propertyDescriptorsProducer, outputPath, reportingTaskType)
 }
