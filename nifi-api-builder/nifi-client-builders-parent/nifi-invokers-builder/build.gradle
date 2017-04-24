@@ -10,7 +10,9 @@ dependencies
 
 	compile files("lib/org.apache.nifi/nifi-web-api-${nifiVersion}.jar")
 	compile "org.apache.nifi:nifi-framework-core-api:${nifiVersion}"
-
+	compile "org.apache.nifi:nifi-framework-cluster:${nifiVersion}"
+	compile "org.apache.felix:javax.servlet:1.0.0"
+	
 	compile "com.squareup:javapoet:1.8.0"
 	compile "org.reflections:reflections:0.9.10"
 	compile "org.eclipse.jdt:org.eclipse.jdt.core:3.12.2"

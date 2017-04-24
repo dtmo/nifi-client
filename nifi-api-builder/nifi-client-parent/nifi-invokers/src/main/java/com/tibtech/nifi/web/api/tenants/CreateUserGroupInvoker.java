@@ -30,7 +30,7 @@ public final class CreateUserGroupInvoker extends ComponentEntityInvoker<UserGro
   }
 
   public final UserGroupEntity invoke() throws InvokerException {
-    // tenants/user-groups
+    // /tenants/user-groups
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("user-groups");

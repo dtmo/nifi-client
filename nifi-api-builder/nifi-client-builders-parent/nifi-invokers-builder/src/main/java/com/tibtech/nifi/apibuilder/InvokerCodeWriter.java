@@ -7,13 +7,22 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
+import javax.ws.rs.GET;
+import javax.ws.rs.HEAD;
+import javax.ws.rs.OPTIONS;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -37,10 +46,8 @@ import org.slf4j.LoggerFactory;
 
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
 import com.sun.jersey.multipart.FormDataParam;
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
@@ -173,31 +180,83 @@ public class InvokerCodeWriter
 		}
 	}
 
-	public static TypeSpec createComponentEntityInvokerTypeSpec(
-			final Class<? extends ApplicationResource> resourceClass, final Method resourceMethod,
-			final Class<?> responseType) throws IntrospectionException
+	/**
+	 * Determine what HTTP method is being used base on annotations on the
+	 * method (there should only be one!).
+	 * 
+	 * @param invokerTypeSpecBuilder
+	 * @param resourceMethod
+	 */
+	public static void configureHttpMethod(final InvokerTypeSpecBuilder invokerTypeSpecBuilder,
+			final Method resourceMethod)
+	{
+		if (resourceMethod.getAnnotation(DELETE.class) != null)
+		{
+			invokerTypeSpecBuilder.setHttpMethod("DELETE");
+		}
+		else if (resourceMethod.getAnnotation(HEAD.class) != null)
+		{
+			invokerTypeSpecBuilder.setHttpMethod("HEAD");
+		}
+		else if (resourceMethod.getAnnotation(GET.class) != null)
+		{
+			invokerTypeSpecBuilder.setHttpMethod("GET");
+		}
+		else if (resourceMethod.getAnnotation(OPTIONS.class) != null)
+		{
+			invokerTypeSpecBuilder.setHttpMethod("OPTIONS");
+		}
+		else if (resourceMethod.getAnnotation(POST.class) != null)
+		{
+			invokerTypeSpecBuilder.setHttpMethod("POST");
+		}
+		else if (resourceMethod.getAnnotation(PUT.class) != null)
+		{
+			invokerTypeSpecBuilder.setHttpMethod("PUT");
+		}
+		else
+		{
+			throw new IllegalStateException("Could not find a HTTP method for resource method: " + resourceMethod);
+		}
+	}
+
+	private static PackagedTypeSpec createComponentEntityInvokerTypeSpec(
+			final Function<String, String> packageNameMapper, final Class<?> resourceClass, final Method resourceMethod,
+			final Class<?> responseType, final String classResourcePathPrefix) throws IntrospectionException
 	{
 		final InvokerTypeSpecBuilder invokerTypeSpecBuilder = new InvokerTypeSpecBuilder();
 		invokerTypeSpecBuilder.setResponseType(responseType);
+
+		final String classResourcePath;
+		// Determine the class level path.
+		final Path classResourcePathAnnotation = resourceClass.getAnnotation(Path.class);
+		if (classResourcePathAnnotation != null)
+		{
+			classResourcePath = classResourcePathPrefix + "/" + classResourcePathAnnotation.value();
+			invokerTypeSpecBuilder.setClassResourcePathString(classResourcePath);
+		}
+		else
+		{
+			throw new IllegalStateException("No class resource path annotation found: " + resourceClass);
+		}
+
+		final String methodResourcePath;
+		final Path methodResourcePathAnnotation = resourceMethod.getAnnotation(Path.class);
+		if (methodResourcePathAnnotation != null)
+		{
+			methodResourcePath = methodResourcePathAnnotation.value();
+			invokerTypeSpecBuilder.setMethodResourcePathString(methodResourcePath);
+		}
+		else
+		{
+			throw new IllegalStateException("No method resource path annotation found: " + resourceMethod);
+		}
 
 		invokerTypeSpecBuilder.setInvokerName(
 				NameUtils.componentsToCamelCase(NameUtils.getNameComponents(resourceMethod.getName()), false)
 						+ "Invoker");
 
-		final List<Annotation> classJaxRsAnnotations = getJaxRsAnnotations(resourceClass);
-		for (final Annotation classAnnotation : classJaxRsAnnotations)
-		{
-			switch (classAnnotation.annotationType().getName())
-			{
-				case "javax.ws.rs.Path":
-					final Path path = (Path) classAnnotation;
-					invokerTypeSpecBuilder.setClassResourcePathString(path.value());
-					break;
-
-				default:
-					throw new IllegalStateException("Unsupported JAX-RS class annotation: " + classAnnotation);
-			}
-		}
+		configureHttpMethod(invokerTypeSpecBuilder, resourceMethod);
 
 		final List<Annotation> methodJaxRsAnnotations = getJaxRsAnnotations(resourceMethod);
 		for (final Annotation methodAnnotation : methodJaxRsAnnotations)
@@ -214,43 +273,59 @@ public class InvokerCodeWriter
 					invokerTypeSpecBuilder.addProducesMediaTypes(stringsToMediaTypes(produces.value()));
 					break;
 
-				case "javax.ws.rs.DELETE":
-					invokerTypeSpecBuilder.setHttpMethod("DELETE");
-					break;
-
-				case "javax.ws.rs.HEAD":
-					invokerTypeSpecBuilder.setHttpMethod("HEAD");
-					break;
-
-				case "javax.ws.rs.GET":
-					invokerTypeSpecBuilder.setHttpMethod("GET");
-					break;
-
-				case "javax.ws.rs.OPTIONS":
-					invokerTypeSpecBuilder.setHttpMethod("OPTIONS");
-					break;
-
-				case "javax.ws.rs.POST":
-					invokerTypeSpecBuilder.setHttpMethod("POST");
-					break;
-
-				case "javax.ws.rs.PUT":
-					invokerTypeSpecBuilder.setHttpMethod("PUT");
-					break;
-
-				case "javax.ws.rs.Path":
-					final Path path = (Path) methodAnnotation;
-					invokerTypeSpecBuilder.setMethodResourcePathString(path.value());
-					break;
-
 				default:
-					throw new IllegalStateException("Unsupported JAX-RS method annotation: " + methodAnnotation);
+					// Do nothing
 			}
 		}
 
 		addInvokerProperties(invokerTypeSpecBuilder, resourceMethod);
 
-		return invokerTypeSpecBuilder.build();
+		return new PackagedTypeSpec(
+				packageNameMapper.apply(resourceClass.getPackage().getName()) + "."
+						+ NameUtils.componentsToPackageName(NameUtils.getNameComponents(classResourcePath)),
+				invokerTypeSpecBuilder.build());
+	}
+
+	public static void doStuff(final Collection<PackagedTypeSpec> packagedTypeSpecs,
+			final Function<String, String> packageNameMapper, final Class<?> resourceClass, final Method resourceMethod,
+			final Class<?> responseType, final String classResourcePathPrefix) throws IntrospectionException
+	{
+		if (ApplicationResource.class.isAssignableFrom(responseType))
+		{
+			final Method[] methods = responseType.getMethods();
+			final List<Method> restApiMethods = Arrays.stream(methods)
+					.filter(m -> Arrays.stream(m.getAnnotations()).anyMatch(a -> a instanceof Path))
+					.collect(Collectors.toList());
+
+			for (final Method restApiMethod : restApiMethods)
+			{
+				final ApiOperation apiOperation = restApiMethod.getAnnotation(ApiOperation.class);
+				if (apiOperation != null)
+				{
+					final Path methodResourcePathAnnotation = restApiMethod.getAnnotation(Path.class);
+					if (methodResourcePathAnnotation != null)
+					{
+						final String methodResourcePath = methodResourcePathAnnotation.value();
+						final Class<?> invokerResponseType = apiOperation.response();
+						doStuff(packagedTypeSpecs, packageNameMapper, responseType, restApiMethod, invokerResponseType,
+								classResourcePathPrefix + "/" + methodResourcePath);
+					}
+					else
+					{
+						throw new IllegalStateException("No method resource path annotation found: " + resourceMethod);
+					}
+				}
+				else
+				{
+					LOGGER.warn("Could not find API operation for method: {}", restApiMethod);
+				}
+			}
+		}
+		else
+		{
+			packagedTypeSpecs.add(createComponentEntityInvokerTypeSpec(packageNameMapper, resourceClass, resourceMethod,
+					responseType, classResourcePathPrefix));
+		}
 	}
 
 	public static void main(final String[] args) throws Exception
@@ -259,6 +334,10 @@ public class InvokerCodeWriter
 		final Set<Class<? extends ApplicationResource>> applicationResources = reflections
 				.getSubTypesOf(ApplicationResource.class);
 
+		final Function<String, String> packageNameMapper = s -> s.replaceFirst("org\\.apache", "com.tibtech");
+
+		final Set<PackagedTypeSpec> packagedTypeSpecs = new HashSet<>();
+
 		for (final Class<? extends ApplicationResource> applicationResourceClass : applicationResources)
 		{
 			Annotation[] annotations = applicationResourceClass.getAnnotations();
@@ -266,16 +345,10 @@ public class InvokerCodeWriter
 					.findFirst().orElse(null);
 			if (classResourcePathAnnotation != null)
 			{
-				List<String> classResourcePathNameComponents = NameUtils
-						.getNameComponents(classResourcePathAnnotation.value());
-
 				final Method[] methods = applicationResourceClass.getMethods();
 				final List<Method> restApiMethods = Arrays.stream(methods)
 						.filter(m -> Arrays.stream(m.getAnnotations()).anyMatch(a -> a instanceof Path))
 						.collect(Collectors.toList());
-
-				final java.nio.file.Path generatedJavaPath = Paths
-						.get("../nifi-client-parent/nifi-invokers/src/main/java");
 
 				for (final Method restApiMethod : restApiMethods)
 				{
@@ -283,16 +356,9 @@ public class InvokerCodeWriter
 					if (apiOperation != null)
 					{
 						final Class<?> invokerResponseType = apiOperation.response();
-						final TypeSpec invokerTypeSpec = createComponentEntityInvokerTypeSpec(applicationResourceClass,
-								restApiMethod, invokerResponseType);
 
-						final String applicationResourcePackageName = applicationResourceClass.getPackage().getName();
-						final String builderPackageName = applicationResourcePackageName.replaceFirst("org\\.apache",
-								"com.tibtech") + "."
-								+ NameUtils.componentsToPackageName(classResourcePathNameComponents);
-
-						final JavaFile javaFile = JavaFile.builder(builderPackageName, invokerTypeSpec).build();
-						javaFile.writeTo(generatedJavaPath);
+						doStuff(packagedTypeSpecs, packageNameMapper, applicationResourceClass, restApiMethod,
+								invokerResponseType, "");
 					}
 					else
 					{
@@ -300,7 +366,17 @@ public class InvokerCodeWriter
 					}
 				}
 			}
+		}
 
+		final java.nio.file.Path generatedJavaPath = Paths.get("../../nifi-client-parent/nifi-invokers/src/main/java");
+
+		for (final PackagedTypeSpec packagedTypeSpec : packagedTypeSpecs)
+		{
+			final String builderPackageName = packagedTypeSpec.getPackageName().replaceFirst("org\\.apache",
+					"com.tibtech");
+
+			final JavaFile javaFile = JavaFile.builder(builderPackageName, packagedTypeSpec.getTypeSpec()).build();
+			javaFile.writeTo(generatedJavaPath);
 		}
 	}
 }

@@ -30,7 +30,7 @@ public final class SearchClusterInvoker extends AbstractInvoker<TenantsEntity> {
   }
 
   public final TenantsEntity invoke() throws InvokerException {
-    // tenants/search-results
+    // /tenants/search-results
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("search-results");

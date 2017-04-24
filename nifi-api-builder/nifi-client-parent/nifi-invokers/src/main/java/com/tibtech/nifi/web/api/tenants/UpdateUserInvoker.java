@@ -46,7 +46,7 @@ public final class UpdateUserInvoker extends ComponentEntityInvoker<UserEntity> 
   }
 
   public final UserEntity invoke() throws InvokerException {
-    // tenants/users/{id}
+    // /tenants/users/{id}
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("users");

@@ -14,7 +14,7 @@ public final class GetUsersInvoker extends AbstractInvoker<UsersEntity> {
   }
 
   public final UsersEntity invoke() throws InvokerException {
-    // tenants/users
+    // /tenants/users
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("users");

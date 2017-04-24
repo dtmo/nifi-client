@@ -30,7 +30,7 @@ public final class CreateUserInvoker extends ComponentEntityInvoker<UserEntity> 
   }
 
   public final UserEntity invoke() throws InvokerException {
-    // tenants/users
+    // /tenants/users
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("users");

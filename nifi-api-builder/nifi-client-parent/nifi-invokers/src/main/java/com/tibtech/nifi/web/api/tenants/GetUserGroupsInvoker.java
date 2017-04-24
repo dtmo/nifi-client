@@ -14,7 +14,7 @@ public final class GetUserGroupsInvoker extends AbstractInvoker<UserGroupsEntity
   }
 
   public final UserGroupsEntity invoke() throws InvokerException {
-    // tenants/user-groups
+    // /tenants/user-groups
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("user-groups");

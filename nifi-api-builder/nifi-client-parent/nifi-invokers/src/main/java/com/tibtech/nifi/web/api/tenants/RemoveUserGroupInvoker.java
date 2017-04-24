@@ -30,7 +30,7 @@ public final class RemoveUserGroupInvoker extends ComponentEntityInvoker<UserGro
   }
 
   public final UserGroupEntity invoke() throws InvokerException {
-    // tenants/user-groups/{id}
+    // /tenants/user-groups/{id}
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("user-groups");

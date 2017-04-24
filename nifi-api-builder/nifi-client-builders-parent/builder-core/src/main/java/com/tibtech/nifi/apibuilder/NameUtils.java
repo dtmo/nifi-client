@@ -12,41 +12,44 @@ public class NameUtils
 		final String[] splits = propertyDescriptorName.replaceAll("[^a-zA-Z0-9_\\- ]", "").split("[_\\- ]");
 		for (final String split : splits)
 		{
-			// Try to split CamelCase names based on capitalisation
-			final StringBuilder stringBuilder = new StringBuilder();
-			final char[] charArray = split.toCharArray();
-			stringBuilder.append(charArray[0]);
-			CharacterType prevCharType = CharacterType.ofChar(charArray[0]);
-			for (int i = 1; i < charArray.length; i++)
+			if (split.isEmpty() == false)
 			{
-				char c = charArray[i];
-				if (CharacterType.ofChar(c) == prevCharType)
+				// Try to split CamelCase names based on capitalisation
+				final StringBuilder stringBuilder = new StringBuilder();
+				final char[] charArray = split.toCharArray();
+				stringBuilder.append(charArray[0]);
+				CharacterType prevCharType = CharacterType.ofChar(charArray[0]);
+				for (int i = 1; i < charArray.length; i++)
 				{
-					stringBuilder.append(c);
-				}
-				else if (prevCharType == CharacterType.UPPER && CharacterType.ofChar(c) == CharacterType.LOWER)
-				{
-					// We've gone from an upper case character to
-					// a lower case one
-					if (stringBuilder.length() > 1)
+					char c = charArray[i];
+					if (CharacterType.ofChar(c) == prevCharType)
 					{
-						components.add(stringBuilder.substring(0, stringBuilder.length() - 1));
-						stringBuilder.delete(0, stringBuilder.length() - 1);
+						stringBuilder.append(c);
 					}
-					stringBuilder.append(c);
-					prevCharType = CharacterType.LOWER;
+					else if (prevCharType == CharacterType.UPPER && CharacterType.ofChar(c) == CharacterType.LOWER)
+					{
+						// We've gone from an upper case character to
+						// a lower case one
+						if (stringBuilder.length() > 1)
+						{
+							components.add(stringBuilder.substring(0, stringBuilder.length() - 1));
+							stringBuilder.delete(0, stringBuilder.length() - 1);
+						}
+						stringBuilder.append(c);
+						prevCharType = CharacterType.LOWER;
+					}
+					else
+					{
+						// We've gone from upper case to something else
+						components.add(stringBuilder.toString());
+						stringBuilder.setLength(0);
+						stringBuilder.append(c);
+						prevCharType = CharacterType.ofChar(c);
+					}
 				}
-				else
-				{
-					// We've gone from upper case to something else
-					components.add(stringBuilder.toString());
-					stringBuilder.setLength(0);
-					stringBuilder.append(c);
-					prevCharType = CharacterType.ofChar(c);
-				}
-			}
 
-			components.add(stringBuilder.toString());
+				components.add(stringBuilder.toString());
+			}
 		}
 
 		return components;
