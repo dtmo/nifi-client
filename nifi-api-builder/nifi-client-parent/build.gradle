@@ -1,0 +1,12 @@
+ext
+{ jerseyVersion = "2.25.1" }
+
+subprojects
+{
+	apply plugin: "java"
+
+	dependencies
+	{
+		testImplementation "junit:junit:4.12"
+	}
+}

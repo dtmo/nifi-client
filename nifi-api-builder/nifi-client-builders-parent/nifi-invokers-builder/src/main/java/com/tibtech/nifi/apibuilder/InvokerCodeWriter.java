@@ -274,7 +274,8 @@ public class InvokerCodeWriter
 						.filter(m -> Arrays.stream(m.getAnnotations()).anyMatch(a -> a instanceof Path))
 						.collect(Collectors.toList());
 
-				final java.nio.file.Path generatedJavaPath = Paths.get("../nifi-client-parent/nifi-invokers/src/main/java");
+				final java.nio.file.Path generatedJavaPath = Paths
+						.get("../nifi-client-parent/nifi-invokers/src/main/java");
 
 				for (final Method restApiMethod : restApiMethods)
 				{
@@ -282,26 +283,16 @@ public class InvokerCodeWriter
 					if (apiOperation != null)
 					{
 						final Class<?> invokerResponseType = apiOperation.response();
+						final TypeSpec invokerTypeSpec = createComponentEntityInvokerTypeSpec(applicationResourceClass,
+								restApiMethod, invokerResponseType);
 
-						final Api responseApi = invokerResponseType.getAnnotation(Api.class);
-						if (responseApi == null || responseApi.hidden() == false)
-						{
-							final TypeSpec invokerTypeSpec = createComponentEntityInvokerTypeSpec(
-									applicationResourceClass, restApiMethod, invokerResponseType);
+						final String applicationResourcePackageName = applicationResourceClass.getPackage().getName();
+						final String builderPackageName = applicationResourcePackageName.replaceFirst("org\\.apache",
+								"com.tibtech") + "."
+								+ NameUtils.componentsToPackageName(classResourcePathNameComponents);
 
-							final String applicationResourcePackageName = applicationResourceClass.getPackage()
-									.getName();
-							final String builderPackageName = applicationResourcePackageName
-									.replaceFirst("org\\.apache", "com.tibtech") + "."
-									+ NameUtils.componentsToPackageName(classResourcePathNameComponents);
-
-							final JavaFile javaFile = JavaFile.builder(builderPackageName, invokerTypeSpec).build();
-							javaFile.writeTo(generatedJavaPath);
-						}
-						else
-						{
-							LOGGER.info("Method returns a hidden response type: {}", restApiMethod);
-						}
+						final JavaFile javaFile = JavaFile.builder(builderPackageName, invokerTypeSpec).build();
+						javaFile.writeTo(generatedJavaPath);
 					}
 					else
 					{

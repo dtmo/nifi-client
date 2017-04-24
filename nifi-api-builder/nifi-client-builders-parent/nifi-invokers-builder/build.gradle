@@ -1,11 +1,14 @@
+apply plugin: "java"
+
 dependencies
 {
-	compile project(":builder-core")
+	compile project(":nifi-client-builders-parent:builder-core")
 	compile project(":nifi-client-parent:invoker-core")
 	
 	compile "com.sun.jersey:jersey-client:1.19.3"
 	compile "com.sun.jersey.contribs:jersey-multipart:1.19.3"
 
+	compile files("lib/org.apache.nifi/nifi-web-api-${nifiVersion}.jar")
 	compile "org.apache.nifi:nifi-framework-core-api:${nifiVersion}"
 
 	compile "com.squareup:javapoet:1.8.0"
