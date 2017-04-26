@@ -9,7 +9,7 @@ public class NameUtils
 	public static List<String> getNameComponents(final String propertyDescriptorName)
 	{
 		List<String> components = new ArrayList<>();
-		final String[] splits = propertyDescriptorName.replaceAll("[^a-zA-Z0-9_\\- ]", "").split("[_\\- ]");
+		final String[] splits = propertyDescriptorName.replaceAll("[^a-zA-Z0-9_\\- .]", "").split("[_\\- .]");
 		for (final String split : splits)
 		{
 			if (split.isEmpty() == false)
