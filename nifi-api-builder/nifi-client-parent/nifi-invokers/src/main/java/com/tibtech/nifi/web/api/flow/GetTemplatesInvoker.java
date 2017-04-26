@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.TemplatesEntity;
 
+/**
+ * Gets all templates
+ */
 public final class GetTemplatesInvoker extends AbstractInvoker<TemplatesEntity> {
   public GetTemplatesInvoker(final Transport transport, final long version) {
     super(transport, version);

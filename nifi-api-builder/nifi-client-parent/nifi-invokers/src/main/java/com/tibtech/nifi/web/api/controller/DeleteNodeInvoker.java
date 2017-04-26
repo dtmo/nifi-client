@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.NodeEntity;
 
+/**
+ * Removes a node from the cluster
+ */
 public final class DeleteNodeInvoker extends AbstractInvoker<NodeEntity> {
   private String id;
 

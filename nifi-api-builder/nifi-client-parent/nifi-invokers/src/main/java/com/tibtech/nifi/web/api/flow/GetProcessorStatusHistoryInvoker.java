@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.StatusHistoryEntity;
 
+/**
+ * Gets status history for a processor
+ */
 public final class GetProcessorStatusHistoryInvoker extends AbstractInvoker<StatusHistoryEntity> {
   private String id;
 

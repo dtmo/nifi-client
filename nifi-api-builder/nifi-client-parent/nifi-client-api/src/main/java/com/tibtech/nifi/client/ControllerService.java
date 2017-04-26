@@ -12,9 +12,9 @@ import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
 import org.apache.nifi.web.api.entity.ControllerServiceEntity;
 import org.apache.nifi.web.api.entity.ControllerServiceReferencingComponentEntity;
 
-import com.tibtech.nifi.web.api.controller.services.GetControllerServiceInvoker;
-import com.tibtech.nifi.web.api.controller.services.RemoveControllerServiceInvoker;
-import com.tibtech.nifi.web.api.controller.services.UpdateControllerServiceInvoker;
+import com.tibtech.nifi.web.api.controllerservice.GetControllerServiceInvoker;
+import com.tibtech.nifi.web.api.controllerservice.RemoveControllerServiceInvoker;
+import com.tibtech.nifi.web.api.controllerservice.UpdateControllerServiceInvoker;
 import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
 

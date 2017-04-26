@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.FlowConfigurationEntity;
 
+/**
+ * Retrieves the configuration for this NiFi flow
+ */
 public final class GetFlowConfigInvoker extends AbstractInvoker<FlowConfigurationEntity> {
   public GetFlowConfigInvoker(final Transport transport, final long version) {
     super(transport, version);

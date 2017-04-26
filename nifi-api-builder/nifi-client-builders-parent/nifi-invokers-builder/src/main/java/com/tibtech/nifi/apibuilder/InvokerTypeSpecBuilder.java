@@ -37,7 +37,8 @@ public class InvokerTypeSpecBuilder
 {
 	private static final Pattern PATH_VARIABLE_PATTERN = Pattern.compile("\\{([^:]*)(:.*)?\\}");
 	private String invokerName;
-
+	private String invokerComment;
+	
 	private Class<?> responseType;
 
 	private String classResourcePathString;
@@ -64,6 +65,16 @@ public class InvokerTypeSpecBuilder
 	public void setInvokerName(String invokerName)
 	{
 		this.invokerName = invokerName;
+	}
+
+	public String getInvokerComment()
+	{
+		return invokerComment;
+	}
+
+	public void setInvokerComment(String invokerComment)
+	{
+		this.invokerComment = invokerComment;
 	}
 
 	public Class<?> getResponseType()
@@ -419,7 +430,7 @@ public class InvokerTypeSpecBuilder
 	public TypeSpec build()
 	{
 		final TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(invokerName).addModifiers(Modifier.PUBLIC,
-				Modifier.FINAL);
+				Modifier.FINAL).addJavadoc(invokerComment);
 
 		if (ComponentEntity.class.isAssignableFrom(responseType))
 		{

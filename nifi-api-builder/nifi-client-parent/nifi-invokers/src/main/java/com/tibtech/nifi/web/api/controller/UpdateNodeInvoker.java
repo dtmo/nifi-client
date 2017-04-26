@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.NodeEntity;
 
+/**
+ * Updates a node in the cluster
+ */
 public final class UpdateNodeInvoker extends AbstractInvoker<NodeEntity> {
   private String id;
 

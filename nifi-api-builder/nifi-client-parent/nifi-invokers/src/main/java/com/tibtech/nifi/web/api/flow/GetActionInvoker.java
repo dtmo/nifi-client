@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ActionEntity;
 
+/**
+ * Gets an action
+ */
 public final class GetActionInvoker extends AbstractInvoker<ActionEntity> {
   private Integer id;
 

@@ -11,9 +11,9 @@ import org.apache.nifi.web.api.entity.ReportingTaskEntity;
 
 import com.tibtech.nifi.web.api.dto.ReportingTaskDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ReportingTaskEntityBuilder;
-import com.tibtech.nifi.web.api.reporting.tasks.GetReportingTaskInvoker;
-import com.tibtech.nifi.web.api.reporting.tasks.RemoveReportingTaskInvoker;
-import com.tibtech.nifi.web.api.reporting.tasks.UpdateReportingTaskInvoker;
+import com.tibtech.nifi.web.api.reportingtask.GetReportingTaskInvoker;
+import com.tibtech.nifi.web.api.reportingtask.RemoveReportingTaskInvoker;
+import com.tibtech.nifi.web.api.reportingtask.UpdateReportingTaskInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;

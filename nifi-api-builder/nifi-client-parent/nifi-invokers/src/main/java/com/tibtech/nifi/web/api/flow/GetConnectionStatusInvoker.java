@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ConnectionStatusEntity;
 
+/**
+ * Gets status for a connection
+ */
 public final class GetConnectionStatusInvoker extends AbstractInvoker<ConnectionStatusEntity> {
   private String id;
 

@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.PrioritizerTypesEntity;
 
+/**
+ * Retrieves the types of prioritizers that this NiFi supports
+ */
 public final class GetPrioritizersInvoker extends AbstractInvoker<PrioritizerTypesEntity> {
   public GetPrioritizersInvoker(final Transport transport, final long version) {
     super(transport, version);

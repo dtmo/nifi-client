@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.NodeEntity;
 
+/**
+ * Gets a node in the cluster
+ */
 public final class GetNodeInvoker extends AbstractInvoker<NodeEntity> {
   private String id;
 

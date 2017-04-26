@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerConfigurationEntity;
 
+/**
+ * Retrieves the configuration for this NiFi
+ */
 public final class UpdateControllerConfigInvoker extends AbstractInvoker<ControllerConfigurationEntity> {
   private ControllerConfigurationEntity controllerConfigurationEntity;
 

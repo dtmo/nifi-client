@@ -8,6 +8,9 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+/**
+ * Creates a token for accessing the REST API via Kerberos ticket exchange / SPNEGO negotiation
+ */
 public final class CreateAccessTokenFromTicketInvoker extends AbstractInvoker<String> {
   public CreateAccessTokenFromTicketInvoker(final Transport transport, final long version) {
     super(transport, version);

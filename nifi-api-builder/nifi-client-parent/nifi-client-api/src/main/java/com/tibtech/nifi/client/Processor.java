@@ -13,9 +13,9 @@ import org.apache.nifi.web.api.entity.ProcessorEntity;
 
 import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
-import com.tibtech.nifi.web.api.process.groups.CreateProcessorInvoker;
-import com.tibtech.nifi.web.api.processors.DeleteProcessorInvoker;
-import com.tibtech.nifi.web.api.processors.GetProcessorInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
+import com.tibtech.nifi.web.api.processor.DeleteProcessorInvoker;
+import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;

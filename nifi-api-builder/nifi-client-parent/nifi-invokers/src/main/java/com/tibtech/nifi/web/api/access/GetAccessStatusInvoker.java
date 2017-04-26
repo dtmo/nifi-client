@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.AccessStatusEntity;
 
+/**
+ * Gets the status the client's access
+ */
 public final class GetAccessStatusInvoker extends AbstractInvoker<AccessStatusEntity> {
   public GetAccessStatusInvoker(final Transport transport, final long version) {
     super(transport, version);

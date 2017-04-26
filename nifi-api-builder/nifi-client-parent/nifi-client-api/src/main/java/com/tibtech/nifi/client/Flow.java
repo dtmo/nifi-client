@@ -21,7 +21,7 @@ import com.tibtech.nifi.web.api.flow.GenerateClientIdInvoker;
 import com.tibtech.nifi.web.api.flow.GetControllerServiceTypesInvoker;
 import com.tibtech.nifi.web.api.flow.GetProcessorTypesInvoker;
 import com.tibtech.nifi.web.api.flow.GetReportingTaskTypesInvoker;
-import com.tibtech.nifi.web.api.process.groups.GetProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;

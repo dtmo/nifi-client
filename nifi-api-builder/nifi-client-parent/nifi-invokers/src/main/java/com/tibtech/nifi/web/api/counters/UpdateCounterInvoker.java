@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.CounterEntity;
 
+/**
+ * Updates the specified counter. This will reset the counter value to 0
+ */
 public final class UpdateCounterInvoker extends AbstractInvoker<CounterEntity> {
   private String id;
 

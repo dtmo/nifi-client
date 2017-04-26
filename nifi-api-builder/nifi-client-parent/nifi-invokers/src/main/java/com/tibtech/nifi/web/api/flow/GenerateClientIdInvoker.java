@@ -8,6 +8,9 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+/**
+ * Generates a client id.
+ */
 public final class GenerateClientIdInvoker extends AbstractInvoker<String> {
   public GenerateClientIdInvoker(final Transport transport, final long version) {
     super(transport, version);

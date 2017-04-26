@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.AboutEntity;
 
+/**
+ * Retrieves details about this NiFi to put in the About dialog
+ */
 public final class GetAboutInfoInvoker extends AbstractInvoker<AboutEntity> {
   public GetAboutInfoInvoker(final Transport transport, final long version) {
     super(transport, version);

@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerServiceEntity;
 
+/**
+ * Creates a new controller service
+ */
 public final class CreateControllerServiceInvoker extends ComponentEntityInvoker<ControllerServiceEntity> {
   private ControllerServiceEntity controllerServiceEntity;
 

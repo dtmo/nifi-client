@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerServicesEntity;
 
+/**
+ * Gets all controller services
+ */
 public final class GetControllerServicesFromControllerInvoker extends AbstractInvoker<ControllerServicesEntity> {
   public GetControllerServicesFromControllerInvoker(final Transport transport, final long version) {
     super(transport, version);

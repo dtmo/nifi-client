@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ScheduleComponentsEntity;
 
+/**
+ * Schedule or unschedule comopnents in the specified Process Group.
+ */
 public final class ScheduleComponentsInvoker extends AbstractInvoker<ScheduleComponentsEntity> {
   private String id;
 

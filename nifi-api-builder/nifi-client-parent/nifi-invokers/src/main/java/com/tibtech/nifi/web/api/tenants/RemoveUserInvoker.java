@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.UserEntity;
 
+/**
+ * Deletes a user
+ */
 public final class RemoveUserInvoker extends ComponentEntityInvoker<UserEntity> {
   private String id;
 
@@ -30,7 +33,7 @@ public final class RemoveUserInvoker extends ComponentEntityInvoker<UserEntity> 
   }
 
   public final UserEntity invoke() throws InvokerException {
-    // /tenants/users/{id}
+    // tenants/users/{id}
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("users");

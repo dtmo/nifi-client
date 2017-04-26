@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Form;
 import javax.ws.rs.core.Response;
 
+/**
+ * Creates a token for accessing the REST API via username/password
+ */
 public final class CreateAccessTokenInvoker extends AbstractInvoker<String> {
   private String username;
 

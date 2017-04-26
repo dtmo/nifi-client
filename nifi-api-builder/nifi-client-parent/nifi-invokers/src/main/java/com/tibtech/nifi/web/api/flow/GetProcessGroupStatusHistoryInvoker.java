@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.StatusHistoryEntity;
 
+/**
+ * Gets status history for a remote process group
+ */
 public final class GetProcessGroupStatusHistoryInvoker extends AbstractInvoker<StatusHistoryEntity> {
   private String id;
 

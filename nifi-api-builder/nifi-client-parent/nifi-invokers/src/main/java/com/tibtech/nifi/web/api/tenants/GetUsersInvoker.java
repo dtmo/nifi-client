@@ -8,13 +8,16 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.UsersEntity;
 
+/**
+ * Gets all users
+ */
 public final class GetUsersInvoker extends AbstractInvoker<UsersEntity> {
   public GetUsersInvoker(final Transport transport, final long version) {
     super(transport, version);
   }
 
   public final UsersEntity invoke() throws InvokerException {
-    // /tenants/users
+    // tenants/users
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("users");

@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ProvenanceOptionsEntity;
 
+/**
+ * Gets the searchable attributes for provenance events
+ */
 public final class GetSearchOptionsInvoker extends AbstractInvoker<ProvenanceOptionsEntity> {
   public GetSearchOptionsInvoker(final Transport transport, final long version) {
     super(transport, version);

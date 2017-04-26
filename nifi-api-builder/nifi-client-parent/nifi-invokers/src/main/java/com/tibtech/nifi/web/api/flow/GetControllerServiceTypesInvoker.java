@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerServiceTypesEntity;
 
+/**
+ * Retrieves the types of controller services that this NiFi supports
+ */
 public final class GetControllerServiceTypesInvoker extends AbstractInvoker<ControllerServiceTypesEntity> {
   private String serviceType;
 

@@ -11,6 +11,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.BulletinBoardEntity;
 
+/**
+ * Gets current bulletins
+ */
 public final class GetBulletinBoardInvoker extends AbstractInvoker<BulletinBoardEntity> {
   private Long after;
 

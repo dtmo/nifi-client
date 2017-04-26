@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.TenantsEntity;
 
+/**
+ * Searches for a tenant with the specified identity
+ */
 public final class SearchClusterInvoker extends AbstractInvoker<TenantsEntity> {
   private String q;
 
@@ -30,7 +33,7 @@ public final class SearchClusterInvoker extends AbstractInvoker<TenantsEntity> {
   }
 
   public final TenantsEntity invoke() throws InvokerException {
-    // /tenants/search-results
+    // tenants/search-results
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("search-results");

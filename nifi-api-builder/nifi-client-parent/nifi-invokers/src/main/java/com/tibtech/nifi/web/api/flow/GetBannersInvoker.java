@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.BannerEntity;
 
+/**
+ * Retrieves the banners for this NiFi
+ */
 public final class GetBannersInvoker extends AbstractInvoker<BannerEntity> {
   public GetBannersInvoker(final Transport transport, final long version) {
     super(transport, version);

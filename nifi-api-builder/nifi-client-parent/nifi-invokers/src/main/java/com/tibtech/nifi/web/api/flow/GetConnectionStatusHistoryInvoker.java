@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.StatusHistoryEntity;
 
+/**
+ * Gets the status history for a connection
+ */
 public final class GetConnectionStatusHistoryInvoker extends AbstractInvoker<StatusHistoryEntity> {
   private String id;
 

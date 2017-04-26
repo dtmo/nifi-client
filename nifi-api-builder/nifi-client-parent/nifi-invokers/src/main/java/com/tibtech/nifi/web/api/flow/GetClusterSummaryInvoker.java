@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ClusteSummaryEntity;
 
+/**
+ * The cluster summary for this NiFi
+ */
 public final class GetClusterSummaryInvoker extends AbstractInvoker<ClusteSummaryEntity> {
   public GetClusterSummaryInvoker(final Transport transport, final long version) {
     super(transport, version);

@@ -6,11 +6,13 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.Deque;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -41,33 +43,26 @@ import org.apache.nifi.web.api.request.IntegerParameter;
 import org.apache.nifi.web.api.request.LongParameter;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
-import com.squareup.javapoet.TypeVariableName;
+import com.squareup.javapoet.TypeSpec;
 import com.sun.jersey.multipart.FormDataParam;
+import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 
 public class InvokerCodeWriter
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(InvokerCodeWriter.class);
-
-	public static List<Annotation> getJaxRsAnnotations(final AnnotatedElement annotatedElement)
+	private static List<Annotation> getJaxRsAnnotations(final AnnotatedElement annotatedElement)
 	{
 		return Arrays.stream(annotatedElement.getAnnotations())
 				.filter(a -> a.annotationType().getName().matches("javax\\.ws\\.rs\\..*|com\\.sun\\.jersey\\..*"))
 				.collect(Collectors.toList());
 	}
 
-	public static List<MediaType> stringsToMediaTypes(final String[] mediaTypeStrings)
-	{
-		return Arrays.stream(mediaTypeStrings).map(s -> MediaType.valueOf(s)).collect(Collectors.toList());
-	}
-
-	public static void addInvokerProperties(final InvokerTypeSpecBuilder invokerTypeSpecBuilder,
+	private static void addInvokerProperties(final InvokerTypeSpecBuilder invokerTypeSpecBuilder,
 			final Method resourceMethod) throws IntrospectionException
 	{
 		final Parameter[] parameters = resourceMethod.getParameters();
@@ -80,48 +75,8 @@ public class InvokerCodeWriter
 			final Annotation paramAnnotation = parameterJaxRsAnnotations.parallelStream()
 					.filter(a -> a.annotationType().getName().endsWith("Param")).findFirst().orElse(null);
 
-			final TypeName parameterTypeName;
-			final Class<?> parameterType;
-			if (BulletinBoardPatternParameter.class.isAssignableFrom(parameter.getType()))
-			{
-				parameterTypeName = TypeVariableName.get(String.class);
-				parameterType = String.class;
-			}
-			else if (ClientIdParameter.class.isAssignableFrom(parameter.getType()))
-			{
-				parameterTypeName = TypeVariableName.get(String.class);
-				parameterType = String.class;
-			}
-			else if (ConnectableTypeParameter.class.isAssignableFrom(parameter.getType()))
-			{
-				parameterTypeName = TypeVariableName.get(ConnectableType.class);
-				parameterType = ConnectableType.class;
-			}
-			else if (DateTimeParameter.class.isAssignableFrom(parameter.getType()))
-			{
-				parameterTypeName = TypeVariableName.get(Date.class);
-				parameterType = Date.class;
-			}
-			else if (DoubleParameter.class.isAssignableFrom(parameter.getType()))
-			{
-				parameterTypeName = TypeVariableName.get(Double.class);
-				parameterType = Double.class;
-			}
-			else if (IntegerParameter.class.isAssignableFrom(parameter.getType()))
-			{
-				parameterTypeName = TypeVariableName.get(Integer.class);
-				parameterType = Integer.class;
-			}
-			else if (LongParameter.class.isAssignableFrom(parameter.getType()))
-			{
-				parameterTypeName = TypeVariableName.get(Long.class);
-				parameterType = Long.class;
-			}
-			else
-			{
-				parameterTypeName = ClassUtils.getParameterTypeName(parameter);
-				parameterType = parameter.getType();
-			}
+			final TypeName parameterTypeName = mapParameterTypeName(parameter);
+			final Class<?> parameterType = mapParameterType(parameter);
 
 			final ApiParam apiParam = parameter.getAnnotation(ApiParam.class);
 			final String comment = apiParam != null ? apiParam.value() : "";
@@ -180,6 +135,61 @@ public class InvokerCodeWriter
 		}
 	}
 
+	private static TypeName mapParameterTypeName(final Parameter parameter)
+	{
+		final TypeName parameterTypeName;
+		final Class<?> mappedParameterType = mapParameterType(parameter);
+		if (mappedParameterType != parameter.getClass())
+		{
+			parameterTypeName = ClassName.get(mappedParameterType);
+		}
+		else
+		{
+			parameterTypeName = TypeName.get(parameter.getParameterizedType());
+		}
+
+		return parameterTypeName;
+	}
+
+	private static Class<?> mapParameterType(final Parameter parameter)
+	{
+		final Class<?> mappedClass;
+		if (BulletinBoardPatternParameter.class.isAssignableFrom(parameter.getType()))
+		{
+			mappedClass = String.class;
+		}
+		else if (ClientIdParameter.class.isAssignableFrom(parameter.getType()))
+		{
+			mappedClass = String.class;
+		}
+		else if (ConnectableTypeParameter.class.isAssignableFrom(parameter.getType()))
+		{
+			mappedClass = ConnectableType.class;
+		}
+		else if (DateTimeParameter.class.isAssignableFrom(parameter.getType()))
+		{
+			mappedClass = Date.class;
+		}
+		else if (DoubleParameter.class.isAssignableFrom(parameter.getType()))
+		{
+			mappedClass = Double.class;
+		}
+		else if (IntegerParameter.class.isAssignableFrom(parameter.getType()))
+		{
+			mappedClass = Integer.class;
+		}
+		else if (LongParameter.class.isAssignableFrom(parameter.getType()))
+		{
+			mappedClass = Long.class;
+		}
+		else
+		{
+			mappedClass = parameter.getType();
+		}
+
+		return mappedClass;
+	}
+
 	/**
 	 * Determine what HTTP method is being used base on annotations on the
 	 * method (there should only be one!).
@@ -187,145 +197,202 @@ public class InvokerCodeWriter
 	 * @param invokerTypeSpecBuilder
 	 * @param resourceMethod
 	 */
-	public static void configureHttpMethod(final InvokerTypeSpecBuilder invokerTypeSpecBuilder,
-			final Method resourceMethod)
+	private static String getHttpMethod(final Method resourceMethod)
 	{
+		final String method;
+
 		if (resourceMethod.getAnnotation(DELETE.class) != null)
 		{
-			invokerTypeSpecBuilder.setHttpMethod("DELETE");
+			method = "DELETE";
 		}
 		else if (resourceMethod.getAnnotation(HEAD.class) != null)
 		{
-			invokerTypeSpecBuilder.setHttpMethod("HEAD");
+			method = "HEAD";
 		}
 		else if (resourceMethod.getAnnotation(GET.class) != null)
 		{
-			invokerTypeSpecBuilder.setHttpMethod("GET");
+			method = "GET";
 		}
 		else if (resourceMethod.getAnnotation(OPTIONS.class) != null)
 		{
-			invokerTypeSpecBuilder.setHttpMethod("OPTIONS");
+			method = "OPTIONS";
 		}
 		else if (resourceMethod.getAnnotation(POST.class) != null)
 		{
-			invokerTypeSpecBuilder.setHttpMethod("POST");
+			method = "POST";
 		}
 		else if (resourceMethod.getAnnotation(PUT.class) != null)
 		{
-			invokerTypeSpecBuilder.setHttpMethod("PUT");
+			method = "PUT";
 		}
 		else
 		{
 			throw new IllegalStateException("Could not find a HTTP method for resource method: " + resourceMethod);
 		}
+
+		return method;
 	}
 
-	private static PackagedTypeSpec createComponentEntityInvokerTypeSpec(
-			final Function<String, String> packageNameMapper, final Class<?> resourceClass, final Method resourceMethod,
-			final Class<?> responseType, final String classResourcePathPrefix) throws IntrospectionException
+	private static Optional<BuilderProperty> getRequestEntityBuilderProperty(final Method resourceMethod)
 	{
+		final Optional<BuilderProperty> optionalBuilderProperty;
+		final Parameter[] parameters = resourceMethod.getParameters();
+		if (parameters.length > 0)
+		{
+			final Parameter finalParameter = parameters[parameters.length - 1];
+			if (Entity.class.isAssignableFrom(finalParameter.getType()))
+			{
+				final String entityPropertyName = NameUtils.componentsToCamelCase(
+						NameUtils.getNameComponents(finalParameter.getType().getSimpleName()), true);
+
+				final ApiParam apiParam = finalParameter.getAnnotation(ApiParam.class);
+				final String comment = apiParam != null ? apiParam.value() : "";
+
+				final BuilderProperty builderProperty = new BuilderProperty(entityPropertyName,
+						finalParameter.getType(), mapParameterTypeName(finalParameter), comment, false, null);
+
+				optionalBuilderProperty = Optional.of(builderProperty);
+			}
+			else
+			{
+				optionalBuilderProperty = Optional.empty();
+			}
+		}
+		else
+		{
+			optionalBuilderProperty = Optional.empty();
+		}
+
+		return optionalBuilderProperty;
+	}
+
+	private static List<MediaType> getConsumedMediaTypes(final Method resourceMethod)
+	{
+		final List<MediaType> consumedMediaTypes = new ArrayList<>();
+		final Consumes[] consumesAnnotations = resourceMethod.getAnnotationsByType(Consumes.class);
+		for (final Consumes consumesAnnotation : consumesAnnotations)
+		{
+			final String[] consumedMediaTypeStrings = consumesAnnotation.value();
+			for (final String consumedMediaTypeString : consumedMediaTypeStrings)
+			{
+				consumedMediaTypes.add(MediaType.valueOf(consumedMediaTypeString));
+			}
+		}
+		return consumedMediaTypes;
+	}
+
+	private static List<MediaType> getProducedMediaTypes(final Method resourceMethod)
+	{
+		final List<MediaType> producedMediaTypes = new ArrayList<>();
+		final Produces[] producesAnnotations = resourceMethod.getAnnotationsByType(Produces.class);
+		for (final Produces producesAnnotation : producesAnnotations)
+		{
+			final String[] producedMediaTypeStrings = producesAnnotation.value();
+			for (final String producedMediaTypeString : producedMediaTypeStrings)
+			{
+				producedMediaTypes.add(MediaType.valueOf(producedMediaTypeString));
+			}
+		}
+		return producedMediaTypes;
+	}
+
+	private static String getInvokerName(final Method resourceMethod)
+	{
+		return NameUtils.componentsToCamelCase(NameUtils.getNameComponents(resourceMethod.getName()), false)
+				+ "Invoker";
+	}
+
+	private static String getInvokerPackageName(final Class<?> resourceClass)
+	{
+		final List<String> resourceClassNameComponents = NameUtils.getNameComponents(resourceClass.getSimpleName());
+		final String packageName = resourceClass.getPackage().getName() + "."
+				+ resourceClassNameComponents.subList(0, Math.max(1, resourceClassNameComponents.size() - 1)).stream()
+						.map(s -> s.toLowerCase()).collect(Collectors.joining());
+		return packageName;
+	}
+
+	private static TypeSpec createInvokerTypeSpec(final String classResourcePath, final Class<?> resourceClass,
+			final String methodResourcePath, final Deque<Method> resourceMethodStack) throws IntrospectionException
+	{
+		final Method endpointMethod = resourceMethodStack.peek();
+		final String invokerName = getInvokerName(endpointMethod);
+		final String httpMethod = getHttpMethod(endpointMethod);
+		final ApiOperation endpointMethodApiAnnotation = endpointMethod.getAnnotation(ApiOperation.class);
+		final String invokerDescription = endpointMethodApiAnnotation != null
+				? endpointMethodApiAnnotation.value() + "\n" : "";
+
+		System.out.println(getInvokerPackageName(resourceClass) + "." + invokerName);
+
 		final InvokerTypeSpecBuilder invokerTypeSpecBuilder = new InvokerTypeSpecBuilder();
-		invokerTypeSpecBuilder.setResponseType(responseType);
+		invokerTypeSpecBuilder.setInvokerComment(invokerDescription);
+		invokerTypeSpecBuilder.setClassResourcePathString(classResourcePath);
+		invokerTypeSpecBuilder.setMethodResourcePathString(methodResourcePath);
+		invokerTypeSpecBuilder.setInvokerName(invokerName);
+		invokerTypeSpecBuilder.setResponseType(endpointMethodApiAnnotation.response());
+		invokerTypeSpecBuilder.setHttpMethod(httpMethod);
+		invokerTypeSpecBuilder.setConsumesMediaTypes(getConsumedMediaTypes(endpointMethod));
+		invokerTypeSpecBuilder.setProducesMediaTypes(getProducedMediaTypes(endpointMethod));
+		invokerTypeSpecBuilder.setRequestEntity(getRequestEntityBuilderProperty(endpointMethod).orElse(null));
 
-		final String classResourcePath;
-		// Determine the class level path.
-		final Path classResourcePathAnnotation = resourceClass.getAnnotation(Path.class);
-		if (classResourcePathAnnotation != null)
+		for (final Method resourceMethod : resourceMethodStack)
 		{
-			classResourcePath = classResourcePathPrefix + "/" + classResourcePathAnnotation.value();
-			invokerTypeSpecBuilder.setClassResourcePathString(classResourcePath);
-		}
-		else
-		{
-			throw new IllegalStateException("No class resource path annotation found: " + resourceClass);
-		}
-
-		final String methodResourcePath;
-		final Path methodResourcePathAnnotation = resourceMethod.getAnnotation(Path.class);
-		if (methodResourcePathAnnotation != null)
-		{
-			methodResourcePath = methodResourcePathAnnotation.value();
-			invokerTypeSpecBuilder.setMethodResourcePathString(methodResourcePath);
-		}
-		else
-		{
-			throw new IllegalStateException("No method resource path annotation found: " + resourceMethod);
+			addInvokerProperties(invokerTypeSpecBuilder, resourceMethod);
 		}
 
-		invokerTypeSpecBuilder.setInvokerName(
-				NameUtils.componentsToCamelCase(NameUtils.getNameComponents(resourceMethod.getName()), false)
-						+ "Invoker");
-
-		configureHttpMethod(invokerTypeSpecBuilder, resourceMethod);
-
-		final List<Annotation> methodJaxRsAnnotations = getJaxRsAnnotations(resourceMethod);
-		for (final Annotation methodAnnotation : methodJaxRsAnnotations)
-		{
-			switch (methodAnnotation.annotationType().getName())
-			{
-				case "javax.ws.rs.Consumes":
-					final Consumes consumes = (Consumes) methodAnnotation;
-					invokerTypeSpecBuilder.addConsumesMediaTypes(stringsToMediaTypes(consumes.value()));
-					break;
-
-				case "javax.ws.rs.Produces":
-					final Produces produces = (Produces) methodAnnotation;
-					invokerTypeSpecBuilder.addProducesMediaTypes(stringsToMediaTypes(produces.value()));
-					break;
-
-				default:
-					// Do nothing
-			}
-		}
-
-		addInvokerProperties(invokerTypeSpecBuilder, resourceMethod);
-
-		return new PackagedTypeSpec(
-				packageNameMapper.apply(resourceClass.getPackage().getName()) + "."
-						+ NameUtils.componentsToPackageName(NameUtils.getNameComponents(classResourcePath)),
-				invokerTypeSpecBuilder.build());
+		return invokerTypeSpecBuilder.build();
 	}
 
-	public static void doStuff(final Collection<PackagedTypeSpec> packagedTypeSpecs,
-			final Function<String, String> packageNameMapper, final Class<?> resourceClass, final Method resourceMethod,
-			final Class<?> responseType, final String classResourcePathPrefix) throws IntrospectionException
+	private static List<PackagedTypeSpec> recurseApplicationResources(final Function<String, String> packageNameMapper,
+			final Class<?> resourceClass, final Deque<Method> resourceMethodStack, final String resourcePathPrefix)
 	{
-		if (ApplicationResource.class.isAssignableFrom(responseType))
-		{
-			final Method[] methods = responseType.getMethods();
-			final List<Method> restApiMethods = Arrays.stream(methods)
-					.filter(m -> Arrays.stream(m.getAnnotations()).anyMatch(a -> a instanceof Path))
-					.collect(Collectors.toList());
+		final List<PackagedTypeSpec> packagedTypeSpecs = new ArrayList<>();
 
-			for (final Method restApiMethod : restApiMethods)
-			{
-				final ApiOperation apiOperation = restApiMethod.getAnnotation(ApiOperation.class);
-				if (apiOperation != null)
+		final Path classPathAnnotation = resourceClass.getAnnotation(Path.class);
+		final String classResourcePath = resourcePathPrefix
+				+ (classPathAnnotation != null ? classPathAnnotation.value() : "");
+
+		Arrays.stream(resourceClass.getMethods()).filter(method -> method.getAnnotation(Path.class) != null)
+				.forEach(resourceMethod ->
 				{
-					final Path methodResourcePathAnnotation = restApiMethod.getAnnotation(Path.class);
-					if (methodResourcePathAnnotation != null)
+					final Path methodPathAnnotation = resourceMethod.getAnnotation(Path.class);
+					final String methodResourcePath = methodPathAnnotation != null ? methodPathAnnotation.value() : "";
+
+					// We accumulate the methods that take us to the end-point
+					// so that they can all contribute parameters to the final
+					// invoker.
+					resourceMethodStack.push(resourceMethod);
+
+					final ApiOperation methodApiOperationAnnotation = resourceMethod.getAnnotation(ApiOperation.class);
+					if (methodApiOperationAnnotation != null)
 					{
-						final String methodResourcePath = methodResourcePathAnnotation.value();
-						final Class<?> invokerResponseType = apiOperation.response();
-						doStuff(packagedTypeSpecs, packageNameMapper, responseType, restApiMethod, invokerResponseType,
-								classResourcePathPrefix + "/" + methodResourcePath);
+						final Class<?> responseClass = methodApiOperationAnnotation.response();
+						if (ApplicationResource.class.isAssignableFrom(responseClass))
+						{
+							packagedTypeSpecs.addAll(recurseApplicationResources(packageNameMapper, responseClass,
+									resourceMethodStack, classResourcePath + "/" + methodResourcePath));
+						}
+						else
+						{
+							try
+							{
+								final TypeSpec invokerTypeSpec = createInvokerTypeSpec(classResourcePath, resourceClass,
+										methodResourcePath, resourceMethodStack);
+
+								packagedTypeSpecs.add(new PackagedTypeSpec(
+										packageNameMapper.apply(getInvokerPackageName(resourceClass)),
+										invokerTypeSpec));
+							}
+							catch (IntrospectionException e)
+							{
+								throw new IllegalStateException("Could not create invoker class", e);
+							}
+						}
 					}
-					else
-					{
-						throw new IllegalStateException("No method resource path annotation found: " + resourceMethod);
-					}
-				}
-				else
-				{
-					LOGGER.warn("Could not find API operation for method: {}", restApiMethod);
-				}
-			}
-		}
-		else
-		{
-			packagedTypeSpecs.add(createComponentEntityInvokerTypeSpec(packageNameMapper, resourceClass, resourceMethod,
-					responseType, classResourcePathPrefix));
-		}
+
+					resourceMethodStack.pop();
+				});
+
+		return packagedTypeSpecs;
 	}
 
 	public static void main(final String[] args) throws Exception
@@ -336,37 +403,16 @@ public class InvokerCodeWriter
 
 		final Function<String, String> packageNameMapper = s -> s.replaceFirst("org\\.apache", "com.tibtech");
 
-		final Set<PackagedTypeSpec> packagedTypeSpecs = new HashSet<>();
-
-		for (final Class<? extends ApplicationResource> applicationResourceClass : applicationResources)
-		{
-			Annotation[] annotations = applicationResourceClass.getAnnotations();
-			Path classResourcePathAnnotation = (Path) Arrays.stream(annotations).filter(a -> a instanceof Path)
-					.findFirst().orElse(null);
-			if (classResourcePathAnnotation != null)
-			{
-				final Method[] methods = applicationResourceClass.getMethods();
-				final List<Method> restApiMethods = Arrays.stream(methods)
-						.filter(m -> Arrays.stream(m.getAnnotations()).anyMatch(a -> a instanceof Path))
-						.collect(Collectors.toList());
-
-				for (final Method restApiMethod : restApiMethods)
+		final List<PackagedTypeSpec> packagedTypeSpecs = applicationResources.stream()
+				.filter(resourceClass -> resourceClass.getAnnotation(Api.class) == null
+						|| resourceClass.getAnnotation(Api.class).hidden() == false)
+				.map(resourceClass -> recurseApplicationResources(packageNameMapper, resourceClass, new ArrayDeque<>(),
+						""))
+				.reduce(new ArrayList<>(), (l, r) ->
 				{
-					final ApiOperation apiOperation = restApiMethod.getAnnotation(ApiOperation.class);
-					if (apiOperation != null)
-					{
-						final Class<?> invokerResponseType = apiOperation.response();
-
-						doStuff(packagedTypeSpecs, packageNameMapper, applicationResourceClass, restApiMethod,
-								invokerResponseType, "");
-					}
-					else
-					{
-						LOGGER.warn("Could not find API operation for method: {}", restApiMethod);
-					}
-				}
-			}
-		}
+					l.addAll(r);
+					return l;
+				});
 
 		final java.nio.file.Path generatedJavaPath = Paths.get("../../nifi-client-parent/nifi-invokers/src/main/java");
 

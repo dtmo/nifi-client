@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ComponentHistoryEntity;
 
+/**
+ * Gets configuration history for a component
+ */
 public final class GetComponentHistoryInvoker extends AbstractInvoker<ComponentHistoryEntity> {
   private String componentId;
 

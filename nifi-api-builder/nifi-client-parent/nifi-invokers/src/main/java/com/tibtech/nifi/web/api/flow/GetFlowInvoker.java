@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ProcessGroupFlowEntity;
 
+/**
+ * Gets a process group
+ */
 public final class GetFlowInvoker extends AbstractInvoker<ProcessGroupFlowEntity> {
   private String id;
 

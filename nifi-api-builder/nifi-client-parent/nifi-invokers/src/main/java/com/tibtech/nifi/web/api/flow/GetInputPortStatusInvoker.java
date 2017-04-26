@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.PortStatusEntity;
 
+/**
+ * Gets status for an input port
+ */
 public final class GetInputPortStatusInvoker extends AbstractInvoker<PortStatusEntity> {
   private String id;
 

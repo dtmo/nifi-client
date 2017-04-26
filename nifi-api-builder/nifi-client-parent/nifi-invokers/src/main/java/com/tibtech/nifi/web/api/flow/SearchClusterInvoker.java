@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ClusterSearchResultsEntity;
 
+/**
+ * Searches the cluster for a node with the specified address
+ */
 public final class SearchClusterInvoker extends AbstractInvoker<ClusterSearchResultsEntity> {
   private String q;
 

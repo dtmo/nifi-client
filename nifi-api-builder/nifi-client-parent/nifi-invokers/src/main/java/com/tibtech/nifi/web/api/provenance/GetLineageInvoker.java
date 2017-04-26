@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.LineageEntity;
 
+/**
+ * Gets a lineage query
+ */
 public final class GetLineageInvoker extends AbstractInvoker<LineageEntity> {
   private String id;
 

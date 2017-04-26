@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ControllerServicesEntity;
 
+/**
+ * Gets all controller services
+ */
 public final class GetControllerServicesFromGroupInvoker extends AbstractInvoker<ControllerServicesEntity> {
   private String id;
 

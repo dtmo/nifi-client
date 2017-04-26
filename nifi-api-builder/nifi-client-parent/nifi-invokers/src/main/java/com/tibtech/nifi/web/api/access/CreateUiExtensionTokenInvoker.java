@@ -8,6 +8,9 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+/**
+ * Creates a single use access token for accessing a NiFi UI extension.
+ */
 public final class CreateUiExtensionTokenInvoker extends AbstractInvoker<String> {
   public CreateUiExtensionTokenInvoker(final Transport transport, final long version) {
     super(transport, version);

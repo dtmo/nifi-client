@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.UserEntity;
 
+/**
+ * Gets a user
+ */
 public final class GetUserInvoker extends ComponentEntityInvoker<UserEntity> {
   private String id;
 
@@ -30,7 +33,7 @@ public final class GetUserInvoker extends ComponentEntityInvoker<UserEntity> {
   }
 
   public final UserEntity invoke() throws InvokerException {
-    // /tenants/users/{id}
+    // tenants/users/{id}
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("users");

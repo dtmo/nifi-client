@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ReportingTaskEntity;
 
+/**
+ * Creates a new reporting task
+ */
 public final class CreateReportingTaskInvoker extends ComponentEntityInvoker<ReportingTaskEntity> {
   private ReportingTaskEntity reportingTaskEntity;
 

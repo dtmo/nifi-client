@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ClusterEntity;
 
+/**
+ * Gets the contents of the cluster
+ */
 public final class GetClusterInvoker extends AbstractInvoker<ClusterEntity> {
   public GetClusterInvoker(final Transport transport, final long version) {
     super(transport, version);

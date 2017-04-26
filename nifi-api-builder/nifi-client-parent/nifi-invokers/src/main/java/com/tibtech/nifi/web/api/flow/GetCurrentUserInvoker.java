@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.CurrentUserEntity;
 
+/**
+ * Retrieves the user identity of the user making the request
+ */
 public final class GetCurrentUserInvoker extends AbstractInvoker<CurrentUserEntity> {
   public GetCurrentUserInvoker(final Transport transport, final long version) {
     super(transport, version);

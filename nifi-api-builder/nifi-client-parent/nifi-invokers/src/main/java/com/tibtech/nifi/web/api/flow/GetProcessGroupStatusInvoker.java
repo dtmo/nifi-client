@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ProcessGroupStatusEntity;
 
+/**
+ * Gets the status for a process group
+ */
 public final class GetProcessGroupStatusInvoker extends AbstractInvoker<ProcessGroupStatusEntity> {
   private String id;
 

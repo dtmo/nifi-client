@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ProcessorStatusEntity;
 
+/**
+ * Gets status for a remote process group
+ */
 public final class GetRemoteProcessGroupStatusInvoker extends AbstractInvoker<ProcessorStatusEntity> {
   private String id;
 

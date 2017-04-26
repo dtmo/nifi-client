@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ProcessorStatusEntity;
 
+/**
+ * Gets status for a processor
+ */
 public final class GetProcessorStatusInvoker extends AbstractInvoker<ProcessorStatusEntity> {
   private String id;
 

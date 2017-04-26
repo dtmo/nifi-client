@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.UserGroupEntity;
 
+/**
+ * Creates a user group
+ */
 public final class CreateUserGroupInvoker extends ComponentEntityInvoker<UserGroupEntity> {
   private UserGroupEntity userGroupEntity;
 
@@ -30,7 +33,7 @@ public final class CreateUserGroupInvoker extends ComponentEntityInvoker<UserGro
   }
 
   public final UserGroupEntity invoke() throws InvokerException {
-    // /tenants/user-groups
+    // tenants/user-groups
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("user-groups");

@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ReportingTaskTypesEntity;
 
+/**
+ * Retrieves the types of reporting tasks that this NiFi supports
+ */
 public final class GetReportingTaskTypesInvoker extends AbstractInvoker<ReportingTaskTypesEntity> {
   public GetReportingTaskTypesInvoker(final Transport transport, final long version) {
     super(transport, version);

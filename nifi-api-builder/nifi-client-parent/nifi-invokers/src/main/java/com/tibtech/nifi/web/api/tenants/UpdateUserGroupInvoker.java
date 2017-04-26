@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.UserGroupEntity;
 
+/**
+ * Updates a user group
+ */
 public final class UpdateUserGroupInvoker extends ComponentEntityInvoker<UserGroupEntity> {
   private String id;
 
@@ -46,7 +49,7 @@ public final class UpdateUserGroupInvoker extends ComponentEntityInvoker<UserGro
   }
 
   public final UserGroupEntity invoke() throws InvokerException {
-    // /tenants/user-groups/{id}
+    // tenants/user-groups/{id}
     WebTarget target = getBaseWebTarget();
     target = target.path("tenants");
     target = target.path("user-groups");

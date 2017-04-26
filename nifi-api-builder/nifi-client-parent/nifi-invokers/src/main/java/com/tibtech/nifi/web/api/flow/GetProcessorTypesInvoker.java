@@ -8,6 +8,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.ProcessorTypesEntity;
 
+/**
+ * Retrieves the types of processors that this NiFi supports
+ */
 public final class GetProcessorTypesInvoker extends AbstractInvoker<ProcessorTypesEntity> {
   public GetProcessorTypesInvoker(final Transport transport, final long version) {
     super(transport, version);

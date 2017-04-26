@@ -13,11 +13,11 @@ import com.tibtech.nifi.web.api.dto.ProcessGroupDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessGroupEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
-import com.tibtech.nifi.web.api.process.groups.CreateProcessGroupInvoker;
-import com.tibtech.nifi.web.api.process.groups.CreateProcessorInvoker;
-import com.tibtech.nifi.web.api.process.groups.GetProcessGroupInvoker;
-import com.tibtech.nifi.web.api.process.groups.RemoveProcessGroupInvoker;
-import com.tibtech.nifi.web.api.process.groups.UpdateProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.RemoveProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.UpdateProcessGroupInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;

@@ -10,6 +10,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.CountersEntity;
 
+/**
+ * Gets the current counters for this NiFi
+ */
 public final class GetCountersInvoker extends AbstractInvoker<CountersEntity> {
   private Boolean nodewise;
 

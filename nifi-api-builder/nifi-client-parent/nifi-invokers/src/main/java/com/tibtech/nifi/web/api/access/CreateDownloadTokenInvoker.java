@@ -8,6 +8,9 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
+/**
+ * Creates a single use access token for downloading FlowFile content.
+ */
 public final class CreateDownloadTokenInvoker extends AbstractInvoker<String> {
   public CreateDownloadTokenInvoker(final Transport transport, final long version) {
     super(transport, version);

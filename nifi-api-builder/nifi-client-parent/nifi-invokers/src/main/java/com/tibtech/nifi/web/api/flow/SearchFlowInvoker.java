@@ -9,6 +9,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.SearchResultsEntity;
 
+/**
+ * Performs a search against this NiFi using the specified search term
+ */
 public final class SearchFlowInvoker extends AbstractInvoker<SearchResultsEntity> {
   private String q;
 

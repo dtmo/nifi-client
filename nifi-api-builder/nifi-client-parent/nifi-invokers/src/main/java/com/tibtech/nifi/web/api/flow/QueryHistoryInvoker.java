@@ -11,6 +11,9 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.HistoryEntity;
 
+/**
+ * Gets configuration history
+ */
 public final class QueryHistoryInvoker extends AbstractInvoker<HistoryEntity> {
   private Integer offset;
 
