@@ -24,6 +24,8 @@ public abstract class EditableComponent<T extends EditableComponent<T, B>, B> ex
 	{
 		this.version = version;
 	}
+	
+	public abstract String getId();
 
 	public abstract void delete() throws InvokerException;
 

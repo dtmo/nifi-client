@@ -144,6 +144,19 @@ public class ProcessGroup extends EditableComponent<ProcessGroup, ProcessGroupDT
 				processGroupEntity.getComponent());
 	}
 
+	public ProcessGroup createProcessGroup(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupDTOBuilder.class) final Closure<ProcessGroupDTOBuilder> closure)
+			throws InvokerException
+	{
+		return createProcessGroup(p ->
+		{
+			final Closure<ProcessGroupDTOBuilder> code = closure.rehydrate(p, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			code.call();
+			return p;
+		});
+	}
+
 	@Override
 	public void delete() throws InvokerException
 	{

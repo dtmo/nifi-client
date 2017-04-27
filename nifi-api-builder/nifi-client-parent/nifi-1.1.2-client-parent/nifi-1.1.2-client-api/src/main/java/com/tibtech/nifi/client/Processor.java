@@ -20,7 +20,7 @@ import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class Processor extends EditableComponent<Processor, ProcessorDTOBuilder>
+public class Processor extends ConnectableComponent<Processor, ProcessorDTOBuilder>
 {
 	private ProcessorDTO processorDTO;
 
@@ -114,6 +114,12 @@ public class Processor extends EditableComponent<Processor, ProcessorDTOBuilder>
 	public String getDescription()
 	{
 		return processorDTO.getDescription();
+	}
+
+	@Override
+	public ConnectableType getConnectableType()
+	{
+		return ConnectableType.PROCESSOR;
 	}
 
 	@Override
