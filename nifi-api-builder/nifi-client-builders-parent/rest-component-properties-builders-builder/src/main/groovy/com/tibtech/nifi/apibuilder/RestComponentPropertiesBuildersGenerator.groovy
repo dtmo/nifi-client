@@ -1,15 +1,5 @@
-#!/usr/bin/env groovy
-
 package com.tibtech.nifi.apibuilder
 
-//@Grapes([
-//	@Grab("org.glassfish.jersey.core:jersey-client:2.25.1"),
-//	@Grab("org.glassfish.jersey.media:jersey-media-json-jackson:2.25.1"),
-//	@Grab("org.glassfish.jersey.media:jersey-media-multipart:2.25.1"),
-//	@Grab("javax.ws.rs:javax.ws.rs-api:2.0.1"),
-//	@Grab("org.apache.nifi:nifi-client-dto:1.1.2"),
-//	@Grab("com.squareup:javapoet:1.8.0"),
-//])
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -35,7 +25,7 @@ def writeComponentPropertiesBuilder(Flow flow, Closure packageNameMapper, Closur
 
 	for (PropertyDescriptorDTO d : propertyDescriptorsProducer())
 	{
-		builder.addConfigurableComponentProperty(new ConfigurableComponentProperty(d.getName(), d.getDescription()))
+		builder.addConfigurableComponentProperty(new ConfigurableComponentProperty(d.name, d.description))
 	}
 
 	def typeSpec = builder.build()
@@ -45,14 +35,13 @@ def writeComponentPropertiesBuilder(Flow flow, Closure packageNameMapper, Closur
 }
 
 println "Controller service types:"
-def controllerServiceTypes = flow.getControllerServiceTypes()
-for (def controllerServiceType : controllerServiceTypes)
+for (def controllerServiceType : flow.controllerServiceTypes)
 {
-	println "\t" + controllerServiceType.getType()
+	println "\t" + controllerServiceType.type
 	def propertyDescriptorsProducer =
 	{
 		def controllerService = flow.createControllerService {type = controllerServiceType.getType()}
-		def propertyDescriptors = controllerService.getDescriptors().values()
+		def propertyDescriptors = controllerService.descriptors.values()
 		controllerService.delete()
 		propertyDescriptors
 	}
@@ -61,14 +50,13 @@ for (def controllerServiceType : controllerServiceTypes)
 }
 
 println "\nProcessor types: "
-def processorTypes = flow.getProcessorTypes()
-for (def processorType : processorTypes)
+for (def processorType : flow.processorTypes)
 {
 	println "\t" + processorType.getType()
 	def propertyDescriptorsProducer =
 	{
-		def processor = root.createProcessor {type = processorType.getType()}
-		def propertyDescriptors = processor.getConfig().getDescriptors().values()
+		def processor = root.createProcessor {type = processorType.type}
+		def propertyDescriptors = processor.config.descriptors.values()
 		processor.delete()
 		propertyDescriptors
 	}
@@ -77,14 +65,13 @@ for (def processorType : processorTypes)
 }
 
 println "\nReporting Task types: "
-def reportingTaskTypes = flow.getReportingTaskTypes()
-for (def reportingTaskType : reportingTaskTypes)
+for (def reportingTaskType : flow.reportingTaskTypes)
 {
-	println "\t" + reportingTaskType.getType()
+	println "\t" + reportingTaskType.type
 	def propertyDescriptorsProducer =
 	{
-		def reportingTask = flow.createReportingTask {type = reportingTaskType.getType()}
-		def propertyDescriptors = reportingTask.getDescriptors().values()
+		def reportingTask = flow.createReportingTask {type = reportingTaskType.type}
+		def propertyDescriptors = reportingTask.descriptors.values()
 		reportingTask.delete()
 		propertyDescriptors
 	}
