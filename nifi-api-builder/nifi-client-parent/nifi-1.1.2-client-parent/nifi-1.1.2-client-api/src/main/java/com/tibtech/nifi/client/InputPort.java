@@ -2,7 +2,6 @@ package com.tibtech.nifi.client;
 
 import java.util.function.Function;
 
-import org.apache.nifi.web.api.dto.PortDTO;
 import org.apache.nifi.web.api.entity.PortEntity;
 
 import com.tibtech.nifi.web.api.dto.PortDTOBuilder;
@@ -13,9 +12,9 @@ import com.tibtech.nifi.web.api.inputport.UpdateInputPortInvoker;
 
 public class InputPort extends Port<InputPort>
 {
-	public InputPort(final Transport transport, final long version, final PortDTO portDTO)
+	public InputPort(final Transport transport, final PortEntity portEntity)
 	{
-		super(transport, version, portDTO);
+		super(transport, portEntity);
 	}
 
 	@Override
@@ -25,27 +24,28 @@ public class InputPort extends Port<InputPort>
 	}
 
 	@Override
-	public void delete() throws InvokerException
-	{
-		new RemoveInputPortInvoker(getTransport(), getVersion()).setId(getId());
-	}
-
-	@Override
 	public InputPort refresh() throws InvokerException
 	{
-		setPortDTO(new GetInputPortInvoker(getTransport(), getVersion()).setId(getId()).invoke().getComponent());
+		setComponentEntity(new GetInputPortInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+
 		return this;
 	}
 
 	@Override
 	public InputPort update(final Function<PortDTOBuilder, PortDTOBuilder> configurator) throws InvokerException
 	{
-		final PortEntity portEntity = new UpdateInputPortInvoker(getTransport(), getVersion()).setId(getId())
-				.setPortEntity(new PortEntityBuilder()
-						.setComponent(configurator.apply(PortDTOBuilder.of(getPortDTO())).build()).build())
-				.invoke();
-		setVersion(portEntity.getRevision().getVersion());
-		setPortDTO(portEntity.getComponent());
+		setComponentEntity(
+				new UpdateInputPortInvoker(getTransport(), getVersion()).setId(getId())
+						.setPortEntity(new PortEntityBuilder()
+								.setComponent(configurator.apply(PortDTOBuilder.of(getPortDTO())).build()).build())
+						.invoke());
+
 		return this;
+	}
+
+	@Override
+	public void delete() throws InvokerException
+	{
+		new RemoveInputPortInvoker(getTransport(), getVersion()).setId(getId());
 	}
 }

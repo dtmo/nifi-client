@@ -7,7 +7,6 @@ import java.util.function.Function;
 
 import org.apache.nifi.controller.service.ControllerServiceState;
 import org.apache.nifi.web.api.dto.ControllerServiceDTO;
-import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
 import org.apache.nifi.web.api.entity.ControllerServiceEntity;
 import org.apache.nifi.web.api.entity.ControllerServiceReferencingComponentEntity;
@@ -21,104 +20,89 @@ import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class ControllerService extends EditableComponent<ControllerService, ControllerServiceDTOBuilder>
+public class ControllerService
+		extends UpdatableComponent<ControllerService, ControllerServiceEntity, ControllerServiceDTOBuilder>
 {
-	private ControllerServiceDTO controllerServiceDTO;
-
-	public ControllerService(final Transport transport, final long version,
-			final ControllerServiceDTO controllerServiceDTO)
+	public ControllerService(final Transport transport, final ControllerServiceEntity controllerServiceEntity)
 	{
-		super(transport, version);
-
-		this.controllerServiceDTO = controllerServiceDTO;
+		super(transport, controllerServiceEntity);
 	}
 
-	public String getId()
+	protected ControllerServiceDTO getControllerServiceDTO()
 	{
-		return controllerServiceDTO.getId();
+		return getComponentEntity().getComponent();
 	}
 
 	public String getParentGroupId()
 	{
-		return controllerServiceDTO.getParentGroupId();
+		return getControllerServiceDTO().getParentGroupId();
 	}
 
 	public String getName()
 	{
-		return controllerServiceDTO.getName();
-	}
-
-	public PositionDTO getPosition()
-	{
-		return controllerServiceDTO.getPosition();
+		return getControllerServiceDTO().getName();
 	}
 
 	public String getType()
 	{
-		return controllerServiceDTO.getType();
+		return getControllerServiceDTO().getType();
 	}
 
 	public String getComments()
 	{
-		return controllerServiceDTO.getComments();
+		return getControllerServiceDTO().getComments();
 	}
 
 	public Boolean getPersistsState()
 	{
-		return controllerServiceDTO.getPersistsState();
+		return getControllerServiceDTO().getPersistsState();
 	}
 
 	public Boolean getRestricted()
 	{
-		return controllerServiceDTO.getRestricted();
+		return getControllerServiceDTO().getRestricted();
 	}
 
 	public String getState()
 	{
-		return controllerServiceDTO.getState();
+		return getControllerServiceDTO().getState();
 	}
 
 	public Map<String, String> getProperties()
 	{
-		return controllerServiceDTO.getProperties();
+		return getControllerServiceDTO().getProperties();
 	}
 
 	public Map<String, PropertyDescriptorDTO> getDescriptors()
 	{
-		return controllerServiceDTO.getDescriptors();
+		return getControllerServiceDTO().getDescriptors();
 	}
 
 	public String getCustomUiUrl()
 	{
-		return controllerServiceDTO.getCustomUiUrl();
+		return getControllerServiceDTO().getCustomUiUrl();
 	}
 
 	public String getAnnotationData()
 	{
-		return controllerServiceDTO.getAnnotationData();
+		return getControllerServiceDTO().getAnnotationData();
 	}
 
 	public Set<ControllerServiceReferencingComponentEntity> getReferencingComponents()
 	{
-		return controllerServiceDTO.getReferencingComponents();
+		return getControllerServiceDTO().getReferencingComponents();
 	}
 
 	public Collection<String> getValidationErrors()
 	{
-		return controllerServiceDTO.getValidationErrors();
-	}
-
-	@Override
-	public void delete() throws InvokerException
-	{
-		new RemoveControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+		return getControllerServiceDTO().getValidationErrors();
 	}
 
 	@Override
 	public ControllerService refresh() throws InvokerException
 	{
-		controllerServiceDTO = new GetControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke()
-				.getComponent();
+		setComponentEntity(new GetControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+
 		return this;
 	}
 
@@ -127,19 +111,12 @@ public class ControllerService extends EditableComponent<ControllerService, Cont
 			final Function<ControllerServiceDTOBuilder, ControllerServiceDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final ControllerServiceEntity controllerServiceEntity = new UpdateControllerServiceInvoker(getTransport(),
-				getVersion())
-						.setId(controllerServiceDTO.getId())
-						.setControllerServiceEntity(
-								new ControllerServiceEntityBuilder().setId(controllerServiceDTO.getId())
-										.setComponent(configurator
-												.apply(ControllerServiceDTOBuilder.of(controllerServiceDTO)).build())
-										.build())
-						.invoke();
-
-		this.setVersion(controllerServiceEntity.getRevision().getVersion());
-
-		this.controllerServiceDTO = controllerServiceEntity.getComponent();
+		setComponentEntity(new UpdateControllerServiceInvoker(getTransport(), getVersion()).setId(getId())
+				.setControllerServiceEntity(new ControllerServiceEntityBuilder().setId(getId())
+						.setComponent(
+								configurator.apply(ControllerServiceDTOBuilder.of(getControllerServiceDTO())).build())
+						.build())
+				.invoke());
 
 		return this;
 	}
@@ -150,6 +127,12 @@ public class ControllerService extends EditableComponent<ControllerService, Cont
 			throws InvokerException
 	{
 		return super.update(closure);
+	}
+
+	@Override
+	public void delete() throws InvokerException
+	{
+		new RemoveControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
 
 	public void enable() throws InvokerException

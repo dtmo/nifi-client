@@ -2,8 +2,6 @@ package com.tibtech.nifi.client;
 
 import java.util.function.Function;
 
-import org.apache.nifi.web.api.dto.FunnelDTO;
-import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.entity.FunnelEntity;
 
 import com.tibtech.nifi.web.api.dto.FunnelDTOBuilder;
@@ -15,30 +13,17 @@ import com.tibtech.nifi.web.api.funnel.UpdateFunnelInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class Funnel extends ConnectableComponent<Funnel, FunnelDTOBuilder>
+public class Funnel extends ConnectableComponent<Funnel, FunnelEntity, FunnelDTOBuilder>
 {
-	private FunnelDTO funnelDTO;
-
-	public Funnel(final Transport transport, final long version, final FunnelDTO funnelDTO)
+	public Funnel(final Transport transport, final FunnelEntity funnelEntity)
 	{
-		super(transport, version);
-
-		this.funnelDTO = funnelDTO;
+		super(transport, funnelEntity);
 	}
 
-	public String getId()
-	{
-		return funnelDTO.getId();
-	}
-
+	@Override
 	public String getParentGroupId()
 	{
-		return funnelDTO.getParentGroupId();
-	}
-
-	public PositionDTO getPosition()
-	{
-		return funnelDTO.getPosition();
+		return getComponentEntity().getComponent().getParentGroupId();
 	}
 
 	@Override
@@ -56,19 +41,19 @@ public class Funnel extends ConnectableComponent<Funnel, FunnelDTOBuilder>
 	@Override
 	public Funnel refresh() throws InvokerException
 	{
-		this.funnelDTO = new GetFunnelInvoker(getTransport(), getVersion()).setId(getId()).invoke().getComponent();
+		setComponentEntity(new GetFunnelInvoker(getTransport(), getVersion()).setId(getId()).invoke());
 		return this;
 	}
 
 	@Override
 	public Funnel update(final Function<FunnelDTOBuilder, FunnelDTOBuilder> configurator) throws InvokerException
 	{
-		final FunnelEntity funnelEntity = new UpdateFunnelInvoker(getTransport(), getVersion()).setId(getId())
+		setComponentEntity(new UpdateFunnelInvoker(getTransport(), getVersion()).setId(getId())
 				.setFunnelEntity(new FunnelEntityBuilder().setId(getId())
-						.setComponent(configurator.apply(FunnelDTOBuilder.of(funnelDTO)).build()).build())
-				.invoke();
-		setVersion(funnelEntity.getRevision().getVersion());
-		this.funnelDTO = funnelEntity.getComponent();
+						.setComponent(
+								configurator.apply(FunnelDTOBuilder.of(getComponentEntity().getComponent())).build())
+						.build())
+				.invoke());
 		return this;
 	}
 

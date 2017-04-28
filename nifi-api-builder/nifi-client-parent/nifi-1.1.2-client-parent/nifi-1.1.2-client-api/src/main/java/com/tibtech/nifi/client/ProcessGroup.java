@@ -3,18 +3,21 @@ package com.tibtech.nifi.client;
 import java.util.function.Function;
 
 import org.apache.nifi.web.api.dto.FlowSnippetDTO;
-import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
-import org.apache.nifi.web.api.dto.ProcessorDTO;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
-import org.apache.nifi.web.api.entity.ProcessorEntity;
 
+import com.tibtech.nifi.web.api.dto.FunnelDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ProcessGroupDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
+import com.tibtech.nifi.web.api.dto.RemoteProcessGroupDTOBuilder;
+import com.tibtech.nifi.web.api.entity.FunnelEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessGroupEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
+import com.tibtech.nifi.web.api.entity.RemoteProcessGroupEntityBuilder;
+import com.tibtech.nifi.web.api.processgroup.CreateFunnelInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateRemoteProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.RemoveProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.UpdateProcessGroupInvoker;
@@ -22,126 +25,132 @@ import com.tibtech.nifi.web.api.processgroup.UpdateProcessGroupInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class ProcessGroup extends EditableComponent<ProcessGroup, ProcessGroupDTOBuilder>
+public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupEntity, ProcessGroupDTOBuilder>
 {
-	private ProcessGroupDTO processGroupDTO;
-
-	public ProcessGroup(final Transport transport, final long version, final ProcessGroupDTO processGroupDTO)
+	public ProcessGroup(final Transport transport, final ProcessGroupEntity processGroupEntity)
 	{
-		super(transport, version);
-
-		this.processGroupDTO = processGroupDTO;
+		super(transport, processGroupEntity);
 	}
 
-	public String getId()
+	protected ProcessGroupDTO getProcessGroupDTO()
 	{
-		return processGroupDTO.getId();
+		return getComponentEntity().getComponent();
 	}
 
 	public String getParentGroupId()
 	{
-		return processGroupDTO.getParentGroupId();
+		return getProcessGroupDTO().getParentGroupId();
 	}
 
 	public String getName()
 	{
-		return processGroupDTO.getName();
-	}
-
-	public PositionDTO getPosition()
-	{
-		return processGroupDTO.getPosition();
+		return getProcessGroupDTO().getName();
 	}
 
 	public String getComments()
 	{
-		return processGroupDTO.getComments();
+		return getProcessGroupDTO().getComments();
 	}
 
 	public FlowSnippetDTO getContents()
 	{
-		return processGroupDTO.getContents();
+		return getProcessGroupDTO().getContents();
 	}
 
 	public Integer getInputPortCount()
 	{
-		return processGroupDTO.getInputPortCount();
+		return getProcessGroupDTO().getInputPortCount();
 	}
 
 	public Integer getInvalidCount()
 	{
-		return processGroupDTO.getInvalidCount();
+		return getProcessGroupDTO().getInvalidCount();
 	}
 
 	public Integer getOutputPortCount()
 	{
-		return processGroupDTO.getOutputPortCount();
+		return getProcessGroupDTO().getOutputPortCount();
 	}
 
 	public Integer getRunningCount()
 	{
-		return processGroupDTO.getRunningCount();
+		return getProcessGroupDTO().getRunningCount();
 	}
 
 	public Integer getStoppedCount()
 	{
-		return processGroupDTO.getStoppedCount();
+		return getProcessGroupDTO().getStoppedCount();
 	}
 
 	public Integer getDisabledCount()
 	{
-		return processGroupDTO.getDisabledCount();
+		return getProcessGroupDTO().getDisabledCount();
 	}
 
 	public Integer getActiveRemotePortCount()
 	{
-		return processGroupDTO.getActiveRemotePortCount();
+		return getProcessGroupDTO().getActiveRemotePortCount();
 	}
 
 	public Integer getInactiveRemotePortCount()
 	{
-		return processGroupDTO.getInactiveRemotePortCount();
+		return getProcessGroupDTO().getInactiveRemotePortCount();
 	}
 
-	public Processor createProcessor(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> function)
+	public Funnel createFunnel(final Function<FunnelDTOBuilder, FunnelDTOBuilder> configurator) throws InvokerException
+	{
+		return new Funnel(getTransport(), new CreateFunnelInvoker(getTransport(), 0).setId(getId())
+				.setFunnelEntity(new FunnelEntityBuilder()
+						.setComponent(configurator.apply(new FunnelDTOBuilder().setParentGroupId(getId())).build())
+						.build())
+				.invoke());
+	}
+
+	public Funnel createFunnel(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FunnelDTOBuilder.class) final Closure<FunnelDTOBuilder> closure)
 			throws InvokerException
 	{
-		final ProcessorDTO processorDTO = function
-				.apply(new ProcessorDTOBuilder().setParentGroupId(processGroupDTO.getId())).build();
-		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport(), 0)
-				.setId(processorDTO.getParentGroupId())
-				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(processorDTO).build()).invoke();
+		return createFunnel(configurator ->
+		{
+			final Closure<FunnelDTOBuilder> code = closure.rehydrate(configurator, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			code.call();
+			return configurator;
+		});
+	}
 
-		return new Processor(getTransport(), processorEntity.getRevision().getVersion(),
-				processorEntity.getComponent());
+	public Processor createProcessor(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> configurator)
+			throws InvokerException
+	{
+		return new Processor(getTransport(), new CreateProcessorInvoker(getTransport(), 0).setId(getId())
+				.setProcessorEntity(new ProcessorEntityBuilder()
+						.setComponent(configurator.apply(new ProcessorDTOBuilder().setParentGroupId(getId())).build())
+						.build())
+				.invoke());
 	}
 
 	public Processor createProcessor(
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createProcessor(p ->
+		return createProcessor(configurator ->
 		{
-			final Closure<ProcessorDTOBuilder> code = closure.rehydrate(p, this, this);
+			final Closure<ProcessorDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return p;
+			return configurator;
 		});
 	}
 
-	public ProcessGroup createProcessGroup(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> function)
+	public ProcessGroup createProcessGroup(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final ProcessGroupDTO childProcessGroup = function
-				.apply(new ProcessGroupDTOBuilder().setParentGroupId(processGroupDTO.getParentGroupId())).build();
-
-		final ProcessGroupEntity processGroupEntity = new CreateProcessGroupInvoker(getTransport(), 0)
-				.setId(childProcessGroup.getParentGroupId())
-				.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(childProcessGroup).build())
-				.invoke();
-
-		return new ProcessGroup(getTransport(), processGroupEntity.getRevision().getVersion(),
-				processGroupEntity.getComponent());
+		return new ProcessGroup(getTransport(),
+				new CreateProcessGroupInvoker(getTransport(), 0).setId(getParentGroupId())
+						.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(configurator
+								.apply(new ProcessGroupDTOBuilder().setParentGroupId(getParentGroupId())).build())
+								.build())
+						.invoke());
 	}
 
 	public ProcessGroup createProcessGroup(
@@ -157,34 +166,47 @@ public class ProcessGroup extends EditableComponent<ProcessGroup, ProcessGroupDT
 		});
 	}
 
-	@Override
-	public void delete() throws InvokerException
+	public RemoteProcessGroup createRemoteProcessGroup(
+			final Function<RemoteProcessGroupDTOBuilder, RemoteProcessGroupDTOBuilder> configurator)
+			throws InvokerException
 	{
-		new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+		return new RemoteProcessGroup(getTransport(),
+				new CreateRemoteProcessGroupInvoker(getTransport(), 0).setId(getId())
+						.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder().setComponent(configurator
+								.apply(new RemoteProcessGroupDTOBuilder().setParentGroupId(getParentGroupId())).build())
+								.build())
+						.invoke());
+	}
+
+	public RemoteProcessGroup createRemoteProcessGroup(final Closure<RemoteProcessGroup> closure)
+			throws InvokerException
+	{
+		return createRemoteProcessGroup(configurator ->
+		{
+			final Closure<RemoteProcessGroup> code = closure.rehydrate(closure, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			code.call();
+			return configurator;
+		});
 	}
 
 	@Override
 	public ProcessGroup refresh() throws InvokerException
 	{
-		this.processGroupDTO = new GetProcessGroupInvoker(getTransport(), 0).setId(getId()).invoke().getComponent();
+		setComponentEntity(new GetProcessGroupInvoker(getTransport(), 0).setId(getId()).invoke());
+
 		return this;
 	}
 
 	@Override
-	public ProcessGroup update(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> function)
+	public ProcessGroup update(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final ProcessGroupDTO updatedProcessGroupDTO = function.apply(ProcessGroupDTOBuilder.of(processGroupDTO))
-				.build();
-
-		final ProcessGroupEntity processGroupEntity = new UpdateProcessGroupInvoker(getTransport(), getVersion())
-				.setId(updatedProcessGroupDTO.getId())
-				.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(updatedProcessGroupDTO).build())
-				.invoke();
-
-		this.setVersion(processGroupEntity.getRevision().getVersion());
-
-		this.processGroupDTO = processGroupEntity.getComponent();
+		setComponentEntity(new UpdateProcessGroupInvoker(getTransport(), getVersion()).setId(getId())
+				.setProcessGroupEntity(new ProcessGroupEntityBuilder()
+						.setComponent(configurator.apply(ProcessGroupDTOBuilder.of(getProcessGroupDTO())).build())
+						.build())
+				.invoke());
 
 		return this;
 	}
@@ -195,5 +217,11 @@ public class ProcessGroup extends EditableComponent<ProcessGroup, ProcessGroupDT
 			throws InvokerException
 	{
 		return super.update(closure);
+	}
+
+	@Override
+	public void delete() throws InvokerException
+	{
+		new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
 }

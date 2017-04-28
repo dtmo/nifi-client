@@ -12,98 +12,87 @@ import org.apache.nifi.web.api.entity.ConnectionEntity;
 import com.tibtech.nifi.web.api.connection.DeleteConnectionInvoker;
 import com.tibtech.nifi.web.api.connection.GetConnectionInvoker;
 import com.tibtech.nifi.web.api.connection.UpdateConnectionInvoker;
-import com.tibtech.nifi.web.api.dto.ConnectableDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ConnectionEntityBuilder;
-import com.tibtech.nifi.web.api.processgroup.CreateConnectionInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class Connection extends EditableComponent<Connection, ConnectionDTOBuilder>
+public class Connection extends UpdatableComponent<Connection, ConnectionEntity, ConnectionDTOBuilder>
 {
-	private ConnectionDTO connectionDTO;
-
-	public Connection(final Transport transport, final long version, final ConnectionDTO connectionDTO)
+	public Connection(final Transport transport, final ConnectionEntity connectionEntity)
 	{
-		super(transport, version);
+		super(transport, connectionEntity);
+	}
 
-		this.connectionDTO = connectionDTO;
+	private ConnectionDTO getConnectionDTO()
+	{
+		return getComponentEntity().getComponent();
 	}
 
 	public Set<String> getAvailableRelationships()
 	{
-		return connectionDTO.getAvailableRelationships();
+		return getConnectionDTO().getAvailableRelationships();
 	}
 
 	public String getBackPressureDataSizeThreshold()
 	{
-		return connectionDTO.getBackPressureDataSizeThreshold();
+		return getConnectionDTO().getBackPressureDataSizeThreshold();
 	}
 
 	public Long getBackPressureObjectThreshold()
 	{
-		return connectionDTO.getBackPressureObjectThreshold();
+		return getConnectionDTO().getBackPressureObjectThreshold();
 	}
 
 	public List<PositionDTO> getBends()
 	{
-		return connectionDTO.getBends();
+		return getConnectionDTO().getBends();
 	}
 
 	public ConnectableDTO getDestination()
 	{
-		return connectionDTO.getDestination();
+		return getConnectionDTO().getDestination();
 	}
 
 	public String getFlowFileExpiration()
 	{
-		return connectionDTO.getFlowFileExpiration();
-	}
-
-	public String getId()
-	{
-		return connectionDTO.getId();
+		return getConnectionDTO().getFlowFileExpiration();
 	}
 
 	public Integer getLabelIndex()
 	{
-		return connectionDTO.getLabelIndex();
+		return getConnectionDTO().getLabelIndex();
 	}
 
 	public String getName()
 	{
-		return connectionDTO.getName();
+		return getConnectionDTO().getName();
 	}
 
 	public String getParentGroupId()
 	{
-		return connectionDTO.getParentGroupId();
-	}
-
-	public PositionDTO getPosition()
-	{
-		return connectionDTO.getPosition();
+		return getConnectionDTO().getParentGroupId();
 	}
 
 	public List<String> getPrioritizers()
 	{
-		return connectionDTO.getPrioritizers();
+		return getConnectionDTO().getPrioritizers();
 	}
 
 	public Set<String> getSelectedRelationships()
 	{
-		return connectionDTO.getSelectedRelationships();
+		return getConnectionDTO().getSelectedRelationships();
 	}
 
 	public ConnectableDTO getSource()
 	{
-		return connectionDTO.getSource();
+		return getConnectionDTO().getSource();
 	}
 
 	public Long getzIndex()
 	{
-		return connectionDTO.getzIndex();
+		return getConnectionDTO().getzIndex();
 	}
 
 	@Override
@@ -115,18 +104,18 @@ public class Connection extends EditableComponent<Connection, ConnectionDTOBuild
 	@Override
 	public Connection refresh() throws InvokerException
 	{
-		this.connectionDTO = new GetConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke()
-				.getComponent();
+		setComponentEntity(new GetConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+
 		return this;
 	}
 
 	@Override
 	public Connection update(Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException
 	{
-		this.connectionDTO = new UpdateConnectionInvoker(getTransport(), getVersion()).setId(getId())
+		setComponentEntity(new UpdateConnectionInvoker(getTransport(), getVersion()).setId(getId())
 				.setConnectionEntity(new ConnectionEntityBuilder()
-						.setComponent(configurator.apply(ConnectionDTOBuilder.of(connectionDTO)).build()).build())
-				.invoke().getComponent();
+						.setComponent(configurator.apply(ConnectionDTOBuilder.of(getConnectionDTO())).build()).build())
+				.invoke());
 		return this;
 	}
 

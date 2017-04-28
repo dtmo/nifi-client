@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessorConfigDTO;
 import org.apache.nifi.web.api.dto.ProcessorDTO;
 import org.apache.nifi.web.api.dto.RelationshipDTO;
@@ -20,100 +19,91 @@ import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class Processor extends ConnectableComponent<Processor, ProcessorDTOBuilder>
+public class Processor extends ConnectableComponent<Processor, ProcessorEntity, ProcessorDTOBuilder>
 {
-	private ProcessorDTO processorDTO;
-
-	public Processor(final Transport transport, final long version, final ProcessorDTO processorDTO)
+	public Processor(final Transport transport, final ProcessorEntity processorEntity)
 	{
-		super(transport, version);
-
-		this.processorDTO = processorDTO;
+		super(transport, processorEntity);
 	}
 
-	public String getId()
+	protected ProcessorDTO getProcessorDTO()
 	{
-		return processorDTO.getId();
+		return getComponentEntity().getComponent();
 	}
 
 	public String getParentGroupId()
 	{
-		return processorDTO.getParentGroupId();
+		return getProcessorDTO().getParentGroupId();
 	}
 
 	public String getName()
 	{
-		return processorDTO.getName();
-	}
-
-	public PositionDTO getPosition()
-	{
-		return processorDTO.getPosition();
+		return getProcessorDTO().getName();
 	}
 
 	public String getType()
 	{
-		return processorDTO.getType();
+		return getProcessorDTO().getType();
 	}
 
 	public String getState()
 	{
-		return processorDTO.getState();
+		return getProcessorDTO().getState();
 	}
 
 	public Map<String, String> getStyle()
 	{
-		return processorDTO.getStyle();
+		return getProcessorDTO().getStyle();
 	}
 
 	public Boolean getSupportsParallelProcessing()
 	{
-		return processorDTO.getSupportsParallelProcessing();
+		return getProcessorDTO().getSupportsParallelProcessing();
 	}
 
 	public Boolean getPersistsState()
 	{
-		return processorDTO.getPersistsState();
+		return getProcessorDTO().getPersistsState();
 	}
 
 	public Boolean getRestricted()
 	{
-		return processorDTO.getRestricted();
+		return getProcessorDTO().getRestricted();
 	}
 
 	public String getInputRequirement()
 	{
-		return processorDTO.getInputRequirement();
+		return getProcessorDTO().getInputRequirement();
 	}
 
 	public Boolean getSupportsEventDriven()
 	{
-		return processorDTO.getSupportsEventDriven();
+		return getProcessorDTO().getSupportsEventDriven();
 	}
 
 	public Boolean getSupportsBatching()
 	{
-		return processorDTO.getSupportsBatching();
+		return getProcessorDTO().getSupportsBatching();
 	}
 
 	public List<RelationshipDTO> getRelationships()
 	{
-		return processorDTO.getRelationships();
+		return getProcessorDTO().getRelationships();
 	}
 
 	public ProcessorConfigDTO getConfig()
 	{
-		return processorDTO.getConfig();
+		return getProcessorDTO().getConfig();
 	}
 
 	public Collection<String> getValidationErrors()
 	{
-		return processorDTO.getValidationErrors();
+		return getProcessorDTO().getValidationErrors();
 	}
 
 	public String getDescription()
 	{
-		return processorDTO.getDescription();
+		return getProcessorDTO().getDescription();
 	}
 
 	@Override
@@ -125,28 +115,25 @@ public class Processor extends ConnectableComponent<Processor, ProcessorDTOBuild
 	@Override
 	public void delete() throws InvokerException
 	{
-		new DeleteProcessorInvoker(getTransport(), getVersion()).setId(processorDTO.getId()).invoke();
+		new DeleteProcessorInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
 
 	@Override
 	public Processor refresh() throws InvokerException
 	{
-		this.processorDTO = new GetProcessorInvoker(getTransport(), 0).setId(processorDTO.getId()).invoke()
-				.getComponent();
+		setComponentEntity(new GetProcessorInvoker(getTransport(), 0).setId(getId()).invoke());
+		
 		return this;
 	}
 
 	@Override
-	public Processor update(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> function) throws InvokerException
+	public Processor update(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> configurator)
+			throws InvokerException
 	{
-		final ProcessorDTO updatedProcessorDTO = function.apply(ProcessorDTOBuilder.of(processorDTO)).build();
-
-		final ProcessorEntity processorEntity = new CreateProcessorInvoker(getTransport(), 0)
-				.setId(updatedProcessorDTO.getParentGroupId())
-				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(updatedProcessorDTO).build()).invoke();
-
-		this.setVersion(processorEntity.getRevision().getVersion());
-		this.processorDTO = processorEntity.getComponent();
+		setComponentEntity(new CreateProcessorInvoker(getTransport(), 0).setId(getParentGroupId())
+				.setProcessorEntity(new ProcessorEntityBuilder()
+						.setComponent(configurator.apply(ProcessorDTOBuilder.of(getProcessorDTO())).build()).build())
+				.invoke());
 
 		return this;
 	}

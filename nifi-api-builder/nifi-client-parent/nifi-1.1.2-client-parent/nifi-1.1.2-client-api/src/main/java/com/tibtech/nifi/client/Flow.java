@@ -7,9 +7,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
 import org.apache.nifi.web.api.dto.DocumentedTypeDTO;
-import org.apache.nifi.web.api.entity.ControllerServiceEntity;
-import org.apache.nifi.web.api.entity.ProcessGroupEntity;
-import org.apache.nifi.web.api.entity.ReportingTaskEntity;
 
 import com.tibtech.nifi.web.api.controller.CreateControllerServiceInvoker;
 import com.tibtech.nifi.web.api.controller.CreateReportingTaskInvoker;
@@ -37,33 +34,30 @@ public class Flow
 
 	public ProcessGroup getRootProcessGroup() throws InvokerException
 	{
-		final ProcessGroupEntity processGroupEntity = new GetProcessGroupInvoker(transport, 0).setId("root").invoke();
-		return new ProcessGroup(transport, processGroupEntity.getRevision().getVersion(),
-				processGroupEntity.getComponent());
+		return new ProcessGroup(transport, new GetProcessGroupInvoker(transport, 0).setId("root").invoke());
 	}
 
 	public ControllerService createControllerService(
 			final Function<ControllerServiceDTOBuilder, ControllerServiceDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final ControllerServiceEntity controllerServiceEntity = new CreateControllerServiceInvoker(transport, 0)
-				.setControllerServiceEntity(new ControllerServiceEntityBuilder()
-						.setComponent(configurator.apply(new ControllerServiceDTOBuilder()).build()).build())
-				.invoke();
-		return new ControllerService(transport, controllerServiceEntity.getRevision().getVersion(),
-				controllerServiceEntity.getComponent());
+		return new ControllerService(transport,
+				new CreateControllerServiceInvoker(transport, 0)
+						.setControllerServiceEntity(new ControllerServiceEntityBuilder()
+								.setComponent(configurator.apply(new ControllerServiceDTOBuilder()).build()).build())
+						.invoke());
 	}
 
 	public ControllerService createControllerService(
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createControllerService(c ->
+		return createControllerService(configurator ->
 		{
-			final Closure<ControllerServiceDTOBuilder> code = closure.rehydrate(c, this, this);
+			final Closure<ControllerServiceDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return c;
+			return configurator;
 		});
 	}
 
@@ -85,12 +79,11 @@ public class Flow
 	public ReportingTask createReportingTask(
 			final Function<ReportingTaskDTOBuilder, ReportingTaskDTOBuilder> configurator) throws InvokerException
 	{
-		final ReportingTaskEntity reporingTaskEntity = new CreateReportingTaskInvoker(transport, 0)
-				.setReportingTaskEntity(new ReportingTaskEntityBuilder()
-						.setComponent(configurator.apply(new ReportingTaskDTOBuilder()).build()).build())
-				.invoke();
-		return new ReportingTask(transport, reporingTaskEntity.getRevision().getVersion(),
-				reporingTaskEntity.getComponent());
+		return new ReportingTask(transport,
+				new CreateReportingTaskInvoker(transport, 0)
+						.setReportingTaskEntity(new ReportingTaskEntityBuilder()
+								.setComponent(configurator.apply(new ReportingTaskDTOBuilder()).build()).build())
+						.invoke());
 	}
 
 	public ReportingTask createReportingTask(

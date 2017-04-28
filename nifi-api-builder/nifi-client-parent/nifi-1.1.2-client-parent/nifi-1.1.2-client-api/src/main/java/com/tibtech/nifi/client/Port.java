@@ -4,83 +4,81 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.apache.nifi.web.api.dto.PortDTO;
-import org.apache.nifi.web.api.dto.PositionDTO;
+import org.apache.nifi.web.api.dto.status.PortStatusDTO;
+import org.apache.nifi.web.api.entity.PortEntity;
 
 import com.tibtech.nifi.web.api.dto.PortDTOBuilder;
 
-public abstract class Port<T extends Port<T>> extends ConnectableComponent<T, PortDTOBuilder>
+public abstract class Port<T extends Port<T>> extends ConnectableComponent<T, PortEntity, PortDTOBuilder>
 {
-	private PortDTO portDTO;
-
-	public Port(final Transport transport, final long version, final PortDTO portDTO)
+	public Port(final Transport transport, final PortEntity portEntity)
 	{
-		super(transport, version);
-
-		this.portDTO = portDTO;
+		super(transport, portEntity);
 	}
 
 	protected PortDTO getPortDTO()
 	{
-		return portDTO;
+		return getComponentEntity().getComponent();
+	}
+	
+	@Override
+	public String getParentGroupId()
+	{
+		return getPortDTO().getParentGroupId();
 	}
 
-	protected void setPortDTO(final PortDTO portDTO)
+	public String getPortType()
 	{
-		this.portDTO = portDTO;
+		return getComponentEntity().getPortType();
+	}
+
+	public PortStatusDTO getStatus()
+	{
+		return getComponentEntity().getStatus();
+	}
+
+	public String getUri()
+	{
+		return getComponentEntity().getUri();
 	}
 
 	public String getComments()
 	{
-		return portDTO.getComments();
+		return getPortDTO().getComments();
 	}
 
 	public Integer getConcurrentlySchedulableTaskCount()
 	{
-		return portDTO.getConcurrentlySchedulableTaskCount();
+		return getPortDTO().getConcurrentlySchedulableTaskCount();
 	}
 
 	public Set<String> getGroupAccessControl()
 	{
-		return portDTO.getGroupAccessControl();
-	}
-
-	public String getId()
-	{
-		return portDTO.getId();
+		return getPortDTO().getGroupAccessControl();
 	}
 
 	public String getName()
 	{
-		return portDTO.getName();
-	}
-
-	public String getParentGroupId()
-	{
-		return portDTO.getParentGroupId();
-	}
-
-	public PositionDTO getPosition()
-	{
-		return portDTO.getPosition();
+		return getPortDTO().getName();
 	}
 
 	public String getState()
 	{
-		return portDTO.getState();
+		return getPortDTO().getState();
 	}
 
 	public String getType()
 	{
-		return portDTO.getType();
+		return getPortDTO().getType();
 	}
 
 	public Set<String> getUserAccessControl()
 	{
-		return portDTO.getUserAccessControl();
+		return getPortDTO().getUserAccessControl();
 	}
 
 	public Collection<String> getValidationErrors()
 	{
-		return portDTO.getValidationErrors();
+		return getPortDTO().getValidationErrors();
 	}
 }

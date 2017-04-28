@@ -18,118 +18,113 @@ import com.tibtech.nifi.web.api.reportingtask.UpdateReportingTaskInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class ReportingTask extends EditableComponent<ReportingTask, ReportingTaskDTOBuilder>
+public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTaskEntity, ReportingTaskDTOBuilder>
 {
-	private ReportingTaskDTO reportingTaskDTO;
-
-	public ReportingTask(final Transport transport, final long version, final ReportingTaskDTO reportingTaskDTO)
+	public ReportingTask(final Transport transport, final ReportingTaskEntity reportingTaskEntity)
 	{
-		super(transport, version);
+		super(transport, reportingTaskEntity);
+	}
 
-		this.reportingTaskDTO = reportingTaskDTO;
+	protected ReportingTaskDTO getReportingTaskDTO()
+	{
+		return getComponentEntity().getComponent();
 	}
 
 	public String getId()
 	{
-		return reportingTaskDTO.getId();
+		return getReportingTaskDTO().getId();
 	}
 
 	public String getParentGroupId()
 	{
-		return reportingTaskDTO.getParentGroupId();
+		return getReportingTaskDTO().getParentGroupId();
 	}
 
 	public String getName()
 	{
-		return reportingTaskDTO.getName();
+		return getReportingTaskDTO().getName();
 	}
 
 	public PositionDTO getPosition()
 	{
-		return reportingTaskDTO.getPosition();
+		return getReportingTaskDTO().getPosition();
 	}
 
 	public String getComments()
 	{
-		return reportingTaskDTO.getComments();
+		return getReportingTaskDTO().getComments();
 	}
 
 	public String getType()
 	{
-		return reportingTaskDTO.getType();
+		return getReportingTaskDTO().getType();
 	}
 
 	public String getSchedulingPeriod()
 	{
-		return reportingTaskDTO.getSchedulingPeriod();
+		return getReportingTaskDTO().getSchedulingPeriod();
 	}
 
 	public Boolean getPersistsState()
 	{
-		return reportingTaskDTO.getPersistsState();
+		return getReportingTaskDTO().getPersistsState();
 	}
 
 	public Boolean getRestricted()
 	{
-		return reportingTaskDTO.getRestricted();
+		return getReportingTaskDTO().getRestricted();
 	}
 
 	public String getState()
 	{
-		return reportingTaskDTO.getState();
+		return getReportingTaskDTO().getState();
 	}
 
 	public String getSchedulingStrategy()
 	{
-		return reportingTaskDTO.getSchedulingStrategy();
+		return getReportingTaskDTO().getSchedulingStrategy();
 	}
 
 	public Map<String, String> getProperties()
 	{
-		return reportingTaskDTO.getProperties();
+		return getReportingTaskDTO().getProperties();
 	}
 
 	public Map<String, PropertyDescriptorDTO> getDescriptors()
 	{
-		return reportingTaskDTO.getDescriptors();
+		return getReportingTaskDTO().getDescriptors();
 	}
 
 	public String getCustomUiUrl()
 	{
-		return reportingTaskDTO.getCustomUiUrl();
+		return getReportingTaskDTO().getCustomUiUrl();
 	}
 
 	public String getAnnotationData()
 	{
-		return reportingTaskDTO.getAnnotationData();
+		return getReportingTaskDTO().getAnnotationData();
 	}
 
 	public Collection<String> getValidationErrors()
 	{
-		return reportingTaskDTO.getValidationErrors();
+		return getReportingTaskDTO().getValidationErrors();
 	}
 
 	public Map<String, String> getDefaultSchedulingPeriod()
 	{
-		return reportingTaskDTO.getDefaultSchedulingPeriod();
+		return getReportingTaskDTO().getDefaultSchedulingPeriod();
 	}
 
 	public Integer getActiveThreadCount()
 	{
-		return reportingTaskDTO.getActiveThreadCount();
-	}
-
-	@Override
-	public void delete() throws InvokerException
-	{
-		new RemoveReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+		return getReportingTaskDTO().getActiveThreadCount();
 	}
 
 	@Override
 	public ReportingTask refresh() throws InvokerException
 	{
-		reportingTaskDTO = new GetReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke()
-				.getComponent();
+		setComponentEntity(new GetReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+
 		return this;
 	}
 
@@ -137,13 +132,11 @@ public class ReportingTask extends EditableComponent<ReportingTask, ReportingTas
 	public ReportingTask update(final Function<ReportingTaskDTOBuilder, ReportingTaskDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final ReportingTaskEntity reportingTaskEntity = new UpdateReportingTaskInvoker(getTransport(), getVersion())
-				.setId(getId())
+		setComponentEntity(new UpdateReportingTaskInvoker(getTransport(), getVersion()).setId(getId())
 				.setReportingTaskEntity(new ReportingTaskEntityBuilder()
 						.setComponent(configurator.apply(new ReportingTaskDTOBuilder().setId(getId())).build()).build())
-				.invoke();
-		setVersion(reportingTaskEntity.getRevision().getVersion());
-		reportingTaskDTO = reportingTaskEntity.getComponent();
+				.invoke());
+
 		return this;
 	}
 
@@ -153,5 +146,11 @@ public class ReportingTask extends EditableComponent<ReportingTask, ReportingTas
 			throws InvokerException
 	{
 		return super.update(closure);
+	}
+
+	@Override
+	public void delete() throws InvokerException
+	{
+		new RemoveReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
 }
