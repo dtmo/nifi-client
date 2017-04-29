@@ -1,6 +1,10 @@
 package com.tibtech.nifi.client;
 
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.apache.nifi.web.api.dto.FlowSnippetDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
@@ -18,7 +22,11 @@ import com.tibtech.nifi.web.api.processgroup.CreateFunnelInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateRemoteProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetFunnelsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetProcessGroupsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetProcessorsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetRemoteProcessGroupsInvoker;
 import com.tibtech.nifi.web.api.processgroup.RemoveProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.UpdateProcessGroupInvoker;
 
@@ -119,6 +127,59 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
+	public Set<Funnel> getFunnels() throws InvokerException
+	{
+		return new GetFunnelsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getFunnels().stream()
+				.map(funnelEntity -> new Funnel(getTransport(), funnelEntity)).collect(Collectors.toSet());
+	}
+
+	public Set<Funnel> findFunnels(final Predicate<Funnel> filter) throws InvokerException
+	{
+		return getFunnels().stream().filter(filter).collect(Collectors.toSet());
+	}
+
+	public Set<Funnel> findFunnels(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Funnel.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return findFunnels(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public Optional<Funnel> getFunnel(final Predicate<Funnel> filter) throws InvokerException
+	{
+		final Set<Funnel> funnels = findFunnels(filter);
+
+		if (funnels.isEmpty())
+		{
+			return Optional.empty();
+		}
+		else if (funnels.size() == 1)
+		{
+			return Optional.of(funnels.iterator().next());
+		}
+		else
+		{
+			throw new IllegalArgumentException("Filter matched more than one funnel: " + funnels);
+		}
+	}
+
+	public Optional<Funnel> getFunnel(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Funnel.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return getFunnel(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
 	public Processor createProcessor(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> configurator)
 			throws InvokerException
 	{
@@ -139,6 +200,59 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
 			return configurator;
+		});
+	}
+
+	public Set<Processor> getProcessors() throws InvokerException
+	{
+		return new GetProcessorsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getProcessors().stream()
+				.map(processorEntity -> new Processor(getTransport(), processorEntity)).collect(Collectors.toSet());
+	}
+
+	public Set<Processor> findProcessors(final Predicate<Processor> filter) throws InvokerException
+	{
+		return getProcessors().stream().filter(filter).collect(Collectors.toSet());
+	}
+
+	public Set<Processor> findProcessors(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Processor.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return findProcessors(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public Optional<Processor> getProcessor(final Predicate<Processor> filter) throws InvokerException
+	{
+		final Set<Processor> processors = findProcessors(filter);
+
+		if (processors.isEmpty())
+		{
+			return Optional.empty();
+		}
+		else if (processors.size() == 1)
+		{
+			return Optional.of(processors.iterator().next());
+		}
+		else
+		{
+			throw new IllegalArgumentException("Filter matched more than one processor: " + processors);
+		}
+	}
+
+	public Optional<Processor> getProcessor(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Processor.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return getProcessor(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
 		});
 	}
 
@@ -166,6 +280,60 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
+	public Set<ProcessGroup> getProcessGroups() throws InvokerException
+	{
+		return new GetProcessGroupsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getProcessGroups()
+				.stream().map(processGroupEntity -> new ProcessGroup(getTransport(), processGroupEntity))
+				.collect(Collectors.toSet());
+	}
+
+	public Set<ProcessGroup> findProcessGroups(final Predicate<ProcessGroup> filter) throws InvokerException
+	{
+		return getProcessGroups().stream().filter(filter).collect(Collectors.toSet());
+	}
+
+	public Set<ProcessGroup> findProcessGroups(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroup.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return findProcessGroups(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public Optional<ProcessGroup> getProcessGroup(final Predicate<ProcessGroup> filter) throws InvokerException
+	{
+		final Set<ProcessGroup> processGroups = findProcessGroups(filter);
+
+		if (processGroups.isEmpty())
+		{
+			return Optional.empty();
+		}
+		else if (processGroups.size() == 1)
+		{
+			return Optional.of(processGroups.iterator().next());
+		}
+		else
+		{
+			throw new IllegalArgumentException("Filter matched more than one process group: " + processGroups);
+		}
+	}
+
+	public Optional<ProcessGroup> getProcessGroup(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroup.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return getProcessGroup(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
 	public RemoteProcessGroup createRemoteProcessGroup(
 			final Function<RemoteProcessGroupDTOBuilder, RemoteProcessGroupDTOBuilder> configurator)
 			throws InvokerException
@@ -187,6 +355,64 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
 			return configurator;
+		});
+	}
+
+	public Set<RemoteProcessGroup> getRemoteProcessGroups() throws InvokerException
+	{
+		return new GetRemoteProcessGroupsInvoker(getTransport(), getVersion()).setId(getId()).invoke()
+				.getRemoteProcessGroups().stream()
+				.map(remoteProcessGroupEntity -> new RemoteProcessGroup(getTransport(), remoteProcessGroupEntity))
+				.collect(Collectors.toSet());
+	}
+
+	public Set<RemoteProcessGroup> findRemoteProcessGroups(final Predicate<RemoteProcessGroup> filter)
+			throws InvokerException
+	{
+		return getRemoteProcessGroups().stream().filter(filter).collect(Collectors.toSet());
+	}
+
+	public Set<RemoteProcessGroup> findRemoteProcessGroups(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroup.class) final Closure<Boolean> closure)
+			throws IllegalArgumentException, InvokerException
+	{
+		return findRemoteProcessGroups(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public Optional<RemoteProcessGroup> getRemoteProcessGroup(final Predicate<RemoteProcessGroup> filter)
+			throws IllegalArgumentException, InvokerException
+	{
+		final Set<RemoteProcessGroup> remoteProcessGroups = findRemoteProcessGroups(filter);
+
+		if (remoteProcessGroups.isEmpty())
+		{
+			return Optional.empty();
+		}
+		else if (remoteProcessGroups.size() == 1)
+		{
+			return Optional.of(remoteProcessGroups.iterator().next());
+		}
+		else
+		{
+			throw new IllegalArgumentException(
+					"Filter matched more than one remote process group: " + remoteProcessGroups);
+		}
+	}
+
+	public Optional<RemoteProcessGroup> getRemoteProcessGroup(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroup.class) final Closure<Boolean> closure)
+			throws IllegalArgumentException, InvokerException
+	{
+		return getRemoteProcessGroup(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
 		});
 	}
 
