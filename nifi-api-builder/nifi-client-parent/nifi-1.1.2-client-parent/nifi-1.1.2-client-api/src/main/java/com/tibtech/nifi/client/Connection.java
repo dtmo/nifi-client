@@ -12,8 +12,10 @@ import org.apache.nifi.web.api.entity.ConnectionEntity;
 import com.tibtech.nifi.web.api.connection.DeleteConnectionInvoker;
 import com.tibtech.nifi.web.api.connection.GetConnectionInvoker;
 import com.tibtech.nifi.web.api.connection.UpdateConnectionInvoker;
+import com.tibtech.nifi.web.api.dto.ConnectableDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ConnectionEntityBuilder;
+import com.tibtech.nifi.web.api.processgroup.CreateConnectionInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -125,5 +127,35 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
 			throws InvokerException
 	{
 		return super.update(closure);
+	}
+
+	public static Connection createConnection(final Transport transport, final Connectable source,
+			final Connectable destination, final Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator)
+			throws InvokerException
+	{
+		final ConnectionEntity connectionEntity = new CreateConnectionInvoker(
+				transport, 0)
+						.setId(source
+								.getParentGroupId())
+						.setConnectionEntity(
+								new ConnectionEntityBuilder()
+										.setComponent(
+												configurator
+														.apply(new ConnectionDTOBuilder()
+																.setSource(new ConnectableDTOBuilder()
+																		.setId(source.getId())
+																		.setGroupId(source.getParentGroupId())
+																		.setType(source.getConnectableType().name())
+																		.build())
+																.setDestination(new ConnectableDTOBuilder()
+																		.setId(destination.getId())
+																		.setGroupId(destination.getParentGroupId())
+																		.setType(
+																				destination.getConnectableType().name())
+																		.build()))
+														.build())
+										.build())
+						.invoke();
+		return new Connection(transport, connectionEntity);
 	}
 }
