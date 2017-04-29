@@ -414,7 +414,7 @@ public class InvokerCodeWriter
 					return l;
 				});
 
-		final java.nio.file.Path generatedJavaPath = Paths.get("../../nifi-client-parent/nifi-invokers/src/main/java");
+		final java.nio.file.Path generatedJavaPath = Paths.get("../../nifi-client-parent/nifi-1.1.2-client-parent/nifi-1.1.2-invokers/src/main/java");
 
 		for (final PackagedTypeSpec packagedTypeSpec : packagedTypeSpecs)
 		{

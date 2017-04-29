@@ -7,12 +7,12 @@ import java.lang.String;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import org.apache.nifi.web.api.entity.ProcessorsEntity;
+import org.apache.nifi.web.api.entity.ProcessGroupsEntity;
 
 /**
  * Gets all process groups
  */
-public final class GetProcessGroupsInvoker extends AbstractInvoker<ProcessorsEntity> {
+public final class GetProcessGroupsInvoker extends AbstractInvoker<ProcessGroupsEntity> {
   private String id;
 
   public GetProcessGroupsInvoker(final Transport transport, final long version) {
@@ -32,7 +32,7 @@ public final class GetProcessGroupsInvoker extends AbstractInvoker<ProcessorsEnt
     return this;
   }
 
-  public final ProcessorsEntity invoke() throws InvokerException {
+  public final ProcessGroupsEntity invoke() throws InvokerException {
     // /process-groups/{id}/process-groups
     WebTarget target = getBaseWebTarget();
     target = target.path("process-groups");
@@ -41,7 +41,7 @@ public final class GetProcessGroupsInvoker extends AbstractInvoker<ProcessorsEnt
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Response response = invocationBuilder.method("GET");
     try {
-      return handleResponse(response, ProcessorsEntity.class);
+      return handleResponse(response, ProcessGroupsEntity.class);
     }
     finally {
       response.close();
