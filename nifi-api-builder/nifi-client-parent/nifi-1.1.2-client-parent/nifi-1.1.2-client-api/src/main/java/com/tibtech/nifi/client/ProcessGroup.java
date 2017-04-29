@@ -1,6 +1,5 @@
 package com.tibtech.nifi.client;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -150,17 +149,17 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
-	public Optional<Funnel> getFunnel(final Predicate<Funnel> filter) throws InvokerException
+	public Funnel getFunnel(final Predicate<Funnel> filter) throws InvokerException
 	{
 		final Set<Funnel> funnels = findFunnels(filter);
 
 		if (funnels.isEmpty())
 		{
-			return Optional.empty();
+			return null;
 		}
 		else if (funnels.size() == 1)
 		{
-			return Optional.of(funnels.iterator().next());
+			return funnels.iterator().next();
 		}
 		else
 		{
@@ -168,7 +167,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		}
 	}
 
-	public Optional<Funnel> getFunnel(
+	public Funnel getFunnel(
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Funnel.class) final Closure<Boolean> closure)
 			throws InvokerException
 	{
@@ -226,17 +225,17 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
-	public Optional<Processor> getProcessor(final Predicate<Processor> filter) throws InvokerException
+	public Processor getProcessor(final Predicate<Processor> filter) throws InvokerException
 	{
 		final Set<Processor> processors = findProcessors(filter);
 
 		if (processors.isEmpty())
 		{
-			return Optional.empty();
+			return null;
 		}
 		else if (processors.size() == 1)
 		{
-			return Optional.of(processors.iterator().next());
+			return processors.iterator().next();
 		}
 		else
 		{
@@ -244,7 +243,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		}
 	}
 
-	public Optional<Processor> getProcessor(
+	public Processor getProcessor(
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Processor.class) final Closure<Boolean> closure)
 			throws InvokerException
 	{
@@ -304,17 +303,17 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
-	public Optional<ProcessGroup> getProcessGroup(final Predicate<ProcessGroup> filter) throws InvokerException
+	public ProcessGroup getProcessGroup(final Predicate<ProcessGroup> filter) throws InvokerException
 	{
 		final Set<ProcessGroup> processGroups = findProcessGroups(filter);
 
 		if (processGroups.isEmpty())
 		{
-			return Optional.empty();
+			return null;
 		}
 		else if (processGroups.size() == 1)
 		{
-			return Optional.of(processGroups.iterator().next());
+			return processGroups.iterator().next();
 		}
 		else
 		{
@@ -322,7 +321,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		}
 	}
 
-	public Optional<ProcessGroup> getProcessGroup(
+	public ProcessGroup getProcessGroup(
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroup.class) final Closure<Boolean> closure)
 			throws InvokerException
 	{
@@ -384,18 +383,18 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
-	public Optional<RemoteProcessGroup> getRemoteProcessGroup(final Predicate<RemoteProcessGroup> filter)
+	public RemoteProcessGroup getRemoteProcessGroup(final Predicate<RemoteProcessGroup> filter)
 			throws IllegalArgumentException, InvokerException
 	{
 		final Set<RemoteProcessGroup> remoteProcessGroups = findRemoteProcessGroups(filter);
 
 		if (remoteProcessGroups.isEmpty())
 		{
-			return Optional.empty();
+			return null;
 		}
 		else if (remoteProcessGroups.size() == 1)
 		{
-			return Optional.of(remoteProcessGroups.iterator().next());
+			return remoteProcessGroups.iterator().next();
 		}
 		else
 		{
@@ -404,7 +403,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		}
 	}
 
-	public Optional<RemoteProcessGroup> getRemoteProcessGroup(
+	public RemoteProcessGroup getRemoteProcessGroup(
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroup.class) final Closure<Boolean> closure)
 			throws IllegalArgumentException, InvokerException
 	{
