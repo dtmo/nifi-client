@@ -5,6 +5,5 @@ mainClassName = "com.tibtech.nifi.apibuilder.RestComponentPropertiesBuildersGene
 
 dependencies {
 	compile project(":nifi-client-builders-parent:builder-core")
-	compile project(":nifi-client-parent:nifi-1.1.2-client-parent:nifi-1.1.2-client-api")
-	compile "org.codehaus.groovy:groovy-all:2.4.10"
+	compile project(":nifi-client-parent:nifi-${nifiVersion}-client-parent:nifi-${nifiVersion}-client-api")
 }
