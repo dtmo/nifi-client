@@ -1,8 +1,6 @@
 package com.tibtech.nifi.apibuilder;
 
 import java.beans.IntrospectionException;
-import java.lang.annotation.Annotation;
-import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.nio.file.Paths;
@@ -12,7 +10,6 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -55,70 +52,45 @@ import com.wordnik.swagger.annotations.ApiParam;
 
 public class InvokerCodeWriter
 {
-	private static List<Annotation> getJaxRsAnnotations(final AnnotatedElement annotatedElement)
-	{
-		return Arrays.stream(annotatedElement.getAnnotations())
-				.filter(a -> a.annotationType().getName().matches("javax\\.ws\\.rs\\..*|com\\.sun\\.jersey\\..*"))
-				.collect(Collectors.toList());
-	}
-
 	private static void addInvokerProperties(final InvokerTypeSpecBuilder invokerTypeSpecBuilder,
 			final Method resourceMethod) throws IntrospectionException
 	{
 		final Parameter[] parameters = resourceMethod.getParameters();
 		for (final Parameter parameter : parameters)
 		{
-			final List<Annotation> parameterJaxRsAnnotations = getJaxRsAnnotations(parameter);
-
-			// If the parameter annotation is a XxxParam annotation then add the
-			// parameter as an invoker property.
-			final Annotation paramAnnotation = parameterJaxRsAnnotations.parallelStream()
-					.filter(a -> a.annotationType().getName().endsWith("Param")).findFirst().orElse(null);
-
 			final TypeName parameterTypeName = mapParameterTypeName(parameter);
 			final Class<?> parameterType = mapParameterType(parameter);
 
 			final ApiParam apiParam = parameter.getAnnotation(ApiParam.class);
 			final String comment = apiParam != null ? apiParam.value() : "";
 
-			if (paramAnnotation != null)
+			if (parameter.getAnnotation(PathParam.class) != null)
 			{
-				if (paramAnnotation instanceof PathParam)
-				{
-					// Add path parameter.
-					final PathParam pathParam = (PathParam) paramAnnotation;
-					final String name = pathParam.value();
+				// Add path parameter.
+				final String name = parameter.getAnnotation(PathParam.class).value();
 
-					invokerTypeSpecBuilder.addPathParameter(name, parameterType, parameterTypeName, comment);
-				}
-				else if (paramAnnotation instanceof QueryParam)
-				{
-					// Add query parameter.
-					final QueryParam queryParam = (QueryParam) paramAnnotation;
-					final String name = queryParam.value();
+				invokerTypeSpecBuilder.addPathParameter(name, parameterType, parameterTypeName, comment);
+			}
+			else if (parameter.getAnnotation(QueryParam.class) != null)
+			{
+				// Add query parameter.
+				final String name = parameter.getAnnotation(QueryParam.class).value();
 
-					invokerTypeSpecBuilder.addQueryParameter(name, parameterType, parameterTypeName, comment);
-				}
-				else if (paramAnnotation instanceof FormParam)
-				{
-					// Add form parameter.
-					final FormParam formParam = (FormParam) paramAnnotation;
-					final String name = formParam.value();
+				invokerTypeSpecBuilder.addQueryParameter(name, parameterType, parameterTypeName, comment);
+			}
+			else if (parameter.getAnnotation(FormParam.class) != null)
+			{
+				// Add form parameter.
+				final String name = parameter.getAnnotation(FormParam.class).value();
 
-					invokerTypeSpecBuilder.addFormParameter(name, parameterType, parameterTypeName, comment);
-				}
-				else if (paramAnnotation instanceof FormDataParam)
-				{
-					// Add form data parameter.
-					final FormDataParam formDataParam = (FormDataParam) paramAnnotation;
-					final String name = formDataParam.value();
+				invokerTypeSpecBuilder.addFormParameter(name, parameterType, parameterTypeName, comment);
+			}
+			else if (parameter.getAnnotation(FormDataParam.class) != null)
+			{
+				// Add form data parameter.
+				final String name = parameter.getAnnotation(FormDataParam.class).value();
 
-					invokerTypeSpecBuilder.addFormDataParameter(name, parameterType, parameterTypeName, comment);
-				}
-				else
-				{
-					throw new IllegalStateException("Unrecognised param annotation: " + paramAnnotation);
-				}
+				invokerTypeSpecBuilder.addFormDataParameter(name, parameterType, parameterTypeName, comment);
 			}
 			else
 			{
@@ -233,39 +205,6 @@ public class InvokerCodeWriter
 		return method;
 	}
 
-	private static Optional<BuilderProperty> getRequestEntityBuilderProperty(final Method resourceMethod)
-	{
-		final Optional<BuilderProperty> optionalBuilderProperty;
-		final Parameter[] parameters = resourceMethod.getParameters();
-		if (parameters.length > 0)
-		{
-			final Parameter finalParameter = parameters[parameters.length - 1];
-			if (Entity.class.isAssignableFrom(finalParameter.getType()))
-			{
-				final String entityPropertyName = NameUtils.componentsToCamelCase(
-						NameUtils.getNameComponents(finalParameter.getType().getSimpleName()), true);
-
-				final ApiParam apiParam = finalParameter.getAnnotation(ApiParam.class);
-				final String comment = apiParam != null ? apiParam.value() : "";
-
-				final BuilderProperty builderProperty = new BuilderProperty(entityPropertyName,
-						finalParameter.getType(), mapParameterTypeName(finalParameter), comment, false, null);
-
-				optionalBuilderProperty = Optional.of(builderProperty);
-			}
-			else
-			{
-				optionalBuilderProperty = Optional.empty();
-			}
-		}
-		else
-		{
-			optionalBuilderProperty = Optional.empty();
-		}
-
-		return optionalBuilderProperty;
-	}
-
 	private static List<MediaType> getConsumedMediaTypes(final Method resourceMethod)
 	{
 		final List<MediaType> consumedMediaTypes = new ArrayList<>();
@@ -332,7 +271,6 @@ public class InvokerCodeWriter
 		invokerTypeSpecBuilder.setHttpMethod(httpMethod);
 		invokerTypeSpecBuilder.setConsumesMediaTypes(getConsumedMediaTypes(endpointMethod));
 		invokerTypeSpecBuilder.setProducesMediaTypes(getProducedMediaTypes(endpointMethod));
-		invokerTypeSpecBuilder.setRequestEntity(getRequestEntityBuilderProperty(endpointMethod).orElse(null));
 
 		for (final Method resourceMethod : resourceMethodStack)
 		{
@@ -414,7 +352,8 @@ public class InvokerCodeWriter
 					return l;
 				});
 
-		final java.nio.file.Path generatedJavaPath = Paths.get("../../nifi-client-parent/nifi-1.1.2-client-parent/nifi-1.1.2-invokers/src/main/java");
+		final java.nio.file.Path generatedJavaPath = Paths
+				.get("../../nifi-client-parent/nifi-1.1.2-client-parent/nifi-1.1.2-invokers/src/main/java");
 
 		for (final PackagedTypeSpec packagedTypeSpec : packagedTypeSpecs)
 		{

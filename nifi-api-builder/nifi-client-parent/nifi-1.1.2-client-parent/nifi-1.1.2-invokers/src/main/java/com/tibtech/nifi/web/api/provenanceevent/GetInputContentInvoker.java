@@ -52,7 +52,7 @@ public final class GetInputContentInvoker extends AbstractInvoker<Void> {
     // /provenance-events/{id}/content/input
     WebTarget target = getBaseWebTarget();
     target = target.path("provenance-events");
-    target = target.path(id.toString());
+    target = target.path(String.valueOf(id));
     target = target.path("content");
     target = target.path("input");
     target = target.queryParam("clusterNodeId", clusterNodeId);

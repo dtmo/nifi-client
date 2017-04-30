@@ -37,7 +37,7 @@ public final class GetActionInvoker extends AbstractInvoker<ActionEntity> {
     WebTarget target = getBaseWebTarget();
     target = target.path("flow");
     target = target.path("history");
-    target = target.path(id.toString());
+    target = target.path(String.valueOf(id));
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Response response = invocationBuilder.method("GET");
     try {

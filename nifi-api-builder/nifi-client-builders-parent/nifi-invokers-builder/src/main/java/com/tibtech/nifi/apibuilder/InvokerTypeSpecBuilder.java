@@ -38,7 +38,7 @@ public class InvokerTypeSpecBuilder
 	private static final Pattern PATH_VARIABLE_PATTERN = Pattern.compile("\\{([^:]*)(:.*)?\\}");
 	private String invokerName;
 	private String invokerComment;
-	
+
 	private Class<?> responseType;
 
 	private String classResourcePathString;
@@ -234,25 +234,14 @@ public class InvokerTypeSpecBuilder
 				final BuilderProperty pathBuilderParameter = findPathParameter(pathParameter);
 				final String propertyName = NameUtils
 						.componentsToCamelCase(NameUtils.getNameComponents(pathBuilderParameter.getName()), true);
-				if (pathBuilderParameter.getPropertyClass() == int.class)
+
+				if (pathBuilderParameter.getPropertyClass() == String.class)
 				{
-					invokeMethodBuilder.addStatement("target = target.path(Integer.toString($L))", propertyName);
-				}
-				else if (pathBuilderParameter.getPropertyClass() == Integer.class)
-				{
-					invokeMethodBuilder.addStatement("target = target.path($L.toString())", propertyName);
-				}
-				else if (pathBuilderParameter.getPropertyClass() == long.class)
-				{
-					invokeMethodBuilder.addStatement("target = target.path(Long.toString($L))", propertyName);
-				}
-				else if (pathBuilderParameter.getPropertyClass() == Long.class)
-				{
-					invokeMethodBuilder.addStatement("target = target.path($L.toString())", propertyName);
+					invokeMethodBuilder.addStatement("target = target.path($L)", propertyName);
 				}
 				else
 				{
-					invokeMethodBuilder.addStatement("target = target.path($L)", propertyName);
+					invokeMethodBuilder.addStatement("target = target.path(String.valueOf($L))", propertyName);
 				}
 			}
 			else
@@ -298,7 +287,7 @@ public class InvokerTypeSpecBuilder
 				}
 				else if (formParamName.equalsIgnoreCase("version"))
 				{
-					invokeMethodBuilder.addStatement("form.param($S, getVersion().toString())",
+					invokeMethodBuilder.addStatement("form.param($S, String.valueOf(getVersion()))",
 							invokerProperty.getName());
 				}
 				else
@@ -429,8 +418,8 @@ public class InvokerTypeSpecBuilder
 
 	public TypeSpec build()
 	{
-		final TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(invokerName).addModifiers(Modifier.PUBLIC,
-				Modifier.FINAL).addJavadoc(invokerComment);
+		final TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(invokerName)
+				.addModifiers(Modifier.PUBLIC, Modifier.FINAL).addJavadoc(invokerComment);
 
 		if (ComponentEntity.class.isAssignableFrom(responseType))
 		{
