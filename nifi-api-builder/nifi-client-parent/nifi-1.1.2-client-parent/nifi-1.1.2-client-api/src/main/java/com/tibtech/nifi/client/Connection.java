@@ -1,5 +1,7 @@
 package com.tibtech.nifi.client;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -130,8 +132,8 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
 	}
 
 	public static Connection createConnection(final Transport transport, final Connectable source,
-			final Connectable destination, final Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator)
-			throws InvokerException
+			final Connectable destination, final Collection<String> selectedRelationships,
+			final Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException
 	{
 		final ConnectionEntity connectionEntity = new CreateConnectionInvoker(
 				transport, 0)
@@ -152,7 +154,9 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
 																		.setGroupId(destination.getParentGroupId())
 																		.setType(
 																				destination.getConnectableType().name())
-																		.build()))
+																		.build())
+																.setSelectedRelationships(
+																		new HashSet<>(selectedRelationships)))
 														.build())
 										.build())
 						.invoke();

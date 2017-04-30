@@ -1,5 +1,7 @@
 package com.tibtech.nifi.client;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.apache.nifi.web.api.entity.ComponentEntity;
@@ -17,17 +19,19 @@ public abstract class ConnectableComponent<T extends ConnectableComponent<T, E, 
 		super(transport, componentEntity);
 	}
 
-	public Connection connectTo(final Connectable destination,
+	@Override
+	public Connection connectTo(final Connectable destination, Collection<String> selectedRelationships,
 			final Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException
 	{
-		return Connection.createConnection(getTransport(), this, destination, configurator);
+		return Connection.createConnection(getTransport(), this, destination, selectedRelationships, configurator);
 	}
 
-	public Connection connectTo(final Connectable destination,
+	@Override
+	public Connection connectTo(final Connectable destination, Collection<String> selectedRelationships,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure)
 			throws InvokerException
 	{
-		return connectTo(destination, configurator ->
+		return connectTo(destination, selectedRelationships, configurator ->
 		{
 			final Closure<ConnectionDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
