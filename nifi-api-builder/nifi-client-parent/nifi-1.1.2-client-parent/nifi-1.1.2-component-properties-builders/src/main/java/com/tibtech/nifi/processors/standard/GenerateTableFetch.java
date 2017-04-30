@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GenerateTableFetch {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.GenerateTableFetch";
+
+  /**
    * The Controller Service that is used to obtain a connection to the database.
    */
   public static final String DATABASE_CONNECTION_POOLING_SERVICE_PROPERTY = "Database Connection Pooling Service";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListDatabaseTables {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ListDatabaseTables";
+
+  /**
    * The Controller Service that is used to obtain connection to database
    */
   public static final String LIST_DB_TABLES_DB_CONNECTION_PROPERTY = "list-db-tables-db-connection";

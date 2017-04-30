@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ControllerStatusReportingTask {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.controller.ControllerStatusReportingTask";
+
+  /**
    * Specifies whether or not to show the difference in values between the current status and the previous status
    */
   public static final String SHOW_DELTAS_PROPERTY = "Show Deltas";

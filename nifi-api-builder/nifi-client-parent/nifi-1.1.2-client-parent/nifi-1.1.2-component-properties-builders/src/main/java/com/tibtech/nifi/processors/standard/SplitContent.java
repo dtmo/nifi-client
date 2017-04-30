@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SplitContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.SplitContent";
+
+  /**
    * Specifies how the <Byte Sequence> property should be interpreted
    */
   public static final String BYTE_SEQUENCE_FORMAT_PROPERTY = "Byte Sequence Format";

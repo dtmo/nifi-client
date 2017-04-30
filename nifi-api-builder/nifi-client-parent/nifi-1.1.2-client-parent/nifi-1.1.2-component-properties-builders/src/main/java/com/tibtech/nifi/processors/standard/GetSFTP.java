@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetSFTP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.GetSFTP";
+
+  /**
    * The fully qualified hostname or IP address of the remote system
    */
   public static final String HOSTNAME_PROPERTY = "Hostname";

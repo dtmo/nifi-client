@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutKinesisStream {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.kinesis.stream.PutKinesisStream";
+
+  /**
    * The name of Kinesis Stream
    */
   public static final String KINESIS_STREAM_NAME_PROPERTY = "kinesis-stream-name";

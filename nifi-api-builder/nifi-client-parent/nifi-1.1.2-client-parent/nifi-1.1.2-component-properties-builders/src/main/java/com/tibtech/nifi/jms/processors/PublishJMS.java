@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PublishJMS {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.jms.processors.PublishJMS";
+
+  /**
    * The Controller Service that is used to obtain ConnectionFactory
    */
   public static final String CONNECTION_FACTORY_SERVICE_PROPERTY = "Connection Factory Service";

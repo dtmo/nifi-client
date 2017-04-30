@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ParseEvtx {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.evtx.ParseEvtx";
+
+  /**
    * Output flow file for each Record, Chunk, or File encountered in the event log
    */
   public static final String GRANULARITY_PROPERTY = "granularity";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListenSyslog {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ListenSyslog";
+
+  /**
    * The protocol for Syslog communication.
    */
   public static final String PROTOCOL_PROPERTY = "Protocol";

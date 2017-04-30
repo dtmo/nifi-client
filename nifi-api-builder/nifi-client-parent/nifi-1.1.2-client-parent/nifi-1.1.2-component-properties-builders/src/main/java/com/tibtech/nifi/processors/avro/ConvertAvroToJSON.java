@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConvertAvroToJSON {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.avro.ConvertAvroToJSON";
+
+  /**
    * Determines how stream of records is exposed: either as a sequence of single Objects (none) (i.e. writing every Object to a new line), or as an array of Objects (array).
    */
   public static final String JSON_CONTAINER_OPTIONS_PROPERTY = "JSON container options";

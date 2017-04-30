@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DistributedSetCacheClientService {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.distributed.cache.client.DistributedSetCacheClientService";
+
+  /**
    * The name of the server that is running the DistributedSetCacheServer service
    */
   public static final String SERVER_HOSTNAME_PROPERTY = "Server Hostname";

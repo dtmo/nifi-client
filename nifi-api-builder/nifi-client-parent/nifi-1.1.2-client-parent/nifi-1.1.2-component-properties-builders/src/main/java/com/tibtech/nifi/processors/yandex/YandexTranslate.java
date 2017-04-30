@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class YandexTranslate {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.yandex.YandexTranslate";
+
+  /**
    * The API Key that is registered with Yandex
    */
   public static final String YANDEX_API_KEY_PROPERTY = "Yandex API Key";

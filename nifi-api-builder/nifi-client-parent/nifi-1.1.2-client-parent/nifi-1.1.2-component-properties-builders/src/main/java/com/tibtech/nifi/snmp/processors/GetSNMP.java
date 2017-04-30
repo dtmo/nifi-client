@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetSNMP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.snmp.processors.GetSNMP";
+
+  /**
    * The OID to request
    */
   public static final String SNMP_OID_PROPERTY = "snmp-oid";

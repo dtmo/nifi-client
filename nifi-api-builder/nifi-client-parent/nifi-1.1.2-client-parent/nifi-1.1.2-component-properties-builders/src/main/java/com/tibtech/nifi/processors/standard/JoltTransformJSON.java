@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class JoltTransformJSON {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.JoltTransformJSON";
+
+  /**
    * Specifies the Jolt Transformation that should be used with the provided specification.
    */
   public static final String JOLT_TRANSFORM_PROPERTY = "jolt-transform";

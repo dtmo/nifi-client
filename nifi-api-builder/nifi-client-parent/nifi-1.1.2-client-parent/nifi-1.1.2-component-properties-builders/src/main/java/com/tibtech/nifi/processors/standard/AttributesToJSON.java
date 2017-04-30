@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class AttributesToJSON {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.AttributesToJSON";
+
+  /**
    * Comma separated list of attributes to be included in the resulting JSON. If this value is left empty then all existing Attributes will be included. This list of attributes is case sensitive. If an attribute specified in the list is not found it will be be emitted to the resulting JSON with an empty string or NULL value.
    */
   public static final String ATTRIBUTES_LIST_PROPERTY = "Attributes List";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetCouchbaseKey {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.couchbase.GetCouchbaseKey";
+
+  /**
    * A Couchbase Cluster Controller Service which manages connections to a Couchbase cluster.
    */
   public static final String COUCHBASE_CLUSTER_CONTROLLER_SERVICE_PROPERTY = "Couchbase Cluster Controller Service";

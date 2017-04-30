@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class JMSConnectionFactoryProvider {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.jms.cf.JMSConnectionFactoryProvider";
+
+  /**
    * A fully qualified name of the JMS ConnectionFactory implementation class (i.e., org.apache.activemq.ActiveMQConnectionFactory)
    */
   public static final String CF_PROPERTY = "cf";

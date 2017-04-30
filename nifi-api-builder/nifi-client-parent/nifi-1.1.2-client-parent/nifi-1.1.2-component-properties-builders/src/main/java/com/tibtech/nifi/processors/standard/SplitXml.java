@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SplitXml {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.SplitXml";
+
+  /**
    * Indicates the XML-nesting depth to start splitting XML fragments. A depth of 1 means split the root's children, whereas a depth of 2 means split the root's children's children and so forth.
    */
   public static final String SPLIT_DEPTH_PROPERTY = "Split Depth";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class RouteOnAttribute {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.RouteOnAttribute";
+
+  /**
    * Specifies how to determine which relationship to use when evaluating the Expression Language
    */
   public static final String ROUTING_STRATEGY_PROPERTY = "Routing Strategy";

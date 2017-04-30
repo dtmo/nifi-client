@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class MonitorDiskUsage {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.controller.MonitorDiskUsage";
+
+  /**
    * The threshold at which a bulletin will be generated to indicate that the disk usage of the partition on which the directory found is of concern
    */
   public static final String THRESHOLD_PROPERTY = "Threshold";

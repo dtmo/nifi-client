@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListenWebSocket {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.websocket.ListenWebSocket";
+
+  /**
    * A WebSocket SERVER Controller Service which can accept WebSocket requests.
    */
   public static final String WEBSOCKET_SERVER_CONTROLLER_SERVICE_PROPERTY = "websocket-server-controller-service";

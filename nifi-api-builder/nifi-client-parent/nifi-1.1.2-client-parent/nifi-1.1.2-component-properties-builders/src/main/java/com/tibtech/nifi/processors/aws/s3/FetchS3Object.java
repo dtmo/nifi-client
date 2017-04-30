@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class FetchS3Object {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.s3.FetchS3Object";
+
+  /**
    *
    */
   public static final String BUCKET_PROPERTY = "Bucket";

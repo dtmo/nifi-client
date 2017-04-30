@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetKafka {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.kafka.GetKafka";
+
+  /**
    * The Connection String to use in order to connect to ZooKeeper. This is often a comma-separated list of <host>:<port> combinations. For example, host1:2181,host2:2181,host3:2188
    */
   public static final String ZOO_KEEPER_CONNECTION_STRING_PROPERTY = "ZooKeeper Connection String";

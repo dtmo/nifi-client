@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExecuteFlumeSink {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.flume.ExecuteFlumeSink";
+
+  /**
    * The component type name for the sink. For some sinks, this is a short, symbolic name (e.g. hdfs). For others, it's the fully-qualified name of the Sink class. See the Flume User Guide for details.
    */
   public static final String SINK_TYPE_PROPERTY = "Sink Type";

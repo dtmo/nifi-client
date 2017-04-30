@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ResizeImage {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.image.ResizeImage";
+
+  /**
    * The desired number of pixels for the image's width
    */
   public static final String IMAGE_WIDTH_IN_PIXELS_PROPERTY = "Image Width (in pixels)";

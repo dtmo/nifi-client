@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SplitJson {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.SplitJson";
+
+  /**
    * A JsonPath expression that indicates the array element to split into JSON/scalar fragments.
    */
   public static final String JSON_PATH_EXPRESSION_PROPERTY = "JsonPath Expression";

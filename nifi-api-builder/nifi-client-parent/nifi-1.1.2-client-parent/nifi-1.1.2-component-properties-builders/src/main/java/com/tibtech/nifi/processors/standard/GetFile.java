@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetFile {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.GetFile";
+
+  /**
    * The input directory from which to pull files
    */
   public static final String INPUT_DIRECTORY_PROPERTY = "Input Directory";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutEmail {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.PutEmail";
+
+  /**
    * The hostname of the SMTP host
    */
   public static final String SMTP_HOSTNAME_PROPERTY = "SMTP Hostname";

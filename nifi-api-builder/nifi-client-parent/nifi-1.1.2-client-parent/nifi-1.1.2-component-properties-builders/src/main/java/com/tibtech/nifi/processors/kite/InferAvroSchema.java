@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class InferAvroSchema {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.kite.InferAvroSchema";
+
+  /**
    * Control if Avro schema is written as a new flowfile attribute 'inferred.avro.schema' or written in the flowfile content. Writing to flowfile content will overwrite any existing flowfile content.
    */
   public static final String SCHEMA_OUTPUT_DESTINATION_PROPERTY = "Schema Output Destination";

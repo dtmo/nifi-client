@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PostHTTP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.PostHTTP";
+
+  /**
    * The URL to POST to. The first part of the URL must be static. However, the path of the URL may be defined using the Attribute Expression Language. For example, https://${hostname} is not valid, but https://1.1.1.1:8080/files/${nf.file.name} is valid.
    */
   public static final String URL_PROPERTY = "URL";

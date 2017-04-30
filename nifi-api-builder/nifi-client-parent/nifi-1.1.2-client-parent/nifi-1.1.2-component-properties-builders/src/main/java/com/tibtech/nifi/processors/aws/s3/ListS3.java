@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListS3 {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.s3.ListS3";
+
+  /**
    *
    */
   public static final String BUCKET_PROPERTY = "Bucket";

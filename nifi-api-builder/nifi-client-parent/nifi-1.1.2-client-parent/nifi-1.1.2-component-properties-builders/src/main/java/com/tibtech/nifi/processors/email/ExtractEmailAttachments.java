@@ -8,6 +8,11 @@ import java.util.Map;
 import java.util.function.Function;
 
 public final class ExtractEmailAttachments {
+  /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.email.ExtractEmailAttachments";
+
   private final Map<String, String> properties = new HashMap<String, String>();
 
   public final String getDynamicProperty(final String name) {

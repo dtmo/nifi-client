@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutLambda {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.lambda.PutLambda";
+
+  /**
    * The Lambda Function Name
    */
   public static final String AMAZON_LAMBDA_NAME_PROPERTY = "Amazon Lambda Name";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConvertJSONToSQL {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ConvertJSONToSQL";
+
+  /**
    * Specifies the JDBC Connection Pool to use in order to convert the JSON message to a SQL statement. The Connection Pool is necessary in order to determine the appropriate database column types.
    */
   public static final String JDBC_CONNECTION_POOL_PROPERTY = "JDBC Connection Pool";

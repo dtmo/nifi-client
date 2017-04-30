@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class AWSCredentialsProviderControllerService {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderControllerService";
+
+  /**
    * If true, uses the Default Credential chain, including EC2 instance profiles or roles, environment variables, default user credentials, etc.
    */
   public static final String DEFAULT_CREDENTIALS_PROPERTY = "default-credentials";

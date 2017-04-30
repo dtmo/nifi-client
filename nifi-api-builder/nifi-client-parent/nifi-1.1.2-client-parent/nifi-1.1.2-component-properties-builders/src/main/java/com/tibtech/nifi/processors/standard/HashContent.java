@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class HashContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.HashContent";
+
+  /**
    * The name of the FlowFile Attribute into which the Hash Value should be written. If the value already exists, it will be overwritten
    */
   public static final String HASH_ATTRIBUTE_NAME_PROPERTY = "Hash Attribute Name";

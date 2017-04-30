@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutDistributedMapCache {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.PutDistributedMapCache";
+
+  /**
    * A FlowFile attribute, or the results of an Attribute Expression Language statement, which will be evaluated against a FlowFile in order to determine the cache key
    */
   public static final String CACHE_ENTRY_IDENTIFIER_PROPERTY = "Cache Entry Identifier";

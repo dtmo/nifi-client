@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ValidateXml {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ValidateXml";
+
+  /**
    * The path to the Schema file that is to be used for validation
    */
   public static final String SCHEMA_FILE_PROPERTY = "Schema File";

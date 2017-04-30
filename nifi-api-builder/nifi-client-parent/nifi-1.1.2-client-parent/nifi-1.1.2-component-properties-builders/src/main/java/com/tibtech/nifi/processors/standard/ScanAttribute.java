@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ScanAttribute {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ScanAttribute";
+
+  /**
    * A new-line-delimited text file that includes the terms that should trigger a match. Empty lines are ignored.
    */
   public static final String DICTIONARY_FILE_PROPERTY = "Dictionary File";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetHTTP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.GetHTTP";
+
+  /**
    * The URL to pull from
    */
   public static final String URL_PROPERTY = "URL";

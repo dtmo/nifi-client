@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class MergeContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.MergeContent";
+
+  /**
    * Specifies the algorithm used to merge content. The 'Defragment' algorithm combines fragments that are associated by attributes back into a single cohesive FlowFile. The 'Bin-Packing Algorithm' generates a FlowFile populated by arbitrarily chosen FlowFiles
    */
   public static final String MERGE_STRATEGY_PROPERTY = "Merge Strategy";

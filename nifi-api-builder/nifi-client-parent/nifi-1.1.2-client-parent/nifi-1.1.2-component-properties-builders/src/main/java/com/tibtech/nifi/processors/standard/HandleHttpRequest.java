@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class HandleHttpRequest {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.HandleHttpRequest";
+
+  /**
    * The Port to listen on for incoming HTTP requests
    */
   public static final String LISTENING_PORT_PROPERTY = "Listening Port";

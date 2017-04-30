@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class StoreInKiteDataset {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.kite.StoreInKiteDataset";
+
+  /**
    * A comma-separated list of Hadoop configuration files
    */
   public static final String HADOOP_CONFIGURATION_FILES_PROPERTY = "Hadoop configuration files";

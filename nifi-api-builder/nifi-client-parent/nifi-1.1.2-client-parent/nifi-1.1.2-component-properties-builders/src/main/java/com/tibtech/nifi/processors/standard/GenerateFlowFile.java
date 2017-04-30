@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GenerateFlowFile {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.GenerateFlowFile";
+
+  /**
    * The size of the file that will be used
    */
   public static final String FILE_SIZE_PROPERTY = "File Size";

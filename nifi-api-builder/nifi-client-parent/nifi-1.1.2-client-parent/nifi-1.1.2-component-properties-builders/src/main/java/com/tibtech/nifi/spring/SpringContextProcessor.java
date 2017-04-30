@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SpringContextProcessor {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.spring.SpringContextProcessor";
+
+  /**
    * The path to the Spring Application Context configuration file relative to the classpath
    */
   public static final String APPLICATION_CONTEXT_CONFIG_PATH_PROPERTY = "Application Context config path";

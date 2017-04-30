@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SelectHiveQL {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.hive.SelectHiveQL";
+
+  /**
    * The Hive Controller Service that is used to obtain connection(s) to the Hive database
    */
   public static final String HIVE_DATABASE_CONNECTION_POOLING_SERVICE_PROPERTY = "Hive Database Connection Pooling Service";

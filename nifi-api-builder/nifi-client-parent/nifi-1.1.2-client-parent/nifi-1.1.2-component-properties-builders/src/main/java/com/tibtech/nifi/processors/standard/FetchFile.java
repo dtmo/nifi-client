@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class FetchFile {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.FetchFile";
+
+  /**
    * The fully-qualified filename of the file to fetch from the file system
    */
   public static final String FILE_TO_FETCH_PROPERTY = "File to Fetch";

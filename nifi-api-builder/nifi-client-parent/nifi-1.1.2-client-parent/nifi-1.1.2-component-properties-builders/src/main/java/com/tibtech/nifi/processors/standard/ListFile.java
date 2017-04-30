@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListFile {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ListFile";
+
+  /**
    * The input directory from which files to pull files
    */
   public static final String INPUT_DIRECTORY_PROPERTY = "Input Directory";

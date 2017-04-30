@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutUDP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.PutUDP";
+
+  /**
    * The ip address or hostname of the destination.
    */
   public static final String HOSTNAME_PROPERTY = "Hostname";

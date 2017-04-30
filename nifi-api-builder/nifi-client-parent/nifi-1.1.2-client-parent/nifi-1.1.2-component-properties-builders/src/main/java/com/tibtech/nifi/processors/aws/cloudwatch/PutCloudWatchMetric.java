@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutCloudWatchMetric {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.cloudwatch.PutCloudWatchMetric";
+
+  /**
    * The namespace for the metric data for CloudWatch
    */
   public static final String NAMESPACE_PROPERTY = "Namespace";

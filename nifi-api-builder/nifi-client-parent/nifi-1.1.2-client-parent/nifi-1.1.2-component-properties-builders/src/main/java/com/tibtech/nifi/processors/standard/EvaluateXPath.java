@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class EvaluateXPath {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.EvaluateXPath";
+
+  /**
    * Indicates whether the results of the XPath evaluation are written to the FlowFile content or a FlowFile attribute; if using attribute, must specify the Attribute Name property. If set to flowfile-content, only one XPath may be specified, and the property name is ignored.
    */
   public static final String DESTINATION_PROPERTY = "Destination";

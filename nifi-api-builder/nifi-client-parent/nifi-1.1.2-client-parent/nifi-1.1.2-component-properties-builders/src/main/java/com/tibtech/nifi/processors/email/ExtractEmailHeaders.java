@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExtractEmailHeaders {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.email.ExtractEmailHeaders";
+
+  /**
    * COLON separated list of additional headers to be extracted from the flowfile content.NOTE the header key is case insensitive and will be matched as lower-case. Values will respect email contents.
    */
   public static final String CAPTURED_HEADERS_PROPERTY = "CAPTURED_HEADERS";

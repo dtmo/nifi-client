@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class MonitorActivity {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.MonitorActivity";
+
+  /**
    * Determines how much time must elapse before considering the flow to be inactive
    */
   public static final String THRESHOLD_DURATION_PROPERTY = "Threshold Duration";

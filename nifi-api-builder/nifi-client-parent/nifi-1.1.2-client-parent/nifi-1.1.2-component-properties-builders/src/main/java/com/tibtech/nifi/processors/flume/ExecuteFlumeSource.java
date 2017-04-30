@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExecuteFlumeSource {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.flume.ExecuteFlumeSource";
+
+  /**
    * The component type name for the source. For some sources, this is a short, symbolic name (e.g. spooldir). For others, it's the fully-qualified name of the Source class. See the Flume User Guide for details.
    */
   public static final String SOURCE_TYPE_PROPERTY = "Source Type";

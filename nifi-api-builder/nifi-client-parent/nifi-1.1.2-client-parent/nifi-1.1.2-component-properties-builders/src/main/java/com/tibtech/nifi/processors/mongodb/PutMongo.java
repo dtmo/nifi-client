@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutMongo {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.mongodb.PutMongo";
+
+  /**
    * MongoURI, typically of the form: mongodb://host1[:port1][,host2[:port2],...]
    */
   public static final String MONGO_URI_PROPERTY = "Mongo URI";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConnectWebSocket {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.websocket.ConnectWebSocket";
+
+  /**
    * A WebSocket CLIENT Controller Service which can connect to a WebSocket server.
    */
   public static final String WEBSOCKET_CLIENT_CONTROLLER_SERVICE_PROPERTY = "websocket-client-controller-service";

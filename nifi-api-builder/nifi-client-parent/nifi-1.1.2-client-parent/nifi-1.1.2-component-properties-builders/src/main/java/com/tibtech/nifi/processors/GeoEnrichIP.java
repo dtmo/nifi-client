@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GeoEnrichIP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.GeoEnrichIP";
+
+  /**
    * Path to Maxmind Geo Enrichment Database File
    */
   public static final String GEO_DATABASE_FILE_PROPERTY = "Geo Database File";

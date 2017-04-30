@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ScanContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ScanContent";
+
+  /**
    * The filename of the terms dictionary
    */
   public static final String DICTIONARY_FILE_PROPERTY = "Dictionary File";

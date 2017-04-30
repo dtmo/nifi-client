@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class Base64EncodeContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.Base64EncodeContent";
+
+  /**
    * Specifies whether the content should be encoded or decoded
    */
   public static final String MODE_PROPERTY = "Mode";

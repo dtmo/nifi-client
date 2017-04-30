@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DistributedMapCacheClientService {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.distributed.cache.client.DistributedMapCacheClientService";
+
+  /**
    * The name of the server that is running the DistributedMapCacheServer service
    */
   public static final String SERVER_HOSTNAME_PROPERTY = "Server Hostname";

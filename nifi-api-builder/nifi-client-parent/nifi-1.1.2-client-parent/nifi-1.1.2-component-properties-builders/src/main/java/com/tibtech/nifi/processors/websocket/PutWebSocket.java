@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutWebSocket {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.websocket.PutWebSocket";
+
+  /**
    * A NiFi Expression to retrieve the session id.
    */
   public static final String WEBSOCKET_SESSION_ID_PROPERTY = "websocket-session-id";

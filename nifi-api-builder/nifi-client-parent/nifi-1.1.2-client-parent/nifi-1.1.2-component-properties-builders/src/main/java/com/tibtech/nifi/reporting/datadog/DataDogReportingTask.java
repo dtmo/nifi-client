@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DataDogReportingTask {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.reporting.datadog.DataDogReportingTask";
+
+  /**
    * Prefix to be added before every metric
    */
   public static final String METRICS_PREFIX_PROPERTY = "Metrics prefix";

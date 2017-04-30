@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class MonitorMemory {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.controller.MonitorMemory";
+
+  /**
    * The name of the JVM Memory Pool to monitor
    */
   public static final String MEMORY_POOL_PROPERTY = "Memory Pool";

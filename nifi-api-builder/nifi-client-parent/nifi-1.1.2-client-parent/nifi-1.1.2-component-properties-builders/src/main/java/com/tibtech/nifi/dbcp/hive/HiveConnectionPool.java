@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class HiveConnectionPool {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.dbcp.hive.HiveConnectionPool";
+
+  /**
    * A database connection URL used to connect to a database. May contain database system name, host, port, database name and some parameters. The exact syntax of a database connection URL is specified by the Hive documentation. For example, the server principal is often included as a connection parameter when connecting to a secure Hive server.
    */
   public static final String HIVE_DB_CONNECT_URL_PROPERTY = "hive-db-connect-url";

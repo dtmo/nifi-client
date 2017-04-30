@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutKafka {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.kafka.PutKafka";
+
+  /**
    * A comma-separated list of known Kafka Brokers in the format <host>:<port>
    */
   public static final String KNOWN_BROKERS_PROPERTY = "Known Brokers";

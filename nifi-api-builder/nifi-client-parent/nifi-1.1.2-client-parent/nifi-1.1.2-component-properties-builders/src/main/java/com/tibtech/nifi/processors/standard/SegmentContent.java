@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SegmentContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.SegmentContent";
+
+  /**
    * The maximum data size in bytes for each segment
    */
   public static final String SEGMENT_SIZE_PROPERTY = "Segment Size";

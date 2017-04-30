@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExtractAvroMetadata {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.avro.ExtractAvroMetadata";
+
+  /**
    * The algorithm used to generate the schema fingerprint. Available choices are based on the Avro recommended practices for fingerprint generation.
    */
   public static final String FINGERPRINT_ALGORITHM_PROPERTY = "Fingerprint Algorithm";

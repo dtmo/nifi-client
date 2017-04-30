@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConsumeWindowsEventLog {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.windows.event.log.ConsumeWindowsEventLog";
+
+  /**
    * The Windows Event Log Channel to listen to.
    */
   public static final String CHANNEL_PROPERTY = "channel";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetJMSTopic {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.GetJMSTopic";
+
+  /**
    * The Provider used for the JMS Server
    */
   public static final String JMS_PROVIDER_PROPERTY = "JMS Provider";

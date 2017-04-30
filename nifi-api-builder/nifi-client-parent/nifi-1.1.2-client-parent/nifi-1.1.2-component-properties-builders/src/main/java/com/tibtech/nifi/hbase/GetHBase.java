@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetHBase {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.hbase.GetHBase";
+
+  /**
    * Specifies the Controller Service to use for accessing HBase.
    */
   public static final String H_BASE_CLIENT_SERVICE_PROPERTY = "HBase Client Service";

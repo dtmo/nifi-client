@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class StandardGangliaReporter {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.reporting.ganglia.StandardGangliaReporter";
+
+  /**
    * The fully-qualified name of the host on which Ganglia is running
    */
   public static final String HOSTNAME_PROPERTY = "Hostname";

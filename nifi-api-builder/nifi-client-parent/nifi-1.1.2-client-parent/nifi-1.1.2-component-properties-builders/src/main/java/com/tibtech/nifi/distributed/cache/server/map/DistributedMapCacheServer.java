@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DistributedMapCacheServer {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.distributed.cache.server.map.DistributedMapCacheServer";
+
+  /**
    * The port to listen on for incoming connections
    */
   public static final String PORT_PROPERTY = "Port";

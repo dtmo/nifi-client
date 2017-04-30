@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutSQS {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.sqs.PutSQS";
+
+  /**
    * The URL of the queue to act upon
    */
   public static final String QUEUE_URL_PROPERTY = "Queue URL";

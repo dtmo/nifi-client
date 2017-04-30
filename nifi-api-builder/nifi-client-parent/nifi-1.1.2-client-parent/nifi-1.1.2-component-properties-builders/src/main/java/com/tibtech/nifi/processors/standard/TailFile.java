@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class TailFile {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.TailFile";
+
+  /**
    * Mode to use: single file will tail only one file, multiple file will look for a list of file. In Multiple mode the Base directory is required.
    */
   public static final String TAIL_MODE_PROPERTY = "tail-mode";

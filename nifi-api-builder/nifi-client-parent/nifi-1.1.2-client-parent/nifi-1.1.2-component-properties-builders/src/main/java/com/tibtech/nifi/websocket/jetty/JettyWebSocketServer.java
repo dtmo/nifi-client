@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class JettyWebSocketServer {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.websocket.jetty.JettyWebSocketServer";
+
+  /**
    * The size of the input (read from network layer) buffer size.
    */
   public static final String INPUT_BUFFER_SIZE_PROPERTY = "input-buffer-size";

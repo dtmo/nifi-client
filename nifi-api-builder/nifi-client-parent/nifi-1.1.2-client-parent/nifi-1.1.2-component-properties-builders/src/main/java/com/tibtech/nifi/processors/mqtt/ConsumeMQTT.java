@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConsumeMQTT {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.mqtt.ConsumeMQTT";
+
+  /**
    * The URI to use to connect to the MQTT broker (e.g. tcp://localhost:1883). The 'tcp' and 'ssl' schemes are supported. In order to use 'ssl', the SSL Context Service property must be set.
    */
   public static final String BROKER_URI_PROPERTY = "Broker URI";

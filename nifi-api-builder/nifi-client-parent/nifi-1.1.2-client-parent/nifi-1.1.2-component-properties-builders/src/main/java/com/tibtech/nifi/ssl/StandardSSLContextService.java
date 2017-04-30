@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class StandardSSLContextService {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.ssl.StandardSSLContextService";
+
+  /**
    * The fully-qualified filename of the Keystore
    */
   public static final String KEYSTORE_FILENAME_PROPERTY = "Keystore Filename";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetAzureEventHub {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.azure.eventhub.GetAzureEventHub";
+
+  /**
    * The name of the Azure Event Hub to pull messages from
    */
   public static final String EVENT_HUB_NAME_PROPERTY = "Event Hub Name";

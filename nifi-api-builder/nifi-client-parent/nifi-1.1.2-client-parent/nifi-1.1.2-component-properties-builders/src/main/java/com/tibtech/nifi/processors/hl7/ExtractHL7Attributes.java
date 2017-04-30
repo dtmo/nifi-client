@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExtractHL7Attributes {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.hl7.ExtractHL7Attributes";
+
+  /**
    * The Character Encoding that is used to encode the HL7 data
    */
   public static final String CHARACTER_ENCODING_PROPERTY = "Character Encoding";

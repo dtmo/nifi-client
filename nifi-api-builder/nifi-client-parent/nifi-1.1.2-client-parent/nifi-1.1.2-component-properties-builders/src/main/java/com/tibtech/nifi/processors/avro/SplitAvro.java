@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SplitAvro {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.avro.SplitAvro";
+
+  /**
    * The strategy for splitting the incoming datafile. The Record strategy will read the incoming datafile by de-serializing each record.
    */
   public static final String SPLIT_STRATEGY_PROPERTY = "Split Strategy";

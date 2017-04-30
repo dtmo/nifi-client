@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class EvaluateXQuery {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.EvaluateXQuery";
+
+  /**
    * Indicates whether the results of the XQuery evaluation are written to the FlowFile content or a FlowFile attribute. If set to <flowfile-content>, only one XQuery may be specified and the property name is ignored.  If set to <flowfile-attribute> and the XQuery returns more than one result, multiple attributes will be added to theFlowFile, each named with a '.n' one-up number appended to the specified attribute name
    */
   public static final String DESTINATION_PROPERTY = "Destination";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class HandleHttpResponse {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.HandleHttpResponse";
+
+  /**
    * The HTTP Status Code to use when responding to the HTTP Request. See Section 10 of RFC 2616 for more information.
    */
   public static final String HTTP_STATUS_CODE_PROPERTY = "HTTP Status Code";

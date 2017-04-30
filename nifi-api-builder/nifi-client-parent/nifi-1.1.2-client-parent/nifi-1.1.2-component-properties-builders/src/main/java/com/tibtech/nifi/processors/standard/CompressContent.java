@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class CompressContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.CompressContent";
+
+  /**
    * Indicates whether the processor should compress content or decompress content. Must be either 'compress' or 'decompress'
    */
   public static final String MODE_PROPERTY = "Mode";

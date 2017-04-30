@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ReplaceTextWithMapping {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ReplaceTextWithMapping";
+
+  /**
    * The Regular Expression to search for in the FlowFile content
    */
   public static final String REGULAR_EXPRESSION_PROPERTY = "Regular Expression";

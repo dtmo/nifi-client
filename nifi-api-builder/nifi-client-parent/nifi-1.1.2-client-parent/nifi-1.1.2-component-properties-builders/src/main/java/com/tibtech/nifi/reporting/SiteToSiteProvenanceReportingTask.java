@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SiteToSiteProvenanceReportingTask {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.reporting.SiteToSiteProvenanceReportingTask";
+
+  /**
    * The URL of the destination NiFi instance to send the Provenance Events to, should be in the format http(s)://host:port/nifi.
    */
   public static final String DESTINATION_URL_PROPERTY = "Destination URL";

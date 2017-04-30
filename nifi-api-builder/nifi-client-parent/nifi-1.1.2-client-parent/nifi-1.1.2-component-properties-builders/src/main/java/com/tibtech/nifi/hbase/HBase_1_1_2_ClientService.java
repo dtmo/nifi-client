@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class HBase_1_1_2_ClientService {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.hbase.HBase_1_1_2_ClientService";
+
+  /**
    * Comma-separated list of Hadoop Configuration files, such as hbase-site.xml and core-site.xml for kerberos, including full paths to the files.
    */
   public static final String HADOOP_CONFIGURATION_FILES_PROPERTY = "Hadoop Configuration Files";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DistributeLoad {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.DistributeLoad";
+
+  /**
    * Determines the number of Relationships to which the load should be distributed
    */
   public static final String NUMBER_OF_RELATIONSHIPS_PROPERTY = "Number of Relationships";

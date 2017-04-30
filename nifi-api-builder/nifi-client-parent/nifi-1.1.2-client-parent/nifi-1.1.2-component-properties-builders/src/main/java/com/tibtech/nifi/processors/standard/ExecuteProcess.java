@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExecuteProcess {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ExecuteProcess";
+
+  /**
    * Specifies the command to be executed; if just the name of an executable is provided, it must be in the user's environment PATH.
    */
   public static final String COMMAND_PROPERTY = "Command";

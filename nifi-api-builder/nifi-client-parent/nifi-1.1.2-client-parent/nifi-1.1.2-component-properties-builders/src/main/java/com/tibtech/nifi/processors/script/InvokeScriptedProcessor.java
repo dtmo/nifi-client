@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class InvokeScriptedProcessor {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.script.InvokeScriptedProcessor";
+
+  /**
    * The engine to execute scripts
    */
   public static final String SCRIPT_ENGINE_PROPERTY = "Script Engine";

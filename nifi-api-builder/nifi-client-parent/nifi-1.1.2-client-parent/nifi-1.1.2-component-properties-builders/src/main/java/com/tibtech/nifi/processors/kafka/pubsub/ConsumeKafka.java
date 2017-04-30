@@ -9,24 +9,29 @@ import java.util.function.Function;
 
 public final class ConsumeKafka {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.kafka.pubsub.ConsumeKafka";
+
+  /**
    * A comma-separated list of known Kafka Brokers in the format <host>:<port>
    */
-  public static final String BOOTSTRAPSERVERS_PROPERTY = "bootstrap.servers";
+  public static final String BOOTSTRAP_SERVERS_PROPERTY = "bootstrap.servers";
 
   /**
    * Protocol used to communicate with brokers. Corresponds to Kafka's 'security.protocol' property.
    */
-  public static final String SECURITYPROTOCOL_PROPERTY = "security.protocol";
+  public static final String SECURITY_PROTOCOL_PROPERTY = "security.protocol";
 
   /**
    * The Kerberos principal name that Kafka runs as. This can be defined either in Kafka's JAAS config or in Kafka's config. Corresponds to Kafka's 'security.protocol' property.It is ignored unless one of the SASL options of the <Security Protocol> are selected.
    */
-  public static final String SASLKERBEROSSERVICENAME_PROPERTY = "sasl.kerberos.service.name";
+  public static final String SASL_KERBEROS_SERVICE_NAME_PROPERTY = "sasl.kerberos.service.name";
 
   /**
    * Specifies the SSL Context Service to use for communicating with Kafka.
    */
-  public static final String SSLCONTEXTSERVICE_PROPERTY = "ssl.context.service";
+  public static final String SSL_CONTEXT_SERVICE_PROPERTY = "ssl.context.service";
 
   /**
    * The name of the Kafka Topic(s) to pull from. More than one can be supplied if comma separated.
@@ -36,12 +41,12 @@ public final class ConsumeKafka {
   /**
    * A Group ID is used to identify consumers that are within the same consumer group. Corresponds to Kafka's 'group.id' property.
    */
-  public static final String GROUPID_PROPERTY = "group.id";
+  public static final String GROUP_ID_PROPERTY = "group.id";
 
   /**
    * Allows you to manage the condition when there is no initial offset in Kafka or if the current offset does not exist any more on the server (e.g. because that data has been deleted). Corresponds to Kafka's 'auto.offset.reset' property.
    */
-  public static final String AUTOOFFSETRESET_PROPERTY = "auto.offset.reset";
+  public static final String AUTO_OFFSET_RESET_PROPERTY = "auto.offset.reset";
 
   /**
    * FlowFiles that are emitted have an attribute named 'kafka.key'. This property dictates how the value of the attribute should be encoded.
@@ -56,7 +61,7 @@ public final class ConsumeKafka {
   /**
    * Specifies the maximum number of records Kafka should return in a single poll.
    */
-  public static final String MAXPOLLRECORDS_PROPERTY = "max.poll.records";
+  public static final String MAX_POLL_RECORDS_PROPERTY = "max.poll.records";
 
   /**
    * Specifies the maximum amount of time allowed to pass before offsets must be committed. This value impacts how often offsets will be committed.  Committing offsets less often increases throughput but also increases the window of potential data duplication in the event of a rebalance or JVM restart between commits.  This value is also related to maximum poll records and the use of a message demarcator.  When using a message demarcator we can have far more uncommitted messages than when we're not as there is much less for us to keep track of in memory.
@@ -68,92 +73,92 @@ public final class ConsumeKafka {
   /**
    * A comma-separated list of known Kafka Brokers in the format <host>:<port>
    */
-  public final String getBootstrapservers() {
-    return properties.get(BOOTSTRAPSERVERS_PROPERTY);
+  public final String getBootstrapServers() {
+    return properties.get(BOOTSTRAP_SERVERS_PROPERTY);
   }
 
   /**
    * A comma-separated list of known Kafka Brokers in the format <host>:<port>
    */
-  public final ConsumeKafka setBootstrapservers(final String bootstrapservers) {
-    properties.put(BOOTSTRAPSERVERS_PROPERTY, bootstrapservers);
+  public final ConsumeKafka setBootstrapServers(final String bootstrapServers) {
+    properties.put(BOOTSTRAP_SERVERS_PROPERTY, bootstrapServers);
     return this;
   }
 
   /**
    * A comma-separated list of known Kafka Brokers in the format <host>:<port>
    */
-  public final ConsumeKafka removeBootstrapservers() {
-    properties.remove(BOOTSTRAPSERVERS_PROPERTY);
+  public final ConsumeKafka removeBootstrapServers() {
+    properties.remove(BOOTSTRAP_SERVERS_PROPERTY);
     return this;
   }
 
   /**
    * Protocol used to communicate with brokers. Corresponds to Kafka's 'security.protocol' property.
    */
-  public final String getSecurityprotocol() {
-    return properties.get(SECURITYPROTOCOL_PROPERTY);
+  public final String getSecurityProtocol() {
+    return properties.get(SECURITY_PROTOCOL_PROPERTY);
   }
 
   /**
    * Protocol used to communicate with brokers. Corresponds to Kafka's 'security.protocol' property.
    */
-  public final ConsumeKafka setSecurityprotocol(final String securityprotocol) {
-    properties.put(SECURITYPROTOCOL_PROPERTY, securityprotocol);
+  public final ConsumeKafka setSecurityProtocol(final String securityProtocol) {
+    properties.put(SECURITY_PROTOCOL_PROPERTY, securityProtocol);
     return this;
   }
 
   /**
    * Protocol used to communicate with brokers. Corresponds to Kafka's 'security.protocol' property.
    */
-  public final ConsumeKafka removeSecurityprotocol() {
-    properties.remove(SECURITYPROTOCOL_PROPERTY);
+  public final ConsumeKafka removeSecurityProtocol() {
+    properties.remove(SECURITY_PROTOCOL_PROPERTY);
     return this;
   }
 
   /**
    * The Kerberos principal name that Kafka runs as. This can be defined either in Kafka's JAAS config or in Kafka's config. Corresponds to Kafka's 'security.protocol' property.It is ignored unless one of the SASL options of the <Security Protocol> are selected.
    */
-  public final String getSaslkerberosservicename() {
-    return properties.get(SASLKERBEROSSERVICENAME_PROPERTY);
+  public final String getSaslKerberosServiceName() {
+    return properties.get(SASL_KERBEROS_SERVICE_NAME_PROPERTY);
   }
 
   /**
    * The Kerberos principal name that Kafka runs as. This can be defined either in Kafka's JAAS config or in Kafka's config. Corresponds to Kafka's 'security.protocol' property.It is ignored unless one of the SASL options of the <Security Protocol> are selected.
    */
-  public final ConsumeKafka setSaslkerberosservicename(final String saslkerberosservicename) {
-    properties.put(SASLKERBEROSSERVICENAME_PROPERTY, saslkerberosservicename);
+  public final ConsumeKafka setSaslKerberosServiceName(final String saslKerberosServiceName) {
+    properties.put(SASL_KERBEROS_SERVICE_NAME_PROPERTY, saslKerberosServiceName);
     return this;
   }
 
   /**
    * The Kerberos principal name that Kafka runs as. This can be defined either in Kafka's JAAS config or in Kafka's config. Corresponds to Kafka's 'security.protocol' property.It is ignored unless one of the SASL options of the <Security Protocol> are selected.
    */
-  public final ConsumeKafka removeSaslkerberosservicename() {
-    properties.remove(SASLKERBEROSSERVICENAME_PROPERTY);
+  public final ConsumeKafka removeSaslKerberosServiceName() {
+    properties.remove(SASL_KERBEROS_SERVICE_NAME_PROPERTY);
     return this;
   }
 
   /**
    * Specifies the SSL Context Service to use for communicating with Kafka.
    */
-  public final String getSslcontextservice() {
-    return properties.get(SSLCONTEXTSERVICE_PROPERTY);
+  public final String getSslContextService() {
+    return properties.get(SSL_CONTEXT_SERVICE_PROPERTY);
   }
 
   /**
    * Specifies the SSL Context Service to use for communicating with Kafka.
    */
-  public final ConsumeKafka setSslcontextservice(final String sslcontextservice) {
-    properties.put(SSLCONTEXTSERVICE_PROPERTY, sslcontextservice);
+  public final ConsumeKafka setSslContextService(final String sslContextService) {
+    properties.put(SSL_CONTEXT_SERVICE_PROPERTY, sslContextService);
     return this;
   }
 
   /**
    * Specifies the SSL Context Service to use for communicating with Kafka.
    */
-  public final ConsumeKafka removeSslcontextservice() {
-    properties.remove(SSLCONTEXTSERVICE_PROPERTY);
+  public final ConsumeKafka removeSslContextService() {
+    properties.remove(SSL_CONTEXT_SERVICE_PROPERTY);
     return this;
   }
 
@@ -183,46 +188,46 @@ public final class ConsumeKafka {
   /**
    * A Group ID is used to identify consumers that are within the same consumer group. Corresponds to Kafka's 'group.id' property.
    */
-  public final String getGroupid() {
-    return properties.get(GROUPID_PROPERTY);
+  public final String getGroupId() {
+    return properties.get(GROUP_ID_PROPERTY);
   }
 
   /**
    * A Group ID is used to identify consumers that are within the same consumer group. Corresponds to Kafka's 'group.id' property.
    */
-  public final ConsumeKafka setGroupid(final String groupid) {
-    properties.put(GROUPID_PROPERTY, groupid);
+  public final ConsumeKafka setGroupId(final String groupId) {
+    properties.put(GROUP_ID_PROPERTY, groupId);
     return this;
   }
 
   /**
    * A Group ID is used to identify consumers that are within the same consumer group. Corresponds to Kafka's 'group.id' property.
    */
-  public final ConsumeKafka removeGroupid() {
-    properties.remove(GROUPID_PROPERTY);
+  public final ConsumeKafka removeGroupId() {
+    properties.remove(GROUP_ID_PROPERTY);
     return this;
   }
 
   /**
    * Allows you to manage the condition when there is no initial offset in Kafka or if the current offset does not exist any more on the server (e.g. because that data has been deleted). Corresponds to Kafka's 'auto.offset.reset' property.
    */
-  public final String getAutooffsetreset() {
-    return properties.get(AUTOOFFSETRESET_PROPERTY);
+  public final String getAutoOffsetReset() {
+    return properties.get(AUTO_OFFSET_RESET_PROPERTY);
   }
 
   /**
    * Allows you to manage the condition when there is no initial offset in Kafka or if the current offset does not exist any more on the server (e.g. because that data has been deleted). Corresponds to Kafka's 'auto.offset.reset' property.
    */
-  public final ConsumeKafka setAutooffsetreset(final String autooffsetreset) {
-    properties.put(AUTOOFFSETRESET_PROPERTY, autooffsetreset);
+  public final ConsumeKafka setAutoOffsetReset(final String autoOffsetReset) {
+    properties.put(AUTO_OFFSET_RESET_PROPERTY, autoOffsetReset);
     return this;
   }
 
   /**
    * Allows you to manage the condition when there is no initial offset in Kafka or if the current offset does not exist any more on the server (e.g. because that data has been deleted). Corresponds to Kafka's 'auto.offset.reset' property.
    */
-  public final ConsumeKafka removeAutooffsetreset() {
-    properties.remove(AUTOOFFSETRESET_PROPERTY);
+  public final ConsumeKafka removeAutoOffsetReset() {
+    properties.remove(AUTO_OFFSET_RESET_PROPERTY);
     return this;
   }
 
@@ -275,23 +280,23 @@ public final class ConsumeKafka {
   /**
    * Specifies the maximum number of records Kafka should return in a single poll.
    */
-  public final String getMaxpollrecords() {
-    return properties.get(MAXPOLLRECORDS_PROPERTY);
+  public final String getMaxPollRecords() {
+    return properties.get(MAX_POLL_RECORDS_PROPERTY);
   }
 
   /**
    * Specifies the maximum number of records Kafka should return in a single poll.
    */
-  public final ConsumeKafka setMaxpollrecords(final String maxpollrecords) {
-    properties.put(MAXPOLLRECORDS_PROPERTY, maxpollrecords);
+  public final ConsumeKafka setMaxPollRecords(final String maxPollRecords) {
+    properties.put(MAX_POLL_RECORDS_PROPERTY, maxPollRecords);
     return this;
   }
 
   /**
    * Specifies the maximum number of records Kafka should return in a single poll.
    */
-  public final ConsumeKafka removeMaxpollrecords() {
-    properties.remove(MAXPOLLRECORDS_PROPERTY);
+  public final ConsumeKafka removeMaxPollRecords() {
+    properties.remove(MAX_POLL_RECORDS_PROPERTY);
     return this;
   }
 

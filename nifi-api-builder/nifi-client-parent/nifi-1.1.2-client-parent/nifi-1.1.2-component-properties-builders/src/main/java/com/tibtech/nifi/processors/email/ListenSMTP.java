@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListenSMTP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.email.ListenSMTP";
+
+  /**
    * The TCP port the ListenSMTP processor will bind to.NOTE that on Unix derivative operating  systems this port must be higher than 1024 unless NiFi is running as with root user permissions.
    */
   public static final String SMTP_PORT_PROPERTY = "SMTP_PORT";

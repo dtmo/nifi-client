@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConsumeIMAP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.email.ConsumeIMAP";
+
+  /**
    * Network address of Email server (e.g., pop.gmail.com, imap.gmail.com . . .)
    */
   public static final String HOST_PROPERTY = "host";
@@ -36,17 +41,17 @@ public final class ConsumeIMAP {
   /**
    * Specify the maximum number of Messages to fetch per call to Email Server.
    */
-  public static final String FETCHSIZE_PROPERTY = "fetch.size";
+  public static final String FETCH_SIZE_PROPERTY = "fetch.size";
 
   /**
    * Specify whether mail messages should be deleted after retrieval.
    */
-  public static final String DELETEMESSAGES_PROPERTY = "delete.messages";
+  public static final String DELETE_MESSAGES_PROPERTY = "delete.messages";
 
   /**
    * The amount of time to wait to connect to Email server
    */
-  public static final String CONNECTIONTIMEOUT_PROPERTY = "connection.timeout";
+  public static final String CONNECTION_TIMEOUT_PROPERTY = "connection.timeout";
 
   /**
    * Specify if messages should be marked as read after retrieval.
@@ -178,69 +183,69 @@ public final class ConsumeIMAP {
   /**
    * Specify the maximum number of Messages to fetch per call to Email Server.
    */
-  public final String getFetchsize() {
-    return properties.get(FETCHSIZE_PROPERTY);
+  public final String getFetchSize() {
+    return properties.get(FETCH_SIZE_PROPERTY);
   }
 
   /**
    * Specify the maximum number of Messages to fetch per call to Email Server.
    */
-  public final ConsumeIMAP setFetchsize(final String fetchsize) {
-    properties.put(FETCHSIZE_PROPERTY, fetchsize);
+  public final ConsumeIMAP setFetchSize(final String fetchSize) {
+    properties.put(FETCH_SIZE_PROPERTY, fetchSize);
     return this;
   }
 
   /**
    * Specify the maximum number of Messages to fetch per call to Email Server.
    */
-  public final ConsumeIMAP removeFetchsize() {
-    properties.remove(FETCHSIZE_PROPERTY);
+  public final ConsumeIMAP removeFetchSize() {
+    properties.remove(FETCH_SIZE_PROPERTY);
     return this;
   }
 
   /**
    * Specify whether mail messages should be deleted after retrieval.
    */
-  public final String getDeletemessages() {
-    return properties.get(DELETEMESSAGES_PROPERTY);
+  public final String getDeleteMessages() {
+    return properties.get(DELETE_MESSAGES_PROPERTY);
   }
 
   /**
    * Specify whether mail messages should be deleted after retrieval.
    */
-  public final ConsumeIMAP setDeletemessages(final String deletemessages) {
-    properties.put(DELETEMESSAGES_PROPERTY, deletemessages);
+  public final ConsumeIMAP setDeleteMessages(final String deleteMessages) {
+    properties.put(DELETE_MESSAGES_PROPERTY, deleteMessages);
     return this;
   }
 
   /**
    * Specify whether mail messages should be deleted after retrieval.
    */
-  public final ConsumeIMAP removeDeletemessages() {
-    properties.remove(DELETEMESSAGES_PROPERTY);
+  public final ConsumeIMAP removeDeleteMessages() {
+    properties.remove(DELETE_MESSAGES_PROPERTY);
     return this;
   }
 
   /**
    * The amount of time to wait to connect to Email server
    */
-  public final String getConnectiontimeout() {
-    return properties.get(CONNECTIONTIMEOUT_PROPERTY);
+  public final String getConnectionTimeout() {
+    return properties.get(CONNECTION_TIMEOUT_PROPERTY);
   }
 
   /**
    * The amount of time to wait to connect to Email server
    */
-  public final ConsumeIMAP setConnectiontimeout(final String connectiontimeout) {
-    properties.put(CONNECTIONTIMEOUT_PROPERTY, connectiontimeout);
+  public final ConsumeIMAP setConnectionTimeout(final String connectionTimeout) {
+    properties.put(CONNECTION_TIMEOUT_PROPERTY, connectionTimeout);
     return this;
   }
 
   /**
    * The amount of time to wait to connect to Email server
    */
-  public final ConsumeIMAP removeConnectiontimeout() {
-    properties.remove(CONNECTIONTIMEOUT_PROPERTY);
+  public final ConsumeIMAP removeConnectionTimeout() {
+    properties.remove(CONNECTION_TIMEOUT_PROPERTY);
     return this;
   }
 

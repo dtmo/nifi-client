@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class FetchSFTP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.FetchSFTP";
+
+  /**
    * The fully-qualified hostname or IP address of the host to fetch the data from
    */
   public static final String HOSTNAME_PROPERTY = "Hostname";

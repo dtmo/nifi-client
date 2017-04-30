@@ -22,9 +22,14 @@ import groovy.lang.DelegatesTo;
 
 public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 {
+	private static final String COMPONENT_TYPE_PROPERTY_NAME = "COMPONENT_TYPE";
 	private static final String PROPERTY_NAME_SUFFIX = "_PROPERTY";
 
 	private final ClassName builderClassName;
+
+	private String componentType;
+
+	private final List<ConfigurableComponentProperty> configurableComponentProperties = new ArrayList<>();
 
 	public ConfigurableComponentPropertiesBuilderTypeSpecBuilder(final ClassName builderClassName)
 	{
@@ -36,7 +41,15 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 		this(ClassName.get(packageName, classname));
 	}
 
-	private final List<ConfigurableComponentProperty> configurableComponentProperties = new ArrayList<>();
+	public String getComponentType()
+	{
+		return componentType;
+	}
+
+	public void setComponentType(final String componentType)
+	{
+		this.componentType = componentType;
+	}
 
 	public void addConfigurableComponentProperty(final ConfigurableComponentProperty configurableComponentProperty)
 	{
@@ -142,6 +155,14 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 	{
 		final Builder typeSpecBuilder = TypeSpec.classBuilder(builderClassName).addModifiers(Modifier.PUBLIC,
 				Modifier.FINAL);
+
+		if (componentType != null)
+		{
+			typeSpecBuilder.addField(FieldSpec
+					.builder(String.class, COMPONENT_TYPE_PROPERTY_NAME, Modifier.PUBLIC, Modifier.STATIC,
+							Modifier.FINAL)
+					.initializer("$S", componentType).addJavadoc("The component type name.\n").build());
+		}
 
 		for (final ConfigurableComponentProperty configurableComponentProperty : configurableComponentProperties)
 		{

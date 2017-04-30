@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ParseCEF {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ParseCEF";
+
+  /**
    * Indicates whether the results of the CEF parser are written to the FlowFile content or a FlowFile attribute; if using flowfile-attributeattribute, fields will be populated as attributes. If set to flowfile-content, the CEF extension field will be converted into a flat JSON object.
    */
   public static final String FIELDS_DESTINATION_PROPERTY = "FIELDS_DESTINATION";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutTCP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.PutTCP";
+
+  /**
    * The ip address or hostname of the destination.
    */
   public static final String HOSTNAME_PROPERTY = "Hostname";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class AmbariReportingTask {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.reporting.ambari.AmbariReportingTask";
+
+  /**
    * The URL of the Ambari Metrics Collector Service
    */
   public static final String METRICS_COLLECTOR_URL_PROPERTY = "Metrics Collector URL";

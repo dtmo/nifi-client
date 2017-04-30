@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class QueryDNS {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.enrich.QueryDNS";
+
+  /**
    * The value that should be used to populate the query
    */
   public static final String QUERY_INPUT_PROPERTY = "QUERY_INPUT";

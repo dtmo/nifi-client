@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetDynamoDB {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.dynamodb.GetDynamoDB";
+
+  /**
    * The DynamoDB table name
    */
   public static final String TABLE_NAME_PROPERTY = "Table Name";

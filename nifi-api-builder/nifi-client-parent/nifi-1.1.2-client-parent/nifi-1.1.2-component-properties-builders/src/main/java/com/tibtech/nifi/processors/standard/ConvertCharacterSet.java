@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConvertCharacterSet {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ConvertCharacterSet";
+
+  /**
    * The name of the CharacterSet to expect for Input
    */
   public static final String INPUT_CHARACTER_SET_PROPERTY = "Input Character Set";

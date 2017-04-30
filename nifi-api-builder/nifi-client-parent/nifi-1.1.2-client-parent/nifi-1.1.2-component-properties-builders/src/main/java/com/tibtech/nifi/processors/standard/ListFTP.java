@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListFTP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ListFTP";
+
+  /**
    * The fully qualified hostname or IP address of the remote system
    */
   public static final String HOSTNAME_PROPERTY = "Hostname";

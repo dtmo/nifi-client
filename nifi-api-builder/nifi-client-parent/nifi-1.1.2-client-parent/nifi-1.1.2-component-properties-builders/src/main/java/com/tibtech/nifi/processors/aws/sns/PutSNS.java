@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutSNS {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.sns.PutSNS";
+
+  /**
    * The name of the resource to which notifications should be published
    */
   public static final String AMAZON_RESOURCE_NAME_ARN_PROPERTY = "Amazon Resource Name (ARN)";

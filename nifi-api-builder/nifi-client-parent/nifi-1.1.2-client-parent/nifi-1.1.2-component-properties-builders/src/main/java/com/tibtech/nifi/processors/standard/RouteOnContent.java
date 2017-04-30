@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class RouteOnContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.RouteOnContent";
+
+  /**
    * Specifies whether the entire content of the file must match the regular expression exactly, or if any part of the file (up to Content Buffer Size) can contain the regular expression in order to be considered a match
    */
   public static final String MATCH_REQUIREMENT_PROPERTY = "Match Requirement";

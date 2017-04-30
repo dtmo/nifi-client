@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutSlack {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.slack.PutSlack";
+
+  /**
    * The POST URL provided by Slack to send messages into a channel.
    */
   public static final String WEBHOOK_URL_PROPERTY = "webhook-url";

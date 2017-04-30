@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class FetchElasticsearchHttp {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.elasticsearch.FetchElasticsearchHttp";
+
+  /**
    * Elasticsearch URL which will be connected to, including scheme (http, e.g.), host, and port. The default port for the REST API is 9200.
    */
   public static final String ELASTICSEARCH_HTTP_URL_PROPERTY = "elasticsearch-http-url";

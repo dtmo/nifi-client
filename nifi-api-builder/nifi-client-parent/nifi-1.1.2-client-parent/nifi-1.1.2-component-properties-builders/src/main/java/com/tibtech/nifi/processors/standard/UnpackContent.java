@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class UnpackContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.UnpackContent";
+
+  /**
    * The Packaging Format used to create the file
    */
   public static final String PACKAGING_FORMAT_PROPERTY = "Packaging Format";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetSplunk {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.splunk.GetSplunk";
+
+  /**
    * The scheme for connecting to Splunk.
    */
   public static final String SCHEME_PROPERTY = "Scheme";

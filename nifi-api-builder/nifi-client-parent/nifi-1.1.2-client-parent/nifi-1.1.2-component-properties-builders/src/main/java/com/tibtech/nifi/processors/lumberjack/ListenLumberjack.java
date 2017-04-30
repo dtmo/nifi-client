@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListenLumberjack {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.lumberjack.ListenLumberjack";
+
+  /**
    * The name of a local network interface to be used to restrict listening to a specific LAN.
    */
   public static final String LOCAL_NETWORK_INTERFACE_PROPERTY = "Local Network Interface";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class CouchbaseClusterService {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.couchbase.CouchbaseClusterService";
+
+  /**
    * The hostnames or ip addresses of the bootstraping nodes and optional parameters. Syntax) couchbase://node1,node2,nodeN?param1=value1&param2=value2&paramN=valueN
    */
   public static final String CONNECTION_STRING_PROPERTY = "Connection String";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SplitText {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.SplitText";
+
+  /**
    * The number of lines that will be added to each split file, excluding header lines. A value of zero requires Maximum Fragment Size to be set, and line count will not be considered in determining splits.
    */
   public static final String LINE_SPLIT_COUNT_PROPERTY = "Line Split Count";

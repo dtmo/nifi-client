@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class RouteText {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.RouteText";
+
+  /**
    * Specifies how to determine which Relationship(s) to use when evaluating the lines of incoming text against the 'Matching Strategy' and user-defined properties.
    */
   public static final String ROUTING_STRATEGY_PROPERTY = "Routing Strategy";

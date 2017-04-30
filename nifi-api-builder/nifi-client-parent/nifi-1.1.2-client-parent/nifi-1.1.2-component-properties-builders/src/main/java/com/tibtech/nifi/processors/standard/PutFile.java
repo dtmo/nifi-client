@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutFile {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.PutFile";
+
+  /**
    * The directory to which files should be written. You may use expression language such as /aa/bb/${path}
    */
   public static final String DIRECTORY_PROPERTY = "Directory";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DeleteSQS {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.sqs.DeleteSQS";
+
+  /**
    *
    */
   public static final String ACCESS_KEY_PROPERTY = "Access Key";

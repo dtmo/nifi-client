@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ReplaceText {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ReplaceText";
+
+  /**
    * The Search Value to search for in the FlowFile content. Only used for 'Literal Replace' and 'Regex Replace' matching strategies
    */
   public static final String REGULAR_EXPRESSION_PROPERTY = "Regular Expression";

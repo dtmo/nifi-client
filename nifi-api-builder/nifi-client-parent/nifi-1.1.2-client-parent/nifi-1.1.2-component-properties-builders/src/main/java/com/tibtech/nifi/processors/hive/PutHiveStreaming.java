@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutHiveStreaming {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.hive.PutHiveStreaming";
+
+  /**
    * The URI location for the Hive Metastore. Note that this is not the location of the Hive Server. The default port for the Hive metastore is 9043.
    */
   public static final String HIVE_STREAM_METASTORE_URI_PROPERTY = "hive-stream-metastore-uri";

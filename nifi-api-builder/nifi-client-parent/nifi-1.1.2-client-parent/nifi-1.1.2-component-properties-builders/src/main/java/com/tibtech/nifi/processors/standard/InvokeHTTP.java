@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class InvokeHTTP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.InvokeHTTP";
+
+  /**
    * HTTP request method (GET, POST, PUT, DELETE, HEAD, OPTIONS). Arbitrary methods are also supported. Methods other than POST and PUT will be sent without a message body.
    */
   public static final String HTTP_METHOD_PROPERTY = "HTTP Method";

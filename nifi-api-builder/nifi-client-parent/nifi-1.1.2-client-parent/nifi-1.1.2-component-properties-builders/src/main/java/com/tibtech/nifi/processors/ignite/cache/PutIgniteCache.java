@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutIgniteCache {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.ignite.cache.PutIgniteCache";
+
+  /**
    * Ignite spring configuration file, <path>/<ignite-configuration>.xml. If the configuration file is not provided, default Ignite configuration configuration is used which binds to 127.0.0.1:47500..47509
    */
   public static final String IGNITE_SPRING_PROPERTIES_XML_FILE_PROPERTY = "ignite-spring-properties-xml-file";

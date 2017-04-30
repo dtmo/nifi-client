@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExtractText {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ExtractText";
+
+  /**
    * The Character Set in which the file is encoded
    */
   public static final String CHARACTER_SET_PROPERTY = "Character Set";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ListenHTTP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ListenHTTP";
+
+  /**
    * Base path for incoming connections
    */
   public static final String BASE_PATH_PROPERTY = "Base Path";

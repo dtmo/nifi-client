@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class FetchElasticsearch {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.elasticsearch.FetchElasticsearch";
+
+  /**
    * Name of the ES cluster (for example, elasticsearch_brew). Defaults to 'elasticsearch'
    */
   public static final String CLUSTER_NAME_PROPERTY = "Cluster Name";

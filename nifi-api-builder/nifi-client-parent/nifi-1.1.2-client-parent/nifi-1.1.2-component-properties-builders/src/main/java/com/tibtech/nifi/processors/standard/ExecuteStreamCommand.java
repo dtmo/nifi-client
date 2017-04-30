@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExecuteStreamCommand {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ExecuteStreamCommand";
+
+  /**
    * The arguments to supply to the executable delimited by the ';' character.
    */
   public static final String COMMAND_ARGUMENTS_PROPERTY = "Command Arguments";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DBCPConnectionPool {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.dbcp.DBCPConnectionPool";
+
+  /**
    * A database connection URL used to connect to a database. May contain database system name, host, port, database name and some parameters. The exact syntax of a database connection URL is specified by your DBMS.
    */
   public static final String DATABASE_CONNECTION_URL_PROPERTY = "Database Connection URL";

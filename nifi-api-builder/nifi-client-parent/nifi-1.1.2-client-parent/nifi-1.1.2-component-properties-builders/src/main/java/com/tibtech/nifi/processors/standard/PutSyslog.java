@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutSyslog {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.PutSyslog";
+
+  /**
    * The ip address or hostname of the Syslog server.
    */
   public static final String HOSTNAME_PROPERTY = "Hostname";

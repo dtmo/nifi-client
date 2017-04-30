@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DebugFlow {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.DebugFlow";
+
+  /**
    * Number of FlowFiles to forward to success relationship.
    */
   public static final String FLOW_FILE_SUCCESS_ITERATIONS_PROPERTY = "FlowFile Success Iterations";

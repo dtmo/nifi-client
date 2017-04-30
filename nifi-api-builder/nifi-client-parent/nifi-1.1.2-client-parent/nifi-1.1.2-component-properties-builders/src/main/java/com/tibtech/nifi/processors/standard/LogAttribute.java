@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class LogAttribute {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.LogAttribute";
+
+  /**
    * The Log Level to use when logging the Attributes
    */
   public static final String LOG_LEVEL_PROPERTY = "Log Level";

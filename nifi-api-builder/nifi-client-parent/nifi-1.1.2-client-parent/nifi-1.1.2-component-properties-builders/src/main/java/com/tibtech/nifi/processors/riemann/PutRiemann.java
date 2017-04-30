@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutRiemann {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.riemann.PutRiemann";
+
+  /**
    * Hostname of Riemann server
    */
   public static final String RIEMANN_ADDRESS_PROPERTY = "Riemann Address";

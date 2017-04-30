@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetTwitter {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.twitter.GetTwitter";
+
+  /**
    * Specifies which endpoint data should be pulled from
    */
   public static final String TWITTER_ENDPOINT_PROPERTY = "Twitter Endpoint";

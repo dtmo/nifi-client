@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ExtractMediaMetadata {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.media.ExtractMediaMetadata";
+
+  /**
    * Specify the max number of attributes to add to the flowfile. There is no guarantee in what order the tags will be processed. By default it will process all of them.
    */
   public static final String MAX_NUMBER_OF_ATTRIBUTES_PROPERTY = "Max Number of Attributes";

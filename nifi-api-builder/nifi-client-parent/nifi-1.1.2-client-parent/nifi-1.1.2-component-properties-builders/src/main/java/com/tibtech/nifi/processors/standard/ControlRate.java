@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ControlRate {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ControlRate";
+
+  /**
    * Indicates the criteria that is used to control the throughput rate. Changing this value resets the rate counters.
    */
   public static final String RATE_CONTROL_CRITERIA_PROPERTY = "Rate Control Criteria";

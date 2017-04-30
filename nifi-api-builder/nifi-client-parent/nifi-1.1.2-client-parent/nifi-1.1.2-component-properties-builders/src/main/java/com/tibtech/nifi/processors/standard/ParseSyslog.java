@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ParseSyslog {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ParseSyslog";
+
+  /**
    * Specifies which character set of the Syslog messages
    */
   public static final String CHARACTER_SET_PROPERTY = "Character Set";

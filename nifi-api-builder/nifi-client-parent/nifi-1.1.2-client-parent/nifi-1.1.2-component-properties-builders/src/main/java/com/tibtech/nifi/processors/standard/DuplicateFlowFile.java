@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DuplicateFlowFile {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.DuplicateFlowFile";
+
+  /**
    * Specifies how many copies of each incoming FlowFile will be made
    */
   public static final String NUMBER_OF_COPIES_PROPERTY = "Number of Copies";

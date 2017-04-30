@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class UpdateAttribute {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.attributes.UpdateAttribute";
+
+  /**
    * Regular expression for attributes to be deleted from flowfiles.
    */
   public static final String DELETE_ATTRIBUTES_EXPRESSION_PROPERTY = "Delete Attributes Expression";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PutKinesisFirehose {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.kinesis.firehose.PutKinesisFirehose";
+
+  /**
    * The name of kinesis firehose delivery stream
    */
   public static final String AMAZON_KINESIS_FIREHOSE_DELIVERY_STREAM_NAME_PROPERTY = "Amazon Kinesis Firehose Delivery Stream Name";

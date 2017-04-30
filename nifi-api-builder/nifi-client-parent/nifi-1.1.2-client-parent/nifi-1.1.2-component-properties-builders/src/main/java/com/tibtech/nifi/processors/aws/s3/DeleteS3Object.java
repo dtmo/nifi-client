@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class DeleteS3Object {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.aws.s3.DeleteS3Object";
+
+  /**
    *
    */
   public static final String OBJECT_KEY_PROPERTY = "Object Key";

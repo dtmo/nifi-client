@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class SetSNMP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.snmp.processors.SetSNMP";
+
+  /**
    * Network address of SNMP Agent (e.g., localhost)
    */
   public static final String SNMP_HOSTNAME_PROPERTY = "snmp-hostname";

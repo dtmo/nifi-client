@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class StandardHttpContextMap {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.http.StandardHttpContextMap";
+
+  /**
    * The maximum number of HTTP requests that can be outstanding at any one time. Any attempt to register an additional HTTP Request will cause an error
    */
   public static final String MAXIMUM_OUTSTANDING_REQUESTS_PROPERTY = "Maximum Outstanding Requests";

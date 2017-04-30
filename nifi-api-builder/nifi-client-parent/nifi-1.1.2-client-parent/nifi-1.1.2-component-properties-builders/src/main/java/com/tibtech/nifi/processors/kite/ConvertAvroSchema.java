@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConvertAvroSchema {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.kite.ConvertAvroSchema";
+
+  /**
    * Avro Schema of Input Flowfiles.  This can be a URI (dataset, view, or resource) or literal JSON schema.
    */
   public static final String INPUT_SCHEMA_PROPERTY = "Input Schema";

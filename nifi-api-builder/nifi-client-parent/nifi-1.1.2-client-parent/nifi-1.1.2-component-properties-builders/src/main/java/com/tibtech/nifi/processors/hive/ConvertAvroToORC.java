@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConvertAvroToORC {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.hive.ConvertAvroToORC";
+
+  /**
    * A file or comma separated list of files which contains the ORC configuration (hive-site.xml, e.g.). Without this, Hadoop will search the classpath for a 'hive-site.xml' file or will revert to a default configuration. Please see the ORC documentation for more details.
    */
   public static final String ORC_CONFIG_RESOURCES_PROPERTY = "orc-config-resources";

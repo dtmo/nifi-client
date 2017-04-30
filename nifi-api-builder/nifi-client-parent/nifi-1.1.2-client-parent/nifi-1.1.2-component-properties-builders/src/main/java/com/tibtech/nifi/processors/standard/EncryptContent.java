@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class EncryptContent {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.EncryptContent";
+
+  /**
    * Specifies whether the content should be encrypted or decrypted
    */
   public static final String MODE_PROPERTY = "Mode";

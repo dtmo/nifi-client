@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ConsumeAMQP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.amqp.processors.ConsumeAMQP";
+
+  /**
    * The name of the existing AMQP Queue from which messages will be consumed. Usually pre-defined by AMQP administrator. 
    */
   public static final String QUEUE_PROPERTY = "Queue";

@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class TransformXml {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.TransformXml";
+
+  /**
    * Provides the name (including full path) of the XSLT file to apply to the flowfile XML content.
    */
   public static final String XSLT_FILE_NAME_PROPERTY = "XSLT file name";

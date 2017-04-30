@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class ModifyBytes {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.ModifyBytes";
+
+  /**
    * Number of bytes removed at the beginning of the file.
    */
   public static final String START_OFFSET_PROPERTY = "Start Offset";

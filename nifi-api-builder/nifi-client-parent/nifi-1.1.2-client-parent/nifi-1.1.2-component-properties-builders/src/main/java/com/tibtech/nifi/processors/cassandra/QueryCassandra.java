@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class QueryCassandra {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.cassandra.QueryCassandra";
+
+  /**
    * Contact points are addresses of Cassandra nodes. The list of contact points should be comma-separated and in hostname:port format. Example node1:port,node2:port,.... The default client port for Cassandra is 9042, but the port(s) must be explicitly specified.
    */
   public static final String CASSANDRA_CONTACT_POINTS_PROPERTY = "Cassandra Contact Points";

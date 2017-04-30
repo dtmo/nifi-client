@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetSolr {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.processors.solr.GetSolr";
+
+  /**
    * The type of Solr instance, Cloud or Standard.
    */
   public static final String SOLR_TYPE_PROPERTY = "Solr Type";

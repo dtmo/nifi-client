@@ -27,6 +27,8 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilderFactory
 
 		final ConfigurableComponentPropertiesBuilderTypeSpecBuilder builder = new ConfigurableComponentPropertiesBuilderTypeSpecBuilder(
 				builderClassName);
+		
+		builder.setComponentType(configurableComponentClass.getName());
 
 		Arrays.stream(configurableComponentClass.getFields())
 				.filter(f -> PropertyDescriptor.class.isAssignableFrom(f.getType())).map(f ->

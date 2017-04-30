@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class PublishAMQP {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.amqp.processors.PublishAMQP";
+
+  /**
    * The name of the AMQP Exchange the messages will be sent to. Usually provided by the AMQP administrator (e.g., 'amq.direct'). It is an optional property. If kept empty the messages will be sent to a default AMQP exchange.
    */
   public static final String EXCHANGE_NAME_PROPERTY = "Exchange Name";

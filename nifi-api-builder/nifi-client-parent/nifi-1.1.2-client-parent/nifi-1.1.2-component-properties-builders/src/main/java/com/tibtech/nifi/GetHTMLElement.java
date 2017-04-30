@@ -9,6 +9,11 @@ import java.util.function.Function;
 
 public final class GetHTMLElement {
   /**
+   * The component type name.
+   */
+  public static final String COMPONENT_TYPE = "org.apache.nifi.GetHTMLElement";
+
+  /**
    * Base URL for the HTML page being parsed.
    */
   public static final String URL_PROPERTY = "URL";
