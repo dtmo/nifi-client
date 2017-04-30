@@ -1,7 +1,6 @@
 package com.tibtech.nifi.client;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.Function;
 
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;

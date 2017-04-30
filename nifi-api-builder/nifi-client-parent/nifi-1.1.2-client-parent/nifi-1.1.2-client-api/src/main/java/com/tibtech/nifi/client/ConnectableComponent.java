@@ -1,7 +1,6 @@
 package com.tibtech.nifi.client;
 
 import java.util.Collection;
-import java.util.Set;
 import java.util.function.Function;
 
 import org.apache.nifi.web.api.entity.ComponentEntity;
