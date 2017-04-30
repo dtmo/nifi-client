@@ -23,6 +23,8 @@ import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateRemoteProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetConnectionsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetFunnelsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetInputPortsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetOutputPortsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessorsInvoker;
@@ -226,6 +228,112 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			throws InvokerException
 	{
 		return getFunnel(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public Set<InputPort> getInputPorts() throws InvokerException
+	{
+		return new GetInputPortsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getInputPorts().stream()
+				.map(inputPortEntity -> new InputPort(getTransport(), inputPortEntity)).collect(Collectors.toSet());
+	}
+
+	public Set<InputPort> findInputPorts(final Predicate<InputPort> filter) throws InvokerException
+	{
+		return getInputPorts().stream().filter(filter).collect(Collectors.toSet());
+	}
+
+	public Set<InputPort> findInputPorts(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InputPort.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return findInputPorts(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public InputPort getInputPort(final Predicate<InputPort> filter) throws InvokerException
+	{
+		final Set<InputPort> inputPorts = findInputPorts(filter);
+
+		if (inputPorts.isEmpty())
+		{
+			return null;
+		}
+		else if (inputPorts.size() == 1)
+		{
+			return inputPorts.iterator().next();
+		}
+		else
+		{
+			throw new IllegalArgumentException("Filter matched more than one inputPort: " + inputPorts);
+		}
+	}
+
+	public InputPort getInputPort(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InputPort.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return getInputPort(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public Set<OutputPort> getOutputPorts() throws InvokerException
+	{
+		return new GetOutputPortsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getOutputPorts().stream()
+				.map(outputPortEntity -> new OutputPort(getTransport(), outputPortEntity)).collect(Collectors.toSet());
+	}
+
+	public Set<OutputPort> findOutputPorts(final Predicate<OutputPort> filter) throws InvokerException
+	{
+		return getOutputPorts().stream().filter(filter).collect(Collectors.toSet());
+	}
+
+	public Set<OutputPort> findOutputPorts(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = OutputPort.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return findOutputPorts(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public OutputPort getOutputPort(final Predicate<OutputPort> filter) throws InvokerException
+	{
+		final Set<OutputPort> outputPorts = findOutputPorts(filter);
+
+		if (outputPorts.isEmpty())
+		{
+			return null;
+		}
+		else if (outputPorts.size() == 1)
+		{
+			return outputPorts.iterator().next();
+		}
+		else
+		{
+			throw new IllegalArgumentException("Filter matched more than one outputPort: " + outputPorts);
+		}
+	}
+
+	public OutputPort getOutputPort(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = OutputPort.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return getOutputPort(filter ->
 		{
 			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
