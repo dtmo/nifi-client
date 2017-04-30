@@ -21,6 +21,7 @@ import com.tibtech.nifi.web.api.processgroup.CreateFunnelInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateRemoteProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetConnectionsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetFunnelsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupsInvoker;
@@ -102,6 +103,59 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public Integer getInactiveRemotePortCount()
 	{
 		return getProcessGroupDTO().getInactiveRemotePortCount();
+	}
+
+	public Set<Connection> getConnections() throws InvokerException
+	{
+		return new GetConnectionsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getConnections().stream()
+				.map(connectionEntity -> new Connection(getTransport(), connectionEntity)).collect(Collectors.toSet());
+	}
+
+	public Set<Connection> findConnections(final Predicate<Connection> filter) throws InvokerException
+	{
+		return getConnections().stream().filter(filter).collect(Collectors.toSet());
+	}
+
+	public Set<Connection> findConnections(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Connection.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return findConnections(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
+	}
+
+	public Connection getConnection(final Predicate<Connection> filter) throws InvokerException
+	{
+		final Set<Connection> connections = findConnections(filter);
+
+		if (connections.isEmpty())
+		{
+			return null;
+		}
+		else if (connections.size() == 1)
+		{
+			return connections.iterator().next();
+		}
+		else
+		{
+			throw new IllegalArgumentException("Filter matched more than one connection: " + connections);
+		}
+	}
+
+	public Connection getConnection(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Connection.class) final Closure<Boolean> closure)
+			throws InvokerException
+	{
+		return getConnection(filter ->
+		{
+			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			return code.call();
+		});
 	}
 
 	public Funnel createFunnel(final Function<FunnelDTOBuilder, FunnelDTOBuilder> configurator) throws InvokerException
