@@ -9,6 +9,9 @@ import com.tibtech.nifi.web.api.dto.RemoteProcessGroupPortDTOBuilder;
 import com.tibtech.nifi.web.api.entity.RemoteProcessGroupPortEntityBuilder;
 import com.tibtech.nifi.web.api.remoteprocessgroup.UpdateRemoteProcessGroupOutputPortInvoker;
 
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
 public class RemoteProcessGroupOutputPort extends RemoteProcessGroupPort
 {
 	public RemoteProcessGroupOutputPort(final Transport transport, final RemoteProcessGroup remoteProcessGroup,
@@ -31,11 +34,24 @@ public class RemoteProcessGroupOutputPort extends RemoteProcessGroupPort
 		final RemoteProcessGroupPortEntity remoteProcessGroupPortEntity = new UpdateRemoteProcessGroupOutputPortInvoker(
 				getTransport(), getVersion()).setId(getParentGroupId())
 						.setPortId(getId())
-						.setRemoteProcessGroupPortEntity(
-								new RemoteProcessGroupPortEntityBuilder().setRemoteProcessGroupPort(configurator
-										.apply(RemoteProcessGroupPortDTOBuilder.of(getRemoteProcessGroupPortDTO()))
-										.build()).build())
+						.setRemoteProcessGroupPortEntity(new RemoteProcessGroupPortEntityBuilder()
+								.setRemoteProcessGroupPort(configurator.apply(RemoteProcessGroupPortDTOBuilder
+										.of(getRemoteProcessGroupPortDTO()).setGroupId(getParentGroupId())).build())
+								.build())
 						.invoke();
 		return this;
+	}
+
+	public RemoteProcessGroupOutputPort update(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupPortDTOBuilder.class) final Closure<RemoteProcessGroupPortDTOBuilder> closure)
+			throws InvokerException
+	{
+		return update(configurator ->
+		{
+			final Closure<RemoteProcessGroupPortDTOBuilder> code = closure.rehydrate(configurator, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			code.call();
+			return configurator;
+		});
 	}
 }
