@@ -18,7 +18,15 @@ public final class ExtractEmailHeaders {
    */
   public static final String CAPTURED_HEADERS_PROPERTY = "CAPTURED_HEADERS";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExtractEmailHeaders() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExtractEmailHeaders(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * COLON separated list of additional headers to be extracted from the flowfile content.NOTE the header key is case insensitive and will be matched as lower-case. Values will respect email contents.
@@ -67,6 +75,21 @@ public final class ExtractEmailHeaders {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractEmailHeaders.class) final Closure<ExtractEmailHeaders> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.email.ExtractEmailHeaders> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ExtractEmailHeaders.class, com.tibtech.nifi.processors.email.ExtractEmailHeaders.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExtractEmailHeaders, ExtractEmailHeaders> configurator) {
+    return configurator.apply(new ExtractEmailHeaders(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractEmailHeaders.class) final Closure<ExtractEmailHeaders> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.email.ExtractEmailHeaders> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ExtractEmailHeaders.class, com.tibtech.nifi.processors.email.ExtractEmailHeaders.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

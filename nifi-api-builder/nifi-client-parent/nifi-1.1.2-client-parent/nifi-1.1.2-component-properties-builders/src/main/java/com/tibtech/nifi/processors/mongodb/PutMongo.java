@@ -63,7 +63,15 @@ public final class PutMongo {
    */
   public static final String CHARACTER_SET_PROPERTY = "Character Set";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutMongo() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutMongo(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * MongoURI, typically of the form: mongodb://host1[:port1][,host2[:port2],...]
@@ -319,6 +327,21 @@ public final class PutMongo {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutMongo.class) final Closure<PutMongo> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.mongodb.PutMongo> code = closure.rehydrate(c, com.tibtech.nifi.processors.mongodb.PutMongo.class, com.tibtech.nifi.processors.mongodb.PutMongo.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutMongo, PutMongo> configurator) {
+    return configurator.apply(new PutMongo(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutMongo.class) final Closure<PutMongo> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.mongodb.PutMongo> code = closure.rehydrate(c, com.tibtech.nifi.processors.mongodb.PutMongo.class, com.tibtech.nifi.processors.mongodb.PutMongo.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -63,7 +63,15 @@ public final class TailFile {
    */
   public static final String TAILFILE_MAXIMUM_AGE_PROPERTY = "tailfile-maximum-age";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public TailFile() {
+    this.properties = new HashMap<>();
+  }
+
+  public TailFile(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Mode to use: single file will tail only one file, multiple file will look for a list of file. In Multiple mode the Base directory is required.
@@ -319,6 +327,21 @@ public final class TailFile {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = TailFile.class) final Closure<TailFile> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.TailFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.TailFile.class, com.tibtech.nifi.processors.standard.TailFile.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<TailFile, TailFile> configurator) {
+    return configurator.apply(new TailFile(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = TailFile.class) final Closure<TailFile> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.TailFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.TailFile.class, com.tibtech.nifi.processors.standard.TailFile.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

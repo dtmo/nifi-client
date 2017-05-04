@@ -33,7 +33,15 @@ public final class PutWebSocket {
    */
   public static final String WEBSOCKET_MESSAGE_TYPE_PROPERTY = "websocket-message-type";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutWebSocket() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutWebSocket(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A NiFi Expression to retrieve the session id.
@@ -151,6 +159,21 @@ public final class PutWebSocket {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutWebSocket.class) final Closure<PutWebSocket> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.websocket.PutWebSocket> code = closure.rehydrate(c, com.tibtech.nifi.processors.websocket.PutWebSocket.class, com.tibtech.nifi.processors.websocket.PutWebSocket.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutWebSocket, PutWebSocket> configurator) {
+    return configurator.apply(new PutWebSocket(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutWebSocket.class) final Closure<PutWebSocket> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.websocket.PutWebSocket> code = closure.rehydrate(c, com.tibtech.nifi.processors.websocket.PutWebSocket.class, com.tibtech.nifi.processors.websocket.PutWebSocket.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

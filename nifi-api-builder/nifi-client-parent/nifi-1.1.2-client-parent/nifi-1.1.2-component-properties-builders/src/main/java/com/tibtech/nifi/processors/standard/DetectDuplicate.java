@@ -38,7 +38,15 @@ public final class DetectDuplicate {
    */
   public static final String CACHE_THE_ENTRY_IDENTIFIER_PROPERTY = "Cache The Entry Identifier";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DetectDuplicate() {
+    this.properties = new HashMap<>();
+  }
+
+  public DetectDuplicate(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A FlowFile attribute, or the results of an Attribute Expression Language statement, which will be evaluated against a FlowFile in order to determine the value used to identify duplicates; it is this value that is cached
@@ -179,6 +187,21 @@ public final class DetectDuplicate {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DetectDuplicate.class) final Closure<DetectDuplicate> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.DetectDuplicate> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.DetectDuplicate.class, com.tibtech.nifi.processors.standard.DetectDuplicate.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DetectDuplicate, DetectDuplicate> configurator) {
+    return configurator.apply(new DetectDuplicate(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DetectDuplicate.class) final Closure<DetectDuplicate> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.DetectDuplicate> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.DetectDuplicate.class, com.tibtech.nifi.processors.standard.DetectDuplicate.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

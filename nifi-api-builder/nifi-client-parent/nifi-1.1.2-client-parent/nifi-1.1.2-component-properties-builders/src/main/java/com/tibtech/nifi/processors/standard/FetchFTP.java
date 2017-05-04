@@ -98,7 +98,15 @@ public final class FetchFTP {
    */
   public static final String HTTP_PROXY_PASSWORD_PROPERTY = "Http Proxy Password";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public FetchFTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public FetchFTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The fully-qualified hostname or IP address of the host to fetch the data from
@@ -515,6 +523,21 @@ public final class FetchFTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchFTP.class) final Closure<FetchFTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.FetchFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.FetchFTP.class, com.tibtech.nifi.processors.standard.FetchFTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<FetchFTP, FetchFTP> configurator) {
+    return configurator.apply(new FetchFTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchFTP.class) final Closure<FetchFTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.FetchFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.FetchFTP.class, com.tibtech.nifi.processors.standard.FetchFTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -48,7 +48,15 @@ public final class ExecuteStreamCommand {
    */
   public static final String MAX_ATTRIBUTE_LENGTH_PROPERTY = "Max Attribute Length";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExecuteStreamCommand() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExecuteStreamCommand(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The arguments to supply to the executable delimited by the ';' character.
@@ -235,6 +243,21 @@ public final class ExecuteStreamCommand {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteStreamCommand.class) final Closure<ExecuteStreamCommand> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ExecuteStreamCommand> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ExecuteStreamCommand.class, com.tibtech.nifi.processors.standard.ExecuteStreamCommand.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExecuteStreamCommand, ExecuteStreamCommand> configurator) {
+    return configurator.apply(new ExecuteStreamCommand(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteStreamCommand.class) final Closure<ExecuteStreamCommand> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ExecuteStreamCommand> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ExecuteStreamCommand.class, com.tibtech.nifi.processors.standard.ExecuteStreamCommand.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

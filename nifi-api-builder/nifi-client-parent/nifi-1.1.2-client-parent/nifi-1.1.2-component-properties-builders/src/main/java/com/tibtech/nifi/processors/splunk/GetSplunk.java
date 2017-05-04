@@ -93,7 +93,15 @@ public final class GetSplunk {
    */
   public static final String OUTPUT_MODE_PROPERTY = "Output Mode";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetSplunk() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetSplunk(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The scheme for connecting to Splunk.
@@ -487,6 +495,21 @@ public final class GetSplunk {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetSplunk.class) final Closure<GetSplunk> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.splunk.GetSplunk> code = closure.rehydrate(c, com.tibtech.nifi.processors.splunk.GetSplunk.class, com.tibtech.nifi.processors.splunk.GetSplunk.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetSplunk, GetSplunk> configurator) {
+    return configurator.apply(new GetSplunk(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetSplunk.class) final Closure<GetSplunk> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.splunk.GetSplunk> code = closure.rehydrate(c, com.tibtech.nifi.processors.splunk.GetSplunk.class, com.tibtech.nifi.processors.splunk.GetSplunk.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

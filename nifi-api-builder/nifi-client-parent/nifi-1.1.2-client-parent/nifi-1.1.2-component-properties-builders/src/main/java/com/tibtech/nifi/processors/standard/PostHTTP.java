@@ -93,7 +93,15 @@ public final class PostHTTP {
    */
   public static final String CONTENT_TYPE_PROPERTY = "Content-Type";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PostHTTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public PostHTTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The URL to POST to. The first part of the URL must be static. However, the path of the URL may be defined using the Attribute Expression Language. For example, https://${hostname} is not valid, but https://1.1.1.1:8080/files/${nf.file.name} is valid.
@@ -487,6 +495,21 @@ public final class PostHTTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PostHTTP.class) final Closure<PostHTTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PostHTTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PostHTTP.class, com.tibtech.nifi.processors.standard.PostHTTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PostHTTP, PostHTTP> configurator) {
+    return configurator.apply(new PostHTTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PostHTTP.class) final Closure<PostHTTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PostHTTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PostHTTP.class, com.tibtech.nifi.processors.standard.PostHTTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

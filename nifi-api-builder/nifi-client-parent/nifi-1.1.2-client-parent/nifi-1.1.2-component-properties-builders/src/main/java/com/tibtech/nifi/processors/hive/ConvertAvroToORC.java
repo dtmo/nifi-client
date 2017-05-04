@@ -38,7 +38,15 @@ public final class ConvertAvroToORC {
    */
   public static final String ORC_HIVE_TABLE_NAME_PROPERTY = "orc-hive-table-name";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConvertAvroToORC() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConvertAvroToORC(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A file or comma separated list of files which contains the ORC configuration (hive-site.xml, e.g.). Without this, Hadoop will search the classpath for a 'hive-site.xml' file or will revert to a default configuration. Please see the ORC documentation for more details.
@@ -179,6 +187,21 @@ public final class ConvertAvroToORC {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertAvroToORC.class) final Closure<ConvertAvroToORC> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hive.ConvertAvroToORC> code = closure.rehydrate(c, com.tibtech.nifi.processors.hive.ConvertAvroToORC.class, com.tibtech.nifi.processors.hive.ConvertAvroToORC.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConvertAvroToORC, ConvertAvroToORC> configurator) {
+    return configurator.apply(new ConvertAvroToORC(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertAvroToORC.class) final Closure<ConvertAvroToORC> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hive.ConvertAvroToORC> code = closure.rehydrate(c, com.tibtech.nifi.processors.hive.ConvertAvroToORC.class, com.tibtech.nifi.processors.hive.ConvertAvroToORC.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

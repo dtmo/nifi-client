@@ -58,7 +58,15 @@ public final class PutHBaseJSON {
    */
   public static final String FIELD_ENCODING_STRATEGY_PROPERTY = "Field Encoding Strategy";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutHBaseJSON() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutHBaseJSON(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies the Controller Service to use for accessing HBase.
@@ -291,6 +299,21 @@ public final class PutHBaseJSON {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHBaseJSON.class) final Closure<PutHBaseJSON> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.hbase.PutHBaseJSON> code = closure.rehydrate(c, com.tibtech.nifi.hbase.PutHBaseJSON.class, com.tibtech.nifi.hbase.PutHBaseJSON.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutHBaseJSON, PutHBaseJSON> configurator) {
+    return configurator.apply(new PutHBaseJSON(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHBaseJSON.class) final Closure<PutHBaseJSON> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.hbase.PutHBaseJSON> code = closure.rehydrate(c, com.tibtech.nifi.hbase.PutHBaseJSON.class, com.tibtech.nifi.hbase.PutHBaseJSON.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

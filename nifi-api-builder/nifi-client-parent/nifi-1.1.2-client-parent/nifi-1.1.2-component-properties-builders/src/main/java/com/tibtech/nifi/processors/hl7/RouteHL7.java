@@ -18,7 +18,15 @@ public final class RouteHL7 {
    */
   public static final String CHARACTER_ENCODING_PROPERTY = "Character Encoding";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public RouteHL7() {
+    this.properties = new HashMap<>();
+  }
+
+  public RouteHL7(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Character Encoding that is used to encode the HL7 data
@@ -67,6 +75,21 @@ public final class RouteHL7 {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RouteHL7.class) final Closure<RouteHL7> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hl7.RouteHL7> code = closure.rehydrate(c, com.tibtech.nifi.processors.hl7.RouteHL7.class, com.tibtech.nifi.processors.hl7.RouteHL7.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<RouteHL7, RouteHL7> configurator) {
+    return configurator.apply(new RouteHL7(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RouteHL7.class) final Closure<RouteHL7> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hl7.RouteHL7> code = closure.rehydrate(c, com.tibtech.nifi.processors.hl7.RouteHL7.class, com.tibtech.nifi.processors.hl7.RouteHL7.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

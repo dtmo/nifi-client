@@ -103,7 +103,15 @@ public final class GetHDFSSequenceFile {
    */
   public static final String FLOW_FILE_CONTENT_PROPERTY = "FlowFile Content";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetHDFSSequenceFile() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetHDFSSequenceFile(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A file or comma separated list of files which contains the Hadoop file system configuration. Without this, Hadoop will search the classpath for a 'core-site.xml' and 'hdfs-site.xml' file or will revert to a default configuration.
@@ -543,6 +551,21 @@ public final class GetHDFSSequenceFile {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetHDFSSequenceFile.class) final Closure<GetHDFSSequenceFile> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hadoop.GetHDFSSequenceFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.hadoop.GetHDFSSequenceFile.class, com.tibtech.nifi.processors.hadoop.GetHDFSSequenceFile.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetHDFSSequenceFile, GetHDFSSequenceFile> configurator) {
+    return configurator.apply(new GetHDFSSequenceFile(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetHDFSSequenceFile.class) final Closure<GetHDFSSequenceFile> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hadoop.GetHDFSSequenceFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.hadoop.GetHDFSSequenceFile.class, com.tibtech.nifi.processors.hadoop.GetHDFSSequenceFile.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

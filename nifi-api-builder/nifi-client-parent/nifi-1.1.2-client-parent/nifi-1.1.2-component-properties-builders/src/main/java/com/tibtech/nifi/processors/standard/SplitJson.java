@@ -23,7 +23,15 @@ public final class SplitJson {
    */
   public static final String NULL_VALUE_REPRESENTATION_PROPERTY = "Null Value Representation";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public SplitJson() {
+    this.properties = new HashMap<>();
+  }
+
+  public SplitJson(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A JsonPath expression that indicates the array element to split into JSON/scalar fragments.
@@ -95,6 +103,21 @@ public final class SplitJson {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SplitJson.class) final Closure<SplitJson> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.SplitJson> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SplitJson.class, com.tibtech.nifi.processors.standard.SplitJson.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<SplitJson, SplitJson> configurator) {
+    return configurator.apply(new SplitJson(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SplitJson.class) final Closure<SplitJson> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.SplitJson> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SplitJson.class, com.tibtech.nifi.processors.standard.SplitJson.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

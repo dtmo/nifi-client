@@ -28,7 +28,15 @@ public final class PutHiveQL {
    */
   public static final String HIVE_CHARSET_PROPERTY = "hive-charset";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutHiveQL() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutHiveQL(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Hive Controller Service that is used to obtain connection(s) to the Hive database
@@ -123,6 +131,21 @@ public final class PutHiveQL {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHiveQL.class) final Closure<PutHiveQL> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hive.PutHiveQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.hive.PutHiveQL.class, com.tibtech.nifi.processors.hive.PutHiveQL.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutHiveQL, PutHiveQL> configurator) {
+    return configurator.apply(new PutHiveQL(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHiveQL.class) final Closure<PutHiveQL> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hive.PutHiveQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.hive.PutHiveQL.class, com.tibtech.nifi.processors.hive.PutHiveQL.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

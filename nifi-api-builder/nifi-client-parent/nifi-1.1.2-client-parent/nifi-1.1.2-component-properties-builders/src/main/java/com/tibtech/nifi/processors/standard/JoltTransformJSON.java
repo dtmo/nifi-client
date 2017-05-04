@@ -33,7 +33,15 @@ public final class JoltTransformJSON {
    */
   public static final String JOLT_SPEC_PROPERTY = "jolt-spec";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public JoltTransformJSON() {
+    this.properties = new HashMap<>();
+  }
+
+  public JoltTransformJSON(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies the Jolt Transformation that should be used with the provided specification.
@@ -151,6 +159,21 @@ public final class JoltTransformJSON {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JoltTransformJSON.class) final Closure<JoltTransformJSON> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.JoltTransformJSON> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.JoltTransformJSON.class, com.tibtech.nifi.processors.standard.JoltTransformJSON.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<JoltTransformJSON, JoltTransformJSON> configurator) {
+    return configurator.apply(new JoltTransformJSON(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JoltTransformJSON.class) final Closure<JoltTransformJSON> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.JoltTransformJSON> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.JoltTransformJSON.class, com.tibtech.nifi.processors.standard.JoltTransformJSON.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -43,7 +43,15 @@ public final class ValidateCsv {
    */
   public static final String VALIDATE_CSV_STRATEGY_PROPERTY = "validate-csv-strategy";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ValidateCsv() {
+    this.properties = new HashMap<>();
+  }
+
+  public ValidateCsv(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The schema to be used for validation. Is expected a comma-delimited string representing the cell processors to apply. The following cell processors are allowed in the schema definition: [ParseBigDecimal, ParseBool, ParseChar, ParseDate, ParseDouble, ParseInt, ParseLong, Optional, DMinMax, Equals, ForbidSubStr, LMinMax, NotNull, Null, RequireHashCode, RequireSubStr, Strlen, StrMinMax, StrNotNullOrEmpty, StrRegEx, Unique, UniqueHashCode, IsIncludedIn]. Note: cell processors cannot be nested except with Optional.
@@ -207,6 +215,21 @@ public final class ValidateCsv {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ValidateCsv.class) final Closure<ValidateCsv> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ValidateCsv> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ValidateCsv.class, com.tibtech.nifi.processors.standard.ValidateCsv.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ValidateCsv, ValidateCsv> configurator) {
+    return configurator.apply(new ValidateCsv(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ValidateCsv.class) final Closure<ValidateCsv> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ValidateCsv> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ValidateCsv.class, com.tibtech.nifi.processors.standard.ValidateCsv.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

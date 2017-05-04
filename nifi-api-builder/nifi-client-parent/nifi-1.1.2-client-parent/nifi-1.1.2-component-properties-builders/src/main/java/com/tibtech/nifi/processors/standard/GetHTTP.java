@@ -78,7 +78,15 @@ public final class GetHTTP {
    */
   public static final String PROXY_PORT_PROPERTY = "Proxy Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetHTTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetHTTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The URL to pull from
@@ -403,6 +411,21 @@ public final class GetHTTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetHTTP.class) final Closure<GetHTTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.GetHTTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetHTTP.class, com.tibtech.nifi.processors.standard.GetHTTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetHTTP, GetHTTP> configurator) {
+    return configurator.apply(new GetHTTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetHTTP.class) final Closure<GetHTTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.GetHTTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetHTTP.class, com.tibtech.nifi.processors.standard.GetHTTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -23,7 +23,15 @@ public final class UnpackContent {
    */
   public static final String FILE_FILTER_PROPERTY = "File Filter";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public UnpackContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public UnpackContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Packaging Format used to create the file
@@ -95,6 +103,21 @@ public final class UnpackContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = UnpackContent.class) final Closure<UnpackContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.UnpackContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.UnpackContent.class, com.tibtech.nifi.processors.standard.UnpackContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<UnpackContent, UnpackContent> configurator) {
+    return configurator.apply(new UnpackContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = UnpackContent.class) final Closure<UnpackContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.UnpackContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.UnpackContent.class, com.tibtech.nifi.processors.standard.UnpackContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

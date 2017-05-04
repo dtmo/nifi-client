@@ -18,7 +18,15 @@ public final class SegmentContent {
    */
   public static final String SEGMENT_SIZE_PROPERTY = "Segment Size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public SegmentContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public SegmentContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The maximum data size in bytes for each segment
@@ -67,6 +75,21 @@ public final class SegmentContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SegmentContent.class) final Closure<SegmentContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.SegmentContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SegmentContent.class, com.tibtech.nifi.processors.standard.SegmentContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<SegmentContent, SegmentContent> configurator) {
+    return configurator.apply(new SegmentContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SegmentContent.class) final Closure<SegmentContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.SegmentContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SegmentContent.class, com.tibtech.nifi.processors.standard.SegmentContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -113,7 +113,15 @@ public final class DeleteS3Object {
    */
   public static final String PROXY_HOST_PORT_PROPERTY = "Proxy Host Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DeleteS3Object() {
+    this.properties = new HashMap<>();
+  }
+
+  public DeleteS3Object(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    *
@@ -599,6 +607,21 @@ public final class DeleteS3Object {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DeleteS3Object.class) final Closure<DeleteS3Object> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.s3.DeleteS3Object> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.s3.DeleteS3Object.class, com.tibtech.nifi.processors.aws.s3.DeleteS3Object.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DeleteS3Object, DeleteS3Object> configurator) {
+    return configurator.apply(new DeleteS3Object(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DeleteS3Object.class) final Closure<DeleteS3Object> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.s3.DeleteS3Object> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.s3.DeleteS3Object.class, com.tibtech.nifi.processors.aws.s3.DeleteS3Object.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -18,7 +18,15 @@ public final class SplitXml {
    */
   public static final String SPLIT_DEPTH_PROPERTY = "Split Depth";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public SplitXml() {
+    this.properties = new HashMap<>();
+  }
+
+  public SplitXml(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Indicates the XML-nesting depth to start splitting XML fragments. A depth of 1 means split the root's children, whereas a depth of 2 means split the root's children's children and so forth.
@@ -67,6 +75,21 @@ public final class SplitXml {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SplitXml.class) final Closure<SplitXml> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.SplitXml> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SplitXml.class, com.tibtech.nifi.processors.standard.SplitXml.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<SplitXml, SplitXml> configurator) {
+    return configurator.apply(new SplitXml(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SplitXml.class) final Closure<SplitXml> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.SplitXml> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SplitXml.class, com.tibtech.nifi.processors.standard.SplitXml.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

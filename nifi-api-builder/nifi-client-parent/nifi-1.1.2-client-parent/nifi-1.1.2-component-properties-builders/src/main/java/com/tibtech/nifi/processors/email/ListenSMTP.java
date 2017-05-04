@@ -48,7 +48,15 @@ public final class ListenSMTP {
    */
   public static final String SMTP_HOSTNAME_PROPERTY = "SMTP_HOSTNAME";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ListenSMTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public ListenSMTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The TCP port the ListenSMTP processor will bind to.NOTE that on Unix derivative operating  systems this port must be higher than 1024 unless NiFi is running as with root user permissions.
@@ -235,6 +243,21 @@ public final class ListenSMTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenSMTP.class) final Closure<ListenSMTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.email.ListenSMTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ListenSMTP.class, com.tibtech.nifi.processors.email.ListenSMTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ListenSMTP, ListenSMTP> configurator) {
+    return configurator.apply(new ListenSMTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenSMTP.class) final Closure<ListenSMTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.email.ListenSMTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ListenSMTP.class, com.tibtech.nifi.processors.email.ListenSMTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

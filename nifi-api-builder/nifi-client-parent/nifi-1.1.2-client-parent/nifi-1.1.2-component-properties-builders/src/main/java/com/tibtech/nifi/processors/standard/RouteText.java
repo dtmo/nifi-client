@@ -43,7 +43,15 @@ public final class RouteText {
    */
   public static final String GROUPING_REGULAR_EXPRESSION_PROPERTY = "Grouping Regular Expression";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public RouteText() {
+    this.properties = new HashMap<>();
+  }
+
+  public RouteText(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies how to determine which Relationship(s) to use when evaluating the lines of incoming text against the 'Matching Strategy' and user-defined properties.
@@ -207,6 +215,21 @@ public final class RouteText {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RouteText.class) final Closure<RouteText> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.RouteText> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.RouteText.class, com.tibtech.nifi.processors.standard.RouteText.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<RouteText, RouteText> configurator) {
+    return configurator.apply(new RouteText(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RouteText.class) final Closure<RouteText> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.RouteText> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.RouteText.class, com.tibtech.nifi.processors.standard.RouteText.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

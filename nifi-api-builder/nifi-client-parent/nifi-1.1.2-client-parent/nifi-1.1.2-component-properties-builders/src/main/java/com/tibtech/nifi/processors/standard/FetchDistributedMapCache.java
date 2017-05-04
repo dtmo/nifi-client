@@ -38,7 +38,15 @@ public final class FetchDistributedMapCache {
    */
   public static final String CHARACTER_SET_PROPERTY = "Character Set";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public FetchDistributedMapCache() {
+    this.properties = new HashMap<>();
+  }
+
+  public FetchDistributedMapCache(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A FlowFile attribute, or the results of an Attribute Expression Language statement, which will be evaluated against a FlowFile in order to determine the value used to identify duplicates; it is this value that is cached
@@ -179,6 +187,21 @@ public final class FetchDistributedMapCache {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchDistributedMapCache.class) final Closure<FetchDistributedMapCache> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.FetchDistributedMapCache> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.FetchDistributedMapCache.class, com.tibtech.nifi.processors.standard.FetchDistributedMapCache.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<FetchDistributedMapCache, FetchDistributedMapCache> configurator) {
+    return configurator.apply(new FetchDistributedMapCache(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchDistributedMapCache.class) final Closure<FetchDistributedMapCache> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.FetchDistributedMapCache> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.FetchDistributedMapCache.class, com.tibtech.nifi.processors.standard.FetchDistributedMapCache.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

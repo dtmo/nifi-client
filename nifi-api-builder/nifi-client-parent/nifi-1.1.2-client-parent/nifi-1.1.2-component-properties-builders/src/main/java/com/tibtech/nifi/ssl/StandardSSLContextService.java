@@ -53,7 +53,15 @@ public final class StandardSSLContextService {
    */
   public static final String SSL_PROTOCOL_PROPERTY = "SSL Protocol";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public StandardSSLContextService() {
+    this.properties = new HashMap<>();
+  }
+
+  public StandardSSLContextService(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The fully-qualified filename of the Keystore
@@ -263,6 +271,21 @@ public final class StandardSSLContextService {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StandardSSLContextService.class) final Closure<StandardSSLContextService> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.ssl.StandardSSLContextService> code = closure.rehydrate(c, com.tibtech.nifi.ssl.StandardSSLContextService.class, com.tibtech.nifi.ssl.StandardSSLContextService.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<StandardSSLContextService, StandardSSLContextService> configurator) {
+    return configurator.apply(new StandardSSLContextService(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StandardSSLContextService.class) final Closure<StandardSSLContextService> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.ssl.StandardSSLContextService> code = closure.rehydrate(c, com.tibtech.nifi.ssl.StandardSSLContextService.class, com.tibtech.nifi.ssl.StandardSSLContextService.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

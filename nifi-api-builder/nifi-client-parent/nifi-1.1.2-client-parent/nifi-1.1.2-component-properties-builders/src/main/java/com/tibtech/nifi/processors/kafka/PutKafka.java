@@ -83,7 +83,15 @@ public final class PutKafka {
    */
   public static final String CLIENT_NAME_PROPERTY = "Client Name";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutKafka() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutKafka(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A comma-separated list of known Kafka Brokers in the format <host>:<port>
@@ -431,6 +439,21 @@ public final class PutKafka {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutKafka.class) final Closure<PutKafka> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.kafka.PutKafka> code = closure.rehydrate(c, com.tibtech.nifi.processors.kafka.PutKafka.class, com.tibtech.nifi.processors.kafka.PutKafka.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutKafka, PutKafka> configurator) {
+    return configurator.apply(new PutKafka(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutKafka.class) final Closure<PutKafka> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.kafka.PutKafka> code = closure.rehydrate(c, com.tibtech.nifi.processors.kafka.PutKafka.class, com.tibtech.nifi.processors.kafka.PutKafka.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

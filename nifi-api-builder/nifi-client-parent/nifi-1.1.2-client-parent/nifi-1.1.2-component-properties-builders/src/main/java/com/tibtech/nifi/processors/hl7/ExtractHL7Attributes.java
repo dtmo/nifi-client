@@ -38,7 +38,15 @@ public final class ExtractHL7Attributes {
    */
   public static final String HL_7_INPUT_VERSION_PROPERTY = "hl7-input-version";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExtractHL7Attributes() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExtractHL7Attributes(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Character Encoding that is used to encode the HL7 data
@@ -179,6 +187,21 @@ public final class ExtractHL7Attributes {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractHL7Attributes.class) final Closure<ExtractHL7Attributes> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hl7.ExtractHL7Attributes> code = closure.rehydrate(c, com.tibtech.nifi.processors.hl7.ExtractHL7Attributes.class, com.tibtech.nifi.processors.hl7.ExtractHL7Attributes.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExtractHL7Attributes, ExtractHL7Attributes> configurator) {
+    return configurator.apply(new ExtractHL7Attributes(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractHL7Attributes.class) final Closure<ExtractHL7Attributes> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hl7.ExtractHL7Attributes> code = closure.rehydrate(c, com.tibtech.nifi.processors.hl7.ExtractHL7Attributes.class, com.tibtech.nifi.processors.hl7.ExtractHL7Attributes.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

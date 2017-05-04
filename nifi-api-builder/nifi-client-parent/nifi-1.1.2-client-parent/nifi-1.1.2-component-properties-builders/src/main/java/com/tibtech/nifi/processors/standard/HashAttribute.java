@@ -18,7 +18,15 @@ public final class HashAttribute {
    */
   public static final String HASH_VALUE_ATTRIBUTE_KEY_PROPERTY = "Hash Value Attribute Key";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public HashAttribute() {
+    this.properties = new HashMap<>();
+  }
+
+  public HashAttribute(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the FlowFile Attribute where the hash value should be stored
@@ -67,6 +75,21 @@ public final class HashAttribute {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HashAttribute.class) final Closure<HashAttribute> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.HashAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.HashAttribute.class, com.tibtech.nifi.processors.standard.HashAttribute.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<HashAttribute, HashAttribute> configurator) {
+    return configurator.apply(new HashAttribute(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HashAttribute.class) final Closure<HashAttribute> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.HashAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.HashAttribute.class, com.tibtech.nifi.processors.standard.HashAttribute.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

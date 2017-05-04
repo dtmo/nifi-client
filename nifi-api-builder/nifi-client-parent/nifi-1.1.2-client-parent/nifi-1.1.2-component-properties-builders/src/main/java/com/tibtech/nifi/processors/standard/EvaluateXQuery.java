@@ -33,7 +33,15 @@ public final class EvaluateXQuery {
    */
   public static final String OUTPUT_INDENT_PROPERTY = "Output: Indent";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public EvaluateXQuery() {
+    this.properties = new HashMap<>();
+  }
+
+  public EvaluateXQuery(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Indicates whether the results of the XQuery evaluation are written to the FlowFile content or a FlowFile attribute. If set to <flowfile-content>, only one XQuery may be specified and the property name is ignored.  If set to <flowfile-attribute> and the XQuery returns more than one result, multiple attributes will be added to theFlowFile, each named with a '.n' one-up number appended to the specified attribute name
@@ -151,6 +159,21 @@ public final class EvaluateXQuery {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EvaluateXQuery.class) final Closure<EvaluateXQuery> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.EvaluateXQuery> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.EvaluateXQuery.class, com.tibtech.nifi.processors.standard.EvaluateXQuery.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<EvaluateXQuery, EvaluateXQuery> configurator) {
+    return configurator.apply(new EvaluateXQuery(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EvaluateXQuery.class) final Closure<EvaluateXQuery> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.EvaluateXQuery> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.EvaluateXQuery.class, com.tibtech.nifi.processors.standard.EvaluateXQuery.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

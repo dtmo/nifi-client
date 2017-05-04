@@ -43,7 +43,15 @@ public final class PutSlack {
    */
   public static final String ICON_EMOJI_PROPERTY = "icon-emoji";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutSlack() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutSlack(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The POST URL provided by Slack to send messages into a channel.
@@ -207,6 +215,21 @@ public final class PutSlack {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSlack.class) final Closure<PutSlack> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.slack.PutSlack> code = closure.rehydrate(c, com.tibtech.nifi.processors.slack.PutSlack.class, com.tibtech.nifi.processors.slack.PutSlack.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutSlack, PutSlack> configurator) {
+    return configurator.apply(new PutSlack(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSlack.class) final Closure<PutSlack> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.slack.PutSlack> code = closure.rehydrate(c, com.tibtech.nifi.processors.slack.PutSlack.class, com.tibtech.nifi.processors.slack.PutSlack.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

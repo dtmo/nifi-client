@@ -28,7 +28,15 @@ public final class MonitorDiskUsage {
    */
   public static final String DIRECTORY_DISPLAY_NAME_PROPERTY = "Directory Display Name";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public MonitorDiskUsage() {
+    this.properties = new HashMap<>();
+  }
+
+  public MonitorDiskUsage(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The threshold at which a bulletin will be generated to indicate that the disk usage of the partition on which the directory found is of concern
@@ -123,6 +131,21 @@ public final class MonitorDiskUsage {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MonitorDiskUsage.class) final Closure<MonitorDiskUsage> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.controller.MonitorDiskUsage> code = closure.rehydrate(c, com.tibtech.nifi.controller.MonitorDiskUsage.class, com.tibtech.nifi.controller.MonitorDiskUsage.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<MonitorDiskUsage, MonitorDiskUsage> configurator) {
+    return configurator.apply(new MonitorDiskUsage(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MonitorDiskUsage.class) final Closure<MonitorDiskUsage> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.controller.MonitorDiskUsage> code = closure.rehydrate(c, com.tibtech.nifi.controller.MonitorDiskUsage.class, com.tibtech.nifi.controller.MonitorDiskUsage.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -63,7 +63,15 @@ public final class ListFile {
    */
   public static final String IGNORE_HIDDEN_FILES_PROPERTY = "Ignore Hidden Files";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ListFile() {
+    this.properties = new HashMap<>();
+  }
+
+  public ListFile(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The input directory from which files to pull files
@@ -319,6 +327,21 @@ public final class ListFile {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListFile.class) final Closure<ListFile> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ListFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListFile.class, com.tibtech.nifi.processors.standard.ListFile.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ListFile, ListFile> configurator) {
+    return configurator.apply(new ListFile(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListFile.class) final Closure<ListFile> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ListFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListFile.class, com.tibtech.nifi.processors.standard.ListFile.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -28,7 +28,15 @@ public final class ResizeImage {
    */
   public static final String SCALING_ALGORITHM_PROPERTY = "Scaling Algorithm";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ResizeImage() {
+    this.properties = new HashMap<>();
+  }
+
+  public ResizeImage(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The desired number of pixels for the image's width
@@ -123,6 +131,21 @@ public final class ResizeImage {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ResizeImage.class) final Closure<ResizeImage> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.image.ResizeImage> code = closure.rehydrate(c, com.tibtech.nifi.processors.image.ResizeImage.class, com.tibtech.nifi.processors.image.ResizeImage.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ResizeImage, ResizeImage> configurator) {
+    return configurator.apply(new ResizeImage(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ResizeImage.class) final Closure<ResizeImage> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.image.ResizeImage> code = closure.rehydrate(c, com.tibtech.nifi.processors.image.ResizeImage.class, com.tibtech.nifi.processors.image.ResizeImage.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

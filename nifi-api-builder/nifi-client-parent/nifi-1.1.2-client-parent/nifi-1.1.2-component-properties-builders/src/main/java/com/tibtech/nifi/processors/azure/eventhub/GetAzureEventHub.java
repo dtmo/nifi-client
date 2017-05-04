@@ -58,7 +58,15 @@ public final class GetAzureEventHub {
    */
   public static final String PARTITON_RECEIVER_TIMEOUT_MILLSECONDS_PROPERTY = "Partiton Receiver Timeout (millseconds)";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetAzureEventHub() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetAzureEventHub(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the Azure Event Hub to pull messages from
@@ -291,6 +299,21 @@ public final class GetAzureEventHub {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetAzureEventHub.class) final Closure<GetAzureEventHub> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.azure.eventhub.GetAzureEventHub> code = closure.rehydrate(c, com.tibtech.nifi.processors.azure.eventhub.GetAzureEventHub.class, com.tibtech.nifi.processors.azure.eventhub.GetAzureEventHub.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetAzureEventHub, GetAzureEventHub> configurator) {
+    return configurator.apply(new GetAzureEventHub(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetAzureEventHub.class) final Closure<GetAzureEventHub> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.azure.eventhub.GetAzureEventHub> code = closure.rehydrate(c, com.tibtech.nifi.processors.azure.eventhub.GetAzureEventHub.class, com.tibtech.nifi.processors.azure.eventhub.GetAzureEventHub.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

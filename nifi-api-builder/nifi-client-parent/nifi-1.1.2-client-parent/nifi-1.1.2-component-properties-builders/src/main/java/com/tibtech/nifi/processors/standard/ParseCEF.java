@@ -28,7 +28,15 @@ public final class ParseCEF {
    */
   public static final String TIME_REPRESENTATION_PROPERTY = "TIME_REPRESENTATION";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ParseCEF() {
+    this.properties = new HashMap<>();
+  }
+
+  public ParseCEF(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Indicates whether the results of the CEF parser are written to the FlowFile content or a FlowFile attribute; if using flowfile-attributeattribute, fields will be populated as attributes. If set to flowfile-content, the CEF extension field will be converted into a flat JSON object.
@@ -123,6 +131,21 @@ public final class ParseCEF {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ParseCEF.class) final Closure<ParseCEF> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ParseCEF> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ParseCEF.class, com.tibtech.nifi.processors.standard.ParseCEF.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ParseCEF, ParseCEF> configurator) {
+    return configurator.apply(new ParseCEF(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ParseCEF.class) final Closure<ParseCEF> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ParseCEF> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ParseCEF.class, com.tibtech.nifi.processors.standard.ParseCEF.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

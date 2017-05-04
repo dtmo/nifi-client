@@ -93,7 +93,15 @@ public final class PublishMQTT {
    */
   public static final String RETAIN_MESSAGE_PROPERTY = "Retain Message";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PublishMQTT() {
+    this.properties = new HashMap<>();
+  }
+
+  public PublishMQTT(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The URI to use to connect to the MQTT broker (e.g. tcp://localhost:1883). The 'tcp' and 'ssl' schemes are supported. In order to use 'ssl', the SSL Context Service property must be set.
@@ -487,6 +495,21 @@ public final class PublishMQTT {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PublishMQTT.class) final Closure<PublishMQTT> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.mqtt.PublishMQTT> code = closure.rehydrate(c, com.tibtech.nifi.processors.mqtt.PublishMQTT.class, com.tibtech.nifi.processors.mqtt.PublishMQTT.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PublishMQTT, PublishMQTT> configurator) {
+    return configurator.apply(new PublishMQTT(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PublishMQTT.class) final Closure<PublishMQTT> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.mqtt.PublishMQTT> code = closure.rehydrate(c, com.tibtech.nifi.processors.mqtt.PublishMQTT.class, com.tibtech.nifi.processors.mqtt.PublishMQTT.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -23,7 +23,15 @@ public final class StoreInKiteDataset {
    */
   public static final String TARGET_DATASET_URI_PROPERTY = "Target dataset URI";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public StoreInKiteDataset() {
+    this.properties = new HashMap<>();
+  }
+
+  public StoreInKiteDataset(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A comma-separated list of Hadoop configuration files
@@ -95,6 +103,21 @@ public final class StoreInKiteDataset {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StoreInKiteDataset.class) final Closure<StoreInKiteDataset> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.kite.StoreInKiteDataset> code = closure.rehydrate(c, com.tibtech.nifi.processors.kite.StoreInKiteDataset.class, com.tibtech.nifi.processors.kite.StoreInKiteDataset.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<StoreInKiteDataset, StoreInKiteDataset> configurator) {
+    return configurator.apply(new StoreInKiteDataset(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StoreInKiteDataset.class) final Closure<StoreInKiteDataset> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.kite.StoreInKiteDataset> code = closure.rehydrate(c, com.tibtech.nifi.processors.kite.StoreInKiteDataset.class, com.tibtech.nifi.processors.kite.StoreInKiteDataset.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

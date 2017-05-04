@@ -23,7 +23,15 @@ public final class StandardHttpContextMap {
    */
   public static final String REQUEST_EXPIRATION_PROPERTY = "Request Expiration";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public StandardHttpContextMap() {
+    this.properties = new HashMap<>();
+  }
+
+  public StandardHttpContextMap(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The maximum number of HTTP requests that can be outstanding at any one time. Any attempt to register an additional HTTP Request will cause an error
@@ -95,6 +103,21 @@ public final class StandardHttpContextMap {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StandardHttpContextMap.class) final Closure<StandardHttpContextMap> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.http.StandardHttpContextMap> code = closure.rehydrate(c, com.tibtech.nifi.http.StandardHttpContextMap.class, com.tibtech.nifi.http.StandardHttpContextMap.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<StandardHttpContextMap, StandardHttpContextMap> configurator) {
+    return configurator.apply(new StandardHttpContextMap(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StandardHttpContextMap.class) final Closure<StandardHttpContextMap> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.http.StandardHttpContextMap> code = closure.rehydrate(c, com.tibtech.nifi.http.StandardHttpContextMap.class, com.tibtech.nifi.http.StandardHttpContextMap.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

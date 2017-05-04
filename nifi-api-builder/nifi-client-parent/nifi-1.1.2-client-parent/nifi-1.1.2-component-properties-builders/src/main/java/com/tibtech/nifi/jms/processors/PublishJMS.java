@@ -43,7 +43,15 @@ public final class PublishJMS {
    */
   public static final String SESSION_CACHE_SIZE_PROPERTY = "Session Cache size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PublishJMS() {
+    this.properties = new HashMap<>();
+  }
+
+  public PublishJMS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Controller Service that is used to obtain ConnectionFactory
@@ -207,6 +215,21 @@ public final class PublishJMS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PublishJMS.class) final Closure<PublishJMS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.jms.processors.PublishJMS> code = closure.rehydrate(c, com.tibtech.nifi.jms.processors.PublishJMS.class, com.tibtech.nifi.jms.processors.PublishJMS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PublishJMS, PublishJMS> configurator) {
+    return configurator.apply(new PublishJMS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PublishJMS.class) final Closure<PublishJMS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.jms.processors.PublishJMS> code = closure.rehydrate(c, com.tibtech.nifi.jms.processors.PublishJMS.class, com.tibtech.nifi.jms.processors.PublishJMS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

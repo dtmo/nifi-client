@@ -88,7 +88,15 @@ public final class ListS3 {
    */
   public static final String USE_VERSIONS_PROPERTY = "use-versions";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ListS3() {
+    this.properties = new HashMap<>();
+  }
+
+  public ListS3(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    *
@@ -459,6 +467,21 @@ public final class ListS3 {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListS3.class) final Closure<ListS3> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.s3.ListS3> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.s3.ListS3.class, com.tibtech.nifi.processors.aws.s3.ListS3.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ListS3, ListS3> configurator) {
+    return configurator.apply(new ListS3(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListS3.class) final Closure<ListS3> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.s3.ListS3> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.s3.ListS3.class, com.tibtech.nifi.processors.aws.s3.ListS3.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

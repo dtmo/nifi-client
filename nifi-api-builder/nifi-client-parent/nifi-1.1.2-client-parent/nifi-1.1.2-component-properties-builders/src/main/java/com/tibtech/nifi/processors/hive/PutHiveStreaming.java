@@ -68,7 +68,15 @@ public final class PutHiveStreaming {
    */
   public static final String KERBEROS_KEYTAB_PROPERTY = "Kerberos Keytab";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutHiveStreaming() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutHiveStreaming(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The URI location for the Hive Metastore. Note that this is not the location of the Hive Server. The default port for the Hive metastore is 9043.
@@ -347,6 +355,21 @@ public final class PutHiveStreaming {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHiveStreaming.class) final Closure<PutHiveStreaming> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hive.PutHiveStreaming> code = closure.rehydrate(c, com.tibtech.nifi.processors.hive.PutHiveStreaming.class, com.tibtech.nifi.processors.hive.PutHiveStreaming.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutHiveStreaming, PutHiveStreaming> configurator) {
+    return configurator.apply(new PutHiveStreaming(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHiveStreaming.class) final Closure<PutHiveStreaming> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hive.PutHiveStreaming> code = closure.rehydrate(c, com.tibtech.nifi.processors.hive.PutHiveStreaming.class, com.tibtech.nifi.processors.hive.PutHiveStreaming.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

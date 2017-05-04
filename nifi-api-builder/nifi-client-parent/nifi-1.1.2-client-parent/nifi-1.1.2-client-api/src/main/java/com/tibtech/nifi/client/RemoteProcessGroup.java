@@ -8,11 +8,14 @@ import java.util.stream.Collectors;
 
 import org.apache.nifi.web.api.dto.RemoteProcessGroupContentsDTO;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupDTO;
+import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
 import org.apache.nifi.web.api.dto.RevisionDTO;
 import org.apache.nifi.web.api.dto.status.RemoteProcessGroupStatusDTO;
 import org.apache.nifi.web.api.entity.RemoteProcessGroupEntity;
 
+import com.tibtech.nifi.web.api.dto.RemoteProcessGroupContentsDTOBuilder;
 import com.tibtech.nifi.web.api.dto.RemoteProcessGroupDTOBuilder;
+import com.tibtech.nifi.web.api.dto.RemoteProcessGroupPortDTOBuilder;
 import com.tibtech.nifi.web.api.entity.RemoteProcessGroupEntityBuilder;
 import com.tibtech.nifi.web.api.remoteprocessgroup.GetRemoteProcessGroupInvoker;
 import com.tibtech.nifi.web.api.remoteprocessgroup.RemoveRemoteProcessGroupInvoker;
@@ -152,6 +155,48 @@ public class RemoteProcessGroup
 	public String getYieldDuration()
 	{
 		return getRemoteProcessGroupDTO().getYieldDuration();
+	}
+	
+	public RemoteProcessGroup enableTransmission() throws InvokerException
+	{
+		return setTransmitting(true);
+	}
+	
+	public RemoteProcessGroup disableTransmission() throws InvokerException
+	{
+		return setTransmitting(false);
+	}
+
+	public RemoteProcessGroup setTransmitting(final boolean transmitting) throws InvokerException
+	{
+		refresh();
+
+		final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = RemoteProcessGroupContentsDTOBuilder
+				.of(getContents());
+		
+		final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = getContents().getInputPorts();
+		if (remoteInputPortDTOs != null)
+		{
+			remoteProcessGroupContentsDTOBuilder
+					.setInputPorts(
+							remoteInputPortDTOs
+									.stream().map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder
+											.of(remoteInputPortDTO).setTransmitting(transmitting).build())
+									.collect(Collectors.toSet()));
+		}
+		
+		final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = getContents().getOutputPorts();
+		if (remoteInputPortDTOs != null)
+		{
+			remoteProcessGroupContentsDTOBuilder
+					.setOutputPorts(
+							remoteOutputPortDTOs
+									.stream().map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder
+											.of(remoteOutputPortDTO).setTransmitting(transmitting).build())
+									.collect(Collectors.toSet()));
+		}
+
+		return update(configurator -> configurator.setContents(remoteProcessGroupContentsDTOBuilder.build()));
 	}
 
 	@Override

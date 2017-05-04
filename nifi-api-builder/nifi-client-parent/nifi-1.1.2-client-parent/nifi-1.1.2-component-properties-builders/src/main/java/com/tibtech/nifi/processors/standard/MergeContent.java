@@ -93,7 +93,15 @@ public final class MergeContent {
    */
   public static final String KEEP_PATH_PROPERTY = "Keep Path";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public MergeContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public MergeContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies the algorithm used to merge content. The 'Defragment' algorithm combines fragments that are associated by attributes back into a single cohesive FlowFile. The 'Bin-Packing Algorithm' generates a FlowFile populated by arbitrarily chosen FlowFiles
@@ -487,6 +495,21 @@ public final class MergeContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MergeContent.class) final Closure<MergeContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.MergeContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.MergeContent.class, com.tibtech.nifi.processors.standard.MergeContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<MergeContent, MergeContent> configurator) {
+    return configurator.apply(new MergeContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MergeContent.class) final Closure<MergeContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.MergeContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.MergeContent.class, com.tibtech.nifi.processors.standard.MergeContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

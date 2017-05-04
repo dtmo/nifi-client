@@ -38,7 +38,15 @@ public final class PutSQL {
    */
   public static final String OBTAIN_GENERATED_KEYS_PROPERTY = "Obtain Generated Keys";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutSQL() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutSQL(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies the JDBC Connection Pool to use in order to convert the JSON message to a SQL statement. The Connection Pool is necessary in order to determine the appropriate database column types.
@@ -179,6 +187,21 @@ public final class PutSQL {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSQL.class) final Closure<PutSQL> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PutSQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutSQL.class, com.tibtech.nifi.processors.standard.PutSQL.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutSQL, PutSQL> configurator) {
+    return configurator.apply(new PutSQL(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSQL.class) final Closure<PutSQL> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PutSQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutSQL.class, com.tibtech.nifi.processors.standard.PutSQL.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

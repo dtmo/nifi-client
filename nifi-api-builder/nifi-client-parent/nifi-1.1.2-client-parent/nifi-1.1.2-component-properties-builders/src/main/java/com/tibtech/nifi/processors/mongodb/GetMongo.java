@@ -63,7 +63,15 @@ public final class GetMongo {
    */
   public static final String BATCH_SIZE_PROPERTY = "Batch Size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetMongo() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetMongo(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * MongoURI, typically of the form: mongodb://host1[:port1][,host2[:port2],...]
@@ -319,6 +327,21 @@ public final class GetMongo {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetMongo.class) final Closure<GetMongo> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.mongodb.GetMongo> code = closure.rehydrate(c, com.tibtech.nifi.processors.mongodb.GetMongo.class, com.tibtech.nifi.processors.mongodb.GetMongo.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetMongo, GetMongo> configurator) {
+    return configurator.apply(new GetMongo(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetMongo.class) final Closure<GetMongo> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.mongodb.GetMongo> code = closure.rehydrate(c, com.tibtech.nifi.processors.mongodb.GetMongo.class, com.tibtech.nifi.processors.mongodb.GetMongo.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

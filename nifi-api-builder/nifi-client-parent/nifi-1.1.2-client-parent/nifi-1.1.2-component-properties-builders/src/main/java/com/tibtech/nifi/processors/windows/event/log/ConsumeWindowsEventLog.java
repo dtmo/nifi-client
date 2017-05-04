@@ -33,7 +33,15 @@ public final class ConsumeWindowsEventLog {
    */
   public static final String MAX_QUEUE_PROPERTY = "maxQueue";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConsumeWindowsEventLog() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConsumeWindowsEventLog(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Windows Event Log Channel to listen to.
@@ -151,6 +159,21 @@ public final class ConsumeWindowsEventLog {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeWindowsEventLog.class) final Closure<ConsumeWindowsEventLog> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.windows.event.log.ConsumeWindowsEventLog> code = closure.rehydrate(c, com.tibtech.nifi.processors.windows.event.log.ConsumeWindowsEventLog.class, com.tibtech.nifi.processors.windows.event.log.ConsumeWindowsEventLog.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConsumeWindowsEventLog, ConsumeWindowsEventLog> configurator) {
+    return configurator.apply(new ConsumeWindowsEventLog(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeWindowsEventLog.class) final Closure<ConsumeWindowsEventLog> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.windows.event.log.ConsumeWindowsEventLog> code = closure.rehydrate(c, com.tibtech.nifi.processors.windows.event.log.ConsumeWindowsEventLog.class, com.tibtech.nifi.processors.windows.event.log.ConsumeWindowsEventLog.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

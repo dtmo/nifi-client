@@ -28,7 +28,15 @@ public final class SelectHiveQL {
    */
   public static final String HIVE_OUTPUT_FORMAT_PROPERTY = "hive-output-format";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public SelectHiveQL() {
+    this.properties = new HashMap<>();
+  }
+
+  public SelectHiveQL(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Hive Controller Service that is used to obtain connection(s) to the Hive database
@@ -123,6 +131,21 @@ public final class SelectHiveQL {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SelectHiveQL.class) final Closure<SelectHiveQL> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hive.SelectHiveQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.hive.SelectHiveQL.class, com.tibtech.nifi.processors.hive.SelectHiveQL.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<SelectHiveQL, SelectHiveQL> configurator) {
+    return configurator.apply(new SelectHiveQL(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SelectHiveQL.class) final Closure<SelectHiveQL> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hive.SelectHiveQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.hive.SelectHiveQL.class, com.tibtech.nifi.processors.hive.SelectHiveQL.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

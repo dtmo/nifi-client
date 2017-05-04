@@ -23,7 +23,15 @@ public final class EvaluateXPath {
    */
   public static final String RETURN_TYPE_PROPERTY = "Return Type";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public EvaluateXPath() {
+    this.properties = new HashMap<>();
+  }
+
+  public EvaluateXPath(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Indicates whether the results of the XPath evaluation are written to the FlowFile content or a FlowFile attribute; if using attribute, must specify the Attribute Name property. If set to flowfile-content, only one XPath may be specified, and the property name is ignored.
@@ -95,6 +103,21 @@ public final class EvaluateXPath {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EvaluateXPath.class) final Closure<EvaluateXPath> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.EvaluateXPath> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.EvaluateXPath.class, com.tibtech.nifi.processors.standard.EvaluateXPath.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<EvaluateXPath, EvaluateXPath> configurator) {
+    return configurator.apply(new EvaluateXPath(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EvaluateXPath.class) final Closure<EvaluateXPath> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.EvaluateXPath> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.EvaluateXPath.class, com.tibtech.nifi.processors.standard.EvaluateXPath.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

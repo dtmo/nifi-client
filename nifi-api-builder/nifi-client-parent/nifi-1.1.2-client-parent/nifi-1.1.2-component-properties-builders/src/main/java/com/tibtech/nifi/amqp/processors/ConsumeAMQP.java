@@ -58,7 +58,15 @@ public final class ConsumeAMQP {
    */
   public static final String SSL_CLIENT_AUTH_PROPERTY = "ssl-client-auth";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConsumeAMQP() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConsumeAMQP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the existing AMQP Queue from which messages will be consumed. Usually pre-defined by AMQP administrator. 
@@ -291,6 +299,21 @@ public final class ConsumeAMQP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeAMQP.class) final Closure<ConsumeAMQP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.amqp.processors.ConsumeAMQP> code = closure.rehydrate(c, com.tibtech.nifi.amqp.processors.ConsumeAMQP.class, com.tibtech.nifi.amqp.processors.ConsumeAMQP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConsumeAMQP, ConsumeAMQP> configurator) {
+    return configurator.apply(new ConsumeAMQP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeAMQP.class) final Closure<ConsumeAMQP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.amqp.processors.ConsumeAMQP> code = closure.rehydrate(c, com.tibtech.nifi.amqp.processors.ConsumeAMQP.class, com.tibtech.nifi.amqp.processors.ConsumeAMQP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -98,7 +98,15 @@ public final class PutDynamoDB {
    */
   public static final String SSL_CONTEXT_SERVICE_PROPERTY = "SSL Context Service";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutDynamoDB() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutDynamoDB(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The DynamoDB table name
@@ -515,6 +523,21 @@ public final class PutDynamoDB {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutDynamoDB.class) final Closure<PutDynamoDB> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.dynamodb.PutDynamoDB> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.dynamodb.PutDynamoDB.class, com.tibtech.nifi.processors.aws.dynamodb.PutDynamoDB.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutDynamoDB, PutDynamoDB> configurator) {
+    return configurator.apply(new PutDynamoDB(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutDynamoDB.class) final Closure<PutDynamoDB> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.dynamodb.PutDynamoDB> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.dynamodb.PutDynamoDB.class, com.tibtech.nifi.processors.aws.dynamodb.PutDynamoDB.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

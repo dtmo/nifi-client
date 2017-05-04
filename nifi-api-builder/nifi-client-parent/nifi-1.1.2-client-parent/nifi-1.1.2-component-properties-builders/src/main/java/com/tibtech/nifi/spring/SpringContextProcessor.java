@@ -33,7 +33,15 @@ public final class SpringContextProcessor {
    */
   public static final String RECEIVE_TIMEOUT_PROPERTY = "Receive Timeout";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public SpringContextProcessor() {
+    this.properties = new HashMap<>();
+  }
+
+  public SpringContextProcessor(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The path to the Spring Application Context configuration file relative to the classpath
@@ -151,6 +159,21 @@ public final class SpringContextProcessor {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SpringContextProcessor.class) final Closure<SpringContextProcessor> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.spring.SpringContextProcessor> code = closure.rehydrate(c, com.tibtech.nifi.spring.SpringContextProcessor.class, com.tibtech.nifi.spring.SpringContextProcessor.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<SpringContextProcessor, SpringContextProcessor> configurator) {
+    return configurator.apply(new SpringContextProcessor(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SpringContextProcessor.class) final Closure<SpringContextProcessor> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.spring.SpringContextProcessor> code = closure.rehydrate(c, com.tibtech.nifi.spring.SpringContextProcessor.class, com.tibtech.nifi.spring.SpringContextProcessor.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

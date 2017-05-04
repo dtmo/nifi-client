@@ -83,7 +83,15 @@ public final class GetSNMP {
    */
   public static final String SNMP_TIMEOUT_PROPERTY = "snmp-timeout";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetSNMP() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetSNMP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The OID to request
@@ -431,6 +439,21 @@ public final class GetSNMP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetSNMP.class) final Closure<GetSNMP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.snmp.processors.GetSNMP> code = closure.rehydrate(c, com.tibtech.nifi.snmp.processors.GetSNMP.class, com.tibtech.nifi.snmp.processors.GetSNMP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetSNMP, GetSNMP> configurator) {
+    return configurator.apply(new GetSNMP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetSNMP.class) final Closure<GetSNMP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.snmp.processors.GetSNMP> code = closure.rehydrate(c, com.tibtech.nifi.snmp.processors.GetSNMP.class, com.tibtech.nifi.snmp.processors.GetSNMP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -48,7 +48,15 @@ public final class GetHBase {
    */
   public static final String CHARACTER_SET_PROPERTY = "Character Set";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetHBase() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetHBase(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies the Controller Service to use for accessing HBase.
@@ -235,6 +243,21 @@ public final class GetHBase {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetHBase.class) final Closure<GetHBase> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.hbase.GetHBase> code = closure.rehydrate(c, com.tibtech.nifi.hbase.GetHBase.class, com.tibtech.nifi.hbase.GetHBase.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetHBase, GetHBase> configurator) {
+    return configurator.apply(new GetHBase(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetHBase.class) final Closure<GetHBase> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.hbase.GetHBase> code = closure.rehydrate(c, com.tibtech.nifi.hbase.GetHBase.class, com.tibtech.nifi.hbase.GetHBase.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

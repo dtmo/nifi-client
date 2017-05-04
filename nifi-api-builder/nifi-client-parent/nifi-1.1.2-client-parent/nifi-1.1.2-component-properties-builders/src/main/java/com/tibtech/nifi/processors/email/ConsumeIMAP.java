@@ -63,7 +63,15 @@ public final class ConsumeIMAP {
    */
   public static final String USE_SSL_PROPERTY = "Use SSL";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConsumeIMAP() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConsumeIMAP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Network address of Email server (e.g., pop.gmail.com, imap.gmail.com . . .)
@@ -319,6 +327,21 @@ public final class ConsumeIMAP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeIMAP.class) final Closure<ConsumeIMAP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.email.ConsumeIMAP> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ConsumeIMAP.class, com.tibtech.nifi.processors.email.ConsumeIMAP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConsumeIMAP, ConsumeIMAP> configurator) {
+    return configurator.apply(new ConsumeIMAP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeIMAP.class) final Closure<ConsumeIMAP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.email.ConsumeIMAP> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ConsumeIMAP.class, com.tibtech.nifi.processors.email.ConsumeIMAP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

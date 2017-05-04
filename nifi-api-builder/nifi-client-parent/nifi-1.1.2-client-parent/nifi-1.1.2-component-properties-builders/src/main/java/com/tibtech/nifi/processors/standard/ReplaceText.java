@@ -43,7 +43,15 @@ public final class ReplaceText {
    */
   public static final String EVALUATION_MODE_PROPERTY = "Evaluation Mode";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ReplaceText() {
+    this.properties = new HashMap<>();
+  }
+
+  public ReplaceText(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Search Value to search for in the FlowFile content. Only used for 'Literal Replace' and 'Regex Replace' matching strategies
@@ -207,6 +215,21 @@ public final class ReplaceText {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReplaceText.class) final Closure<ReplaceText> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ReplaceText> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ReplaceText.class, com.tibtech.nifi.processors.standard.ReplaceText.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ReplaceText, ReplaceText> configurator) {
+    return configurator.apply(new ReplaceText(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReplaceText.class) final Closure<ReplaceText> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ReplaceText> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ReplaceText.class, com.tibtech.nifi.processors.standard.ReplaceText.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

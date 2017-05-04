@@ -88,7 +88,15 @@ public final class HandleHttpRequest {
    */
   public static final String CONTAINER_QUEUE_SIZE_PROPERTY = "container-queue-size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public HandleHttpRequest() {
+    this.properties = new HashMap<>();
+  }
+
+  public HandleHttpRequest(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Port to listen on for incoming HTTP requests
@@ -459,6 +467,21 @@ public final class HandleHttpRequest {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HandleHttpRequest.class) final Closure<HandleHttpRequest> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.HandleHttpRequest> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.HandleHttpRequest.class, com.tibtech.nifi.processors.standard.HandleHttpRequest.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<HandleHttpRequest, HandleHttpRequest> configurator) {
+    return configurator.apply(new HandleHttpRequest(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HandleHttpRequest.class) final Closure<HandleHttpRequest> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.HandleHttpRequest> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.HandleHttpRequest.class, com.tibtech.nifi.processors.standard.HandleHttpRequest.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -38,7 +38,15 @@ public final class ControlRate {
    */
   public static final String GROUPING_ATTRIBUTE_PROPERTY = "Grouping Attribute";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ControlRate() {
+    this.properties = new HashMap<>();
+  }
+
+  public ControlRate(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Indicates the criteria that is used to control the throughput rate. Changing this value resets the rate counters.
@@ -179,6 +187,21 @@ public final class ControlRate {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControlRate.class) final Closure<ControlRate> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ControlRate> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ControlRate.class, com.tibtech.nifi.processors.standard.ControlRate.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ControlRate, ControlRate> configurator) {
+    return configurator.apply(new ControlRate(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControlRate.class) final Closure<ControlRate> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ControlRate> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ControlRate.class, com.tibtech.nifi.processors.standard.ControlRate.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -18,7 +18,15 @@ public final class RouteOnAttribute {
    */
   public static final String ROUTING_STRATEGY_PROPERTY = "Routing Strategy";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public RouteOnAttribute() {
+    this.properties = new HashMap<>();
+  }
+
+  public RouteOnAttribute(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies how to determine which relationship to use when evaluating the Expression Language
@@ -67,6 +75,21 @@ public final class RouteOnAttribute {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RouteOnAttribute.class) final Closure<RouteOnAttribute> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.RouteOnAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.RouteOnAttribute.class, com.tibtech.nifi.processors.standard.RouteOnAttribute.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<RouteOnAttribute, RouteOnAttribute> configurator) {
+    return configurator.apply(new RouteOnAttribute(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RouteOnAttribute.class) final Closure<RouteOnAttribute> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.RouteOnAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.RouteOnAttribute.class, com.tibtech.nifi.processors.standard.RouteOnAttribute.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

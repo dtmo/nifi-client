@@ -83,7 +83,15 @@ public final class PutSolrContentStream {
    */
   public static final String ZOO_KEEPER_CONNECTION_TIMEOUT_PROPERTY = "ZooKeeper Connection Timeout";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutSolrContentStream() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutSolrContentStream(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The type of Solr instance, Cloud or Standard.
@@ -431,6 +439,21 @@ public final class PutSolrContentStream {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSolrContentStream.class) final Closure<PutSolrContentStream> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.solr.PutSolrContentStream> code = closure.rehydrate(c, com.tibtech.nifi.processors.solr.PutSolrContentStream.class, com.tibtech.nifi.processors.solr.PutSolrContentStream.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutSolrContentStream, PutSolrContentStream> configurator) {
+    return configurator.apply(new PutSolrContentStream(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSolrContentStream.class) final Closure<PutSolrContentStream> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.solr.PutSolrContentStream> code = closure.rehydrate(c, com.tibtech.nifi.processors.solr.PutSolrContentStream.class, com.tibtech.nifi.processors.solr.PutSolrContentStream.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -38,7 +38,15 @@ public final class ExecuteProcess {
    */
   public static final String ARGUMENT_DELIMITER_PROPERTY = "Argument Delimiter";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExecuteProcess() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExecuteProcess(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies the command to be executed; if just the name of an executable is provided, it must be in the user's environment PATH.
@@ -179,6 +187,21 @@ public final class ExecuteProcess {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteProcess.class) final Closure<ExecuteProcess> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ExecuteProcess> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ExecuteProcess.class, com.tibtech.nifi.processors.standard.ExecuteProcess.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExecuteProcess, ExecuteProcess> configurator) {
+    return configurator.apply(new ExecuteProcess(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteProcess.class) final Closure<ExecuteProcess> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ExecuteProcess> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ExecuteProcess.class, com.tibtech.nifi.processors.standard.ExecuteProcess.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

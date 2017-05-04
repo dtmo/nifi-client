@@ -43,7 +43,15 @@ public final class ModifyHTMLElement {
    */
   public static final String ATTRIBUTE_NAME_PROPERTY = "Attribute Name";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ModifyHTMLElement() {
+    this.properties = new HashMap<>();
+  }
+
+  public ModifyHTMLElement(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Base URL for the HTML page being parsed.
@@ -207,6 +215,21 @@ public final class ModifyHTMLElement {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ModifyHTMLElement.class) final Closure<ModifyHTMLElement> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.ModifyHTMLElement> code = closure.rehydrate(c, com.tibtech.nifi.ModifyHTMLElement.class, com.tibtech.nifi.ModifyHTMLElement.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ModifyHTMLElement, ModifyHTMLElement> configurator) {
+    return configurator.apply(new ModifyHTMLElement(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ModifyHTMLElement.class) final Closure<ModifyHTMLElement> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.ModifyHTMLElement> code = closure.rehydrate(c, com.tibtech.nifi.ModifyHTMLElement.class, com.tibtech.nifi.ModifyHTMLElement.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -73,7 +73,15 @@ public final class PutKinesisStream {
    */
   public static final String PROXY_HOST_PORT_PROPERTY = "Proxy Host Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutKinesisStream() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutKinesisStream(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of Kinesis Stream
@@ -375,6 +383,21 @@ public final class PutKinesisStream {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutKinesisStream.class) final Closure<PutKinesisStream> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.kinesis.stream.PutKinesisStream> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.kinesis.stream.PutKinesisStream.class, com.tibtech.nifi.processors.aws.kinesis.stream.PutKinesisStream.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutKinesisStream, PutKinesisStream> configurator) {
+    return configurator.apply(new PutKinesisStream(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutKinesisStream.class) final Closure<PutKinesisStream> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.kinesis.stream.PutKinesisStream> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.kinesis.stream.PutKinesisStream.class, com.tibtech.nifi.processors.aws.kinesis.stream.PutKinesisStream.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

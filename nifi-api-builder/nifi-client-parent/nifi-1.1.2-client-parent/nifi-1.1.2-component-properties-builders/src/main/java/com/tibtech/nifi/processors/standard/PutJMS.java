@@ -93,7 +93,15 @@ public final class PutJMS {
    */
   public static final String CLIENT_ID_PREFIX_PROPERTY = "Client ID Prefix";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutJMS() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutJMS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Provider used for the JMS Server
@@ -487,6 +495,21 @@ public final class PutJMS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutJMS.class) final Closure<PutJMS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PutJMS> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutJMS.class, com.tibtech.nifi.processors.standard.PutJMS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutJMS, PutJMS> configurator) {
+    return configurator.apply(new PutJMS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutJMS.class) final Closure<PutJMS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PutJMS> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutJMS.class, com.tibtech.nifi.processors.standard.PutJMS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

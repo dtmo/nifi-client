@@ -84,7 +84,15 @@ public final class ExtractText {
    */
   public static final String EXTRACT_TEXT_ENABLE_REPEATING_CAPTURE_GROUP_PROPERTY = "extract-text-enable-repeating-capture-group";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExtractText() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExtractText(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Character Set in which the file is encoded
@@ -435,6 +443,21 @@ public final class ExtractText {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractText.class) final Closure<ExtractText> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ExtractText> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ExtractText.class, com.tibtech.nifi.processors.standard.ExtractText.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExtractText, ExtractText> configurator) {
+    return configurator.apply(new ExtractText(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractText.class) final Closure<ExtractText> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ExtractText> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ExtractText.class, com.tibtech.nifi.processors.standard.ExtractText.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -63,7 +63,15 @@ public final class GetKafka {
    */
   public static final String AUTO_OFFSET_RESET_PROPERTY = "Auto Offset Reset";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetKafka() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetKafka(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Connection String to use in order to connect to ZooKeeper. This is often a comma-separated list of <host>:<port> combinations. For example, host1:2181,host2:2181,host3:2188
@@ -319,6 +327,21 @@ public final class GetKafka {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetKafka.class) final Closure<GetKafka> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.kafka.GetKafka> code = closure.rehydrate(c, com.tibtech.nifi.processors.kafka.GetKafka.class, com.tibtech.nifi.processors.kafka.GetKafka.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetKafka, GetKafka> configurator) {
+    return configurator.apply(new GetKafka(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetKafka.class) final Closure<GetKafka> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.kafka.GetKafka> code = closure.rehydrate(c, com.tibtech.nifi.processors.kafka.GetKafka.class, com.tibtech.nifi.processors.kafka.GetKafka.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

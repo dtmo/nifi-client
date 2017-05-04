@@ -73,7 +73,15 @@ public final class FetchElasticsearch5 {
    */
   public static final String EL_5_CHARSET_PROPERTY = "el5-charset";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public FetchElasticsearch5() {
+    this.properties = new HashMap<>();
+  }
+
+  public FetchElasticsearch5(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Name of the ES cluster (for example, elasticsearch_brew). Defaults to 'elasticsearch'
@@ -375,6 +383,21 @@ public final class FetchElasticsearch5 {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchElasticsearch5.class) final Closure<FetchElasticsearch5> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.elasticsearch.FetchElasticsearch5> code = closure.rehydrate(c, com.tibtech.nifi.processors.elasticsearch.FetchElasticsearch5.class, com.tibtech.nifi.processors.elasticsearch.FetchElasticsearch5.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<FetchElasticsearch5, FetchElasticsearch5> configurator) {
+    return configurator.apply(new FetchElasticsearch5(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchElasticsearch5.class) final Closure<FetchElasticsearch5> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.elasticsearch.FetchElasticsearch5> code = closure.rehydrate(c, com.tibtech.nifi.processors.elasticsearch.FetchElasticsearch5.class, com.tibtech.nifi.processors.elasticsearch.FetchElasticsearch5.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

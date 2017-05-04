@@ -38,7 +38,15 @@ public final class PutHTMLElement {
    */
   public static final String PUT_VALUE_PROPERTY = "Put Value";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutHTMLElement() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutHTMLElement(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Base URL for the HTML page being parsed.
@@ -179,6 +187,21 @@ public final class PutHTMLElement {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHTMLElement.class) final Closure<PutHTMLElement> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.PutHTMLElement> code = closure.rehydrate(c, com.tibtech.nifi.PutHTMLElement.class, com.tibtech.nifi.PutHTMLElement.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutHTMLElement, PutHTMLElement> configurator) {
+    return configurator.apply(new PutHTMLElement(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHTMLElement.class) final Closure<PutHTMLElement> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.PutHTMLElement> code = closure.rehydrate(c, com.tibtech.nifi.PutHTMLElement.class, com.tibtech.nifi.PutHTMLElement.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -28,7 +28,15 @@ public final class RouteOnContent {
    */
   public static final String CONTENT_BUFFER_SIZE_PROPERTY = "Content Buffer Size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public RouteOnContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public RouteOnContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies whether the entire content of the file must match the regular expression exactly, or if any part of the file (up to Content Buffer Size) can contain the regular expression in order to be considered a match
@@ -123,6 +131,21 @@ public final class RouteOnContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RouteOnContent.class) final Closure<RouteOnContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.RouteOnContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.RouteOnContent.class, com.tibtech.nifi.processors.standard.RouteOnContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<RouteOnContent, RouteOnContent> configurator) {
+    return configurator.apply(new RouteOnContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RouteOnContent.class) final Closure<RouteOnContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.RouteOnContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.RouteOnContent.class, com.tibtech.nifi.processors.standard.RouteOnContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

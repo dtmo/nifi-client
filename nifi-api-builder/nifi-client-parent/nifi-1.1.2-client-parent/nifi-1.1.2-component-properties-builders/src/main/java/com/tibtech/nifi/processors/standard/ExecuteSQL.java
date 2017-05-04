@@ -33,7 +33,15 @@ public final class ExecuteSQL {
    */
   public static final String DBF_NORMALIZE_PROPERTY = "dbf-normalize";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExecuteSQL() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExecuteSQL(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Controller Service that is used to obtain connection to database
@@ -151,6 +159,21 @@ public final class ExecuteSQL {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteSQL.class) final Closure<ExecuteSQL> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ExecuteSQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ExecuteSQL.class, com.tibtech.nifi.processors.standard.ExecuteSQL.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExecuteSQL, ExecuteSQL> configurator) {
+    return configurator.apply(new ExecuteSQL(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteSQL.class) final Closure<ExecuteSQL> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ExecuteSQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ExecuteSQL.class, com.tibtech.nifi.processors.standard.ExecuteSQL.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

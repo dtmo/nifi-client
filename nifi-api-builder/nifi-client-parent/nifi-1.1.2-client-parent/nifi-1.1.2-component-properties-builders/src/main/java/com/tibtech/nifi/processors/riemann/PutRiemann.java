@@ -78,7 +78,15 @@ public final class PutRiemann {
    */
   public static final String TIME_PROPERTY = "Time";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutRiemann() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutRiemann(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Hostname of Riemann server
@@ -403,6 +411,21 @@ public final class PutRiemann {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutRiemann.class) final Closure<PutRiemann> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.riemann.PutRiemann> code = closure.rehydrate(c, com.tibtech.nifi.processors.riemann.PutRiemann.class, com.tibtech.nifi.processors.riemann.PutRiemann.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutRiemann, PutRiemann> configurator) {
+    return configurator.apply(new PutRiemann(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutRiemann.class) final Closure<PutRiemann> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.riemann.PutRiemann> code = closure.rehydrate(c, com.tibtech.nifi.processors.riemann.PutRiemann.class, com.tibtech.nifi.processors.riemann.PutRiemann.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

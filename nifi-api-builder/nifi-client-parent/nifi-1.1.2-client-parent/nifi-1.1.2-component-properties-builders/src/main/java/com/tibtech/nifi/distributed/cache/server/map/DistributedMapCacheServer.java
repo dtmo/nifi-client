@@ -38,7 +38,15 @@ public final class DistributedMapCacheServer {
    */
   public static final String SSL_CONTEXT_SERVICE_PROPERTY = "SSL Context Service";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DistributedMapCacheServer() {
+    this.properties = new HashMap<>();
+  }
+
+  public DistributedMapCacheServer(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The port to listen on for incoming connections
@@ -179,6 +187,21 @@ public final class DistributedMapCacheServer {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DistributedMapCacheServer.class) final Closure<DistributedMapCacheServer> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.distributed.cache.server.map.DistributedMapCacheServer> code = closure.rehydrate(c, com.tibtech.nifi.distributed.cache.server.map.DistributedMapCacheServer.class, com.tibtech.nifi.distributed.cache.server.map.DistributedMapCacheServer.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DistributedMapCacheServer, DistributedMapCacheServer> configurator) {
+    return configurator.apply(new DistributedMapCacheServer(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DistributedMapCacheServer.class) final Closure<DistributedMapCacheServer> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.distributed.cache.server.map.DistributedMapCacheServer> code = closure.rehydrate(c, com.tibtech.nifi.distributed.cache.server.map.DistributedMapCacheServer.class, com.tibtech.nifi.distributed.cache.server.map.DistributedMapCacheServer.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

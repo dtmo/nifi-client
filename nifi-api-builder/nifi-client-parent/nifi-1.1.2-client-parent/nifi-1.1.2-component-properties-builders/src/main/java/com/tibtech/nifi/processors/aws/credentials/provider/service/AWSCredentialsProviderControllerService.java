@@ -73,7 +73,15 @@ public final class AWSCredentialsProviderControllerService {
    */
   public static final String ASSUME_ROLE_PROXY_PORT_PROPERTY = "assume-role-proxy-port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public AWSCredentialsProviderControllerService() {
+    this.properties = new HashMap<>();
+  }
+
+  public AWSCredentialsProviderControllerService(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * If true, uses the Default Credential chain, including EC2 instance profiles or roles, environment variables, default user credentials, etc.
@@ -376,6 +384,21 @@ public final class AWSCredentialsProviderControllerService {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = AWSCredentialsProviderControllerService.class) final Closure<AWSCredentialsProviderControllerService> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderControllerService> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderControllerService.class, com.tibtech.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderControllerService.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<AWSCredentialsProviderControllerService, AWSCredentialsProviderControllerService> configurator) {
+    return configurator.apply(new AWSCredentialsProviderControllerService(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = AWSCredentialsProviderControllerService.class) final Closure<AWSCredentialsProviderControllerService> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderControllerService> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderControllerService.class, com.tibtech.nifi.processors.aws.credentials.provider.service.AWSCredentialsProviderControllerService.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

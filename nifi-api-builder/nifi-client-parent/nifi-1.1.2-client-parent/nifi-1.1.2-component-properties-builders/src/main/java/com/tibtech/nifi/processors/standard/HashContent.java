@@ -23,7 +23,15 @@ public final class HashContent {
    */
   public static final String HASH_ALGORITHM_PROPERTY = "Hash Algorithm";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public HashContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public HashContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the FlowFile Attribute into which the Hash Value should be written. If the value already exists, it will be overwritten
@@ -95,6 +103,21 @@ public final class HashContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HashContent.class) final Closure<HashContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.HashContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.HashContent.class, com.tibtech.nifi.processors.standard.HashContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<HashContent, HashContent> configurator) {
+    return configurator.apply(new HashContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HashContent.class) final Closure<HashContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.HashContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.HashContent.class, com.tibtech.nifi.processors.standard.HashContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

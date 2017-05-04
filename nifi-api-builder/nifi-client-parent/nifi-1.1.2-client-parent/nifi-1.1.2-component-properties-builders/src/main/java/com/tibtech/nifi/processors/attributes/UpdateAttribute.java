@@ -18,7 +18,15 @@ public final class UpdateAttribute {
    */
   public static final String DELETE_ATTRIBUTES_EXPRESSION_PROPERTY = "Delete Attributes Expression";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public UpdateAttribute() {
+    this.properties = new HashMap<>();
+  }
+
+  public UpdateAttribute(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Regular expression for attributes to be deleted from flowfiles.
@@ -67,6 +75,21 @@ public final class UpdateAttribute {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = UpdateAttribute.class) final Closure<UpdateAttribute> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.attributes.UpdateAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.attributes.UpdateAttribute.class, com.tibtech.nifi.processors.attributes.UpdateAttribute.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<UpdateAttribute, UpdateAttribute> configurator) {
+    return configurator.apply(new UpdateAttribute(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = UpdateAttribute.class) final Closure<UpdateAttribute> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.attributes.UpdateAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.attributes.UpdateAttribute.class, com.tibtech.nifi.processors.attributes.UpdateAttribute.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

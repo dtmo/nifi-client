@@ -33,7 +33,15 @@ public final class DataDogReportingTask {
    */
   public static final String DATADOG_TRANSPORT_PROPERTY = "Datadog transport";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DataDogReportingTask() {
+    this.properties = new HashMap<>();
+  }
+
+  public DataDogReportingTask(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Prefix to be added before every metric
@@ -151,6 +159,21 @@ public final class DataDogReportingTask {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DataDogReportingTask.class) final Closure<DataDogReportingTask> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.reporting.datadog.DataDogReportingTask> code = closure.rehydrate(c, com.tibtech.nifi.reporting.datadog.DataDogReportingTask.class, com.tibtech.nifi.reporting.datadog.DataDogReportingTask.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DataDogReportingTask, DataDogReportingTask> configurator) {
+    return configurator.apply(new DataDogReportingTask(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DataDogReportingTask.class) final Closure<DataDogReportingTask> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.reporting.datadog.DataDogReportingTask> code = closure.rehydrate(c, com.tibtech.nifi.reporting.datadog.DataDogReportingTask.class, com.tibtech.nifi.reporting.datadog.DataDogReportingTask.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

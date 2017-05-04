@@ -13,7 +13,15 @@ public final class ExtractTNEFAttachments {
    */
   public static final String COMPONENT_TYPE = "org.apache.nifi.processors.email.ExtractTNEFAttachments";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExtractTNEFAttachments() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExtractTNEFAttachments(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   public final String getDynamicProperty(final String name) {
     return properties.get(name);
@@ -39,6 +47,21 @@ public final class ExtractTNEFAttachments {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractTNEFAttachments.class) final Closure<ExtractTNEFAttachments> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.email.ExtractTNEFAttachments> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ExtractTNEFAttachments.class, com.tibtech.nifi.processors.email.ExtractTNEFAttachments.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExtractTNEFAttachments, ExtractTNEFAttachments> configurator) {
+    return configurator.apply(new ExtractTNEFAttachments(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractTNEFAttachments.class) final Closure<ExtractTNEFAttachments> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.email.ExtractTNEFAttachments> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ExtractTNEFAttachments.class, com.tibtech.nifi.processors.email.ExtractTNEFAttachments.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

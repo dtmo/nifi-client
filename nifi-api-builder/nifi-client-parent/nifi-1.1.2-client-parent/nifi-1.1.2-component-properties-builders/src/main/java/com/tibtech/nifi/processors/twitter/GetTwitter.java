@@ -58,7 +58,15 @@ public final class GetTwitter {
    */
   public static final String LOCATIONS_TO_FILTER_ON_PROPERTY = "Locations to Filter On";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetTwitter() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetTwitter(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies which endpoint data should be pulled from
@@ -291,6 +299,21 @@ public final class GetTwitter {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetTwitter.class) final Closure<GetTwitter> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.twitter.GetTwitter> code = closure.rehydrate(c, com.tibtech.nifi.processors.twitter.GetTwitter.class, com.tibtech.nifi.processors.twitter.GetTwitter.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetTwitter, GetTwitter> configurator) {
+    return configurator.apply(new GetTwitter(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetTwitter.class) final Closure<GetTwitter> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.twitter.GetTwitter> code = closure.rehydrate(c, com.tibtech.nifi.processors.twitter.GetTwitter.class, com.tibtech.nifi.processors.twitter.GetTwitter.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -33,7 +33,15 @@ public final class ExecuteFlumeSource {
    */
   public static final String FLUME_CONFIGURATION_PROPERTY = "Flume Configuration";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExecuteFlumeSource() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExecuteFlumeSource(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The component type name for the source. For some sources, this is a short, symbolic name (e.g. spooldir). For others, it's the fully-qualified name of the Source class. See the Flume User Guide for details.
@@ -151,6 +159,21 @@ public final class ExecuteFlumeSource {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteFlumeSource.class) final Closure<ExecuteFlumeSource> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.flume.ExecuteFlumeSource> code = closure.rehydrate(c, com.tibtech.nifi.processors.flume.ExecuteFlumeSource.class, com.tibtech.nifi.processors.flume.ExecuteFlumeSource.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExecuteFlumeSource, ExecuteFlumeSource> configurator) {
+    return configurator.apply(new ExecuteFlumeSource(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteFlumeSource.class) final Closure<ExecuteFlumeSource> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.flume.ExecuteFlumeSource> code = closure.rehydrate(c, com.tibtech.nifi.processors.flume.ExecuteFlumeSource.class, com.tibtech.nifi.processors.flume.ExecuteFlumeSource.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -43,7 +43,15 @@ public final class FetchFile {
    */
   public static final String LOG_LEVEL_WHEN_PERMISSION_DENIED_PROPERTY = "Log level when permission denied";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public FetchFile() {
+    this.properties = new HashMap<>();
+  }
+
+  public FetchFile(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The fully-qualified filename of the file to fetch from the file system
@@ -207,6 +215,21 @@ public final class FetchFile {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchFile.class) final Closure<FetchFile> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.FetchFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.FetchFile.class, com.tibtech.nifi.processors.standard.FetchFile.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<FetchFile, FetchFile> configurator) {
+    return configurator.apply(new FetchFile(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchFile.class) final Closure<FetchFile> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.FetchFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.FetchFile.class, com.tibtech.nifi.processors.standard.FetchFile.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

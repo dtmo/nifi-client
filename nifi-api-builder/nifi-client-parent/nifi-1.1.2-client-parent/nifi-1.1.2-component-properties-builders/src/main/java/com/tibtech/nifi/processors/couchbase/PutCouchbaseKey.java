@@ -43,7 +43,15 @@ public final class PutCouchbaseKey {
    */
   public static final String REPLICATE_TO_PROPERTY = "Replicate To";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutCouchbaseKey() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutCouchbaseKey(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A Couchbase Cluster Controller Service which manages connections to a Couchbase cluster.
@@ -207,6 +215,21 @@ public final class PutCouchbaseKey {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutCouchbaseKey.class) final Closure<PutCouchbaseKey> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.couchbase.PutCouchbaseKey> code = closure.rehydrate(c, com.tibtech.nifi.processors.couchbase.PutCouchbaseKey.class, com.tibtech.nifi.processors.couchbase.PutCouchbaseKey.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutCouchbaseKey, PutCouchbaseKey> configurator) {
+    return configurator.apply(new PutCouchbaseKey(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutCouchbaseKey.class) final Closure<PutCouchbaseKey> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.couchbase.PutCouchbaseKey> code = closure.rehydrate(c, com.tibtech.nifi.processors.couchbase.PutCouchbaseKey.class, com.tibtech.nifi.processors.couchbase.PutCouchbaseKey.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

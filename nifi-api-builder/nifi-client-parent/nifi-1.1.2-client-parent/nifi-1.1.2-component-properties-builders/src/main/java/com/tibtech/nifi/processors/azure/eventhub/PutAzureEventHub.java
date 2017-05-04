@@ -33,7 +33,15 @@ public final class PutAzureEventHub {
    */
   public static final String SHARED_ACCESS_POLICY_PRIMARY_KEY_PROPERTY = "Shared Access Policy Primary Key";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutAzureEventHub() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutAzureEventHub(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the Azure Event Hub to send to
@@ -151,6 +159,21 @@ public final class PutAzureEventHub {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutAzureEventHub.class) final Closure<PutAzureEventHub> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.azure.eventhub.PutAzureEventHub> code = closure.rehydrate(c, com.tibtech.nifi.processors.azure.eventhub.PutAzureEventHub.class, com.tibtech.nifi.processors.azure.eventhub.PutAzureEventHub.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutAzureEventHub, PutAzureEventHub> configurator) {
+    return configurator.apply(new PutAzureEventHub(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutAzureEventHub.class) final Closure<PutAzureEventHub> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.azure.eventhub.PutAzureEventHub> code = closure.rehydrate(c, com.tibtech.nifi.processors.azure.eventhub.PutAzureEventHub.class, com.tibtech.nifi.processors.azure.eventhub.PutAzureEventHub.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -83,7 +83,15 @@ public final class PublishKafka_0_10 {
    */
   public static final String COMPRESSION_TYPE_PROPERTY = "compression.type";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PublishKafka_0_10() {
+    this.properties = new HashMap<>();
+  }
+
+  public PublishKafka_0_10(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A comma-separated list of known Kafka Brokers in the format <host>:<port>
@@ -431,6 +439,21 @@ public final class PublishKafka_0_10 {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PublishKafka_0_10.class) final Closure<PublishKafka_0_10> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.kafka.pubsub.PublishKafka_0_10> code = closure.rehydrate(c, com.tibtech.nifi.processors.kafka.pubsub.PublishKafka_0_10.class, com.tibtech.nifi.processors.kafka.pubsub.PublishKafka_0_10.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PublishKafka_0_10, PublishKafka_0_10> configurator) {
+    return configurator.apply(new PublishKafka_0_10(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PublishKafka_0_10.class) final Closure<PublishKafka_0_10> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.kafka.pubsub.PublishKafka_0_10> code = closure.rehydrate(c, com.tibtech.nifi.processors.kafka.pubsub.PublishKafka_0_10.class, com.tibtech.nifi.processors.kafka.pubsub.PublishKafka_0_10.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

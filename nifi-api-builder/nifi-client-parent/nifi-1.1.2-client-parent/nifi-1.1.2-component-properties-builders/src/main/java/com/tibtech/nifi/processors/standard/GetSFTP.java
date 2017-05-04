@@ -123,7 +123,15 @@ public final class GetSFTP {
    */
   public static final String USE_NATURAL_ORDERING_PROPERTY = "Use Natural Ordering";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetSFTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetSFTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The fully qualified hostname or IP address of the remote system
@@ -655,6 +663,21 @@ public final class GetSFTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetSFTP.class) final Closure<GetSFTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.GetSFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetSFTP.class, com.tibtech.nifi.processors.standard.GetSFTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetSFTP, GetSFTP> configurator) {
+    return configurator.apply(new GetSFTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetSFTP.class) final Closure<GetSFTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.GetSFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetSFTP.class, com.tibtech.nifi.processors.standard.GetSFTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

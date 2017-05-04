@@ -63,7 +63,15 @@ public final class PutSQS {
    */
   public static final String PROXY_HOST_PORT_PROPERTY = "Proxy Host Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutSQS() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutSQS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The URL of the queue to act upon
@@ -319,6 +327,21 @@ public final class PutSQS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSQS.class) final Closure<PutSQS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.sqs.PutSQS> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.sqs.PutSQS.class, com.tibtech.nifi.processors.aws.sqs.PutSQS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutSQS, PutSQS> configurator) {
+    return configurator.apply(new PutSQS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSQS.class) final Closure<PutSQS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.sqs.PutSQS> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.sqs.PutSQS.class, com.tibtech.nifi.processors.aws.sqs.PutSQS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

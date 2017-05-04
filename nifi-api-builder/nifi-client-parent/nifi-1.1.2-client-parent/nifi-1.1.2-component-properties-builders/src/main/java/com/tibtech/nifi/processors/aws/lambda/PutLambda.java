@@ -53,7 +53,15 @@ public final class PutLambda {
    */
   public static final String COMMUNICATIONS_TIMEOUT_PROPERTY = "Communications Timeout";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutLambda() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutLambda(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Lambda Function Name
@@ -263,6 +271,21 @@ public final class PutLambda {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutLambda.class) final Closure<PutLambda> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.lambda.PutLambda> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.lambda.PutLambda.class, com.tibtech.nifi.processors.aws.lambda.PutLambda.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutLambda, PutLambda> configurator) {
+    return configurator.apply(new PutLambda(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutLambda.class) final Closure<PutLambda> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.lambda.PutLambda> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.lambda.PutLambda.class, com.tibtech.nifi.processors.aws.lambda.PutLambda.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

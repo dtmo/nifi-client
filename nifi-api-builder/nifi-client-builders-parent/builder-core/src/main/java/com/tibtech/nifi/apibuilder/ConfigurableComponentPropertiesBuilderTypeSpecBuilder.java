@@ -24,6 +24,8 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 {
 	private static final String COMPONENT_TYPE_PROPERTY_NAME = "COMPONENT_TYPE";
 	private static final String PROPERTY_NAME_SUFFIX = "_PROPERTY";
+	private static final String BUILD_METHOD_NAME = "build";
+	private static final String UPDATE_METHOD_NAME = "update";
 
 	private final ClassName builderClassName;
 
@@ -54,6 +56,18 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 	public void addConfigurableComponentProperty(final ConfigurableComponentProperty configurableComponentProperty)
 	{
 		this.configurableComponentProperties.add(configurableComponentProperty);
+	}
+
+	protected void addConstructors(final TypeSpec.Builder typeSpecBuilder)
+	{
+		typeSpecBuilder.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC)
+				.addStatement("this.properties = new $T<>()", HashMap.class).build());
+
+		typeSpecBuilder
+				.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC)
+						.addParameter(ParameterizedTypeName.get(Map.class, String.class, String.class), "properties",
+								Modifier.FINAL)
+						.addStatement("this.properties = new $T<>(properties)", HashMap.class).build());
 	}
 
 	protected void addPropertyNameConstant(final TypeSpec.Builder typeSpecBuilder,
@@ -125,16 +139,23 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 	protected void addConfiguratorFactoryMethods(final TypeSpec.Builder typeSpecBuilder)
 	{
 		// Add a lambda based configurator factory method
-		typeSpecBuilder.addMethod(
-				MethodSpec.methodBuilder("build").addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-						.returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
-						.addParameter(ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(Function.class),
-								builderClassName, builderClassName), "configurator", Modifier.FINAL).build())
-						.addStatement("return configurator.apply(new $T()).build()", builderClassName).build());
+		typeSpecBuilder
+				.addMethod(
+						MethodSpec
+								.methodBuilder(BUILD_METHOD_NAME).addModifiers(Modifier.PUBLIC, Modifier.STATIC,
+										Modifier.FINAL)
+								.returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
+								.addParameter(
+										ParameterSpec.builder(
+												ParameterizedTypeName.get(ClassName.get(Function.class),
+														builderClassName, builderClassName),
+												"configurator", Modifier.FINAL).build())
+								.addStatement("return configurator.apply(new $T()).build()", builderClassName)
+								.build());
 
 		// Add a Closure based configurator factory method
 
-		typeSpecBuilder.addMethod(MethodSpec.methodBuilder("build")
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(BUILD_METHOD_NAME)
 				.addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
 				.returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
 				.addParameter(ParameterSpec
@@ -144,7 +165,42 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 								AnnotationSpec.builder(DelegatesTo.class).addMember("strategy", "Closure.DELEGATE_ONLY")
 										.addMember("value", "$T.class", builderClassName).build())
 						.build())
-				.beginControlFlow("return build(c ->")
+				.beginControlFlow("return $L(c ->", BUILD_METHOD_NAME)
+				.addStatement("final Closure<$L> code = closure.rehydrate(c, $L.class, $L.class)", builderClassName,
+						builderClassName, builderClassName)
+				.addStatement("code.setResolveStrategy(Closure.DELEGATE_ONLY)").addStatement("code.call()")
+				.addStatement("return c").endControlFlow(")").build());
+	}
+
+	protected void addConfiguratorUpdateMethods(final TypeSpec.Builder typeSpecBuilder)
+	{
+		// Add a lambda based configurator factory method
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(UPDATE_METHOD_NAME)
+				.addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+				.returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
+				.addParameter(ParameterSpec.builder(ParameterizedTypeName.get(Map.class, String.class, String.class),
+						"properties", Modifier.FINAL).build())
+				.addParameter(ParameterSpec.builder(
+						ParameterizedTypeName.get(ClassName.get(Function.class), builderClassName, builderClassName),
+						"configurator", Modifier.FINAL).build())
+				.addStatement("return configurator.apply(new $T(properties)).build()", builderClassName)
+				.build());
+
+		// Add a Closure based configurator factory method
+
+		typeSpecBuilder.addMethod(MethodSpec.methodBuilder(UPDATE_METHOD_NAME)
+				.addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+				.returns(ParameterizedTypeName.get(Map.class, String.class, String.class))
+				.addParameter(ParameterSpec.builder(ParameterizedTypeName.get(Map.class, String.class, String.class),
+						"properties", Modifier.FINAL).build())
+				.addParameter(ParameterSpec
+						.builder(ParameterizedTypeName.get(ClassName.get(Closure.class), builderClassName), "closure",
+								Modifier.FINAL)
+						.addAnnotation(
+								AnnotationSpec.builder(DelegatesTo.class).addMember("strategy", "Closure.DELEGATE_ONLY")
+										.addMember("value", "$T.class", builderClassName).build())
+						.build())
+				.beginControlFlow("return $L(properties, c ->", UPDATE_METHOD_NAME)
 				.addStatement("final Closure<$L> code = closure.rehydrate(c, $L.class, $L.class)", builderClassName,
 						builderClassName, builderClassName)
 				.addStatement("code.setResolveStrategy(Closure.DELEGATE_ONLY)").addStatement("code.call()")
@@ -169,10 +225,10 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 			addPropertyNameConstant(typeSpecBuilder, configurableComponentProperty);
 		}
 
-		typeSpecBuilder.addField(FieldSpec
-				.builder(ParameterizedTypeName.get(Map.class, String.class, String.class), "properties",
-						Modifier.PRIVATE, Modifier.FINAL)
-				.initializer("new $T()", ParameterizedTypeName.get(HashMap.class, String.class, String.class)).build());
+		typeSpecBuilder.addField(FieldSpec.builder(ParameterizedTypeName.get(Map.class, String.class, String.class),
+				"properties", Modifier.PRIVATE, Modifier.FINAL).build());
+
+		addConstructors(typeSpecBuilder);
 
 		for (final ConfigurableComponentProperty configurableComponentProperty : configurableComponentProperties)
 		{
@@ -187,6 +243,8 @@ public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 				.addStatement("return properties").build());
 
 		addConfiguratorFactoryMethods(typeSpecBuilder);
+		
+		addConfiguratorUpdateMethods(typeSpecBuilder);
 
 		return typeSpecBuilder.build();
 	}

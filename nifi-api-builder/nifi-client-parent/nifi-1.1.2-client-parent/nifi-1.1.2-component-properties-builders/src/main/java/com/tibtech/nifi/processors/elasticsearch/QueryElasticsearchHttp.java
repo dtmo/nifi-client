@@ -83,7 +83,15 @@ public final class QueryElasticsearchHttp {
    */
   public static final String QUERY_ES_TARGET_PROPERTY = "query-es-target";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public QueryElasticsearchHttp() {
+    this.properties = new HashMap<>();
+  }
+
+  public QueryElasticsearchHttp(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Elasticsearch URL which will be connected to, including scheme (http, e.g.), host, and port. The default port for the REST API is 9200.
@@ -431,6 +439,21 @@ public final class QueryElasticsearchHttp {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryElasticsearchHttp.class) final Closure<QueryElasticsearchHttp> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.elasticsearch.QueryElasticsearchHttp> code = closure.rehydrate(c, com.tibtech.nifi.processors.elasticsearch.QueryElasticsearchHttp.class, com.tibtech.nifi.processors.elasticsearch.QueryElasticsearchHttp.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<QueryElasticsearchHttp, QueryElasticsearchHttp> configurator) {
+    return configurator.apply(new QueryElasticsearchHttp(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryElasticsearchHttp.class) final Closure<QueryElasticsearchHttp> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.elasticsearch.QueryElasticsearchHttp> code = closure.rehydrate(c, com.tibtech.nifi.processors.elasticsearch.QueryElasticsearchHttp.class, com.tibtech.nifi.processors.elasticsearch.QueryElasticsearchHttp.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

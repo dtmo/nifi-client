@@ -33,7 +33,15 @@ public final class DistributedMapCacheClientService {
    */
   public static final String COMMUNICATIONS_TIMEOUT_PROPERTY = "Communications Timeout";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DistributedMapCacheClientService() {
+    this.properties = new HashMap<>();
+  }
+
+  public DistributedMapCacheClientService(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the server that is running the DistributedMapCacheServer service
@@ -152,6 +160,21 @@ public final class DistributedMapCacheClientService {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DistributedMapCacheClientService.class) final Closure<DistributedMapCacheClientService> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.distributed.cache.client.DistributedMapCacheClientService> code = closure.rehydrate(c, com.tibtech.nifi.distributed.cache.client.DistributedMapCacheClientService.class, com.tibtech.nifi.distributed.cache.client.DistributedMapCacheClientService.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DistributedMapCacheClientService, DistributedMapCacheClientService> configurator) {
+    return configurator.apply(new DistributedMapCacheClientService(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DistributedMapCacheClientService.class) final Closure<DistributedMapCacheClientService> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.distributed.cache.client.DistributedMapCacheClientService> code = closure.rehydrate(c, com.tibtech.nifi.distributed.cache.client.DistributedMapCacheClientService.class, com.tibtech.nifi.distributed.cache.client.DistributedMapCacheClientService.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

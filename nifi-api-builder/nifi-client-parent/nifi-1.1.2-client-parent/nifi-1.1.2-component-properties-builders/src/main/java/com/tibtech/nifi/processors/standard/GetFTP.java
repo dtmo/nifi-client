@@ -128,7 +128,15 @@ public final class GetFTP {
    */
   public static final String HTTP_PROXY_PASSWORD_PROPERTY = "Http Proxy Password";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetFTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetFTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The fully qualified hostname or IP address of the remote system
@@ -683,6 +691,21 @@ public final class GetFTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetFTP.class) final Closure<GetFTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.GetFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetFTP.class, com.tibtech.nifi.processors.standard.GetFTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetFTP, GetFTP> configurator) {
+    return configurator.apply(new GetFTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetFTP.class) final Closure<GetFTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.GetFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetFTP.class, com.tibtech.nifi.processors.standard.GetFTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

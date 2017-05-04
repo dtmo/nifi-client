@@ -13,7 +13,15 @@ public final class ExtractEmailAttachments {
    */
   public static final String COMPONENT_TYPE = "org.apache.nifi.processors.email.ExtractEmailAttachments";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExtractEmailAttachments() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExtractEmailAttachments(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   public final String getDynamicProperty(final String name) {
     return properties.get(name);
@@ -39,6 +47,21 @@ public final class ExtractEmailAttachments {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractEmailAttachments.class) final Closure<ExtractEmailAttachments> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.email.ExtractEmailAttachments> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ExtractEmailAttachments.class, com.tibtech.nifi.processors.email.ExtractEmailAttachments.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExtractEmailAttachments, ExtractEmailAttachments> configurator) {
+    return configurator.apply(new ExtractEmailAttachments(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractEmailAttachments.class) final Closure<ExtractEmailAttachments> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.email.ExtractEmailAttachments> code = closure.rehydrate(c, com.tibtech.nifi.processors.email.ExtractEmailAttachments.class, com.tibtech.nifi.processors.email.ExtractEmailAttachments.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

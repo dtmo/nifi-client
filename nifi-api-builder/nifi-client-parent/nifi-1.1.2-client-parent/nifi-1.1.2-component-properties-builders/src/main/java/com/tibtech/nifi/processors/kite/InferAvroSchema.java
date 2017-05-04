@@ -73,7 +73,15 @@ public final class InferAvroSchema {
    */
   public static final String CHARSET_PROPERTY = "Charset";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public InferAvroSchema() {
+    this.properties = new HashMap<>();
+  }
+
+  public InferAvroSchema(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Control if Avro schema is written as a new flowfile attribute 'inferred.avro.schema' or written in the flowfile content. Writing to flowfile content will overwrite any existing flowfile content.
@@ -375,6 +383,21 @@ public final class InferAvroSchema {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InferAvroSchema.class) final Closure<InferAvroSchema> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.kite.InferAvroSchema> code = closure.rehydrate(c, com.tibtech.nifi.processors.kite.InferAvroSchema.class, com.tibtech.nifi.processors.kite.InferAvroSchema.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<InferAvroSchema, InferAvroSchema> configurator) {
+    return configurator.apply(new InferAvroSchema(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InferAvroSchema.class) final Closure<InferAvroSchema> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.kite.InferAvroSchema> code = closure.rehydrate(c, com.tibtech.nifi.processors.kite.InferAvroSchema.class, com.tibtech.nifi.processors.kite.InferAvroSchema.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

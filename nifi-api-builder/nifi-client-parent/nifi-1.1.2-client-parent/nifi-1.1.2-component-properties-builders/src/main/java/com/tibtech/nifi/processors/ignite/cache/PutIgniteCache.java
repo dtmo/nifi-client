@@ -53,7 +53,15 @@ public final class PutIgniteCache {
    */
   public static final String DATA_STREAMER_ALLOW_OVERRIDE_PROPERTY = "data-streamer-allow-override";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutIgniteCache() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutIgniteCache(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Ignite spring configuration file, <path>/<ignite-configuration>.xml. If the configuration file is not provided, default Ignite configuration configuration is used which binds to 127.0.0.1:47500..47509
@@ -263,6 +271,21 @@ public final class PutIgniteCache {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutIgniteCache.class) final Closure<PutIgniteCache> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.ignite.cache.PutIgniteCache> code = closure.rehydrate(c, com.tibtech.nifi.processors.ignite.cache.PutIgniteCache.class, com.tibtech.nifi.processors.ignite.cache.PutIgniteCache.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutIgniteCache, PutIgniteCache> configurator) {
+    return configurator.apply(new PutIgniteCache(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutIgniteCache.class) final Closure<PutIgniteCache> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.ignite.cache.PutIgniteCache> code = closure.rehydrate(c, com.tibtech.nifi.processors.ignite.cache.PutIgniteCache.class, com.tibtech.nifi.processors.ignite.cache.PutIgniteCache.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -73,7 +73,15 @@ public final class SetSNMP {
    */
   public static final String SNMP_TIMEOUT_PROPERTY = "snmp-timeout";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public SetSNMP() {
+    this.properties = new HashMap<>();
+  }
+
+  public SetSNMP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Network address of SNMP Agent (e.g., localhost)
@@ -375,6 +383,21 @@ public final class SetSNMP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SetSNMP.class) final Closure<SetSNMP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.snmp.processors.SetSNMP> code = closure.rehydrate(c, com.tibtech.nifi.snmp.processors.SetSNMP.class, com.tibtech.nifi.snmp.processors.SetSNMP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<SetSNMP, SetSNMP> configurator) {
+    return configurator.apply(new SetSNMP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SetSNMP.class) final Closure<SetSNMP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.snmp.processors.SetSNMP> code = closure.rehydrate(c, com.tibtech.nifi.snmp.processors.SetSNMP.class, com.tibtech.nifi.snmp.processors.SetSNMP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

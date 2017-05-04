@@ -23,7 +23,15 @@ public final class DistributeLoad {
    */
   public static final String DISTRIBUTION_STRATEGY_PROPERTY = "Distribution Strategy";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DistributeLoad() {
+    this.properties = new HashMap<>();
+  }
+
+  public DistributeLoad(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Determines the number of Relationships to which the load should be distributed
@@ -95,6 +103,21 @@ public final class DistributeLoad {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DistributeLoad.class) final Closure<DistributeLoad> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.DistributeLoad> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.DistributeLoad.class, com.tibtech.nifi.processors.standard.DistributeLoad.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DistributeLoad, DistributeLoad> configurator) {
+    return configurator.apply(new DistributeLoad(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DistributeLoad.class) final Closure<DistributeLoad> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.DistributeLoad> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.DistributeLoad.class, com.tibtech.nifi.processors.standard.DistributeLoad.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

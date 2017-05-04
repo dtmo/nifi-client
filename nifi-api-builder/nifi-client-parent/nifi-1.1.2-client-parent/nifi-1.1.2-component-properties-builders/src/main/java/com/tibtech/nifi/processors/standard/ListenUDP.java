@@ -63,7 +63,15 @@ public final class ListenUDP {
    */
   public static final String SENDING_HOST_PORT_PROPERTY = "Sending Host Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ListenUDP() {
+    this.properties = new HashMap<>();
+  }
+
+  public ListenUDP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of a local network interface to be used to restrict listening to a specific LAN.
@@ -319,6 +327,21 @@ public final class ListenUDP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenUDP.class) final Closure<ListenUDP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ListenUDP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListenUDP.class, com.tibtech.nifi.processors.standard.ListenUDP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ListenUDP, ListenUDP> configurator) {
+    return configurator.apply(new ListenUDP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenUDP.class) final Closure<ListenUDP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ListenUDP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListenUDP.class, com.tibtech.nifi.processors.standard.ListenUDP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

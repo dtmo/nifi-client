@@ -33,7 +33,15 @@ public final class TransformXml {
    */
   public static final String CACHE_TTL_AFTER_LAST_ACCESS_PROPERTY = "cache-ttl-after-last-access";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public TransformXml() {
+    this.properties = new HashMap<>();
+  }
+
+  public TransformXml(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Provides the name (including full path) of the XSLT file to apply to the flowfile XML content.
@@ -151,6 +159,21 @@ public final class TransformXml {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = TransformXml.class) final Closure<TransformXml> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.TransformXml> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.TransformXml.class, com.tibtech.nifi.processors.standard.TransformXml.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<TransformXml, TransformXml> configurator) {
+    return configurator.apply(new TransformXml(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = TransformXml.class) final Closure<TransformXml> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.TransformXml> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.TransformXml.class, com.tibtech.nifi.processors.standard.TransformXml.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

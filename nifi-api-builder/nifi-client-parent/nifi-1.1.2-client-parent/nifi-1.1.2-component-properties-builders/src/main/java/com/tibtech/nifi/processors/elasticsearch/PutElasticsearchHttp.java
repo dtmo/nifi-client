@@ -73,7 +73,15 @@ public final class PutElasticsearchHttp {
    */
   public static final String PUT_ES_INDEX_OP_PROPERTY = "put-es-index-op";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutElasticsearchHttp() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutElasticsearchHttp(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Elasticsearch URL which will be connected to, including scheme (http, e.g.), host, and port. The default port for the REST API is 9200.
@@ -375,6 +383,21 @@ public final class PutElasticsearchHttp {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutElasticsearchHttp.class) final Closure<PutElasticsearchHttp> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.elasticsearch.PutElasticsearchHttp> code = closure.rehydrate(c, com.tibtech.nifi.processors.elasticsearch.PutElasticsearchHttp.class, com.tibtech.nifi.processors.elasticsearch.PutElasticsearchHttp.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutElasticsearchHttp, PutElasticsearchHttp> configurator) {
+    return configurator.apply(new PutElasticsearchHttp(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutElasticsearchHttp.class) final Closure<PutElasticsearchHttp> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.elasticsearch.PutElasticsearchHttp> code = closure.rehydrate(c, com.tibtech.nifi.processors.elasticsearch.PutElasticsearchHttp.class, com.tibtech.nifi.processors.elasticsearch.PutElasticsearchHttp.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

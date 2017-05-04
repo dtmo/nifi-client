@@ -48,7 +48,15 @@ public final class ConsumeJMS {
    */
   public static final String ACKNOWLEDGEMENT_MODE_PROPERTY = "Acknowledgement Mode";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConsumeJMS() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConsumeJMS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Controller Service that is used to obtain ConnectionFactory
@@ -235,6 +243,21 @@ public final class ConsumeJMS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeJMS.class) final Closure<ConsumeJMS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.jms.processors.ConsumeJMS> code = closure.rehydrate(c, com.tibtech.nifi.jms.processors.ConsumeJMS.class, com.tibtech.nifi.jms.processors.ConsumeJMS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConsumeJMS, ConsumeJMS> configurator) {
+    return configurator.apply(new ConsumeJMS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeJMS.class) final Closure<ConsumeJMS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.jms.processors.ConsumeJMS> code = closure.rehydrate(c, com.tibtech.nifi.jms.processors.ConsumeJMS.class, com.tibtech.nifi.jms.processors.ConsumeJMS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

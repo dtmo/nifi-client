@@ -58,7 +58,15 @@ public final class QueryDatabaseTable {
    */
   public static final String DBF_NORMALIZE_PROPERTY = "dbf-normalize";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public QueryDatabaseTable() {
+    this.properties = new HashMap<>();
+  }
+
+  public QueryDatabaseTable(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Controller Service that is used to obtain a connection to the database.
@@ -291,6 +299,21 @@ public final class QueryDatabaseTable {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryDatabaseTable.class) final Closure<QueryDatabaseTable> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.QueryDatabaseTable> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.QueryDatabaseTable.class, com.tibtech.nifi.processors.standard.QueryDatabaseTable.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<QueryDatabaseTable, QueryDatabaseTable> configurator) {
+    return configurator.apply(new QueryDatabaseTable(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryDatabaseTable.class) final Closure<QueryDatabaseTable> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.QueryDatabaseTable> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.QueryDatabaseTable.class, com.tibtech.nifi.processors.standard.QueryDatabaseTable.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

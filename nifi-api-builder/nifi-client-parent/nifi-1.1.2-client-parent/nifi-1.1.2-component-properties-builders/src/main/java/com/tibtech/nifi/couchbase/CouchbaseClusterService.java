@@ -18,7 +18,15 @@ public final class CouchbaseClusterService {
    */
   public static final String CONNECTION_STRING_PROPERTY = "Connection String";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public CouchbaseClusterService() {
+    this.properties = new HashMap<>();
+  }
+
+  public CouchbaseClusterService(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The hostnames or ip addresses of the bootstraping nodes and optional parameters. Syntax) couchbase://node1,node2,nodeN?param1=value1&param2=value2&paramN=valueN
@@ -67,6 +75,21 @@ public final class CouchbaseClusterService {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = CouchbaseClusterService.class) final Closure<CouchbaseClusterService> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.couchbase.CouchbaseClusterService> code = closure.rehydrate(c, com.tibtech.nifi.couchbase.CouchbaseClusterService.class, com.tibtech.nifi.couchbase.CouchbaseClusterService.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<CouchbaseClusterService, CouchbaseClusterService> configurator) {
+    return configurator.apply(new CouchbaseClusterService(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = CouchbaseClusterService.class) final Closure<CouchbaseClusterService> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.couchbase.CouchbaseClusterService> code = closure.rehydrate(c, com.tibtech.nifi.couchbase.CouchbaseClusterService.class, com.tibtech.nifi.couchbase.CouchbaseClusterService.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

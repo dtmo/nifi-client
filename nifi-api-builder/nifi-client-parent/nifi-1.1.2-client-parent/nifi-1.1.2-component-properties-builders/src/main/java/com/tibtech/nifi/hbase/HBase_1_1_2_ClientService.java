@@ -53,7 +53,15 @@ public final class HBase_1_1_2_ClientService {
    */
   public static final String PHOENIX_CLIENT_JAR_LOCATION_PROPERTY = "Phoenix Client JAR Location";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public HBase_1_1_2_ClientService() {
+    this.properties = new HashMap<>();
+  }
+
+  public HBase_1_1_2_ClientService(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Comma-separated list of Hadoop Configuration files, such as hbase-site.xml and core-site.xml for kerberos, including full paths to the files.
@@ -263,6 +271,21 @@ public final class HBase_1_1_2_ClientService {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HBase_1_1_2_ClientService.class) final Closure<HBase_1_1_2_ClientService> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.hbase.HBase_1_1_2_ClientService> code = closure.rehydrate(c, com.tibtech.nifi.hbase.HBase_1_1_2_ClientService.class, com.tibtech.nifi.hbase.HBase_1_1_2_ClientService.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<HBase_1_1_2_ClientService, HBase_1_1_2_ClientService> configurator) {
+    return configurator.apply(new HBase_1_1_2_ClientService(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HBase_1_1_2_ClientService.class) final Closure<HBase_1_1_2_ClientService> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.hbase.HBase_1_1_2_ClientService> code = closure.rehydrate(c, com.tibtech.nifi.hbase.HBase_1_1_2_ClientService.class, com.tibtech.nifi.hbase.HBase_1_1_2_ClientService.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

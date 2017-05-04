@@ -68,7 +68,15 @@ public final class ConsumeKafka {
    */
   public static final String MAX_UNCOMMIT_OFFSET_WAIT_PROPERTY = "max-uncommit-offset-wait";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConsumeKafka() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConsumeKafka(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A comma-separated list of known Kafka Brokers in the format <host>:<port>
@@ -347,6 +355,21 @@ public final class ConsumeKafka {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeKafka.class) final Closure<ConsumeKafka> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.kafka.pubsub.ConsumeKafka> code = closure.rehydrate(c, com.tibtech.nifi.processors.kafka.pubsub.ConsumeKafka.class, com.tibtech.nifi.processors.kafka.pubsub.ConsumeKafka.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConsumeKafka, ConsumeKafka> configurator) {
+    return configurator.apply(new ConsumeKafka(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeKafka.class) final Closure<ConsumeKafka> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.kafka.pubsub.ConsumeKafka> code = closure.rehydrate(c, com.tibtech.nifi.processors.kafka.pubsub.ConsumeKafka.class, com.tibtech.nifi.processors.kafka.pubsub.ConsumeKafka.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

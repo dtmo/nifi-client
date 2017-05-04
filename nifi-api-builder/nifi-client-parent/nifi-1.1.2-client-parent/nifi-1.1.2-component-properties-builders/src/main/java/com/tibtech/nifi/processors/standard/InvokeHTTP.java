@@ -133,7 +133,15 @@ public final class InvokeHTTP {
    */
   public static final String PENALIZE_ON_NO_RETRY_PROPERTY = "Penalize on \"No Retry\"";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public InvokeHTTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public InvokeHTTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * HTTP request method (GET, POST, PUT, DELETE, HEAD, OPTIONS). Arbitrary methods are also supported. Methods other than POST and PUT will be sent without a message body.
@@ -711,6 +719,21 @@ public final class InvokeHTTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InvokeHTTP.class) final Closure<InvokeHTTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.InvokeHTTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.InvokeHTTP.class, com.tibtech.nifi.processors.standard.InvokeHTTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<InvokeHTTP, InvokeHTTP> configurator) {
+    return configurator.apply(new InvokeHTTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InvokeHTTP.class) final Closure<InvokeHTTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.InvokeHTTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.InvokeHTTP.class, com.tibtech.nifi.processors.standard.InvokeHTTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

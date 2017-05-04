@@ -28,7 +28,15 @@ public final class ConvertAvroToJSON {
    */
   public static final String AVRO_SCHEMA_PROPERTY = "Avro schema";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConvertAvroToJSON() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConvertAvroToJSON(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Determines how stream of records is exposed: either as a sequence of single Objects (none) (i.e. writing every Object to a new line), or as an array of Objects (array).
@@ -123,6 +131,21 @@ public final class ConvertAvroToJSON {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertAvroToJSON.class) final Closure<ConvertAvroToJSON> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.avro.ConvertAvroToJSON> code = closure.rehydrate(c, com.tibtech.nifi.processors.avro.ConvertAvroToJSON.class, com.tibtech.nifi.processors.avro.ConvertAvroToJSON.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConvertAvroToJSON, ConvertAvroToJSON> configurator) {
+    return configurator.apply(new ConvertAvroToJSON(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertAvroToJSON.class) final Closure<ConvertAvroToJSON> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.avro.ConvertAvroToJSON> code = closure.rehydrate(c, com.tibtech.nifi.processors.avro.ConvertAvroToJSON.class, com.tibtech.nifi.processors.avro.ConvertAvroToJSON.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

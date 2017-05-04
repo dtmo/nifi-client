@@ -33,7 +33,15 @@ public final class SplitContent {
    */
   public static final String BYTE_SEQUENCE_LOCATION_PROPERTY = "Byte Sequence Location";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public SplitContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public SplitContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies how the <Byte Sequence> property should be interpreted
@@ -151,6 +159,21 @@ public final class SplitContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SplitContent.class) final Closure<SplitContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.SplitContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SplitContent.class, com.tibtech.nifi.processors.standard.SplitContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<SplitContent, SplitContent> configurator) {
+    return configurator.apply(new SplitContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SplitContent.class) final Closure<SplitContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.SplitContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SplitContent.class, com.tibtech.nifi.processors.standard.SplitContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -28,7 +28,15 @@ public final class ModifyBytes {
    */
   public static final String REMOVE_ALL_CONTENT_PROPERTY = "Remove All Content";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ModifyBytes() {
+    this.properties = new HashMap<>();
+  }
+
+  public ModifyBytes(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Number of bytes removed at the beginning of the file.
@@ -123,6 +131,21 @@ public final class ModifyBytes {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ModifyBytes.class) final Closure<ModifyBytes> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ModifyBytes> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ModifyBytes.class, com.tibtech.nifi.processors.standard.ModifyBytes.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ModifyBytes, ModifyBytes> configurator) {
+    return configurator.apply(new ModifyBytes(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ModifyBytes.class) final Closure<ModifyBytes> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ModifyBytes> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ModifyBytes.class, com.tibtech.nifi.processors.standard.ModifyBytes.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

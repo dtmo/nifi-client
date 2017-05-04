@@ -93,7 +93,15 @@ public final class ConsumeMQTT {
    */
   public static final String MAX_QUEUE_SIZE_PROPERTY = "Max Queue Size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConsumeMQTT() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConsumeMQTT(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The URI to use to connect to the MQTT broker (e.g. tcp://localhost:1883). The 'tcp' and 'ssl' schemes are supported. In order to use 'ssl', the SSL Context Service property must be set.
@@ -487,6 +495,21 @@ public final class ConsumeMQTT {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeMQTT.class) final Closure<ConsumeMQTT> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.mqtt.ConsumeMQTT> code = closure.rehydrate(c, com.tibtech.nifi.processors.mqtt.ConsumeMQTT.class, com.tibtech.nifi.processors.mqtt.ConsumeMQTT.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConsumeMQTT, ConsumeMQTT> configurator) {
+    return configurator.apply(new ConsumeMQTT(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConsumeMQTT.class) final Closure<ConsumeMQTT> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.mqtt.ConsumeMQTT> code = closure.rehydrate(c, com.tibtech.nifi.processors.mqtt.ConsumeMQTT.class, com.tibtech.nifi.processors.mqtt.ConsumeMQTT.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -38,7 +38,15 @@ public final class LogAttribute {
    */
   public static final String LOG_PREFIX_PROPERTY = "Log prefix";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public LogAttribute() {
+    this.properties = new HashMap<>();
+  }
+
+  public LogAttribute(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Log Level to use when logging the Attributes
@@ -179,6 +187,21 @@ public final class LogAttribute {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = LogAttribute.class) final Closure<LogAttribute> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.LogAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.LogAttribute.class, com.tibtech.nifi.processors.standard.LogAttribute.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<LogAttribute, LogAttribute> configurator) {
+    return configurator.apply(new LogAttribute(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = LogAttribute.class) final Closure<LogAttribute> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.LogAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.LogAttribute.class, com.tibtech.nifi.processors.standard.LogAttribute.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

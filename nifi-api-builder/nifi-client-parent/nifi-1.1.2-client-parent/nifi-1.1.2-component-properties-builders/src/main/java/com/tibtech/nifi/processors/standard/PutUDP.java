@@ -33,7 +33,15 @@ public final class PutUDP {
    */
   public static final String IDLE_CONNECTION_EXPIRATION_PROPERTY = "Idle Connection Expiration";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutUDP() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutUDP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The ip address or hostname of the destination.
@@ -151,6 +159,21 @@ public final class PutUDP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutUDP.class) final Closure<PutUDP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PutUDP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutUDP.class, com.tibtech.nifi.processors.standard.PutUDP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutUDP, PutUDP> configurator) {
+    return configurator.apply(new PutUDP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutUDP.class) final Closure<PutUDP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PutUDP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutUDP.class, com.tibtech.nifi.processors.standard.PutUDP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -98,7 +98,15 @@ public final class PutEmail {
    */
   public static final String INCLUDE_ALL_ATTRIBUTES_IN_MESSAGE_PROPERTY = "Include All Attributes In Message";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutEmail() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutEmail(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The hostname of the SMTP host
@@ -515,6 +523,21 @@ public final class PutEmail {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutEmail.class) final Closure<PutEmail> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PutEmail> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutEmail.class, com.tibtech.nifi.processors.standard.PutEmail.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutEmail, PutEmail> configurator) {
+    return configurator.apply(new PutEmail(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutEmail.class) final Closure<PutEmail> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PutEmail> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutEmail.class, com.tibtech.nifi.processors.standard.PutEmail.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

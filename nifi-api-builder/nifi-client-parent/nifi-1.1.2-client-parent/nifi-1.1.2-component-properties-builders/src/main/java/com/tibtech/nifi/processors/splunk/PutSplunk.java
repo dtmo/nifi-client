@@ -58,7 +58,15 @@ public final class PutSplunk {
    */
   public static final String SSL_CONTEXT_SERVICE_PROPERTY = "SSL Context Service";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutSplunk() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutSplunk(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The ip address or hostname of the destination.
@@ -291,6 +299,21 @@ public final class PutSplunk {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSplunk.class) final Closure<PutSplunk> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.splunk.PutSplunk> code = closure.rehydrate(c, com.tibtech.nifi.processors.splunk.PutSplunk.class, com.tibtech.nifi.processors.splunk.PutSplunk.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutSplunk, PutSplunk> configurator) {
+    return configurator.apply(new PutSplunk(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSplunk.class) final Closure<PutSplunk> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.splunk.PutSplunk> code = closure.rehydrate(c, com.tibtech.nifi.processors.splunk.PutSplunk.class, com.tibtech.nifi.processors.splunk.PutSplunk.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

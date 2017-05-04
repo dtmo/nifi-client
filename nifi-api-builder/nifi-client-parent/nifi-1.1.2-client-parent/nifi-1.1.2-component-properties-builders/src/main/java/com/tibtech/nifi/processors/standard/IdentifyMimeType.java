@@ -13,7 +13,15 @@ public final class IdentifyMimeType {
    */
   public static final String COMPONENT_TYPE = "org.apache.nifi.processors.standard.IdentifyMimeType";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public IdentifyMimeType() {
+    this.properties = new HashMap<>();
+  }
+
+  public IdentifyMimeType(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   public final String getDynamicProperty(final String name) {
     return properties.get(name);
@@ -39,6 +47,21 @@ public final class IdentifyMimeType {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = IdentifyMimeType.class) final Closure<IdentifyMimeType> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.IdentifyMimeType> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.IdentifyMimeType.class, com.tibtech.nifi.processors.standard.IdentifyMimeType.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<IdentifyMimeType, IdentifyMimeType> configurator) {
+    return configurator.apply(new IdentifyMimeType(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = IdentifyMimeType.class) final Closure<IdentifyMimeType> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.IdentifyMimeType> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.IdentifyMimeType.class, com.tibtech.nifi.processors.standard.IdentifyMimeType.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

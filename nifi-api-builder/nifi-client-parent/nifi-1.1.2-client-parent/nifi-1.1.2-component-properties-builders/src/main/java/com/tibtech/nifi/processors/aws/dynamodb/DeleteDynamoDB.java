@@ -88,7 +88,15 @@ public final class DeleteDynamoDB {
    */
   public static final String SSL_CONTEXT_SERVICE_PROPERTY = "SSL Context Service";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DeleteDynamoDB() {
+    this.properties = new HashMap<>();
+  }
+
+  public DeleteDynamoDB(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The DynamoDB table name
@@ -459,6 +467,21 @@ public final class DeleteDynamoDB {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DeleteDynamoDB.class) final Closure<DeleteDynamoDB> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.dynamodb.DeleteDynamoDB> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.dynamodb.DeleteDynamoDB.class, com.tibtech.nifi.processors.aws.dynamodb.DeleteDynamoDB.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DeleteDynamoDB, DeleteDynamoDB> configurator) {
+    return configurator.apply(new DeleteDynamoDB(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DeleteDynamoDB.class) final Closure<DeleteDynamoDB> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.dynamodb.DeleteDynamoDB> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.dynamodb.DeleteDynamoDB.class, com.tibtech.nifi.processors.aws.dynamodb.DeleteDynamoDB.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

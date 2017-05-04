@@ -33,7 +33,15 @@ public final class AttributesToJSON {
    */
   public static final String NULL_VALUE_PROPERTY = "Null Value";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public AttributesToJSON() {
+    this.properties = new HashMap<>();
+  }
+
+  public AttributesToJSON(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Comma separated list of attributes to be included in the resulting JSON. If this value is left empty then all existing Attributes will be included. This list of attributes is case sensitive. If an attribute specified in the list is not found it will be be emitted to the resulting JSON with an empty string or NULL value.
@@ -151,6 +159,21 @@ public final class AttributesToJSON {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = AttributesToJSON.class) final Closure<AttributesToJSON> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.AttributesToJSON> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.AttributesToJSON.class, com.tibtech.nifi.processors.standard.AttributesToJSON.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<AttributesToJSON, AttributesToJSON> configurator) {
+    return configurator.apply(new AttributesToJSON(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = AttributesToJSON.class) final Closure<AttributesToJSON> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.AttributesToJSON> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.AttributesToJSON.class, com.tibtech.nifi.processors.standard.AttributesToJSON.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

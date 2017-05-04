@@ -28,7 +28,15 @@ public final class StandardGangliaReporter {
    */
   public static final String SEND_JVM_METRICS_PROPERTY = "Send JVM Metrics";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public StandardGangliaReporter() {
+    this.properties = new HashMap<>();
+  }
+
+  public StandardGangliaReporter(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The fully-qualified name of the host on which Ganglia is running
@@ -123,6 +131,21 @@ public final class StandardGangliaReporter {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StandardGangliaReporter.class) final Closure<StandardGangliaReporter> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.reporting.ganglia.StandardGangliaReporter> code = closure.rehydrate(c, com.tibtech.nifi.reporting.ganglia.StandardGangliaReporter.class, com.tibtech.nifi.reporting.ganglia.StandardGangliaReporter.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<StandardGangliaReporter, StandardGangliaReporter> configurator) {
+    return configurator.apply(new StandardGangliaReporter(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StandardGangliaReporter.class) final Closure<StandardGangliaReporter> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.reporting.ganglia.StandardGangliaReporter> code = closure.rehydrate(c, com.tibtech.nifi.reporting.ganglia.StandardGangliaReporter.class, com.tibtech.nifi.reporting.ganglia.StandardGangliaReporter.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -68,7 +68,15 @@ public final class ListenTCP {
    */
   public static final String CLIENT_AUTH_PROPERTY = "Client Auth";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ListenTCP() {
+    this.properties = new HashMap<>();
+  }
+
+  public ListenTCP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of a local network interface to be used to restrict listening to a specific LAN.
@@ -347,6 +355,21 @@ public final class ListenTCP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenTCP.class) final Closure<ListenTCP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ListenTCP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListenTCP.class, com.tibtech.nifi.processors.standard.ListenTCP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ListenTCP, ListenTCP> configurator) {
+    return configurator.apply(new ListenTCP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenTCP.class) final Closure<ListenTCP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ListenTCP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListenTCP.class, com.tibtech.nifi.processors.standard.ListenTCP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

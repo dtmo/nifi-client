@@ -18,7 +18,15 @@ public final class ValidateXml {
    */
   public static final String SCHEMA_FILE_PROPERTY = "Schema File";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ValidateXml() {
+    this.properties = new HashMap<>();
+  }
+
+  public ValidateXml(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The path to the Schema file that is to be used for validation
@@ -67,6 +75,21 @@ public final class ValidateXml {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ValidateXml.class) final Closure<ValidateXml> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ValidateXml> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ValidateXml.class, com.tibtech.nifi.processors.standard.ValidateXml.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ValidateXml, ValidateXml> configurator) {
+    return configurator.apply(new ValidateXml(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ValidateXml.class) final Closure<ValidateXml> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ValidateXml> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ValidateXml.class, com.tibtech.nifi.processors.standard.ValidateXml.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

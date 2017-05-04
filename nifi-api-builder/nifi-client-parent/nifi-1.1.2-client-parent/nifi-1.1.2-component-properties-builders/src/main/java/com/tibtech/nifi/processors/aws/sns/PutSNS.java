@@ -78,7 +78,15 @@ public final class PutSNS {
    */
   public static final String PROXY_HOST_PORT_PROPERTY = "Proxy Host Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutSNS() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutSNS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the resource to which notifications should be published
@@ -403,6 +411,21 @@ public final class PutSNS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSNS.class) final Closure<PutSNS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.sns.PutSNS> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.sns.PutSNS.class, com.tibtech.nifi.processors.aws.sns.PutSNS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutSNS, PutSNS> configurator) {
+    return configurator.apply(new PutSNS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSNS.class) final Closure<PutSNS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.sns.PutSNS> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.sns.PutSNS.class, com.tibtech.nifi.processors.aws.sns.PutSNS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

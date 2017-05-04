@@ -33,7 +33,15 @@ public final class JMSConnectionFactoryProvider {
    */
   public static final String SSL_CONTEXT_SERVICE_PROPERTY = "SSL Context Service";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public JMSConnectionFactoryProvider() {
+    this.properties = new HashMap<>();
+  }
+
+  public JMSConnectionFactoryProvider(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A fully qualified name of the JMS ConnectionFactory implementation class (i.e., org.apache.activemq.ActiveMQConnectionFactory)
@@ -152,6 +160,21 @@ public final class JMSConnectionFactoryProvider {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JMSConnectionFactoryProvider.class) final Closure<JMSConnectionFactoryProvider> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.jms.cf.JMSConnectionFactoryProvider> code = closure.rehydrate(c, com.tibtech.nifi.jms.cf.JMSConnectionFactoryProvider.class, com.tibtech.nifi.jms.cf.JMSConnectionFactoryProvider.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<JMSConnectionFactoryProvider, JMSConnectionFactoryProvider> configurator) {
+    return configurator.apply(new JMSConnectionFactoryProvider(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JMSConnectionFactoryProvider.class) final Closure<JMSConnectionFactoryProvider> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.jms.cf.JMSConnectionFactoryProvider> code = closure.rehydrate(c, com.tibtech.nifi.jms.cf.JMSConnectionFactoryProvider.class, com.tibtech.nifi.jms.cf.JMSConnectionFactoryProvider.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

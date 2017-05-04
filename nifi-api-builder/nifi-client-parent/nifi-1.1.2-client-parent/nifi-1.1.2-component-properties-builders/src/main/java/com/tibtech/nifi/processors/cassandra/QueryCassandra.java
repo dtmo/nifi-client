@@ -73,7 +73,15 @@ public final class QueryCassandra {
    */
   public static final String OUTPUT_FORMAT_PROPERTY = "Output Format";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public QueryCassandra() {
+    this.properties = new HashMap<>();
+  }
+
+  public QueryCassandra(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Contact points are addresses of Cassandra nodes. The list of contact points should be comma-separated and in hostname:port format. Example node1:port,node2:port,.... The default client port for Cassandra is 9042, but the port(s) must be explicitly specified.
@@ -375,6 +383,21 @@ public final class QueryCassandra {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryCassandra.class) final Closure<QueryCassandra> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.cassandra.QueryCassandra> code = closure.rehydrate(c, com.tibtech.nifi.processors.cassandra.QueryCassandra.class, com.tibtech.nifi.processors.cassandra.QueryCassandra.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<QueryCassandra, QueryCassandra> configurator) {
+    return configurator.apply(new QueryCassandra(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryCassandra.class) final Closure<QueryCassandra> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.cassandra.QueryCassandra> code = closure.rehydrate(c, com.tibtech.nifi.processors.cassandra.QueryCassandra.class, com.tibtech.nifi.processors.cassandra.QueryCassandra.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

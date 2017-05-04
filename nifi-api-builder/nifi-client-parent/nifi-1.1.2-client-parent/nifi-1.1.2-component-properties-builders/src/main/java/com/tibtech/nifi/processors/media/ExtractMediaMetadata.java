@@ -33,7 +33,15 @@ public final class ExtractMediaMetadata {
    */
   public static final String METADATA_KEY_PREFIX_PROPERTY = "Metadata Key Prefix";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExtractMediaMetadata() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExtractMediaMetadata(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specify the max number of attributes to add to the flowfile. There is no guarantee in what order the tags will be processed. By default it will process all of them.
@@ -151,6 +159,21 @@ public final class ExtractMediaMetadata {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractMediaMetadata.class) final Closure<ExtractMediaMetadata> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.media.ExtractMediaMetadata> code = closure.rehydrate(c, com.tibtech.nifi.processors.media.ExtractMediaMetadata.class, com.tibtech.nifi.processors.media.ExtractMediaMetadata.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExtractMediaMetadata, ExtractMediaMetadata> configurator) {
+    return configurator.apply(new ExtractMediaMetadata(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractMediaMetadata.class) final Closure<ExtractMediaMetadata> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.media.ExtractMediaMetadata> code = closure.rehydrate(c, com.tibtech.nifi.processors.media.ExtractMediaMetadata.class, com.tibtech.nifi.processors.media.ExtractMediaMetadata.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

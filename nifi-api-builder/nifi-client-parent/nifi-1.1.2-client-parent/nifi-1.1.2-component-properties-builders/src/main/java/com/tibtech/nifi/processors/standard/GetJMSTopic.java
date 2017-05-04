@@ -78,7 +78,15 @@ public final class GetJMSTopic {
    */
   public static final String USE_DURABLE_SUBSCRIPTION_PROPERTY = "Use Durable Subscription";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetJMSTopic() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetJMSTopic(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Provider used for the JMS Server
@@ -403,6 +411,21 @@ public final class GetJMSTopic {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetJMSTopic.class) final Closure<GetJMSTopic> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.GetJMSTopic> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetJMSTopic.class, com.tibtech.nifi.processors.standard.GetJMSTopic.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetJMSTopic, GetJMSTopic> configurator) {
+    return configurator.apply(new GetJMSTopic(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetJMSTopic.class) final Closure<GetJMSTopic> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.GetJMSTopic> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetJMSTopic.class, com.tibtech.nifi.processors.standard.GetJMSTopic.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

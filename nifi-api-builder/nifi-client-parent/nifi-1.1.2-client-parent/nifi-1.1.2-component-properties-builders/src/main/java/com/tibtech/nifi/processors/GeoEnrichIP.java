@@ -23,7 +23,15 @@ public final class GeoEnrichIP {
    */
   public static final String IP_ADDRESS_ATTRIBUTE_PROPERTY = "IP Address Attribute";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GeoEnrichIP() {
+    this.properties = new HashMap<>();
+  }
+
+  public GeoEnrichIP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Path to Maxmind Geo Enrichment Database File
@@ -95,6 +103,21 @@ public final class GeoEnrichIP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GeoEnrichIP.class) final Closure<GeoEnrichIP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.GeoEnrichIP> code = closure.rehydrate(c, com.tibtech.nifi.processors.GeoEnrichIP.class, com.tibtech.nifi.processors.GeoEnrichIP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GeoEnrichIP, GeoEnrichIP> configurator) {
+    return configurator.apply(new GeoEnrichIP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GeoEnrichIP.class) final Closure<GeoEnrichIP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.GeoEnrichIP> code = closure.rehydrate(c, com.tibtech.nifi.processors.GeoEnrichIP.class, com.tibtech.nifi.processors.GeoEnrichIP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

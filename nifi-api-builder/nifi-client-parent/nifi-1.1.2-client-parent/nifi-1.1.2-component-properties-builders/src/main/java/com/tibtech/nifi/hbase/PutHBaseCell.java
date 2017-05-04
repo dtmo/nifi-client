@@ -48,7 +48,15 @@ public final class PutHBaseCell {
    */
   public static final String BATCH_SIZE_PROPERTY = "Batch Size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutHBaseCell() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutHBaseCell(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies the Controller Service to use for accessing HBase.
@@ -235,6 +243,21 @@ public final class PutHBaseCell {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHBaseCell.class) final Closure<PutHBaseCell> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.hbase.PutHBaseCell> code = closure.rehydrate(c, com.tibtech.nifi.hbase.PutHBaseCell.class, com.tibtech.nifi.hbase.PutHBaseCell.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutHBaseCell, PutHBaseCell> configurator) {
+    return configurator.apply(new PutHBaseCell(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHBaseCell.class) final Closure<PutHBaseCell> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.hbase.PutHBaseCell> code = closure.rehydrate(c, com.tibtech.nifi.hbase.PutHBaseCell.class, com.tibtech.nifi.hbase.PutHBaseCell.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

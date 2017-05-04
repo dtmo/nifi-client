@@ -98,7 +98,15 @@ public final class GetHDFS {
    */
   public static final String COMPRESSION_CODEC_PROPERTY = "Compression codec";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetHDFS() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetHDFS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A file or comma separated list of files which contains the Hadoop file system configuration. Without this, Hadoop will search the classpath for a 'core-site.xml' and 'hdfs-site.xml' file or will revert to a default configuration.
@@ -515,6 +523,21 @@ public final class GetHDFS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetHDFS.class) final Closure<GetHDFS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hadoop.GetHDFS> code = closure.rehydrate(c, com.tibtech.nifi.processors.hadoop.GetHDFS.class, com.tibtech.nifi.processors.hadoop.GetHDFS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetHDFS, GetHDFS> configurator) {
+    return configurator.apply(new GetHDFS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetHDFS.class) final Closure<GetHDFS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hadoop.GetHDFS> code = closure.rehydrate(c, com.tibtech.nifi.processors.hadoop.GetHDFS.class, com.tibtech.nifi.processors.hadoop.GetHDFS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

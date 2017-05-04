@@ -53,7 +53,15 @@ public final class PutFile {
    */
   public static final String GROUP_PROPERTY = "Group";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutFile() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutFile(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The directory to which files should be written. You may use expression language such as /aa/bb/${path}
@@ -263,6 +271,21 @@ public final class PutFile {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutFile.class) final Closure<PutFile> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PutFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutFile.class, com.tibtech.nifi.processors.standard.PutFile.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutFile, PutFile> configurator) {
+    return configurator.apply(new PutFile(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutFile.class) final Closure<PutFile> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PutFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutFile.class, com.tibtech.nifi.processors.standard.PutFile.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

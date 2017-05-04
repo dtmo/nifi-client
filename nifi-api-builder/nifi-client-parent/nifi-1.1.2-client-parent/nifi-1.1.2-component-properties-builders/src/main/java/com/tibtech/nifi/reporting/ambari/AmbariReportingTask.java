@@ -28,7 +28,15 @@ public final class AmbariReportingTask {
    */
   public static final String HOSTNAME_PROPERTY = "Hostname";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public AmbariReportingTask() {
+    this.properties = new HashMap<>();
+  }
+
+  public AmbariReportingTask(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The URL of the Ambari Metrics Collector Service
@@ -123,6 +131,21 @@ public final class AmbariReportingTask {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = AmbariReportingTask.class) final Closure<AmbariReportingTask> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.reporting.ambari.AmbariReportingTask> code = closure.rehydrate(c, com.tibtech.nifi.reporting.ambari.AmbariReportingTask.class, com.tibtech.nifi.reporting.ambari.AmbariReportingTask.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<AmbariReportingTask, AmbariReportingTask> configurator) {
+    return configurator.apply(new AmbariReportingTask(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = AmbariReportingTask.class) final Closure<AmbariReportingTask> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.reporting.ambari.AmbariReportingTask> code = closure.rehydrate(c, com.tibtech.nifi.reporting.ambari.AmbariReportingTask.class, com.tibtech.nifi.reporting.ambari.AmbariReportingTask.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

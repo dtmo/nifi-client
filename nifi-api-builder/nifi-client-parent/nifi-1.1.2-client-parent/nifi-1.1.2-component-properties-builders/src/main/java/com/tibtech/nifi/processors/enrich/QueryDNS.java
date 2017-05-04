@@ -49,7 +49,15 @@ public final class QueryDNS {
    */
   public static final String DNS_QUERY_TYPE_PROPERTY = "DNS_QUERY_TYPE";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public QueryDNS() {
+    this.properties = new HashMap<>();
+  }
+
+  public QueryDNS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The value that should be used to populate the query
@@ -239,6 +247,21 @@ public final class QueryDNS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryDNS.class) final Closure<QueryDNS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.enrich.QueryDNS> code = closure.rehydrate(c, com.tibtech.nifi.processors.enrich.QueryDNS.class, com.tibtech.nifi.processors.enrich.QueryDNS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<QueryDNS, QueryDNS> configurator) {
+    return configurator.apply(new QueryDNS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryDNS.class) final Closure<QueryDNS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.enrich.QueryDNS> code = closure.rehydrate(c, com.tibtech.nifi.processors.enrich.QueryDNS.class, com.tibtech.nifi.processors.enrich.QueryDNS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

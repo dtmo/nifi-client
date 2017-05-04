@@ -28,7 +28,15 @@ public final class ExtractAvroMetadata {
    */
   public static final String COUNT_ITEMS_PROPERTY = "Count Items";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExtractAvroMetadata() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExtractAvroMetadata(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The algorithm used to generate the schema fingerprint. Available choices are based on the Avro recommended practices for fingerprint generation.
@@ -123,6 +131,21 @@ public final class ExtractAvroMetadata {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractAvroMetadata.class) final Closure<ExtractAvroMetadata> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.avro.ExtractAvroMetadata> code = closure.rehydrate(c, com.tibtech.nifi.processors.avro.ExtractAvroMetadata.class, com.tibtech.nifi.processors.avro.ExtractAvroMetadata.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExtractAvroMetadata, ExtractAvroMetadata> configurator) {
+    return configurator.apply(new ExtractAvroMetadata(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExtractAvroMetadata.class) final Closure<ExtractAvroMetadata> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.avro.ExtractAvroMetadata> code = closure.rehydrate(c, com.tibtech.nifi.processors.avro.ExtractAvroMetadata.class, com.tibtech.nifi.processors.avro.ExtractAvroMetadata.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -23,7 +23,15 @@ public final class ConnectWebSocket {
    */
   public static final String WEBSOCKET_CLIENT_ID_PROPERTY = "websocket-client-id";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConnectWebSocket() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConnectWebSocket(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A WebSocket CLIENT Controller Service which can connect to a WebSocket server.
@@ -95,6 +103,21 @@ public final class ConnectWebSocket {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectWebSocket.class) final Closure<ConnectWebSocket> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.websocket.ConnectWebSocket> code = closure.rehydrate(c, com.tibtech.nifi.processors.websocket.ConnectWebSocket.class, com.tibtech.nifi.processors.websocket.ConnectWebSocket.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConnectWebSocket, ConnectWebSocket> configurator) {
+    return configurator.apply(new ConnectWebSocket(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectWebSocket.class) final Closure<ConnectWebSocket> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.websocket.ConnectWebSocket> code = closure.rehydrate(c, com.tibtech.nifi.processors.websocket.ConnectWebSocket.class, com.tibtech.nifi.processors.websocket.ConnectWebSocket.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

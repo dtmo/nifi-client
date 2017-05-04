@@ -48,7 +48,15 @@ public final class MonitorActivity {
    */
   public static final String REPORTING_NODE_PROPERTY = "Reporting Node";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public MonitorActivity() {
+    this.properties = new HashMap<>();
+  }
+
+  public MonitorActivity(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Determines how much time must elapse before considering the flow to be inactive
@@ -235,6 +243,21 @@ public final class MonitorActivity {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MonitorActivity.class) final Closure<MonitorActivity> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.MonitorActivity> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.MonitorActivity.class, com.tibtech.nifi.processors.standard.MonitorActivity.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<MonitorActivity, MonitorActivity> configurator) {
+    return configurator.apply(new MonitorActivity(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MonitorActivity.class) final Closure<MonitorActivity> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.MonitorActivity> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.MonitorActivity.class, com.tibtech.nifi.processors.standard.MonitorActivity.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

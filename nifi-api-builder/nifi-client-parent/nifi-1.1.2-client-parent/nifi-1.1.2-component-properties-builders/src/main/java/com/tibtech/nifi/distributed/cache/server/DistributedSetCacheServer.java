@@ -38,7 +38,15 @@ public final class DistributedSetCacheServer {
    */
   public static final String SSL_CONTEXT_SERVICE_PROPERTY = "SSL Context Service";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DistributedSetCacheServer() {
+    this.properties = new HashMap<>();
+  }
+
+  public DistributedSetCacheServer(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The port to listen on for incoming connections
@@ -179,6 +187,21 @@ public final class DistributedSetCacheServer {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DistributedSetCacheServer.class) final Closure<DistributedSetCacheServer> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.distributed.cache.server.DistributedSetCacheServer> code = closure.rehydrate(c, com.tibtech.nifi.distributed.cache.server.DistributedSetCacheServer.class, com.tibtech.nifi.distributed.cache.server.DistributedSetCacheServer.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DistributedSetCacheServer, DistributedSetCacheServer> configurator) {
+    return configurator.apply(new DistributedSetCacheServer(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DistributedSetCacheServer.class) final Closure<DistributedSetCacheServer> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.distributed.cache.server.DistributedSetCacheServer> code = closure.rehydrate(c, com.tibtech.nifi.distributed.cache.server.DistributedSetCacheServer.class, com.tibtech.nifi.distributed.cache.server.DistributedSetCacheServer.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

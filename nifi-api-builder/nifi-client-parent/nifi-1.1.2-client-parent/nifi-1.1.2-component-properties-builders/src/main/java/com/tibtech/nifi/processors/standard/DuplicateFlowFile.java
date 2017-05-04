@@ -18,7 +18,15 @@ public final class DuplicateFlowFile {
    */
   public static final String NUMBER_OF_COPIES_PROPERTY = "Number of Copies";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DuplicateFlowFile() {
+    this.properties = new HashMap<>();
+  }
+
+  public DuplicateFlowFile(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies how many copies of each incoming FlowFile will be made
@@ -67,6 +75,21 @@ public final class DuplicateFlowFile {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DuplicateFlowFile.class) final Closure<DuplicateFlowFile> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.DuplicateFlowFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.DuplicateFlowFile.class, com.tibtech.nifi.processors.standard.DuplicateFlowFile.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DuplicateFlowFile, DuplicateFlowFile> configurator) {
+    return configurator.apply(new DuplicateFlowFile(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DuplicateFlowFile.class) final Closure<DuplicateFlowFile> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.DuplicateFlowFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.DuplicateFlowFile.class, com.tibtech.nifi.processors.standard.DuplicateFlowFile.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

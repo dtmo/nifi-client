@@ -28,7 +28,15 @@ public final class ConvertJSONToAvro {
    */
   public static final String KITE_COMPRESSION_TYPE_PROPERTY = "kite-compression-type";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConvertJSONToAvro() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConvertJSONToAvro(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A comma-separated list of Hadoop configuration files
@@ -123,6 +131,21 @@ public final class ConvertJSONToAvro {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertJSONToAvro.class) final Closure<ConvertJSONToAvro> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.kite.ConvertJSONToAvro> code = closure.rehydrate(c, com.tibtech.nifi.processors.kite.ConvertJSONToAvro.class, com.tibtech.nifi.processors.kite.ConvertJSONToAvro.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConvertJSONToAvro, ConvertJSONToAvro> configurator) {
+    return configurator.apply(new ConvertJSONToAvro(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertJSONToAvro.class) final Closure<ConvertJSONToAvro> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.kite.ConvertJSONToAvro> code = closure.rehydrate(c, com.tibtech.nifi.processors.kite.ConvertJSONToAvro.class, com.tibtech.nifi.processors.kite.ConvertJSONToAvro.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

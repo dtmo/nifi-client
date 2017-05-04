@@ -98,7 +98,15 @@ public final class ListSFTP {
    */
   public static final String SEND_KEEP_ALIVE_ON_TIMEOUT_PROPERTY = "Send Keep Alive On Timeout";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ListSFTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public ListSFTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The fully qualified hostname or IP address of the remote system
@@ -515,6 +523,21 @@ public final class ListSFTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListSFTP.class) final Closure<ListSFTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ListSFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListSFTP.class, com.tibtech.nifi.processors.standard.ListSFTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ListSFTP, ListSFTP> configurator) {
+    return configurator.apply(new ListSFTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListSFTP.class) final Closure<ListSFTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ListSFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListSFTP.class, com.tibtech.nifi.processors.standard.ListSFTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

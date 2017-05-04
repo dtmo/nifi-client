@@ -33,7 +33,15 @@ public final class CompressContent {
    */
   public static final String UPDATE_FILENAME_PROPERTY = "Update Filename";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public CompressContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public CompressContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Indicates whether the processor should compress content or decompress content. Must be either 'compress' or 'decompress'
@@ -151,6 +159,21 @@ public final class CompressContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = CompressContent.class) final Closure<CompressContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.CompressContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.CompressContent.class, com.tibtech.nifi.processors.standard.CompressContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<CompressContent, CompressContent> configurator) {
+    return configurator.apply(new CompressContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = CompressContent.class) final Closure<CompressContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.CompressContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.CompressContent.class, com.tibtech.nifi.processors.standard.CompressContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

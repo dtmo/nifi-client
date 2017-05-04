@@ -128,7 +128,15 @@ public final class PutSFTP {
    */
   public static final String USE_COMPRESSION_PROPERTY = "Use Compression";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutSFTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutSFTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The fully qualified hostname or IP address of the remote system
@@ -683,6 +691,21 @@ public final class PutSFTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSFTP.class) final Closure<PutSFTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PutSFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutSFTP.class, com.tibtech.nifi.processors.standard.PutSFTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutSFTP, PutSFTP> configurator) {
+    return configurator.apply(new PutSFTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSFTP.class) final Closure<PutSFTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PutSFTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutSFTP.class, com.tibtech.nifi.processors.standard.PutSFTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

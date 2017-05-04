@@ -58,7 +58,15 @@ public final class DeleteSQS {
    */
   public static final String PROXY_HOST_PORT_PROPERTY = "Proxy Host Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DeleteSQS() {
+    this.properties = new HashMap<>();
+  }
+
+  public DeleteSQS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    *
@@ -291,6 +299,21 @@ public final class DeleteSQS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DeleteSQS.class) final Closure<DeleteSQS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.sqs.DeleteSQS> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.sqs.DeleteSQS.class, com.tibtech.nifi.processors.aws.sqs.DeleteSQS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DeleteSQS, DeleteSQS> configurator) {
+    return configurator.apply(new DeleteSQS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DeleteSQS.class) final Closure<DeleteSQS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.sqs.DeleteSQS> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.sqs.DeleteSQS.class, com.tibtech.nifi.processors.aws.sqs.DeleteSQS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

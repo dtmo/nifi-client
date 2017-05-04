@@ -28,7 +28,15 @@ public final class GetIgniteCache {
    */
   public static final String IGNITE_CACHE_ENTRY_IDENTIFIER_PROPERTY = "ignite-cache-entry-identifier";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetIgniteCache() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetIgniteCache(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Ignite spring configuration file, <path>/<ignite-configuration>.xml. If the configuration file is not provided, default Ignite configuration configuration is used which binds to 127.0.0.1:47500..47509
@@ -123,6 +131,21 @@ public final class GetIgniteCache {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetIgniteCache.class) final Closure<GetIgniteCache> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.ignite.cache.GetIgniteCache> code = closure.rehydrate(c, com.tibtech.nifi.processors.ignite.cache.GetIgniteCache.class, com.tibtech.nifi.processors.ignite.cache.GetIgniteCache.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetIgniteCache, GetIgniteCache> configurator) {
+    return configurator.apply(new GetIgniteCache(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetIgniteCache.class) final Closure<GetIgniteCache> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.ignite.cache.GetIgniteCache> code = closure.rehydrate(c, com.tibtech.nifi.processors.ignite.cache.GetIgniteCache.class, com.tibtech.nifi.processors.ignite.cache.GetIgniteCache.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

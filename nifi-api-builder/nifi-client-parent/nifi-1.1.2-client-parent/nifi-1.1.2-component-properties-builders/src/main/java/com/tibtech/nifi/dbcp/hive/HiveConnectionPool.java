@@ -58,7 +58,15 @@ public final class HiveConnectionPool {
    */
   public static final String KERBEROS_KEYTAB_PROPERTY = "Kerberos Keytab";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public HiveConnectionPool() {
+    this.properties = new HashMap<>();
+  }
+
+  public HiveConnectionPool(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A database connection URL used to connect to a database. May contain database system name, host, port, database name and some parameters. The exact syntax of a database connection URL is specified by the Hive documentation. For example, the server principal is often included as a connection parameter when connecting to a secure Hive server.
@@ -291,6 +299,21 @@ public final class HiveConnectionPool {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HiveConnectionPool.class) final Closure<HiveConnectionPool> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.dbcp.hive.HiveConnectionPool> code = closure.rehydrate(c, com.tibtech.nifi.dbcp.hive.HiveConnectionPool.class, com.tibtech.nifi.dbcp.hive.HiveConnectionPool.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<HiveConnectionPool, HiveConnectionPool> configurator) {
+    return configurator.apply(new HiveConnectionPool(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HiveConnectionPool.class) final Closure<HiveConnectionPool> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.dbcp.hive.HiveConnectionPool> code = closure.rehydrate(c, com.tibtech.nifi.dbcp.hive.HiveConnectionPool.class, com.tibtech.nifi.dbcp.hive.HiveConnectionPool.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

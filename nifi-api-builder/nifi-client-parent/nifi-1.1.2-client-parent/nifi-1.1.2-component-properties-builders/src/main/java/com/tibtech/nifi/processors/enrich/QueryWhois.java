@@ -64,7 +64,15 @@ public final class QueryWhois {
    */
   public static final String KEY_GROUP_PROPERTY = "KEY_GROUP";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public QueryWhois() {
+    this.properties = new HashMap<>();
+  }
+
+  public QueryWhois(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The value that should be used to populate the query
@@ -323,6 +331,21 @@ public final class QueryWhois {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryWhois.class) final Closure<QueryWhois> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.enrich.QueryWhois> code = closure.rehydrate(c, com.tibtech.nifi.processors.enrich.QueryWhois.class, com.tibtech.nifi.processors.enrich.QueryWhois.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<QueryWhois, QueryWhois> configurator) {
+    return configurator.apply(new QueryWhois(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueryWhois.class) final Closure<QueryWhois> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.enrich.QueryWhois> code = closure.rehydrate(c, com.tibtech.nifi.processors.enrich.QueryWhois.class, com.tibtech.nifi.processors.enrich.QueryWhois.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

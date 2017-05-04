@@ -39,7 +39,15 @@ public final class SplitText {
    */
   public static final String REMOVE_TRAILING_NEWLINES_PROPERTY = "Remove Trailing Newlines";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public SplitText() {
+    this.properties = new HashMap<>();
+  }
+
+  public SplitText(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The number of lines that will be added to each split file, excluding header lines. A value of zero requires Maximum Fragment Size to be set, and line count will not be considered in determining splits.
@@ -183,6 +191,21 @@ public final class SplitText {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SplitText.class) final Closure<SplitText> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.SplitText> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SplitText.class, com.tibtech.nifi.processors.standard.SplitText.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<SplitText, SplitText> configurator) {
+    return configurator.apply(new SplitText(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SplitText.class) final Closure<SplitText> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.SplitText> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.SplitText.class, com.tibtech.nifi.processors.standard.SplitText.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

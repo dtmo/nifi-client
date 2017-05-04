@@ -18,7 +18,15 @@ public final class ControllerStatusReportingTask {
    */
   public static final String SHOW_DELTAS_PROPERTY = "Show Deltas";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ControllerStatusReportingTask() {
+    this.properties = new HashMap<>();
+  }
+
+  public ControllerStatusReportingTask(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies whether or not to show the difference in values between the current status and the previous status
@@ -68,6 +76,21 @@ public final class ControllerStatusReportingTask {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerStatusReportingTask.class) final Closure<ControllerStatusReportingTask> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.controller.ControllerStatusReportingTask> code = closure.rehydrate(c, com.tibtech.nifi.controller.ControllerStatusReportingTask.class, com.tibtech.nifi.controller.ControllerStatusReportingTask.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ControllerStatusReportingTask, ControllerStatusReportingTask> configurator) {
+    return configurator.apply(new ControllerStatusReportingTask(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerStatusReportingTask.class) final Closure<ControllerStatusReportingTask> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.controller.ControllerStatusReportingTask> code = closure.rehydrate(c, com.tibtech.nifi.controller.ControllerStatusReportingTask.class, com.tibtech.nifi.controller.ControllerStatusReportingTask.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

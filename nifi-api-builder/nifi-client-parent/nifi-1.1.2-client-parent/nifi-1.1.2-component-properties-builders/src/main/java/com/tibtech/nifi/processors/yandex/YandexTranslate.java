@@ -38,7 +38,15 @@ public final class YandexTranslate {
    */
   public static final String CHARACTER_SET_PROPERTY = "Character Set";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public YandexTranslate() {
+    this.properties = new HashMap<>();
+  }
+
+  public YandexTranslate(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The API Key that is registered with Yandex
@@ -179,6 +187,21 @@ public final class YandexTranslate {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = YandexTranslate.class) final Closure<YandexTranslate> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.yandex.YandexTranslate> code = closure.rehydrate(c, com.tibtech.nifi.processors.yandex.YandexTranslate.class, com.tibtech.nifi.processors.yandex.YandexTranslate.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<YandexTranslate, YandexTranslate> configurator) {
+    return configurator.apply(new YandexTranslate(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = YandexTranslate.class) final Closure<YandexTranslate> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.yandex.YandexTranslate> code = closure.rehydrate(c, com.tibtech.nifi.processors.yandex.YandexTranslate.class, com.tibtech.nifi.processors.yandex.YandexTranslate.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

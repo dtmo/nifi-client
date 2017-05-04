@@ -33,7 +33,15 @@ public final class PutDistributedMapCache {
    */
   public static final String MAX_CACHE_ENTRY_SIZE_PROPERTY = "Max cache entry size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutDistributedMapCache() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutDistributedMapCache(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A FlowFile attribute, or the results of an Attribute Expression Language statement, which will be evaluated against a FlowFile in order to determine the cache key
@@ -151,6 +159,21 @@ public final class PutDistributedMapCache {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutDistributedMapCache.class) final Closure<PutDistributedMapCache> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PutDistributedMapCache> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutDistributedMapCache.class, com.tibtech.nifi.processors.standard.PutDistributedMapCache.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutDistributedMapCache, PutDistributedMapCache> configurator) {
+    return configurator.apply(new PutDistributedMapCache(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutDistributedMapCache.class) final Closure<PutDistributedMapCache> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PutDistributedMapCache> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutDistributedMapCache.class, com.tibtech.nifi.processors.standard.PutDistributedMapCache.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

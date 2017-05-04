@@ -63,7 +63,15 @@ public final class ConvertJSONToSQL {
    */
   public static final String JTS_QUOTED_IDENTIFIERS_PROPERTY = "jts-quoted-identifiers";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConvertJSONToSQL() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConvertJSONToSQL(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies the JDBC Connection Pool to use in order to convert the JSON message to a SQL statement. The Connection Pool is necessary in order to determine the appropriate database column types.
@@ -319,6 +327,21 @@ public final class ConvertJSONToSQL {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertJSONToSQL.class) final Closure<ConvertJSONToSQL> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ConvertJSONToSQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ConvertJSONToSQL.class, com.tibtech.nifi.processors.standard.ConvertJSONToSQL.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConvertJSONToSQL, ConvertJSONToSQL> configurator) {
+    return configurator.apply(new ConvertJSONToSQL(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertJSONToSQL.class) final Closure<ConvertJSONToSQL> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ConvertJSONToSQL> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ConvertJSONToSQL.class, com.tibtech.nifi.processors.standard.ConvertJSONToSQL.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -83,7 +83,15 @@ public final class PutHDFS {
    */
   public static final String COMPRESSION_CODEC_PROPERTY = "Compression codec";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutHDFS() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutHDFS(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A file or comma separated list of files which contains the Hadoop file system configuration. Without this, Hadoop will search the classpath for a 'core-site.xml' and 'hdfs-site.xml' file or will revert to a default configuration.
@@ -431,6 +439,21 @@ public final class PutHDFS {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHDFS.class) final Closure<PutHDFS> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.hadoop.PutHDFS> code = closure.rehydrate(c, com.tibtech.nifi.processors.hadoop.PutHDFS.class, com.tibtech.nifi.processors.hadoop.PutHDFS.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutHDFS, PutHDFS> configurator) {
+    return configurator.apply(new PutHDFS(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutHDFS.class) final Closure<PutHDFS> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.hadoop.PutHDFS> code = closure.rehydrate(c, com.tibtech.nifi.processors.hadoop.PutHDFS.class, com.tibtech.nifi.processors.hadoop.PutHDFS.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

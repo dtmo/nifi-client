@@ -63,7 +63,15 @@ public final class PublishAMQP {
    */
   public static final String SSL_CLIENT_AUTH_PROPERTY = "ssl-client-auth";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PublishAMQP() {
+    this.properties = new HashMap<>();
+  }
+
+  public PublishAMQP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the AMQP Exchange the messages will be sent to. Usually provided by the AMQP administrator (e.g., 'amq.direct'). It is an optional property. If kept empty the messages will be sent to a default AMQP exchange.
@@ -319,6 +327,21 @@ public final class PublishAMQP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PublishAMQP.class) final Closure<PublishAMQP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.amqp.processors.PublishAMQP> code = closure.rehydrate(c, com.tibtech.nifi.amqp.processors.PublishAMQP.class, com.tibtech.nifi.amqp.processors.PublishAMQP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PublishAMQP, PublishAMQP> configurator) {
+    return configurator.apply(new PublishAMQP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PublishAMQP.class) final Closure<PublishAMQP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.amqp.processors.PublishAMQP> code = closure.rehydrate(c, com.tibtech.nifi.amqp.processors.PublishAMQP.class, com.tibtech.nifi.amqp.processors.PublishAMQP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

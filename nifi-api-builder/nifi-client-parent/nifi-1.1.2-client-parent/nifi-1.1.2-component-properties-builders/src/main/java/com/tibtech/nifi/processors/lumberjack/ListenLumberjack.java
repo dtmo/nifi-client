@@ -63,7 +63,15 @@ public final class ListenLumberjack {
    */
   public static final String SSL_CONTEXT_SERVICE_PROPERTY = "SSL Context Service";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ListenLumberjack() {
+    this.properties = new HashMap<>();
+  }
+
+  public ListenLumberjack(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of a local network interface to be used to restrict listening to a specific LAN.
@@ -319,6 +327,21 @@ public final class ListenLumberjack {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenLumberjack.class) final Closure<ListenLumberjack> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.lumberjack.ListenLumberjack> code = closure.rehydrate(c, com.tibtech.nifi.processors.lumberjack.ListenLumberjack.class, com.tibtech.nifi.processors.lumberjack.ListenLumberjack.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ListenLumberjack, ListenLumberjack> configurator) {
+    return configurator.apply(new ListenLumberjack(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenLumberjack.class) final Closure<ListenLumberjack> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.lumberjack.ListenLumberjack> code = closure.rehydrate(c, com.tibtech.nifi.processors.lumberjack.ListenLumberjack.class, com.tibtech.nifi.processors.lumberjack.ListenLumberjack.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

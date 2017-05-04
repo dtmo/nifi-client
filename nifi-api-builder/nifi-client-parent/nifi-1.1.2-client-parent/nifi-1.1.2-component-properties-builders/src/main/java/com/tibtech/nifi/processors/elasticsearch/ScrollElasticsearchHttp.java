@@ -78,7 +78,15 @@ public final class ScrollElasticsearchHttp {
    */
   public static final String SCROLL_ES_SORT_PROPERTY = "scroll-es-sort";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ScrollElasticsearchHttp() {
+    this.properties = new HashMap<>();
+  }
+
+  public ScrollElasticsearchHttp(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Elasticsearch URL which will be connected to, including scheme (http, e.g.), host, and port. The default port for the REST API is 9200.
@@ -403,6 +411,21 @@ public final class ScrollElasticsearchHttp {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ScrollElasticsearchHttp.class) final Closure<ScrollElasticsearchHttp> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.elasticsearch.ScrollElasticsearchHttp> code = closure.rehydrate(c, com.tibtech.nifi.processors.elasticsearch.ScrollElasticsearchHttp.class, com.tibtech.nifi.processors.elasticsearch.ScrollElasticsearchHttp.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ScrollElasticsearchHttp, ScrollElasticsearchHttp> configurator) {
+    return configurator.apply(new ScrollElasticsearchHttp(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ScrollElasticsearchHttp.class) final Closure<ScrollElasticsearchHttp> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.elasticsearch.ScrollElasticsearchHttp> code = closure.rehydrate(c, com.tibtech.nifi.processors.elasticsearch.ScrollElasticsearchHttp.class, com.tibtech.nifi.processors.elasticsearch.ScrollElasticsearchHttp.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

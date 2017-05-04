@@ -53,7 +53,15 @@ public final class DBCPConnectionPool {
    */
   public static final String VALIDATION_QUERY_PROPERTY = "Validation-query";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DBCPConnectionPool() {
+    this.properties = new HashMap<>();
+  }
+
+  public DBCPConnectionPool(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A database connection URL used to connect to a database. May contain database system name, host, port, database name and some parameters. The exact syntax of a database connection URL is specified by your DBMS.
@@ -263,6 +271,21 @@ public final class DBCPConnectionPool {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DBCPConnectionPool.class) final Closure<DBCPConnectionPool> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.dbcp.DBCPConnectionPool> code = closure.rehydrate(c, com.tibtech.nifi.dbcp.DBCPConnectionPool.class, com.tibtech.nifi.dbcp.DBCPConnectionPool.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DBCPConnectionPool, DBCPConnectionPool> configurator) {
+    return configurator.apply(new DBCPConnectionPool(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DBCPConnectionPool.class) final Closure<DBCPConnectionPool> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.dbcp.DBCPConnectionPool> code = closure.rehydrate(c, com.tibtech.nifi.dbcp.DBCPConnectionPool.class, com.tibtech.nifi.dbcp.DBCPConnectionPool.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

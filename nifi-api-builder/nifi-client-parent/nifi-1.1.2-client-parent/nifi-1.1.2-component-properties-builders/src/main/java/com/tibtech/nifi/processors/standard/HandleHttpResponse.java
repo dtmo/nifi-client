@@ -23,7 +23,15 @@ public final class HandleHttpResponse {
    */
   public static final String HTTP_CONTEXT_MAP_PROPERTY = "HTTP Context Map";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public HandleHttpResponse() {
+    this.properties = new HashMap<>();
+  }
+
+  public HandleHttpResponse(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The HTTP Status Code to use when responding to the HTTP Request. See Section 10 of RFC 2616 for more information.
@@ -95,6 +103,21 @@ public final class HandleHttpResponse {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HandleHttpResponse.class) final Closure<HandleHttpResponse> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.HandleHttpResponse> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.HandleHttpResponse.class, com.tibtech.nifi.processors.standard.HandleHttpResponse.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<HandleHttpResponse, HandleHttpResponse> configurator) {
+    return configurator.apply(new HandleHttpResponse(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = HandleHttpResponse.class) final Closure<HandleHttpResponse> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.HandleHttpResponse> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.HandleHttpResponse.class, com.tibtech.nifi.processors.standard.HandleHttpResponse.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

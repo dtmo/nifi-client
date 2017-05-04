@@ -33,7 +33,15 @@ public final class ConvertAvroSchema {
    */
   public static final String KITE_COMPRESSION_TYPE_PROPERTY = "kite-compression-type";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConvertAvroSchema() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConvertAvroSchema(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Avro Schema of Input Flowfiles.  This can be a URI (dataset, view, or resource) or literal JSON schema.
@@ -151,6 +159,21 @@ public final class ConvertAvroSchema {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertAvroSchema.class) final Closure<ConvertAvroSchema> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.kite.ConvertAvroSchema> code = closure.rehydrate(c, com.tibtech.nifi.processors.kite.ConvertAvroSchema.class, com.tibtech.nifi.processors.kite.ConvertAvroSchema.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConvertAvroSchema, ConvertAvroSchema> configurator) {
+    return configurator.apply(new ConvertAvroSchema(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertAvroSchema.class) final Closure<ConvertAvroSchema> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.kite.ConvertAvroSchema> code = closure.rehydrate(c, com.tibtech.nifi.processors.kite.ConvertAvroSchema.class, com.tibtech.nifi.processors.kite.ConvertAvroSchema.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -43,7 +43,15 @@ public final class ReplaceTextWithMapping {
    */
   public static final String MAXIMUM_BUFFER_SIZE_PROPERTY = "Maximum Buffer Size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ReplaceTextWithMapping() {
+    this.properties = new HashMap<>();
+  }
+
+  public ReplaceTextWithMapping(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Regular Expression to search for in the FlowFile content
@@ -207,6 +215,21 @@ public final class ReplaceTextWithMapping {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReplaceTextWithMapping.class) final Closure<ReplaceTextWithMapping> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ReplaceTextWithMapping> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ReplaceTextWithMapping.class, com.tibtech.nifi.processors.standard.ReplaceTextWithMapping.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ReplaceTextWithMapping, ReplaceTextWithMapping> configurator) {
+    return configurator.apply(new ReplaceTextWithMapping(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReplaceTextWithMapping.class) final Closure<ReplaceTextWithMapping> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ReplaceTextWithMapping> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ReplaceTextWithMapping.class, com.tibtech.nifi.processors.standard.ReplaceTextWithMapping.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

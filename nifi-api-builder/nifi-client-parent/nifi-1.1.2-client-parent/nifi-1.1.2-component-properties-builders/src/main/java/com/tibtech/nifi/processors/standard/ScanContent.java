@@ -23,7 +23,15 @@ public final class ScanContent {
    */
   public static final String DICTIONARY_ENCODING_PROPERTY = "Dictionary Encoding";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ScanContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public ScanContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The filename of the terms dictionary
@@ -95,6 +103,21 @@ public final class ScanContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ScanContent.class) final Closure<ScanContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ScanContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ScanContent.class, com.tibtech.nifi.processors.standard.ScanContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ScanContent, ScanContent> configurator) {
+    return configurator.apply(new ScanContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ScanContent.class) final Closure<ScanContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ScanContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ScanContent.class, com.tibtech.nifi.processors.standard.ScanContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

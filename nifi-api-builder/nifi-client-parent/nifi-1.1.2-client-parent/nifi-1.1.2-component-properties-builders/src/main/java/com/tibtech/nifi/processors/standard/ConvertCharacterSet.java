@@ -23,7 +23,15 @@ public final class ConvertCharacterSet {
    */
   public static final String OUTPUT_CHARACTER_SET_PROPERTY = "Output Character Set";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ConvertCharacterSet() {
+    this.properties = new HashMap<>();
+  }
+
+  public ConvertCharacterSet(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the CharacterSet to expect for Input
@@ -95,6 +103,21 @@ public final class ConvertCharacterSet {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertCharacterSet.class) final Closure<ConvertCharacterSet> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ConvertCharacterSet> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ConvertCharacterSet.class, com.tibtech.nifi.processors.standard.ConvertCharacterSet.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ConvertCharacterSet, ConvertCharacterSet> configurator) {
+    return configurator.apply(new ConvertCharacterSet(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConvertCharacterSet.class) final Closure<ConvertCharacterSet> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ConvertCharacterSet> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ConvertCharacterSet.class, com.tibtech.nifi.processors.standard.ConvertCharacterSet.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

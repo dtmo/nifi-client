@@ -73,7 +73,15 @@ public final class GetFile {
    */
   public static final String MAXIMUM_FILE_SIZE_PROPERTY = "Maximum File Size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GetFile() {
+    this.properties = new HashMap<>();
+  }
+
+  public GetFile(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The input directory from which to pull files
@@ -375,6 +383,21 @@ public final class GetFile {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetFile.class) final Closure<GetFile> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.GetFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetFile.class, com.tibtech.nifi.processors.standard.GetFile.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GetFile, GetFile> configurator) {
+    return configurator.apply(new GetFile(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GetFile.class) final Closure<GetFile> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.GetFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GetFile.class, com.tibtech.nifi.processors.standard.GetFile.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

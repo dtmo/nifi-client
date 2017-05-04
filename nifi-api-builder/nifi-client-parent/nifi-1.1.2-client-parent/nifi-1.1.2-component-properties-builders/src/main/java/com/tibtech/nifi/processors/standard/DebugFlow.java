@@ -108,7 +108,15 @@ public final class DebugFlow {
    */
   public static final String FAIL_WHEN_ON_STOPPED_CALLED_PROPERTY = "Fail When @OnStopped called";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public DebugFlow() {
+    this.properties = new HashMap<>();
+  }
+
+  public DebugFlow(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Number of FlowFiles to forward to success relationship.
@@ -571,6 +579,21 @@ public final class DebugFlow {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DebugFlow.class) final Closure<DebugFlow> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.DebugFlow> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.DebugFlow.class, com.tibtech.nifi.processors.standard.DebugFlow.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<DebugFlow, DebugFlow> configurator) {
+    return configurator.apply(new DebugFlow(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = DebugFlow.class) final Closure<DebugFlow> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.DebugFlow> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.DebugFlow.class, com.tibtech.nifi.processors.standard.DebugFlow.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

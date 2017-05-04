@@ -33,7 +33,15 @@ public final class ExecuteFlumeSink {
    */
   public static final String FLUME_CONFIGURATION_PROPERTY = "Flume Configuration";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ExecuteFlumeSink() {
+    this.properties = new HashMap<>();
+  }
+
+  public ExecuteFlumeSink(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The component type name for the sink. For some sinks, this is a short, symbolic name (e.g. hdfs). For others, it's the fully-qualified name of the Sink class. See the Flume User Guide for details.
@@ -151,6 +159,21 @@ public final class ExecuteFlumeSink {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteFlumeSink.class) final Closure<ExecuteFlumeSink> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.flume.ExecuteFlumeSink> code = closure.rehydrate(c, com.tibtech.nifi.processors.flume.ExecuteFlumeSink.class, com.tibtech.nifi.processors.flume.ExecuteFlumeSink.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ExecuteFlumeSink, ExecuteFlumeSink> configurator) {
+    return configurator.apply(new ExecuteFlumeSink(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ExecuteFlumeSink.class) final Closure<ExecuteFlumeSink> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.flume.ExecuteFlumeSink> code = closure.rehydrate(c, com.tibtech.nifi.processors.flume.ExecuteFlumeSink.class, com.tibtech.nifi.processors.flume.ExecuteFlumeSink.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

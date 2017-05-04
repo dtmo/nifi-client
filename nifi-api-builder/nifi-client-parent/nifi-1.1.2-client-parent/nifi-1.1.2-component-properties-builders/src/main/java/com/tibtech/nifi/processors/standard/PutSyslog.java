@@ -83,7 +83,15 @@ public final class PutSyslog {
    */
   public static final String MESSAGE_BODY_PROPERTY = "Message Body";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutSyslog() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutSyslog(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The ip address or hostname of the Syslog server.
@@ -431,6 +439,21 @@ public final class PutSyslog {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSyslog.class) final Closure<PutSyslog> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.PutSyslog> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutSyslog.class, com.tibtech.nifi.processors.standard.PutSyslog.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutSyslog, PutSyslog> configurator) {
+    return configurator.apply(new PutSyslog(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutSyslog.class) final Closure<PutSyslog> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.PutSyslog> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.PutSyslog.class, com.tibtech.nifi.processors.standard.PutSyslog.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

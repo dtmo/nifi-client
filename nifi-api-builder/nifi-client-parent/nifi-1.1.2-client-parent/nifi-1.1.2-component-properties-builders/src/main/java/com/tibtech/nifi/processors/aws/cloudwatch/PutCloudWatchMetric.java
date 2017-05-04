@@ -88,7 +88,15 @@ public final class PutCloudWatchMetric {
    */
   public static final String PROXY_HOST_PORT_PROPERTY = "Proxy Host Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public PutCloudWatchMetric() {
+    this.properties = new HashMap<>();
+  }
+
+  public PutCloudWatchMetric(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The namespace for the metric data for CloudWatch
@@ -459,6 +467,21 @@ public final class PutCloudWatchMetric {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutCloudWatchMetric.class) final Closure<PutCloudWatchMetric> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.cloudwatch.PutCloudWatchMetric> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.cloudwatch.PutCloudWatchMetric.class, com.tibtech.nifi.processors.aws.cloudwatch.PutCloudWatchMetric.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<PutCloudWatchMetric, PutCloudWatchMetric> configurator) {
+    return configurator.apply(new PutCloudWatchMetric(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PutCloudWatchMetric.class) final Closure<PutCloudWatchMetric> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.cloudwatch.PutCloudWatchMetric> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.cloudwatch.PutCloudWatchMetric.class, com.tibtech.nifi.processors.aws.cloudwatch.PutCloudWatchMetric.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

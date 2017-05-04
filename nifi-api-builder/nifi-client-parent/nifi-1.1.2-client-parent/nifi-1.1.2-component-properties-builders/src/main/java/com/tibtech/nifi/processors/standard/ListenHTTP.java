@@ -48,7 +48,15 @@ public final class ListenHTTP {
    */
   public static final String HTTP_HEADERS_TO_RECEIVE_AS_ATTRIBUTES_REGEX_PROPERTY = "HTTP Headers to receive as Attributes (Regex)";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ListenHTTP() {
+    this.properties = new HashMap<>();
+  }
+
+  public ListenHTTP(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Base path for incoming connections
@@ -235,6 +243,21 @@ public final class ListenHTTP {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenHTTP.class) final Closure<ListenHTTP> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ListenHTTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListenHTTP.class, com.tibtech.nifi.processors.standard.ListenHTTP.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ListenHTTP, ListenHTTP> configurator) {
+    return configurator.apply(new ListenHTTP(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ListenHTTP.class) final Closure<ListenHTTP> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ListenHTTP> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ListenHTTP.class, com.tibtech.nifi.processors.standard.ListenHTTP.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

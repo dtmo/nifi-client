@@ -63,7 +63,15 @@ public final class EncryptContent {
    */
   public static final String PRIVATE_KEYRING_PASSPHRASE_PROPERTY = "private-keyring-passphrase";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public EncryptContent() {
+    this.properties = new HashMap<>();
+  }
+
+  public EncryptContent(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * Specifies whether the content should be encrypted or decrypted
@@ -319,6 +327,21 @@ public final class EncryptContent {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EncryptContent.class) final Closure<EncryptContent> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.EncryptContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.EncryptContent.class, com.tibtech.nifi.processors.standard.EncryptContent.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<EncryptContent, EncryptContent> configurator) {
+    return configurator.apply(new EncryptContent(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = EncryptContent.class) final Closure<EncryptContent> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.EncryptContent> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.EncryptContent.class, com.tibtech.nifi.processors.standard.EncryptContent.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

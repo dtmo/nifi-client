@@ -43,7 +43,15 @@ public final class JettyWebSocketServer {
    */
   public static final String CLIENT_AUTHENTICATION_PROPERTY = "client-authentication";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public JettyWebSocketServer() {
+    this.properties = new HashMap<>();
+  }
+
+  public JettyWebSocketServer(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The size of the input (read from network layer) buffer size.
@@ -207,6 +215,21 @@ public final class JettyWebSocketServer {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JettyWebSocketServer.class) final Closure<JettyWebSocketServer> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.websocket.jetty.JettyWebSocketServer> code = closure.rehydrate(c, com.tibtech.nifi.websocket.jetty.JettyWebSocketServer.class, com.tibtech.nifi.websocket.jetty.JettyWebSocketServer.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<JettyWebSocketServer, JettyWebSocketServer> configurator) {
+    return configurator.apply(new JettyWebSocketServer(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JettyWebSocketServer.class) final Closure<JettyWebSocketServer> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.websocket.jetty.JettyWebSocketServer> code = closure.rehydrate(c, com.tibtech.nifi.websocket.jetty.JettyWebSocketServer.class, com.tibtech.nifi.websocket.jetty.JettyWebSocketServer.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

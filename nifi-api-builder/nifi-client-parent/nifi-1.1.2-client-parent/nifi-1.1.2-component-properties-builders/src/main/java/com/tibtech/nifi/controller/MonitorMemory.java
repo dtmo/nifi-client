@@ -28,7 +28,15 @@ public final class MonitorMemory {
    */
   public static final String REPORTING_INTERVAL_PROPERTY = "Reporting Interval";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public MonitorMemory() {
+    this.properties = new HashMap<>();
+  }
+
+  public MonitorMemory(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The name of the JVM Memory Pool to monitor
@@ -123,6 +131,21 @@ public final class MonitorMemory {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MonitorMemory.class) final Closure<MonitorMemory> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.controller.MonitorMemory> code = closure.rehydrate(c, com.tibtech.nifi.controller.MonitorMemory.class, com.tibtech.nifi.controller.MonitorMemory.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<MonitorMemory, MonitorMemory> configurator) {
+    return configurator.apply(new MonitorMemory(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = MonitorMemory.class) final Closure<MonitorMemory> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.controller.MonitorMemory> code = closure.rehydrate(c, com.tibtech.nifi.controller.MonitorMemory.class, com.tibtech.nifi.controller.MonitorMemory.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

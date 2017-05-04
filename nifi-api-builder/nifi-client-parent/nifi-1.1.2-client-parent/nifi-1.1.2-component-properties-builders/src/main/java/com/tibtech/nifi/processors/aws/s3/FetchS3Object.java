@@ -83,7 +83,15 @@ public final class FetchS3Object {
    */
   public static final String PROXY_HOST_PORT_PROPERTY = "Proxy Host Port";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public FetchS3Object() {
+    this.properties = new HashMap<>();
+  }
+
+  public FetchS3Object(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    *
@@ -431,6 +439,21 @@ public final class FetchS3Object {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchS3Object.class) final Closure<FetchS3Object> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.aws.s3.FetchS3Object> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.s3.FetchS3Object.class, com.tibtech.nifi.processors.aws.s3.FetchS3Object.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<FetchS3Object, FetchS3Object> configurator) {
+    return configurator.apply(new FetchS3Object(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FetchS3Object.class) final Closure<FetchS3Object> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.aws.s3.FetchS3Object> code = closure.rehydrate(c, com.tibtech.nifi.processors.aws.s3.FetchS3Object.class, com.tibtech.nifi.processors.aws.s3.FetchS3Object.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

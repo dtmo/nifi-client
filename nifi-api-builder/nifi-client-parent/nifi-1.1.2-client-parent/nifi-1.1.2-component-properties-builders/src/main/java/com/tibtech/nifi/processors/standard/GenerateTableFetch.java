@@ -48,7 +48,15 @@ public final class GenerateTableFetch {
    */
   public static final String GEN_TABLE_FETCH_PARTITION_SIZE_PROPERTY = "gen-table-fetch-partition-size";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GenerateTableFetch() {
+    this.properties = new HashMap<>();
+  }
+
+  public GenerateTableFetch(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The Controller Service that is used to obtain a connection to the database.
@@ -235,6 +243,21 @@ public final class GenerateTableFetch {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GenerateTableFetch.class) final Closure<GenerateTableFetch> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.GenerateTableFetch> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GenerateTableFetch.class, com.tibtech.nifi.processors.standard.GenerateTableFetch.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GenerateTableFetch, GenerateTableFetch> configurator) {
+    return configurator.apply(new GenerateTableFetch(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GenerateTableFetch.class) final Closure<GenerateTableFetch> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.GenerateTableFetch> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GenerateTableFetch.class, com.tibtech.nifi.processors.standard.GenerateTableFetch.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

@@ -38,7 +38,15 @@ public final class GenerateFlowFile {
    */
   public static final String GENERATE_FF_CUSTOM_TEXT_PROPERTY = "generate-ff-custom-text";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public GenerateFlowFile() {
+    this.properties = new HashMap<>();
+  }
+
+  public GenerateFlowFile(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * The size of the file that will be used
@@ -179,6 +187,21 @@ public final class GenerateFlowFile {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GenerateFlowFile.class) final Closure<GenerateFlowFile> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.GenerateFlowFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GenerateFlowFile.class, com.tibtech.nifi.processors.standard.GenerateFlowFile.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<GenerateFlowFile, GenerateFlowFile> configurator) {
+    return configurator.apply(new GenerateFlowFile(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GenerateFlowFile.class) final Closure<GenerateFlowFile> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.GenerateFlowFile> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.GenerateFlowFile.class, com.tibtech.nifi.processors.standard.GenerateFlowFile.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();

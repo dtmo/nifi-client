@@ -33,7 +33,15 @@ public final class ScanAttribute {
    */
   public static final String DICTIONARY_FILTER_PATTERN_PROPERTY = "Dictionary Filter Pattern";
 
-  private final Map<String, String> properties = new HashMap<String, String>();
+  private final Map<String, String> properties;
+
+  public ScanAttribute() {
+    this.properties = new HashMap<>();
+  }
+
+  public ScanAttribute(final Map<String, String> properties) {
+    this.properties = new HashMap<>(properties);
+  }
 
   /**
    * A new-line-delimited text file that includes the terms that should trigger a match. Empty lines are ignored.
@@ -151,6 +159,21 @@ public final class ScanAttribute {
 
   public static final Map<String, String> build(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ScanAttribute.class) final Closure<ScanAttribute> closure) {
     return build(c -> {
+      final Closure<com.tibtech.nifi.processors.standard.ScanAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ScanAttribute.class, com.tibtech.nifi.processors.standard.ScanAttribute.class);
+      code.setResolveStrategy(Closure.DELEGATE_ONLY);
+      code.call();
+      return c;
+    } );
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      final Function<ScanAttribute, ScanAttribute> configurator) {
+    return configurator.apply(new ScanAttribute(properties)).build();
+  }
+
+  public static final Map<String, String> update(final Map<String, String> properties,
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ScanAttribute.class) final Closure<ScanAttribute> closure) {
+    return update(properties, c -> {
       final Closure<com.tibtech.nifi.processors.standard.ScanAttribute> code = closure.rehydrate(c, com.tibtech.nifi.processors.standard.ScanAttribute.class, com.tibtech.nifi.processors.standard.ScanAttribute.class);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
