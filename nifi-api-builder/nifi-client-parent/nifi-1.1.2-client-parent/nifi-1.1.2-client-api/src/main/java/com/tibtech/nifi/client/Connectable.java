@@ -19,7 +19,16 @@ public interface Connectable
 	Connection connectTo(Connectable destination, Collection<String> selectedRelationships,
 			Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException;
 
-	Connection connectTo(Connectable destination, Collection<String> selectedRelationships,
+	default public Connection connectTo(final Connectable destination, Collection<String> selectedRelationships,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure)
-			throws InvokerException;
+			throws InvokerException
+	{
+		return connectTo(destination, selectedRelationships, configurator ->
+		{
+			final Closure<ConnectionDTOBuilder> code = closure.rehydrate(configurator, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			code.call();
+			return configurator;
+		});
+	}
 }

@@ -7,9 +7,6 @@ import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
 
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
 
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-
 public abstract class RemoteProcessGroupPort implements Connectable
 {
 	private final Transport transport;
@@ -88,19 +85,5 @@ public abstract class RemoteProcessGroupPort implements Connectable
 			final Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException
 	{
 		return Connection.createConnection(transport, this, destination, selectedRelationships, configurator);
-	}
-
-	@Override
-	public Connection connectTo(final Connectable destination, final Collection<String> selectedRelationships,
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure)
-			throws InvokerException
-	{
-		return connectTo(destination, selectedRelationships, configurator ->
-		{
-			final Closure<ConnectionDTOBuilder> code = closure.rehydrate(configurator, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			code.call();
-			return configurator;
-		});
 	}
 }
