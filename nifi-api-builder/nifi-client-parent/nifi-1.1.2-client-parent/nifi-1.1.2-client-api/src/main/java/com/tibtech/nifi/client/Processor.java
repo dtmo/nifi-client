@@ -15,6 +15,7 @@ import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processor.DeleteProcessorInvoker;
 import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
+import com.tibtech.nifi.web.api.processor.UpdateProcessorInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -122,7 +123,7 @@ public class Processor extends ConnectableComponent<Processor, ProcessorEntity, 
 	public Processor refresh() throws InvokerException
 	{
 		setComponentEntity(new GetProcessorInvoker(getTransport(), 0).setId(getId()).invoke());
-		
+
 		return this;
 	}
 
@@ -130,9 +131,12 @@ public class Processor extends ConnectableComponent<Processor, ProcessorEntity, 
 	public Processor update(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> configurator)
 			throws InvokerException
 	{
-		setComponentEntity(new CreateProcessorInvoker(getTransport(), 0).setId(getParentGroupId())
+		setComponentEntity(new UpdateProcessorInvoker(getTransport(), getVersion()).setId(getId())
 				.setProcessorEntity(new ProcessorEntityBuilder()
-						.setComponent(configurator.apply(ProcessorDTOBuilder.of(getProcessorDTO())).build()).build())
+						.setComponent(
+								configurator.apply(ProcessorDTOBuilder.of(getProcessorDTO()))
+								.build())
+						.build())
 				.invoke());
 
 		return this;
