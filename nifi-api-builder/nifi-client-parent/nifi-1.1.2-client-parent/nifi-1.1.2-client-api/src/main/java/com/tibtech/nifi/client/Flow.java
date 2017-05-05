@@ -27,7 +27,7 @@ public class Flow
 {
 	private final Transport transport;
 
-	public Flow(final Transport transport)
+	private Flow(final Transport transport)
 	{
 		this.transport = transport;
 	}
@@ -99,16 +99,21 @@ public class Flow
 		});
 	}
 
-	public static Flow connect(final String baseUri) throws InvokerException
+	public static Flow connect(final Client client, final String baseUri) throws InvokerException
 	{
-		final ClientBuilder clientBuilder = ClientBuilder.newBuilder();
-		final Client client = clientBuilder.build();
-
 		final Transport transport = new Transport(client, baseUri);
 
 		new GenerateClientIdInvoker(transport, 0).invoke();
 
 		final Flow flow = new Flow(transport);
 		return flow;
+	}
+
+	public static Flow connect(final String baseUri) throws InvokerException
+	{
+		final ClientBuilder clientBuilder = ClientBuilder.newBuilder();
+		final Client client = clientBuilder.build();
+		
+		return connect(client, baseUri);
 	}
 }
