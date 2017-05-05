@@ -60,7 +60,7 @@ public final class ProcessorDTOBuilder extends AbstractComponentDTOBuilder<Proce
    * The configuration details for the processor. These details will be included in a response if the verbose flag is included in a request.
    */
   public ProcessorDTOBuilder setConfig(final Function<ProcessorConfigDTOBuilder, ProcessorConfigDTOBuilder> configurator) {
-    return setConfig(configurator.apply(new ProcessorConfigDTOBuilder()).build());
+    return setConfig(configurator.apply(config != null ? ProcessorConfigDTOBuilder.of(config) : new ProcessorConfigDTOBuilder()).build());
   }
 
   /**

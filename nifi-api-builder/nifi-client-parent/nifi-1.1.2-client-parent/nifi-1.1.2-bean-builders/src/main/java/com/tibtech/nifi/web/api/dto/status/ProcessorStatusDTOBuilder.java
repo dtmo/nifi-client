@@ -46,7 +46,7 @@ public final class ProcessorStatusDTOBuilder {
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
   public ProcessorStatusDTOBuilder setAggregateSnapshot(final Function<ProcessorStatusSnapshotDTOBuilder, ProcessorStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(new ProcessorStatusSnapshotDTOBuilder()).build());
+    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? ProcessorStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ProcessorStatusSnapshotDTOBuilder()).build());
   }
 
   /**

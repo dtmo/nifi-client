@@ -130,7 +130,7 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
    * The flowfile repository storage usage.
    */
   public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(final Function<StorageUsageDTOBuilder, StorageUsageDTOBuilder> configurator) {
-    return setFlowFileRepositoryStorageUsage(configurator.apply(new StorageUsageDTOBuilder()).build());
+    return setFlowFileRepositoryStorageUsage(configurator.apply(flowFileRepositoryStorageUsage != null ? StorageUsageDTOBuilder.of(flowFileRepositoryStorageUsage) : new StorageUsageDTOBuilder()).build());
   }
 
   /**
@@ -494,7 +494,7 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
    * The nifi, os, java, and build version information
    */
   public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(final Function<VersionInfoDTOBuilder, VersionInfoDTOBuilder> configurator) {
-    return setVersionInfo(configurator.apply(new VersionInfoDTOBuilder()).build());
+    return setVersionInfo(configurator.apply(versionInfo != null ? VersionInfoDTOBuilder.of(versionInfo) : new VersionInfoDTOBuilder()).build());
   }
 
   /**

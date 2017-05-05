@@ -32,7 +32,7 @@ public final class NodePortStatusDTOBuilder {
    * The node.
    */
   public NodePortStatusDTOBuilder setNode(final Function<NodeDTOBuilder, NodeDTOBuilder> configurator) {
-    return setNode(configurator.apply(new NodeDTOBuilder()).build());
+    return setNode(configurator.apply(node != null ? NodeDTOBuilder.of(node) : new NodeDTOBuilder()).build());
   }
 
   /**
@@ -66,7 +66,7 @@ public final class NodePortStatusDTOBuilder {
    * The port status from the node.
    */
   public NodePortStatusDTOBuilder setPortStatus(final Function<PortStatusDTOBuilder, PortStatusDTOBuilder> configurator) {
-    return setPortStatus(configurator.apply(new PortStatusDTOBuilder()).build());
+    return setPortStatus(configurator.apply(portStatus != null ? PortStatusDTOBuilder.of(portStatus) : new PortStatusDTOBuilder()).build());
   }
 
   /**

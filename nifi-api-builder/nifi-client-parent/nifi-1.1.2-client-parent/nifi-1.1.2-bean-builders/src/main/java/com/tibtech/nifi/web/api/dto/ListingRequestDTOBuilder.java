@@ -159,7 +159,7 @@ public final class ListingRequestDTOBuilder {
    * The size of the queue
    */
   public ListingRequestDTOBuilder setQueueSize(final Function<QueueSizeDTOBuilder, QueueSizeDTOBuilder> configurator) {
-    return setQueueSize(configurator.apply(new QueueSizeDTOBuilder()).build());
+    return setQueueSize(configurator.apply(queueSize != null ? QueueSizeDTOBuilder.of(queueSize) : new QueueSizeDTOBuilder()).build());
   }
 
   /**

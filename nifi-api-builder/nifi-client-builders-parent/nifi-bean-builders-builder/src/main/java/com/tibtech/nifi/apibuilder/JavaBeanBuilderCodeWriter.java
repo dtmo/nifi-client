@@ -23,7 +23,7 @@ public class JavaBeanBuilderCodeWriter
 		packagedTypeSpecs.addAll(JavaBeanBuilderFactory.getPackagesAndTypeSpecs(Entity.class.getPackage().getName(),
 				s -> s.endsWith("Entity"), packageNameMapper));
 
-		final Path generatedJavaPath = Paths.get("../nifi-bean-builders/src/main/java");
+		final Path generatedJavaPath = Paths.get("../../nifi-client-parent/nifi-1.1.2-client-parent/nifi-1.1.2-bean-builders/src/main/java");
 
 		for (final PackagedTypeSpec packagedTypeSpec : packagedTypeSpecs)
 		{

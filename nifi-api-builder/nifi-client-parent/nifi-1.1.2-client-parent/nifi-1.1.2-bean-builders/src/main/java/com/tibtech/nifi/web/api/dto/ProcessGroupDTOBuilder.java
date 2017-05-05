@@ -80,7 +80,7 @@ public final class ProcessGroupDTOBuilder extends AbstractComponentDTOBuilder<Pr
    * The contents of this process group.
    */
   public ProcessGroupDTOBuilder setContents(final Function<FlowSnippetDTOBuilder, FlowSnippetDTOBuilder> configurator) {
-    return setContents(configurator.apply(new FlowSnippetDTOBuilder()).build());
+    return setContents(configurator.apply(contents != null ? FlowSnippetDTOBuilder.of(contents) : new FlowSnippetDTOBuilder()).build());
   }
 
   /**

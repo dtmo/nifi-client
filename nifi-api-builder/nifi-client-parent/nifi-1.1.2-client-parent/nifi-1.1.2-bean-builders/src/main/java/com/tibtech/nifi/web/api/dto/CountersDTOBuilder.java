@@ -32,7 +32,7 @@ public final class CountersDTOBuilder {
    * A Counters snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
   public CountersDTOBuilder setAggregateSnapshot(final Function<CountersSnapshotDTOBuilder, CountersSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(new CountersSnapshotDTOBuilder()).build());
+    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? CountersSnapshotDTOBuilder.of(aggregateSnapshot) : new CountersSnapshotDTOBuilder()).build());
   }
 
   /**

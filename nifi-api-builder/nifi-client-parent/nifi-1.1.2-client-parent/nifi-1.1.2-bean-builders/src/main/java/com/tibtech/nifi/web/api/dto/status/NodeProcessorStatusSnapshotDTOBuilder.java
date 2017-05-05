@@ -81,7 +81,7 @@ public final class NodeProcessorStatusSnapshotDTOBuilder {
    * The processor status snapshot from the node.
    */
   public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(final Function<ProcessorStatusSnapshotDTOBuilder, ProcessorStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(new ProcessorStatusSnapshotDTOBuilder()).build());
+    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? ProcessorStatusSnapshotDTOBuilder.of(statusSnapshot) : new ProcessorStatusSnapshotDTOBuilder()).build());
   }
 
   /**

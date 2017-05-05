@@ -81,7 +81,7 @@ public final class NodeCountersSnapshotDTOBuilder {
    * The counters from the node.
    */
   public NodeCountersSnapshotDTOBuilder setSnapshot(final Function<CountersSnapshotDTOBuilder, CountersSnapshotDTOBuilder> configurator) {
-    return setSnapshot(configurator.apply(new CountersSnapshotDTOBuilder()).build());
+    return setSnapshot(configurator.apply(snapshot != null ? CountersSnapshotDTOBuilder.of(snapshot) : new CountersSnapshotDTOBuilder()).build());
   }
 
   /**

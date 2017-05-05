@@ -119,7 +119,7 @@ public final class TemplateDTOBuilder {
    * The contents of the template.
    */
   public TemplateDTOBuilder setSnippet(final Function<FlowSnippetDTOBuilder, FlowSnippetDTOBuilder> configurator) {
-    return setSnippet(configurator.apply(new FlowSnippetDTOBuilder()).build());
+    return setSnippet(configurator.apply(snippet != null ? FlowSnippetDTOBuilder.of(snippet) : new FlowSnippetDTOBuilder()).build());
   }
 
   /**

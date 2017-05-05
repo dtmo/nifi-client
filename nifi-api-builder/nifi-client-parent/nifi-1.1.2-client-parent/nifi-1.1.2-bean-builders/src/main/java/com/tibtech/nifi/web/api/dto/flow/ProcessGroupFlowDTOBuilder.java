@@ -56,7 +56,7 @@ public final class ProcessGroupFlowDTOBuilder {
    * The flow structure starting at this Process Group.
    */
   public ProcessGroupFlowDTOBuilder setFlow(final Function<FlowDTOBuilder, FlowDTOBuilder> configurator) {
-    return setFlow(configurator.apply(new FlowDTOBuilder()).build());
+    return setFlow(configurator.apply(flow != null ? FlowDTOBuilder.of(flow) : new FlowDTOBuilder()).build());
   }
 
   /**

@@ -81,7 +81,7 @@ public final class NodeRemoteProcessGroupStatusSnapshotDTOBuilder {
    * The remote process group status snapshot from the node.
    */
   public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final Function<RemoteProcessGroupStatusSnapshotDTOBuilder, RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(new RemoteProcessGroupStatusSnapshotDTOBuilder()).build());
+    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? RemoteProcessGroupStatusSnapshotDTOBuilder.of(statusSnapshot) : new RemoteProcessGroupStatusSnapshotDTOBuilder()).build());
   }
 
   /**

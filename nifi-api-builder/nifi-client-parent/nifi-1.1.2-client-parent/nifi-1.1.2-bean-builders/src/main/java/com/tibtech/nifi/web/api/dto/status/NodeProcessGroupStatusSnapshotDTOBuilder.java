@@ -81,7 +81,7 @@ public final class NodeProcessGroupStatusSnapshotDTOBuilder {
    * The process group status snapshot from the node.
    */
   public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final Function<ProcessGroupStatusSnapshotDTOBuilder, ProcessGroupStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(new ProcessGroupStatusSnapshotDTOBuilder()).build());
+    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? ProcessGroupStatusSnapshotDTOBuilder.of(statusSnapshot) : new ProcessGroupStatusSnapshotDTOBuilder()).build());
   }
 
   /**

@@ -116,7 +116,7 @@ public final class ConnectionDTOBuilder extends AbstractComponentDTOBuilder<Conn
    * The destination of the connection.
    */
   public ConnectionDTOBuilder setDestination(final Function<ConnectableDTOBuilder, ConnectableDTOBuilder> configurator) {
-    return setDestination(configurator.apply(new ConnectableDTOBuilder()).build());
+    return setDestination(configurator.apply(destination != null ? ConnectableDTOBuilder.of(destination) : new ConnectableDTOBuilder()).build());
   }
 
   /**
@@ -225,7 +225,7 @@ public final class ConnectionDTOBuilder extends AbstractComponentDTOBuilder<Conn
    * The source of the connection.
    */
   public ConnectionDTOBuilder setSource(final Function<ConnectableDTOBuilder, ConnectableDTOBuilder> configurator) {
-    return setSource(configurator.apply(new ConnectableDTOBuilder()).build());
+    return setSource(configurator.apply(source != null ? ConnectableDTOBuilder.of(source) : new ConnectableDTOBuilder()).build());
   }
 
   /**

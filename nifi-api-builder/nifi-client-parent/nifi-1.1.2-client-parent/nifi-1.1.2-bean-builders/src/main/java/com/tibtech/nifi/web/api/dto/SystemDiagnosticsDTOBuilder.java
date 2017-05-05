@@ -32,7 +32,7 @@ public final class SystemDiagnosticsDTOBuilder {
    * A systems diagnostic snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
   public SystemDiagnosticsDTOBuilder setAggregateSnapshot(final Function<SystemDiagnosticsSnapshotDTOBuilder, SystemDiagnosticsSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(new SystemDiagnosticsSnapshotDTOBuilder()).build());
+    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? SystemDiagnosticsSnapshotDTOBuilder.of(aggregateSnapshot) : new SystemDiagnosticsSnapshotDTOBuilder()).build());
   }
 
   /**

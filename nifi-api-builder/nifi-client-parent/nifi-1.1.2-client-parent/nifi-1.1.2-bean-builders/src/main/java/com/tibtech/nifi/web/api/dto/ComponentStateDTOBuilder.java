@@ -35,7 +35,7 @@ public final class ComponentStateDTOBuilder {
    * The cluster state for this component, or null if this NiFi is a standalone instance.
    */
   public ComponentStateDTOBuilder setClusterState(final Function<StateMapDTOBuilder, StateMapDTOBuilder> configurator) {
-    return setClusterState(configurator.apply(new StateMapDTOBuilder()).build());
+    return setClusterState(configurator.apply(clusterState != null ? StateMapDTOBuilder.of(clusterState) : new StateMapDTOBuilder()).build());
   }
 
   /**
@@ -84,7 +84,7 @@ public final class ComponentStateDTOBuilder {
    * The local state for this component.
    */
   public ComponentStateDTOBuilder setLocalState(final Function<StateMapDTOBuilder, StateMapDTOBuilder> configurator) {
-    return setLocalState(configurator.apply(new StateMapDTOBuilder()).build());
+    return setLocalState(configurator.apply(localState != null ? StateMapDTOBuilder.of(localState) : new StateMapDTOBuilder()).build());
   }
 
   /**

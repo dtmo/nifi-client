@@ -127,18 +127,18 @@ public class JavaBeanBuilderTypeSpecBuilder
 
 		final String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
 		final MethodSpec.Builder configuratorFunctionMethod = MethodSpec.methodBuilder(setterName)
-				.returns(TypeVariableName.get(builderName))
-				.addModifiers(Modifier.PUBLIC)
+				// TODO: The return type should be builderType<T> for abstract
+				// builders
+				.returns(TypeVariableName.get(builderName)).addModifiers(Modifier.PUBLIC)
 				.addJavadoc(builderProperty.getComment())
-				.addParameter(ParameterSpec
-						.builder(ParameterizedTypeName.get(ClassName.get(Function.class), propertyTypeBuilder, propertyTypeBuilder),
-								"configurator", Modifier.FINAL)
-						.build())
-				.addStatement("return $L(configurator.apply(new $T()).build())", setterName, propertyTypeBuilder);
+				.addParameter(ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(Function.class),
+						propertyTypeBuilder, propertyTypeBuilder), "configurator", Modifier.FINAL).build())
+				.addStatement("return $L(configurator.apply($L != null ? $T.of($L) : new $T()).build())", setterName,
+						propertyName, propertyTypeBuilder, propertyName, propertyTypeBuilder);
 
 		typeSpecBuilder.addMethod(configuratorFunctionMethod.build());
 	}
-	
+
 	protected void addConfiguratorClosureMethod(final TypeSpec.Builder typeSpecBuilder, final String builderName,
 			final BuilderProperty builderProperty)
 	{
@@ -147,8 +147,7 @@ public class JavaBeanBuilderTypeSpecBuilder
 
 		final String setterName = "set" + Character.toUpperCase(propertyName.charAt(0)) + propertyName.substring(1);
 		final MethodSpec.Builder configuratorClosureMethod = MethodSpec.methodBuilder(setterName)
-				.returns(TypeVariableName.get(builderName))
-				.addModifiers(Modifier.PUBLIC)
+				.returns(TypeVariableName.get(builderName)).addModifiers(Modifier.PUBLIC)
 				.addJavadoc(builderProperty.getComment())
 				.addParameter(ParameterSpec
 						.builder(ParameterizedTypeName.get(ClassName.get(Closure.class), propertyTypeBuilder),
@@ -159,10 +158,8 @@ public class JavaBeanBuilderTypeSpecBuilder
 						.build())
 				.beginControlFlow("return $L(c ->", setterName)
 				.addStatement("final Closure<$T> code = closure.rehydrate(c, this, this)", propertyTypeBuilder)
-				.addStatement("code.setResolveStrategy(Closure.DELEGATE_ONLY)")
-				.addStatement("code.call()")
-				.addStatement("return c", setterName)
-				.endControlFlow(")");
+				.addStatement("code.setResolveStrategy(Closure.DELEGATE_ONLY)").addStatement("code.call()")
+				.addStatement("return c", setterName).endControlFlow(")");
 
 		typeSpecBuilder.addMethod(configuratorClosureMethod.build());
 	}
@@ -293,14 +290,6 @@ public class JavaBeanBuilderTypeSpecBuilder
 	protected void addOfDtoMethod(final TypeSpec.Builder typeSpecBuilder, final String builderClassName,
 			final String builderSuperclassName) throws IntrospectionException
 	{
-		// protected static XxxBuilder of(final Xxx xxx)
-		// {
-		// final XxxBuilder xxxBuilder = new XxxBuilder();
-		// SuperClass.setBuilderValues(xxxBuilder, xxx);
-		// xxxBuilder.setYyy(xxx.getYyy());
-		// return xxxBuilder;
-		// }
-
 		final TypeVariableName builderTypeName = TypeVariableName.get(builderClassName);
 
 		// Convert the builder class name into a variable name.

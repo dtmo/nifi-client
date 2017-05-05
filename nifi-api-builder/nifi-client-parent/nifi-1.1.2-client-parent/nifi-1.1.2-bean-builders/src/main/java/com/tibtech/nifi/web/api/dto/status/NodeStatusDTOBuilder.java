@@ -32,7 +32,7 @@ public final class NodeStatusDTOBuilder {
    * The controller status for each node.
    */
   public NodeStatusDTOBuilder setControllerStatus(final Function<ProcessGroupStatusDTOBuilder, ProcessGroupStatusDTOBuilder> configurator) {
-    return setControllerStatus(configurator.apply(new ProcessGroupStatusDTOBuilder()).build());
+    return setControllerStatus(configurator.apply(controllerStatus != null ? ProcessGroupStatusDTOBuilder.of(controllerStatus) : new ProcessGroupStatusDTOBuilder()).build());
   }
 
   /**
@@ -66,7 +66,7 @@ public final class NodeStatusDTOBuilder {
    * The node.
    */
   public NodeStatusDTOBuilder setNode(final Function<NodeDTOBuilder, NodeDTOBuilder> configurator) {
-    return setNode(configurator.apply(new NodeDTOBuilder()).build());
+    return setNode(configurator.apply(node != null ? NodeDTOBuilder.of(node) : new NodeDTOBuilder()).build());
   }
 
   /**

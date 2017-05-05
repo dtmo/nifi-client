@@ -63,7 +63,7 @@ public final class ComponentDTOBuilder extends AbstractComponentDTOBuilder<Compo
    * The position of this component in the UI if applicable.
    */
   public ComponentDTOBuilder setPosition(final Function<PositionDTOBuilder, PositionDTOBuilder> configurator) {
-    return setPosition(configurator.apply(new PositionDTOBuilder()).build());
+    return setPosition(configurator.apply(position != null ? PositionDTOBuilder.of(position) : new PositionDTOBuilder()).build());
   }
 
   /**

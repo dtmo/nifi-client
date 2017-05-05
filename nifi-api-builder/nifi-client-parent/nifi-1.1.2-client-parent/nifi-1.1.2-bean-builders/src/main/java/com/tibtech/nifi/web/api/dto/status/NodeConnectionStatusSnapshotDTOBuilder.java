@@ -81,7 +81,7 @@ public final class NodeConnectionStatusSnapshotDTOBuilder {
    * The connection status snapshot from the node.
    */
   public NodeConnectionStatusSnapshotDTOBuilder setStatusSnapshot(final Function<ConnectionStatusSnapshotDTOBuilder, ConnectionStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(new ConnectionStatusSnapshotDTOBuilder()).build());
+    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? ConnectionStatusSnapshotDTOBuilder.of(statusSnapshot) : new ConnectionStatusSnapshotDTOBuilder()).build());
   }
 
   /**

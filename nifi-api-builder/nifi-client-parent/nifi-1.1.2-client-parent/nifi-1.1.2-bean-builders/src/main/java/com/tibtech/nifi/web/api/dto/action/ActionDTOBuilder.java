@@ -50,7 +50,7 @@ public final class ActionDTOBuilder {
    * The details of the action.
    */
   public ActionDTOBuilder setActionDetails(final Function<ActionDetailsDTOBuilder, ActionDetailsDTOBuilder> configurator) {
-    return setActionDetails(configurator.apply(new ActionDetailsDTOBuilder()).build());
+    return setActionDetails(configurator.apply(actionDetails != null ? ActionDetailsDTOBuilder.of(actionDetails) : new ActionDetailsDTOBuilder()).build());
   }
 
   /**
@@ -84,7 +84,7 @@ public final class ActionDTOBuilder {
    * The details of the source component.
    */
   public ActionDTOBuilder setComponentDetails(final Function<ComponentDetailsDTOBuilder, ComponentDetailsDTOBuilder> configurator) {
-    return setComponentDetails(configurator.apply(new ComponentDetailsDTOBuilder()).build());
+    return setComponentDetails(configurator.apply(componentDetails != null ? ComponentDetailsDTOBuilder.of(componentDetails) : new ComponentDetailsDTOBuilder()).build());
   }
 
   /**

@@ -50,7 +50,7 @@ public final class ConnectionStatusDTOBuilder {
    * The status snapshot that represents the aggregate stats of the cluster
    */
   public ConnectionStatusDTOBuilder setAggregateSnapshot(final Function<ConnectionStatusSnapshotDTOBuilder, ConnectionStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(new ConnectionStatusSnapshotDTOBuilder()).build());
+    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? ConnectionStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ConnectionStatusSnapshotDTOBuilder()).build());
   }
 
   /**

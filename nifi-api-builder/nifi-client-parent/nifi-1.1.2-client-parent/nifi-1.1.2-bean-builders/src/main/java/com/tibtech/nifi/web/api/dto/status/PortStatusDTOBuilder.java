@@ -47,7 +47,7 @@ public final class PortStatusDTOBuilder {
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
   public PortStatusDTOBuilder setAggregateSnapshot(final Function<PortStatusSnapshotDTOBuilder, PortStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(new PortStatusSnapshotDTOBuilder()).build());
+    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? PortStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new PortStatusSnapshotDTOBuilder()).build());
   }
 
   /**

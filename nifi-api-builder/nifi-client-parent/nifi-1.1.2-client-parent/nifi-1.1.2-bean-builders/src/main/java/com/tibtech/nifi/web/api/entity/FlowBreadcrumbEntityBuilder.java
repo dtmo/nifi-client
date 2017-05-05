@@ -66,7 +66,7 @@ public final class FlowBreadcrumbEntityBuilder extends AbstractEntityBuilder<Flo
    * The parent breadcrumb for this breadcrumb.
    */
   public FlowBreadcrumbEntityBuilder setParentBreadcrumb(final Function<FlowBreadcrumbEntityBuilder, FlowBreadcrumbEntityBuilder> configurator) {
-    return setParentBreadcrumb(configurator.apply(new FlowBreadcrumbEntityBuilder()).build());
+    return setParentBreadcrumb(configurator.apply(parentBreadcrumb != null ? FlowBreadcrumbEntityBuilder.of(parentBreadcrumb) : new FlowBreadcrumbEntityBuilder()).build());
   }
 
   /**

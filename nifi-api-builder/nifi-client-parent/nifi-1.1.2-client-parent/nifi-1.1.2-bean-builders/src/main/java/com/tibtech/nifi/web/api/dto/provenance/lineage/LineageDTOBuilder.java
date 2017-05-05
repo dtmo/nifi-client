@@ -107,7 +107,7 @@ public final class LineageDTOBuilder {
    * The initial lineage result.
    */
   public LineageDTOBuilder setRequest(final Function<LineageRequestDTOBuilder, LineageRequestDTOBuilder> configurator) {
-    return setRequest(configurator.apply(new LineageRequestDTOBuilder()).build());
+    return setRequest(configurator.apply(request != null ? LineageRequestDTOBuilder.of(request) : new LineageRequestDTOBuilder()).build());
   }
 
   /**
@@ -141,7 +141,7 @@ public final class LineageDTOBuilder {
    * The results of the lineage query.
    */
   public LineageDTOBuilder setResults(final Function<LineageResultsDTOBuilder, LineageResultsDTOBuilder> configurator) {
-    return setResults(configurator.apply(new LineageResultsDTOBuilder()).build());
+    return setResults(configurator.apply(results != null ? LineageResultsDTOBuilder.of(results) : new LineageResultsDTOBuilder()).build());
   }
 
   /**

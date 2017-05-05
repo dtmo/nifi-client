@@ -40,7 +40,7 @@ public final class ProcessGroupStatusDTOBuilder {
    * The aggregate status of all nodes in the cluster
    */
   public ProcessGroupStatusDTOBuilder setAggregateSnapshot(final Function<ProcessGroupStatusSnapshotDTOBuilder, ProcessGroupStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(new ProcessGroupStatusSnapshotDTOBuilder()).build());
+    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? ProcessGroupStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ProcessGroupStatusSnapshotDTOBuilder()).build());
   }
 
   /**

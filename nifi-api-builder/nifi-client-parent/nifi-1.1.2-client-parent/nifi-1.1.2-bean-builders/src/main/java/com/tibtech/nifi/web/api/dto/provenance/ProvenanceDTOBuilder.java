@@ -107,7 +107,7 @@ public final class ProvenanceDTOBuilder {
    * The provenance request.
    */
   public ProvenanceDTOBuilder setRequest(final Function<ProvenanceRequestDTOBuilder, ProvenanceRequestDTOBuilder> configurator) {
-    return setRequest(configurator.apply(new ProvenanceRequestDTOBuilder()).build());
+    return setRequest(configurator.apply(request != null ? ProvenanceRequestDTOBuilder.of(request) : new ProvenanceRequestDTOBuilder()).build());
   }
 
   /**
@@ -141,7 +141,7 @@ public final class ProvenanceDTOBuilder {
    * The provenance results.
    */
   public ProvenanceDTOBuilder setResults(final Function<ProvenanceResultsDTOBuilder, ProvenanceResultsDTOBuilder> configurator) {
-    return setResults(configurator.apply(new ProvenanceResultsDTOBuilder()).build());
+    return setResults(configurator.apply(results != null ? ProvenanceResultsDTOBuilder.of(results) : new ProvenanceResultsDTOBuilder()).build());
   }
 
   /**

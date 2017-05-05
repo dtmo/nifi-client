@@ -81,7 +81,7 @@ public final class NodeSystemDiagnosticsSnapshotDTOBuilder {
    * The System Diagnostics snapshot from the node.
    */
   public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(final Function<SystemDiagnosticsSnapshotDTOBuilder, SystemDiagnosticsSnapshotDTOBuilder> configurator) {
-    return setSnapshot(configurator.apply(new SystemDiagnosticsSnapshotDTOBuilder()).build());
+    return setSnapshot(configurator.apply(snapshot != null ? SystemDiagnosticsSnapshotDTOBuilder.of(snapshot) : new SystemDiagnosticsSnapshotDTOBuilder()).build());
   }
 
   /**

@@ -46,7 +46,7 @@ public final class RemoteProcessGroupStatusDTOBuilder {
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
   public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(final Function<RemoteProcessGroupStatusSnapshotDTOBuilder, RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(new RemoteProcessGroupStatusSnapshotDTOBuilder()).build());
+    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? RemoteProcessGroupStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new RemoteProcessGroupStatusSnapshotDTOBuilder()).build());
   }
 
   /**

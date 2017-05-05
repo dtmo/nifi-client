@@ -148,7 +148,7 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
    * The contents of the remote process group. Will contain available input/output ports.
    */
   public RemoteProcessGroupDTOBuilder setContents(final Function<RemoteProcessGroupContentsDTOBuilder, RemoteProcessGroupContentsDTOBuilder> configurator) {
-    return setContents(configurator.apply(new RemoteProcessGroupContentsDTOBuilder()).build());
+    return setContents(configurator.apply(contents != null ? RemoteProcessGroupContentsDTOBuilder.of(contents) : new RemoteProcessGroupContentsDTOBuilder()).build());
   }
 
   /**

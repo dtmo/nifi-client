@@ -81,7 +81,7 @@ public final class NodePortStatusSnapshotDTOBuilder {
    * The port status snapshot from the node.
    */
   public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(final Function<PortStatusSnapshotDTOBuilder, PortStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(new PortStatusSnapshotDTOBuilder()).build());
+    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? PortStatusSnapshotDTOBuilder.of(statusSnapshot) : new PortStatusSnapshotDTOBuilder()).build());
   }
 
   /**
