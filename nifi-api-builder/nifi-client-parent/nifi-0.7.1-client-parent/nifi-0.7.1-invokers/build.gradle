@@ -1,2 +1,0 @@
-dependencies
-{ compile project(":nifi-client-parent:nifi-${nifiVersion}-client-parent:nifi-${nifiVersion}-invoker-core") }

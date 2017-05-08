@@ -5,5 +5,5 @@ mainClassName = "com.tibtech.nifi.apibuilder.RestComponentPropertiesBuildersGene
 
 dependencies {
 	compile project(":nifi-client-builders-parent:builder-core")
-	compile project(":nifi-client-parent:nifi-${nifiVersion}-client-parent:nifi-${nifiVersion}-client-api")
+	compile project(":nifi-${nifiVersion}-client-parent:nifi-${nifiVersion}-client-api")
 }

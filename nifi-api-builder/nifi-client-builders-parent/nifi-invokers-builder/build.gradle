@@ -3,7 +3,7 @@ apply plugin: "java"
 dependencies
 {
 	compile project(":nifi-client-builders-parent:builder-core")
-	compile project(":nifi-client-parent:nifi-1.1.2-client-parent:nifi-1.1.2-invoker-core")
+	compile project(":nifi-1.1.2-client-parent:nifi-1.1.2-invoker-core")
 	
 	compile "com.sun.jersey:jersey-client:1.19.3"
 	compile "com.sun.jersey.contribs:jersey-multipart:1.19.3"
