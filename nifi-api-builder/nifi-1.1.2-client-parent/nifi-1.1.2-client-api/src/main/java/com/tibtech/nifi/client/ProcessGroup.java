@@ -9,20 +9,24 @@ import org.apache.nifi.web.api.dto.ProcessGroupDTO;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 
 import com.tibtech.nifi.web.api.dto.FunnelDTOBuilder;
+import com.tibtech.nifi.web.api.dto.LabelDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ProcessGroupDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
 import com.tibtech.nifi.web.api.dto.RemoteProcessGroupDTOBuilder;
 import com.tibtech.nifi.web.api.entity.FunnelEntityBuilder;
+import com.tibtech.nifi.web.api.entity.LabelEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessGroupEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
 import com.tibtech.nifi.web.api.entity.RemoteProcessGroupEntityBuilder;
 import com.tibtech.nifi.web.api.processgroup.CreateFunnelInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateLabelInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateRemoteProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetConnectionsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetFunnelsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetInputPortsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetLabelsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetOutputPortsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupsInvoker;
@@ -250,16 +254,32 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 				.collect(Collectors.toSet());
 	}
 
+	public Label createLabel(final Consumer<LabelDTOBuilder> configurator) throws InvokerException
 	{
+		final LabelDTOBuilder labelDTOBuilder = new LabelDTOBuilder().setParentGroupId(getId());
+
+		configurator.accept(labelDTOBuilder);
+
+		return new Label(getTransport(), new CreateLabelInvoker(getTransport(), 0).setId(getId())
+				.setLabelEntity(new LabelEntityBuilder().setComponent(labelDTOBuilder.build()).build()).invoke());
 	}
 
+	public Label createLabel(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Label.class) final Closure<LabelDTOBuilder> closure)
+			throws InvokerException
 	{
+		return createLabel(configurator ->
 		{
+			final Closure<LabelDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			code.call();
 		});
 	}
 
+	public Set<Label> getLabels() throws InvokerException
 	{
+		return new GetLabelsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getLabels().stream()
+				.map(labelEntity -> new Label(getTransport(), labelEntity)).collect(Collectors.toSet());
 	}
 
 	@Override
