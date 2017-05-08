@@ -1,7 +1,7 @@
 package com.tibtech.nifi.client;
 
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -160,13 +160,14 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
-	public Funnel createFunnel(final Function<FunnelDTOBuilder, FunnelDTOBuilder> configurator) throws InvokerException
+	public Funnel createFunnel(final Consumer<FunnelDTOBuilder> configurator) throws InvokerException
 	{
+		final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder().setParentGroupId(getId());
+
+		configurator.accept(funnelDTOBuilder);
+
 		return new Funnel(getTransport(), new CreateFunnelInvoker(getTransport(), 0).setId(getId())
-				.setFunnelEntity(new FunnelEntityBuilder()
-						.setComponent(configurator.apply(new FunnelDTOBuilder().setParentGroupId(getId())).build())
-						.build())
-				.invoke());
+				.setFunnelEntity(new FunnelEntityBuilder().setComponent(funnelDTOBuilder.build()).build()).invoke());
 	}
 
 	public Funnel createFunnel(
@@ -178,7 +179,6 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			final Closure<FunnelDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return configurator;
 		});
 	}
 
@@ -341,14 +341,17 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
-	public Processor createProcessor(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> configurator)
-			throws InvokerException
+	public Processor createProcessor(final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
 	{
-		return new Processor(getTransport(), new CreateProcessorInvoker(getTransport(), 0).setId(getId())
-				.setProcessorEntity(new ProcessorEntityBuilder()
-						.setComponent(configurator.apply(new ProcessorDTOBuilder().setParentGroupId(getId())).build())
-						.build())
-				.invoke());
+		final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder().setParentGroupId(getId());
+
+		configurator.accept(processorDTOBuilder);
+
+		return new Processor(getTransport(),
+				new CreateProcessorInvoker(getTransport(), 0).setId(getId())
+						.setProcessorEntity(
+								new ProcessorEntityBuilder().setComponent(processorDTOBuilder.build()).build())
+						.invoke());
 	}
 
 	public Processor createProcessor(
@@ -360,7 +363,6 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			final Closure<ProcessorDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return configurator;
 		});
 	}
 
@@ -417,14 +419,17 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
-	public ProcessGroup createProcessGroup(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> configurator)
-			throws InvokerException
+	public ProcessGroup createProcessGroup(final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
+		final ProcessGroupDTOBuilder processGroupDTOBuilder = new ProcessGroupDTOBuilder()
+				.setParentGroupId(getParentGroupId());
+
+		configurator.accept(processGroupDTOBuilder);
+
 		return new ProcessGroup(getTransport(),
 				new CreateProcessGroupInvoker(getTransport(), 0).setId(getParentGroupId())
-						.setProcessGroupEntity(new ProcessGroupEntityBuilder().setComponent(configurator
-								.apply(new ProcessGroupDTOBuilder().setParentGroupId(getParentGroupId())).build())
-								.build())
+						.setProcessGroupEntity(
+								new ProcessGroupEntityBuilder().setComponent(processGroupDTOBuilder.build()).build())
 						.invoke());
 	}
 
@@ -432,12 +437,11 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupDTOBuilder.class) final Closure<ProcessGroupDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createProcessGroup(p ->
+		return createProcessGroup(configurator ->
 		{
-			final Closure<ProcessGroupDTOBuilder> code = closure.rehydrate(p, this, this);
+			final Closure<ProcessGroupDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return p;
 		});
 	}
 
@@ -495,15 +499,18 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		});
 	}
 
-	public RemoteProcessGroup createRemoteProcessGroup(
-			final Function<RemoteProcessGroupDTOBuilder, RemoteProcessGroupDTOBuilder> configurator)
+	public RemoteProcessGroup createRemoteProcessGroup(final Consumer<RemoteProcessGroupDTOBuilder> configurator)
 			throws InvokerException
 	{
+		final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = new RemoteProcessGroupDTOBuilder()
+				.setParentGroupId(getParentGroupId());
+
+		configurator.accept(remoteProcessGroupDTOBuilder);
+
 		return new RemoteProcessGroup(getTransport(),
 				new CreateRemoteProcessGroupInvoker(getTransport(), 0).setId(getId())
-						.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder().setComponent(configurator
-								.apply(new RemoteProcessGroupDTOBuilder().setParentGroupId(getParentGroupId())).build())
-								.build())
+						.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
+								.setComponent(remoteProcessGroupDTOBuilder.build()).build())
 						.invoke());
 	}
 
@@ -515,7 +522,6 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			final Closure<RemoteProcessGroup> code = closure.rehydrate(closure, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return configurator;
 		});
 	}
 
@@ -586,14 +592,17 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	}
 
 	@Override
-	public ProcessGroup update(final Function<ProcessGroupDTOBuilder, ProcessGroupDTOBuilder> configurator)
-			throws InvokerException
+	public ProcessGroup update(final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
-		setComponentEntity(new UpdateProcessGroupInvoker(getTransport(), getVersion()).setId(getId())
-				.setProcessGroupEntity(new ProcessGroupEntityBuilder()
-						.setComponent(configurator.apply(ProcessGroupDTOBuilder.of(getProcessGroupDTO())).build())
-						.build())
-				.invoke());
+		final ProcessGroupDTOBuilder processGroupDTOBuilder = ProcessGroupDTOBuilder.of(getProcessGroupDTO());
+
+		configurator.accept(processGroupDTOBuilder);
+
+		setComponentEntity(
+				new UpdateProcessGroupInvoker(getTransport(), getVersion()).setId(getId())
+						.setProcessGroupEntity(
+								new ProcessGroupEntityBuilder().setComponent(processGroupDTOBuilder.build()).build())
+						.invoke());
 
 		return this;
 	}

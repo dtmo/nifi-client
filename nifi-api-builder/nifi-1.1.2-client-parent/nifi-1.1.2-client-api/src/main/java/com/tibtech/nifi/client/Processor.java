@@ -3,7 +3,7 @@ package com.tibtech.nifi.client;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import org.apache.nifi.web.api.dto.ProcessorConfigDTO;
 import org.apache.nifi.web.api.dto.ProcessorDTO;
@@ -12,7 +12,6 @@ import org.apache.nifi.web.api.entity.ProcessorEntity;
 
 import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
-import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
 import com.tibtech.nifi.web.api.processor.DeleteProcessorInvoker;
 import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
 import com.tibtech.nifi.web.api.processor.UpdateProcessorInvoker;
@@ -128,15 +127,14 @@ public class Processor extends ConnectableComponent<Processor, ProcessorEntity, 
 	}
 
 	@Override
-	public Processor update(final Function<ProcessorDTOBuilder, ProcessorDTOBuilder> configurator)
-			throws InvokerException
+	public Processor update(final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
 	{
+		final ProcessorDTOBuilder processorDTOBuilder = ProcessorDTOBuilder.of(getProcessorDTO());
+
+		configurator.accept(processorDTOBuilder);
+
 		setComponentEntity(new UpdateProcessorInvoker(getTransport(), getVersion()).setId(getId())
-				.setProcessorEntity(new ProcessorEntityBuilder()
-						.setComponent(
-								configurator.apply(ProcessorDTOBuilder.of(getProcessorDTO()))
-								.build())
-						.build())
+				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(processorDTOBuilder.build()).build())
 				.invoke());
 
 		return this;

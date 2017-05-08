@@ -4,7 +4,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import org.apache.nifi.web.api.dto.ConnectableDTO;
 import org.apache.nifi.web.api.dto.ConnectionDTO;
@@ -114,11 +114,14 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
 	}
 
 	@Override
-	public Connection update(Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException
+	public Connection update(final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
 	{
+		final ConnectionDTOBuilder connectionDTOBuilder = ConnectionDTOBuilder.of(getConnectionDTO());
+
+		configurator.accept(connectionDTOBuilder);
+
 		setComponentEntity(new UpdateConnectionInvoker(getTransport(), getVersion()).setId(getId())
-				.setConnectionEntity(new ConnectionEntityBuilder()
-						.setComponent(configurator.apply(ConnectionDTOBuilder.of(getConnectionDTO())).build()).build())
+				.setConnectionEntity(new ConnectionEntityBuilder().setComponent(connectionDTOBuilder.build()).build())
 				.invoke());
 		return this;
 	}
@@ -133,33 +136,22 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
 
 	public static Connection createConnection(final Transport transport, final Connectable source,
 			final Connectable destination, final Collection<String> selectedRelationships,
-			final Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException
+			final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
 	{
-		final ConnectionEntity connectionEntity = new CreateConnectionInvoker(
-				transport, 0)
-						.setId(source
-								.getParentGroupId())
-						.setConnectionEntity(
-								new ConnectionEntityBuilder()
-										.setComponent(
-												configurator
-														.apply(new ConnectionDTOBuilder()
-																.setSource(new ConnectableDTOBuilder()
-																		.setId(source.getId())
-																		.setGroupId(source.getParentGroupId())
-																		.setType(source.getConnectableType().name())
-																		.build())
-																.setDestination(new ConnectableDTOBuilder()
-																		.setId(destination.getId())
-																		.setGroupId(destination.getParentGroupId())
-																		.setType(
-																				destination.getConnectableType().name())
-																		.build())
-																.setSelectedRelationships(
-																		new HashSet<>(selectedRelationships)))
-														.build())
-										.build())
-						.invoke();
+		final ConnectionDTOBuilder connectionDTOBuilder = new ConnectionDTOBuilder()
+				.setSource(new ConnectableDTOBuilder().setId(source.getId()).setGroupId(source.getParentGroupId())
+						.setType(source.getConnectableType().name()).build())
+				.setDestination(new ConnectableDTOBuilder().setId(destination.getId())
+						.setGroupId(destination.getParentGroupId()).setType(destination.getConnectableType().name())
+						.build())
+				.setSelectedRelationships(new HashSet<>(selectedRelationships));
+
+		configurator.accept(connectionDTOBuilder);
+
+		final ConnectionEntity connectionEntity = new CreateConnectionInvoker(transport, 0)
+				.setId(source.getParentGroupId())
+				.setConnectionEntity(new ConnectionEntityBuilder().setComponent(connectionDTOBuilder.build()).build())
+				.invoke();
 		return new Connection(transport, connectionEntity);
 	}
 }

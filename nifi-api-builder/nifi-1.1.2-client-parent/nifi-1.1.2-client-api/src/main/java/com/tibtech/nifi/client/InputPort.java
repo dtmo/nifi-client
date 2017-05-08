@@ -1,6 +1,6 @@
 package com.tibtech.nifi.client;
 
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import org.apache.nifi.web.api.entity.PortEntity;
 
@@ -32,13 +32,14 @@ public class InputPort extends Port<InputPort>
 	}
 
 	@Override
-	public InputPort update(final Function<PortDTOBuilder, PortDTOBuilder> configurator) throws InvokerException
+	public InputPort update(final Consumer<PortDTOBuilder> configurator) throws InvokerException
 	{
-		setComponentEntity(
-				new UpdateInputPortInvoker(getTransport(), getVersion()).setId(getId())
-						.setPortEntity(new PortEntityBuilder()
-								.setComponent(configurator.apply(PortDTOBuilder.of(getPortDTO())).build()).build())
-						.invoke());
+		final PortDTOBuilder portDTOBuilder = PortDTOBuilder.of(getPortDTO());
+
+		configurator.accept(portDTOBuilder);
+
+		setComponentEntity(new UpdateInputPortInvoker(getTransport(), getVersion()).setId(getId())
+				.setPortEntity(new PortEntityBuilder().setComponent(portDTOBuilder.build()).build()).invoke());
 
 		return this;
 	}

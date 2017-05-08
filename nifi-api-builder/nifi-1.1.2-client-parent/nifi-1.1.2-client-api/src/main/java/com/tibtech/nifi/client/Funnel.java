@@ -1,6 +1,6 @@
 package com.tibtech.nifi.client;
 
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import org.apache.nifi.web.api.entity.FunnelEntity;
 
@@ -46,13 +46,15 @@ public class Funnel extends ConnectableComponent<Funnel, FunnelEntity, FunnelDTO
 	}
 
 	@Override
-	public Funnel update(final Function<FunnelDTOBuilder, FunnelDTOBuilder> configurator) throws InvokerException
+	public Funnel update(final Consumer<FunnelDTOBuilder> configurator) throws InvokerException
 	{
+		final FunnelDTOBuilder funnelDTOBuilder = FunnelDTOBuilder.of(getComponentEntity().getComponent());
+
+		configurator.accept(funnelDTOBuilder);
+
 		setComponentEntity(new UpdateFunnelInvoker(getTransport(), getVersion()).setId(getId())
-				.setFunnelEntity(new FunnelEntityBuilder().setId(getId())
-						.setComponent(
-								configurator.apply(FunnelDTOBuilder.of(getComponentEntity().getComponent())).build())
-						.build())
+				.setFunnelEntity(
+						new FunnelEntityBuilder().setId(getId()).setComponent(funnelDTOBuilder.build()).build())
 				.invoke());
 		return this;
 	}

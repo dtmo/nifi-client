@@ -1,7 +1,7 @@
 package com.tibtech.nifi.client;
 
 import java.util.Collection;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
 
@@ -17,9 +17,9 @@ public interface Connectable
 	ConnectableType getConnectableType();
 
 	Connection connectTo(Connectable destination, Collection<String> selectedRelationships,
-			Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException;
+			Consumer<ConnectionDTOBuilder> configurator) throws InvokerException;
 
-	default public Connection connectTo(final Connectable destination, Collection<String> selectedRelationships,
+	default public Connection connectTo(final Connectable destination, final Collection<String> selectedRelationships,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure)
 			throws InvokerException
 	{
@@ -28,7 +28,6 @@ public interface Connectable
 			final Closure<ConnectionDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return configurator;
 		});
 	}
 }

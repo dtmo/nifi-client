@@ -3,7 +3,7 @@ package com.tibtech.nifi.client;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.apache.nifi.web.api.dto.RemoteProcessGroupContentsDTO;
@@ -156,12 +156,12 @@ public class RemoteProcessGroup
 	{
 		return getRemoteProcessGroupDTO().getYieldDuration();
 	}
-	
+
 	public RemoteProcessGroup enableTransmission() throws InvokerException
 	{
 		return setTransmitting(true);
 	}
-	
+
 	public RemoteProcessGroup disableTransmission() throws InvokerException
 	{
 		return setTransmitting(false);
@@ -173,7 +173,7 @@ public class RemoteProcessGroup
 
 		final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = RemoteProcessGroupContentsDTOBuilder
 				.of(getContents());
-		
+
 		final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = getContents().getInputPorts();
 		if (remoteInputPortDTOs != null)
 		{
@@ -184,16 +184,15 @@ public class RemoteProcessGroup
 											.of(remoteInputPortDTO).setTransmitting(transmitting).build())
 									.collect(Collectors.toSet()));
 		}
-		
+
 		final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = getContents().getOutputPorts();
 		if (remoteInputPortDTOs != null)
 		{
 			remoteProcessGroupContentsDTOBuilder
-					.setOutputPorts(
-							remoteOutputPortDTOs
-									.stream().map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder
-											.of(remoteOutputPortDTO).setTransmitting(transmitting).build())
-									.collect(Collectors.toSet()));
+					.setOutputPorts(remoteOutputPortDTOs
+							.stream().map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder
+									.of(remoteOutputPortDTO).setTransmitting(transmitting).build())
+							.collect(Collectors.toSet()));
 		}
 
 		return update(configurator -> configurator.setContents(remoteProcessGroupContentsDTOBuilder.build()));
@@ -222,15 +221,16 @@ public class RemoteProcessGroup
 	}
 
 	@Override
-	public RemoteProcessGroup update(
-			final Function<RemoteProcessGroupDTOBuilder, RemoteProcessGroupDTOBuilder> configurator)
-			throws InvokerException
+	public RemoteProcessGroup update(final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
+		final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = RemoteProcessGroupDTOBuilder
+				.of(getRemoteProcessGroupDTO());
+
+		configurator.accept(remoteProcessGroupDTOBuilder);
+
 		setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId())
 				.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
-						.setComponent(
-								configurator.apply(RemoteProcessGroupDTOBuilder.of(getRemoteProcessGroupDTO())).build())
-						.build())
+						.setComponent(remoteProcessGroupDTOBuilder.build()).build())
 				.invoke());
 
 		return this;

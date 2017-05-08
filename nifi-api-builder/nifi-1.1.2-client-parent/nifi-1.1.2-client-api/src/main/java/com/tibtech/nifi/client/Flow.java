@@ -1,7 +1,7 @@
 package com.tibtech.nifi.client;
 
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -37,14 +37,16 @@ public class Flow
 		return new ProcessGroup(transport, new GetProcessGroupInvoker(transport, 0).setId("root").invoke());
 	}
 
-	public ControllerService createControllerService(
-			final Function<ControllerServiceDTOBuilder, ControllerServiceDTOBuilder> configurator)
+	public ControllerService createControllerService(final Consumer<ControllerServiceDTOBuilder> configurator)
 			throws InvokerException
 	{
+		final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder();
+
+		configurator.accept(controllerServiceDTOBuilder);
+
 		return new ControllerService(transport,
-				new CreateControllerServiceInvoker(transport, 0)
-						.setControllerServiceEntity(new ControllerServiceEntityBuilder()
-								.setComponent(configurator.apply(new ControllerServiceDTOBuilder()).build()).build())
+				new CreateControllerServiceInvoker(transport, 0).setControllerServiceEntity(
+						new ControllerServiceEntityBuilder().setComponent(controllerServiceDTOBuilder.build()).build())
 						.invoke());
 	}
 
@@ -57,7 +59,6 @@ public class Flow
 			final Closure<ControllerServiceDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return configurator;
 		});
 	}
 
@@ -76,13 +77,17 @@ public class Flow
 		return new GetReportingTaskTypesInvoker(transport, 0).invoke().getReportingTaskTypes();
 	}
 
-	public ReportingTask createReportingTask(
-			final Function<ReportingTaskDTOBuilder, ReportingTaskDTOBuilder> configurator) throws InvokerException
+	public ReportingTask createReportingTask(final Consumer<ReportingTaskDTOBuilder> configurator)
+			throws InvokerException
 	{
+		final ReportingTaskDTOBuilder reportingTaskDTOBuilder = new ReportingTaskDTOBuilder();
+
+		configurator.accept(reportingTaskDTOBuilder);
+
 		return new ReportingTask(transport,
 				new CreateReportingTaskInvoker(transport, 0)
-						.setReportingTaskEntity(new ReportingTaskEntityBuilder()
-								.setComponent(configurator.apply(new ReportingTaskDTOBuilder()).build()).build())
+						.setReportingTaskEntity(
+								new ReportingTaskEntityBuilder().setComponent(reportingTaskDTOBuilder.build()).build())
 						.invoke());
 	}
 
@@ -90,12 +95,11 @@ public class Flow
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReportingTaskDTOBuilder.class) final Closure<ReportingTaskDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createReportingTask(c ->
+		return createReportingTask(configurator ->
 		{
-			final Closure<ReportingTaskDTOBuilder> code = closure.rehydrate(c, this, this);
+			final Closure<ReportingTaskDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return c;
 		});
 	}
 
@@ -113,7 +117,7 @@ public class Flow
 	{
 		final ClientBuilder clientBuilder = ClientBuilder.newBuilder();
 		final Client client = clientBuilder.build();
-		
+
 		return connect(client, baseUri);
 	}
 }

@@ -1,7 +1,7 @@
 package com.tibtech.nifi.client;
 
 import java.util.Collection;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import org.apache.nifi.web.api.entity.ComponentEntity;
 
@@ -17,7 +17,7 @@ public abstract class ConnectableComponent<T extends ConnectableComponent<T, E, 
 
 	@Override
 	public Connection connectTo(final Connectable destination, Collection<String> selectedRelationships,
-			final Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException
+			final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
 	{
 		return Connection.createConnection(getTransport(), this, destination, selectedRelationships, configurator);
 	}

@@ -1,13 +1,13 @@
 package com.tibtech.nifi.client;
 
 import java.util.Collection;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
 
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
 
-public abstract class RemoteProcessGroupPort implements Connectable
+public abstract class RemoteProcessGroupPort<T extends RemoteProcessGroupPort<T, B>, B> implements Connectable, Updatable<T, B>
 {
 	private final Transport transport;
 	private RemoteProcessGroup remoteProcessGroup;
@@ -82,7 +82,7 @@ public abstract class RemoteProcessGroupPort implements Connectable
 
 	@Override
 	public Connection connectTo(final Connectable destination, final Collection<String> selectedRelationships,
-			final Function<ConnectionDTOBuilder, ConnectionDTOBuilder> configurator) throws InvokerException
+			final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
 	{
 		return Connection.createConnection(transport, this, destination, selectedRelationships, configurator);
 	}

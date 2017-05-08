@@ -3,7 +3,7 @@ package com.tibtech.nifi.client;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import org.apache.nifi.controller.service.ControllerServiceState;
 import org.apache.nifi.web.api.dto.ControllerServiceDTO;
@@ -107,15 +107,16 @@ public class ControllerService
 	}
 
 	@Override
-	public ControllerService update(
-			final Function<ControllerServiceDTOBuilder, ControllerServiceDTOBuilder> configurator)
-			throws InvokerException
+	public ControllerService update(final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
 	{
+		final ControllerServiceDTOBuilder controllerServiceDTOBuilder = ControllerServiceDTOBuilder
+				.of(getControllerServiceDTO());
+
+		configurator.accept(controllerServiceDTOBuilder);
+
 		setComponentEntity(new UpdateControllerServiceInvoker(getTransport(), getVersion()).setId(getId())
 				.setControllerServiceEntity(new ControllerServiceEntityBuilder().setId(getId())
-						.setComponent(
-								configurator.apply(ControllerServiceDTOBuilder.of(getControllerServiceDTO())).build())
-						.build())
+						.setComponent(controllerServiceDTOBuilder.build()).build())
 				.invoke());
 
 		return this;

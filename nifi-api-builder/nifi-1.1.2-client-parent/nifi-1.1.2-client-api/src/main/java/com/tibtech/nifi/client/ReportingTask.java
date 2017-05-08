@@ -2,7 +2,7 @@ package com.tibtech.nifi.client;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
@@ -129,12 +129,15 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 	}
 
 	@Override
-	public ReportingTask update(final Function<ReportingTaskDTOBuilder, ReportingTaskDTOBuilder> configurator)
-			throws InvokerException
+	public ReportingTask update(final Consumer<ReportingTaskDTOBuilder> configurator) throws InvokerException
 	{
+		final ReportingTaskDTOBuilder reportingTaskDTOBuilder = ReportingTaskDTOBuilder.of(getReportingTaskDTO());
+
+		configurator.accept(reportingTaskDTOBuilder);
+
 		setComponentEntity(new UpdateReportingTaskInvoker(getTransport(), getVersion()).setId(getId())
-				.setReportingTaskEntity(new ReportingTaskEntityBuilder()
-						.setComponent(configurator.apply(new ReportingTaskDTOBuilder().setId(getId())).build()).build())
+				.setReportingTaskEntity(
+						new ReportingTaskEntityBuilder().setComponent(reportingTaskDTOBuilder.build()).build())
 				.invoke());
 
 		return this;

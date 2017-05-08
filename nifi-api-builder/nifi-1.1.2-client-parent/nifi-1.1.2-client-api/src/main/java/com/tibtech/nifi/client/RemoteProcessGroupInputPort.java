@@ -1,5 +1,6 @@
 package com.tibtech.nifi.client;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
@@ -12,7 +13,8 @@ import com.tibtech.nifi.web.api.remoteprocessgroup.UpdateRemoteProcessGroupInput
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class RemoteProcessGroupInputPort extends RemoteProcessGroupPort
+public class RemoteProcessGroupInputPort
+		extends RemoteProcessGroupPort<RemoteProcessGroupInputPort, RemoteProcessGroupPortDTOBuilder>
 {
 	public RemoteProcessGroupInputPort(final Transport transport, final RemoteProcessGroup remoteProcessGroup,
 			final long version, final RemoteProcessGroupPortDTO remoteProcessGroupPortDTO)
@@ -26,18 +28,19 @@ public class RemoteProcessGroupInputPort extends RemoteProcessGroupPort
 		return ConnectableType.REMOTE_INPUT_PORT;
 	}
 
-	public RemoteProcessGroupInputPort update(
-			final Function<RemoteProcessGroupPortDTOBuilder, RemoteProcessGroupPortDTOBuilder> configurator)
+	public RemoteProcessGroupInputPort update(final Consumer<RemoteProcessGroupPortDTOBuilder> configurator)
 			throws InvokerException
 	{
+		final RemoteProcessGroupPortDTOBuilder remoteProcessGroupPortDTOBuilder = RemoteProcessGroupPortDTOBuilder
+				.of(getRemoteProcessGroupPortDTO()).setGroupId(getParentGroupId());
+
+		configurator.accept(remoteProcessGroupPortDTOBuilder);
+
 		// TODO: Work out what, if anything, to do with this entity.
 		final RemoteProcessGroupPortEntity remoteProcessGroupPortEntity = new UpdateRemoteProcessGroupInputPortInvoker(
-				getTransport(), getVersion()).setId(getParentGroupId())
-						.setPortId(getId())
+				getTransport(), getVersion()).setId(getParentGroupId()).setPortId(getId())
 						.setRemoteProcessGroupPortEntity(new RemoteProcessGroupPortEntityBuilder()
-								.setRemoteProcessGroupPort(configurator.apply(RemoteProcessGroupPortDTOBuilder
-										.of(getRemoteProcessGroupPortDTO()).setGroupId(getParentGroupId())).build())
-								.build())
+								.setRemoteProcessGroupPort(remoteProcessGroupPortDTOBuilder.build()).build())
 						.invoke();
 		return this;
 	}
@@ -51,7 +54,6 @@ public class RemoteProcessGroupInputPort extends RemoteProcessGroupPort
 			final Closure<RemoteProcessGroupPortDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
-			return configurator;
 		});
 	}
 }
