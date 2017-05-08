@@ -2,6 +2,7 @@ package com.tibtech.nifi.apibuilder;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -41,9 +42,7 @@ public class InvokerTypeSpecBuilder
 
 	private Class<?> responseType;
 
-	private String classResourcePathString;
-
-	private String methodResourcePathString;
+	private String resourcePathString;
 
 	private List<MediaType> consumesMediaTypes = new ArrayList<>();
 	private List<MediaType> producesMediaTypes = new ArrayList<>();
@@ -87,24 +86,14 @@ public class InvokerTypeSpecBuilder
 		this.responseType = responseType;
 	}
 
-	public String getClassResourcePathString()
+	public String getResourcePathString()
 	{
-		return classResourcePathString;
+		return resourcePathString;
 	}
 
-	public void setClassResourcePathString(String classResourcePathString)
+	public void setResourcePathString(String resourcePathString)
 	{
-		this.classResourcePathString = classResourcePathString;
-	}
-
-	public String getMethodResourcePathString()
-	{
-		return methodResourcePathString;
-	}
-
-	public void setMethodResourcePathString(String methodResourcePathString)
-	{
-		this.methodResourcePathString = methodResourcePathString;
+		this.resourcePathString = resourcePathString;
 	}
 
 	public List<MediaType> getConsumesMediaTypes()
@@ -217,17 +206,15 @@ public class InvokerTypeSpecBuilder
 		final MethodSpec.Builder invokeMethodBuilder = MethodSpec.methodBuilder("invoke").returns(responseType)
 				.addModifiers(Modifier.PUBLIC, Modifier.FINAL).addException(InvokerException.class);
 
-		final String resourcePathString = Paths.get(classResourcePathString, methodResourcePathString).toString();
 		invokeMethodBuilder.addComment("$L", resourcePathString);
 		invokeMethodBuilder.addStatement("$T target = getBaseWebTarget()", WebTarget.class);
 
 		// We need to add each of the path components. (methodPathString)
 		// When we come across one that is a parameter, we need to compose the
 		// path with the appropriate property.
-		final List<String> pathComponents = PathUtils.getComponentsFromPathString(resourcePathString);
-		for (String pathComponent : pathComponents)
+		for (final Path pathComponent : Paths.get(resourcePathString))
 		{
-			final Matcher matcher = PATH_VARIABLE_PATTERN.matcher(pathComponent);
+			final Matcher matcher = PATH_VARIABLE_PATTERN.matcher(pathComponent.toString());
 			if (matcher.matches())
 			{
 				final String pathParameter = matcher.group(1);

@@ -250,8 +250,8 @@ public class InvokerCodeWriter
 		return packageName;
 	}
 
-	private static TypeSpec createInvokerTypeSpec(final String classResourcePath, final Class<?> resourceClass,
-			final String methodResourcePath, final Deque<Method> resourceMethodStack) throws IntrospectionException
+	private static TypeSpec createInvokerTypeSpec(final String resourcePath, final Class<?> resourceClass,
+			final Deque<Method> resourceMethodStack) throws IntrospectionException
 	{
 		final Method endpointMethod = resourceMethodStack.peek();
 		final String invokerName = getInvokerName(endpointMethod);
@@ -264,8 +264,7 @@ public class InvokerCodeWriter
 
 		final InvokerTypeSpecBuilder invokerTypeSpecBuilder = new InvokerTypeSpecBuilder();
 		invokerTypeSpecBuilder.setInvokerComment(invokerDescription);
-		invokerTypeSpecBuilder.setClassResourcePathString(classResourcePath);
-		invokerTypeSpecBuilder.setMethodResourcePathString(methodResourcePath);
+		invokerTypeSpecBuilder.setResourcePathString(resourcePath);
 		invokerTypeSpecBuilder.setInvokerName(invokerName);
 		invokerTypeSpecBuilder.setResponseType(endpointMethodApiAnnotation.response());
 		invokerTypeSpecBuilder.setHttpMethod(httpMethod);
@@ -293,7 +292,9 @@ public class InvokerCodeWriter
 				.forEach(resourceMethod ->
 				{
 					final Path methodPathAnnotation = resourceMethod.getAnnotation(Path.class);
-					final String methodResourcePath = methodPathAnnotation != null ? methodPathAnnotation.value() : "";
+					final String resourcePath = Paths
+							.get(classResourcePath, methodPathAnnotation != null ? methodPathAnnotation.value() : "")
+							.toString();
 
 					// We accumulate the methods that take us to the end-point
 					// so that they can all contribute parameters to the final
@@ -307,14 +308,14 @@ public class InvokerCodeWriter
 						if (ApplicationResource.class.isAssignableFrom(responseClass))
 						{
 							packagedTypeSpecs.addAll(recurseApplicationResources(packageNameMapper, responseClass,
-									resourceMethodStack, classResourcePath + "/" + methodResourcePath));
+									resourceMethodStack, resourcePath));
 						}
 						else
 						{
 							try
 							{
-								final TypeSpec invokerTypeSpec = createInvokerTypeSpec(classResourcePath, resourceClass,
-										methodResourcePath, resourceMethodStack);
+								final TypeSpec invokerTypeSpec = createInvokerTypeSpec(resourcePath, resourceClass,
+										resourceMethodStack);
 
 								packagedTypeSpecs.add(new PackagedTypeSpec(
 										packageNameMapper.apply(getInvokerPackageName(resourceClass)),
