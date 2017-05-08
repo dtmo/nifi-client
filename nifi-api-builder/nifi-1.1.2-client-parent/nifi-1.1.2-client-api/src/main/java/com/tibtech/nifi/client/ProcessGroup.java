@@ -2,7 +2,6 @@ package com.tibtech.nifi.client;
 
 import java.util.Set;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.nifi.web.api.dto.FlowSnippetDTO;
@@ -113,53 +112,6 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 				.map(connectionEntity -> new Connection(getTransport(), connectionEntity)).collect(Collectors.toSet());
 	}
 
-	public Set<Connection> findConnections(final Predicate<Connection> filter) throws InvokerException
-	{
-		return getConnections().stream().filter(filter).collect(Collectors.toSet());
-	}
-
-	public Set<Connection> findConnections(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Connection.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return findConnections(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
-	public Connection getConnection(final Predicate<Connection> filter) throws InvokerException
-	{
-		final Set<Connection> connections = findConnections(filter);
-
-		if (connections.isEmpty())
-		{
-			return null;
-		}
-		else if (connections.size() == 1)
-		{
-			return connections.iterator().next();
-		}
-		else
-		{
-			throw new IllegalArgumentException("Filter matched more than one connection: " + connections);
-		}
-	}
-
-	public Connection getConnection(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Connection.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return getConnection(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
 	public Funnel createFunnel(final Consumer<FunnelDTOBuilder> configurator) throws InvokerException
 	{
 		final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder().setParentGroupId(getId());
@@ -188,157 +140,16 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 				.map(funnelEntity -> new Funnel(getTransport(), funnelEntity)).collect(Collectors.toSet());
 	}
 
-	public Set<Funnel> findFunnels(final Predicate<Funnel> filter) throws InvokerException
-	{
-		return getFunnels().stream().filter(filter).collect(Collectors.toSet());
-	}
-
-	public Set<Funnel> findFunnels(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Funnel.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return findFunnels(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
-	public Funnel getFunnel(final Predicate<Funnel> filter) throws InvokerException
-	{
-		final Set<Funnel> funnels = findFunnels(filter);
-
-		if (funnels.isEmpty())
-		{
-			return null;
-		}
-		else if (funnels.size() == 1)
-		{
-			return funnels.iterator().next();
-		}
-		else
-		{
-			throw new IllegalArgumentException("Filter matched more than one funnel: " + funnels);
-		}
-	}
-
-	public Funnel getFunnel(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Funnel.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return getFunnel(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
 	public Set<InputPort> getInputPorts() throws InvokerException
 	{
 		return new GetInputPortsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getInputPorts().stream()
 				.map(inputPortEntity -> new InputPort(getTransport(), inputPortEntity)).collect(Collectors.toSet());
 	}
 
-	public Set<InputPort> findInputPorts(final Predicate<InputPort> filter) throws InvokerException
-	{
-		return getInputPorts().stream().filter(filter).collect(Collectors.toSet());
-	}
-
-	public Set<InputPort> findInputPorts(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InputPort.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return findInputPorts(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
-	public InputPort getInputPort(final Predicate<InputPort> filter) throws InvokerException
-	{
-		final Set<InputPort> inputPorts = findInputPorts(filter);
-
-		if (inputPorts.isEmpty())
-		{
-			return null;
-		}
-		else if (inputPorts.size() == 1)
-		{
-			return inputPorts.iterator().next();
-		}
-		else
-		{
-			throw new IllegalArgumentException("Filter matched more than one inputPort: " + inputPorts);
-		}
-	}
-
-	public InputPort getInputPort(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InputPort.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return getInputPort(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
 	public Set<OutputPort> getOutputPorts() throws InvokerException
 	{
 		return new GetOutputPortsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getOutputPorts().stream()
 				.map(outputPortEntity -> new OutputPort(getTransport(), outputPortEntity)).collect(Collectors.toSet());
-	}
-
-	public Set<OutputPort> findOutputPorts(final Predicate<OutputPort> filter) throws InvokerException
-	{
-		return getOutputPorts().stream().filter(filter).collect(Collectors.toSet());
-	}
-
-	public Set<OutputPort> findOutputPorts(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = OutputPort.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return findOutputPorts(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
-	public OutputPort getOutputPort(final Predicate<OutputPort> filter) throws InvokerException
-	{
-		final Set<OutputPort> outputPorts = findOutputPorts(filter);
-
-		if (outputPorts.isEmpty())
-		{
-			return null;
-		}
-		else if (outputPorts.size() == 1)
-		{
-			return outputPorts.iterator().next();
-		}
-		else
-		{
-			throw new IllegalArgumentException("Filter matched more than one outputPort: " + outputPorts);
-		}
-	}
-
-	public OutputPort getOutputPort(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = OutputPort.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return getOutputPort(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
 	}
 
 	public Processor createProcessor(final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
@@ -372,53 +183,6 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 				.map(processorEntity -> new Processor(getTransport(), processorEntity)).collect(Collectors.toSet());
 	}
 
-	public Set<Processor> findProcessors(final Predicate<Processor> filter) throws InvokerException
-	{
-		return getProcessors().stream().filter(filter).collect(Collectors.toSet());
-	}
-
-	public Set<Processor> findProcessors(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Processor.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return findProcessors(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
-	public Processor getProcessor(final Predicate<Processor> filter) throws InvokerException
-	{
-		final Set<Processor> processors = findProcessors(filter);
-
-		if (processors.isEmpty())
-		{
-			return null;
-		}
-		else if (processors.size() == 1)
-		{
-			return processors.iterator().next();
-		}
-		else
-		{
-			throw new IllegalArgumentException("Filter matched more than one processor: " + processors);
-		}
-	}
-
-	public Processor getProcessor(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Processor.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return getProcessor(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
 	public ProcessGroup createProcessGroup(final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
 		final ProcessGroupDTOBuilder processGroupDTOBuilder = new ProcessGroupDTOBuilder()
@@ -450,53 +214,6 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		return new GetProcessGroupsInvoker(getTransport(), getVersion()).setId(getId()).invoke().getProcessGroups()
 				.stream().map(processGroupEntity -> new ProcessGroup(getTransport(), processGroupEntity))
 				.collect(Collectors.toSet());
-	}
-
-	public Set<ProcessGroup> findProcessGroups(final Predicate<ProcessGroup> filter) throws InvokerException
-	{
-		return getProcessGroups().stream().filter(filter).collect(Collectors.toSet());
-	}
-
-	public Set<ProcessGroup> findProcessGroups(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroup.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return findProcessGroups(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
-	}
-
-	public ProcessGroup getProcessGroup(final Predicate<ProcessGroup> filter) throws InvokerException
-	{
-		final Set<ProcessGroup> processGroups = findProcessGroups(filter);
-
-		if (processGroups.isEmpty())
-		{
-			return null;
-		}
-		else if (processGroups.size() == 1)
-		{
-			return processGroups.iterator().next();
-		}
-		else
-		{
-			throw new IllegalArgumentException("Filter matched more than one process group: " + processGroups);
-		}
-	}
-
-	public ProcessGroup getProcessGroup(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroup.class) final Closure<Boolean> closure)
-			throws InvokerException
-	{
-		return getProcessGroup(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
 	}
 
 	public RemoteProcessGroup createRemoteProcessGroup(final Consumer<RemoteProcessGroupDTOBuilder> configurator)
@@ -533,54 +250,16 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 				.collect(Collectors.toSet());
 	}
 
-	public Set<RemoteProcessGroup> findRemoteProcessGroups(final Predicate<RemoteProcessGroup> filter)
-			throws InvokerException
 	{
-		return getRemoteProcessGroups().stream().filter(filter).collect(Collectors.toSet());
 	}
 
-	public Set<RemoteProcessGroup> findRemoteProcessGroups(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroup.class) final Closure<Boolean> closure)
-			throws IllegalArgumentException, InvokerException
 	{
-		return findRemoteProcessGroups(filter ->
 		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
 		});
 	}
 
-	public RemoteProcessGroup getRemoteProcessGroup(final Predicate<RemoteProcessGroup> filter)
-			throws IllegalArgumentException, InvokerException
 	{
-		final Set<RemoteProcessGroup> remoteProcessGroups = findRemoteProcessGroups(filter);
-
-		if (remoteProcessGroups.isEmpty())
-		{
-			return null;
-		}
-		else if (remoteProcessGroups.size() == 1)
-		{
-			return remoteProcessGroups.iterator().next();
-		}
-		else
-		{
-			throw new IllegalArgumentException(
-					"Filter matched more than one remote process group: " + remoteProcessGroups);
-		}
-	}
-
-	public RemoteProcessGroup getRemoteProcessGroup(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroup.class) final Closure<Boolean> closure)
-			throws IllegalArgumentException, InvokerException
-	{
-		return getRemoteProcessGroup(filter ->
-		{
-			final Closure<Boolean> code = closure.rehydrate(filter, this, this);
-			code.setResolveStrategy(Closure.DELEGATE_ONLY);
-			return code.call();
-		});
 	}
 
 	@Override
