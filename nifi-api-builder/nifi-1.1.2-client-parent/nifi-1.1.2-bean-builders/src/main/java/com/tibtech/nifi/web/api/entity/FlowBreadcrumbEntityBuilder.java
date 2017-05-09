@@ -3,7 +3,7 @@ package com.tibtech.nifi.web.api.entity;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.PermissionsDTO;
 import org.apache.nifi.web.api.dto.flow.FlowBreadcrumbDTO;
 import org.apache.nifi.web.api.entity.FlowBreadcrumbEntity;
@@ -65,8 +65,10 @@ public final class FlowBreadcrumbEntityBuilder extends AbstractEntityBuilder<Flo
   /**
    * The parent breadcrumb for this breadcrumb.
    */
-  public FlowBreadcrumbEntityBuilder setParentBreadcrumb(final Function<FlowBreadcrumbEntityBuilder, FlowBreadcrumbEntityBuilder> configurator) {
-    return setParentBreadcrumb(configurator.apply(parentBreadcrumb != null ? FlowBreadcrumbEntityBuilder.of(parentBreadcrumb) : new FlowBreadcrumbEntityBuilder()).build());
+  public FlowBreadcrumbEntityBuilder setParentBreadcrumb(final Consumer<FlowBreadcrumbEntityBuilder> configurator) {
+    final FlowBreadcrumbEntityBuilder builder = (parentBreadcrumb != null ? FlowBreadcrumbEntityBuilder.of(parentBreadcrumb) : new FlowBreadcrumbEntityBuilder());
+    configurator.accept(builder);
+    return setParentBreadcrumb(builder.build());
   }
 
   /**
@@ -77,7 +79,6 @@ public final class FlowBreadcrumbEntityBuilder extends AbstractEntityBuilder<Flo
       final Closure<FlowBreadcrumbEntityBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

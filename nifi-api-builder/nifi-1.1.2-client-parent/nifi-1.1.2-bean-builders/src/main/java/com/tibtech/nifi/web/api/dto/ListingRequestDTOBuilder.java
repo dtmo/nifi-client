@@ -7,7 +7,7 @@ import java.lang.Integer;
 import java.lang.String;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.FlowFileSummaryDTO;
 import org.apache.nifi.web.api.dto.ListingRequestDTO;
 import org.apache.nifi.web.api.dto.QueueSizeDTO;
@@ -158,8 +158,10 @@ public final class ListingRequestDTOBuilder {
   /**
    * The size of the queue
    */
-  public ListingRequestDTOBuilder setQueueSize(final Function<QueueSizeDTOBuilder, QueueSizeDTOBuilder> configurator) {
-    return setQueueSize(configurator.apply(queueSize != null ? QueueSizeDTOBuilder.of(queueSize) : new QueueSizeDTOBuilder()).build());
+  public ListingRequestDTOBuilder setQueueSize(final Consumer<QueueSizeDTOBuilder> configurator) {
+    final QueueSizeDTOBuilder builder = (queueSize != null ? QueueSizeDTOBuilder.of(queueSize) : new QueueSizeDTOBuilder());
+    configurator.accept(builder);
+    return setQueueSize(builder.build());
   }
 
   /**
@@ -170,7 +172,6 @@ public final class ListingRequestDTOBuilder {
       final Closure<QueueSizeDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

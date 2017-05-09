@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.String;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.FlowSnippetDTO;
 import org.apache.nifi.web.api.dto.TemplateDTO;
 
@@ -118,8 +118,10 @@ public final class TemplateDTOBuilder {
   /**
    * The contents of the template.
    */
-  public TemplateDTOBuilder setSnippet(final Function<FlowSnippetDTOBuilder, FlowSnippetDTOBuilder> configurator) {
-    return setSnippet(configurator.apply(snippet != null ? FlowSnippetDTOBuilder.of(snippet) : new FlowSnippetDTOBuilder()).build());
+  public TemplateDTOBuilder setSnippet(final Consumer<FlowSnippetDTOBuilder> configurator) {
+    final FlowSnippetDTOBuilder builder = (snippet != null ? FlowSnippetDTOBuilder.of(snippet) : new FlowSnippetDTOBuilder());
+    configurator.accept(builder);
+    return setSnippet(builder.build());
   }
 
   /**
@@ -130,7 +132,6 @@ public final class TemplateDTOBuilder {
       final Closure<FlowSnippetDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

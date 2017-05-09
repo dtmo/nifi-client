@@ -7,7 +7,7 @@ import java.lang.Integer;
 import java.lang.String;
 import java.util.Collection;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupContentsDTO;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupDTO;
 
@@ -147,8 +147,10 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * The contents of the remote process group. Will contain available input/output ports.
    */
-  public RemoteProcessGroupDTOBuilder setContents(final Function<RemoteProcessGroupContentsDTOBuilder, RemoteProcessGroupContentsDTOBuilder> configurator) {
-    return setContents(configurator.apply(contents != null ? RemoteProcessGroupContentsDTOBuilder.of(contents) : new RemoteProcessGroupContentsDTOBuilder()).build());
+  public RemoteProcessGroupDTOBuilder setContents(final Consumer<RemoteProcessGroupContentsDTOBuilder> configurator) {
+    final RemoteProcessGroupContentsDTOBuilder builder = (contents != null ? RemoteProcessGroupContentsDTOBuilder.of(contents) : new RemoteProcessGroupContentsDTOBuilder());
+    configurator.accept(builder);
+    return setContents(builder.build());
   }
 
   /**
@@ -159,7 +161,6 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
       final Closure<RemoteProcessGroupContentsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

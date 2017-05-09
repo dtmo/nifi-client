@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.Integer;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.CountersSnapshotDTO;
 import org.apache.nifi.web.api.dto.NodeCountersSnapshotDTO;
 
@@ -80,8 +80,10 @@ public final class NodeCountersSnapshotDTOBuilder {
   /**
    * The counters from the node.
    */
-  public NodeCountersSnapshotDTOBuilder setSnapshot(final Function<CountersSnapshotDTOBuilder, CountersSnapshotDTOBuilder> configurator) {
-    return setSnapshot(configurator.apply(snapshot != null ? CountersSnapshotDTOBuilder.of(snapshot) : new CountersSnapshotDTOBuilder()).build());
+  public NodeCountersSnapshotDTOBuilder setSnapshot(final Consumer<CountersSnapshotDTOBuilder> configurator) {
+    final CountersSnapshotDTOBuilder builder = (snapshot != null ? CountersSnapshotDTOBuilder.of(snapshot) : new CountersSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setSnapshot(builder.build());
   }
 
   /**
@@ -92,7 +94,6 @@ public final class NodeCountersSnapshotDTOBuilder {
       final Closure<CountersSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

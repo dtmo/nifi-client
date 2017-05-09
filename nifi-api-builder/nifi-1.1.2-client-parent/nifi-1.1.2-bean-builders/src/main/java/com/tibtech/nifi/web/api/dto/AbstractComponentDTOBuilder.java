@@ -3,7 +3,7 @@ package com.tibtech.nifi.web.api.dto;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.ComponentDTO;
 import org.apache.nifi.web.api.dto.PositionDTO;
 
@@ -62,8 +62,10 @@ public abstract class AbstractComponentDTOBuilder<T extends AbstractComponentDTO
   /**
    * The position of this component in the UI if applicable.
    */
-  public AbstractComponentDTOBuilder setPosition(final Function<PositionDTOBuilder, PositionDTOBuilder> configurator) {
-    return setPosition(configurator.apply(position != null ? PositionDTOBuilder.of(position) : new PositionDTOBuilder()).build());
+  public AbstractComponentDTOBuilder setPosition(final Consumer<PositionDTOBuilder> configurator) {
+    final PositionDTOBuilder builder = (position != null ? PositionDTOBuilder.of(position) : new PositionDTOBuilder());
+    configurator.accept(builder);
+    return setPosition(builder.build());
   }
 
   /**
@@ -74,7 +76,6 @@ public abstract class AbstractComponentDTOBuilder<T extends AbstractComponentDTO
       final Closure<PositionDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

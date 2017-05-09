@@ -3,7 +3,7 @@ package com.tibtech.nifi.web.api.dto;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.CountersDTO;
 import org.apache.nifi.web.api.dto.CountersSnapshotDTO;
 import org.apache.nifi.web.api.dto.NodeCountersSnapshotDTO;
@@ -31,8 +31,10 @@ public final class CountersDTOBuilder {
   /**
    * A Counters snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public CountersDTOBuilder setAggregateSnapshot(final Function<CountersSnapshotDTOBuilder, CountersSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? CountersSnapshotDTOBuilder.of(aggregateSnapshot) : new CountersSnapshotDTOBuilder()).build());
+  public CountersDTOBuilder setAggregateSnapshot(final Consumer<CountersSnapshotDTOBuilder> configurator) {
+    final CountersSnapshotDTOBuilder builder = (aggregateSnapshot != null ? CountersSnapshotDTOBuilder.of(aggregateSnapshot) : new CountersSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setAggregateSnapshot(builder.build());
   }
 
   /**
@@ -43,7 +45,6 @@ public final class CountersDTOBuilder {
       final Closure<CountersSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

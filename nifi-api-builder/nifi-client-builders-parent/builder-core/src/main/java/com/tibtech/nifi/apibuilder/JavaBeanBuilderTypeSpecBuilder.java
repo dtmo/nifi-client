@@ -7,7 +7,7 @@ import java.beans.PropertyDescriptor;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 
 import javax.lang.model.element.Modifier;
 
@@ -119,7 +119,7 @@ public class JavaBeanBuilderTypeSpecBuilder
 		typeSpecBuilder.addMethod(setterMethodBuilder.build());
 	}
 
-	protected void addConfiguratorFunctionMethod(final TypeSpec.Builder typeSpecBuilder, final String builderName,
+	protected void addConfiguratorLambdaMethod(final TypeSpec.Builder typeSpecBuilder, final String builderName,
 			final BuilderProperty builderProperty)
 	{
 		final String propertyName = builderProperty.getName();
@@ -131,10 +131,15 @@ public class JavaBeanBuilderTypeSpecBuilder
 				// builders
 				.returns(TypeVariableName.get(builderName)).addModifiers(Modifier.PUBLIC)
 				.addJavadoc(builderProperty.getComment())
-				.addParameter(ParameterSpec.builder(ParameterizedTypeName.get(ClassName.get(Function.class),
-						propertyTypeBuilder, propertyTypeBuilder), "configurator", Modifier.FINAL).build())
-				.addStatement("return $L(configurator.apply($L != null ? $T.of($L) : new $T()).build())", setterName,
-						propertyName, propertyTypeBuilder, propertyName, propertyTypeBuilder);
+				.addParameter(ParameterSpec
+						.builder(ParameterizedTypeName.get(ClassName.get(Consumer.class), propertyTypeBuilder),
+								"configurator", Modifier.FINAL)
+						.build())
+				.addStatement("final $T builder = ($L != null ? $T.of($L) : new $T())", propertyTypeBuilder,
+						propertyName, propertyTypeBuilder, propertyName, propertyTypeBuilder)
+				.addStatement("configurator.accept(builder)", setterName, propertyName, propertyTypeBuilder,
+						propertyName, propertyTypeBuilder)
+				.addStatement("return $L(builder.build())", setterName);
 
 		typeSpecBuilder.addMethod(configuratorFunctionMethod.build());
 	}
@@ -159,7 +164,7 @@ public class JavaBeanBuilderTypeSpecBuilder
 				.beginControlFlow("return $L(c ->", setterName)
 				.addStatement("final Closure<$T> code = closure.rehydrate(c, this, this)", propertyTypeBuilder)
 				.addStatement("code.setResolveStrategy(Closure.DELEGATE_ONLY)").addStatement("code.call()")
-				.addStatement("return c", setterName).endControlFlow(")");
+				.endControlFlow(")");
 
 		typeSpecBuilder.addMethod(configuratorClosureMethod.build());
 	}
@@ -174,7 +179,7 @@ public class JavaBeanBuilderTypeSpecBuilder
 		if (builderProperty.isBuildableType())
 		{
 			// Add lambda and Closure methods
-			addConfiguratorFunctionMethod(typeSpecBuilder, builderName, builderProperty);
+			addConfiguratorLambdaMethod(typeSpecBuilder, builderName, builderProperty);
 			addConfiguratorClosureMethod(typeSpecBuilder, builderName, builderProperty);
 		}
 	}
@@ -352,7 +357,7 @@ public class JavaBeanBuilderTypeSpecBuilder
 
 		final TypeSpec.Builder typeSpecBuilder = TypeSpec.classBuilder(builderClassName).addModifiers(Modifier.PUBLIC);
 
-		TypeVariableName builderTypeName = TypeVariableName.get("T",
+		final TypeVariableName builderTypeName = TypeVariableName.get("T",
 				ParameterizedTypeName.get(ClassName.bestGuess(builderClassName), TypeVariableName.get("T")));
 		if (abstractBuilder)
 		{

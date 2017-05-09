@@ -3,7 +3,7 @@ package com.tibtech.nifi.web.api.dto.status;
 import com.tibtech.nifi.web.api.dto.NodeDTOBuilder;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.NodeDTO;
 import org.apache.nifi.web.api.dto.status.NodeStatusDTO;
 import org.apache.nifi.web.api.dto.status.ProcessGroupStatusDTO;
@@ -31,8 +31,10 @@ public final class NodeStatusDTOBuilder {
   /**
    * The controller status for each node.
    */
-  public NodeStatusDTOBuilder setControllerStatus(final Function<ProcessGroupStatusDTOBuilder, ProcessGroupStatusDTOBuilder> configurator) {
-    return setControllerStatus(configurator.apply(controllerStatus != null ? ProcessGroupStatusDTOBuilder.of(controllerStatus) : new ProcessGroupStatusDTOBuilder()).build());
+  public NodeStatusDTOBuilder setControllerStatus(final Consumer<ProcessGroupStatusDTOBuilder> configurator) {
+    final ProcessGroupStatusDTOBuilder builder = (controllerStatus != null ? ProcessGroupStatusDTOBuilder.of(controllerStatus) : new ProcessGroupStatusDTOBuilder());
+    configurator.accept(builder);
+    return setControllerStatus(builder.build());
   }
 
   /**
@@ -43,7 +45,6 @@ public final class NodeStatusDTOBuilder {
       final Closure<ProcessGroupStatusDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 
@@ -65,8 +66,10 @@ public final class NodeStatusDTOBuilder {
   /**
    * The node.
    */
-  public NodeStatusDTOBuilder setNode(final Function<NodeDTOBuilder, NodeDTOBuilder> configurator) {
-    return setNode(configurator.apply(node != null ? NodeDTOBuilder.of(node) : new NodeDTOBuilder()).build());
+  public NodeStatusDTOBuilder setNode(final Consumer<NodeDTOBuilder> configurator) {
+    final NodeDTOBuilder builder = (node != null ? NodeDTOBuilder.of(node) : new NodeDTOBuilder());
+    configurator.accept(builder);
+    return setNode(builder.build());
   }
 
   /**
@@ -77,7 +80,6 @@ public final class NodeStatusDTOBuilder {
       final Closure<NodeDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

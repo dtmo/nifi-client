@@ -6,7 +6,7 @@ import java.lang.Boolean;
 import java.lang.String;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.status.NodePortStatusSnapshotDTO;
 import org.apache.nifi.web.api.dto.status.PortStatusDTO;
 import org.apache.nifi.web.api.dto.status.PortStatusSnapshotDTO;
@@ -46,8 +46,10 @@ public final class PortStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public PortStatusDTOBuilder setAggregateSnapshot(final Function<PortStatusSnapshotDTOBuilder, PortStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? PortStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new PortStatusSnapshotDTOBuilder()).build());
+  public PortStatusDTOBuilder setAggregateSnapshot(final Consumer<PortStatusSnapshotDTOBuilder> configurator) {
+    final PortStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? PortStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new PortStatusSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setAggregateSnapshot(builder.build());
   }
 
   /**
@@ -58,7 +60,6 @@ public final class PortStatusDTOBuilder {
       final Closure<PortStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

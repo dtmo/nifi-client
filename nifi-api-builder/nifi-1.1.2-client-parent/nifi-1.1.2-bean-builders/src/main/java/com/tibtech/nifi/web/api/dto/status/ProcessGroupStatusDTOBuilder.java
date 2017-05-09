@@ -5,7 +5,7 @@ import groovy.lang.DelegatesTo;
 import java.lang.String;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.status.NodeProcessGroupStatusSnapshotDTO;
 import org.apache.nifi.web.api.dto.status.ProcessGroupStatusDTO;
 import org.apache.nifi.web.api.dto.status.ProcessGroupStatusSnapshotDTO;
@@ -39,8 +39,10 @@ public final class ProcessGroupStatusDTOBuilder {
   /**
    * The aggregate status of all nodes in the cluster
    */
-  public ProcessGroupStatusDTOBuilder setAggregateSnapshot(final Function<ProcessGroupStatusSnapshotDTOBuilder, ProcessGroupStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? ProcessGroupStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ProcessGroupStatusSnapshotDTOBuilder()).build());
+  public ProcessGroupStatusDTOBuilder setAggregateSnapshot(final Consumer<ProcessGroupStatusSnapshotDTOBuilder> configurator) {
+    final ProcessGroupStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? ProcessGroupStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ProcessGroupStatusSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setAggregateSnapshot(builder.build());
   }
 
   /**
@@ -51,7 +53,6 @@ public final class ProcessGroupStatusDTOBuilder {
       final Closure<ProcessGroupStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

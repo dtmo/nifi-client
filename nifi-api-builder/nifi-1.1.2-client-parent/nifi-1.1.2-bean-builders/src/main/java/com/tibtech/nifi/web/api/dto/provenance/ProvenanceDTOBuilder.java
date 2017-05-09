@@ -6,7 +6,7 @@ import java.lang.Boolean;
 import java.lang.Integer;
 import java.lang.String;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.provenance.ProvenanceDTO;
 import org.apache.nifi.web.api.dto.provenance.ProvenanceRequestDTO;
 import org.apache.nifi.web.api.dto.provenance.ProvenanceResultsDTO;
@@ -106,8 +106,10 @@ public final class ProvenanceDTOBuilder {
   /**
    * The provenance request.
    */
-  public ProvenanceDTOBuilder setRequest(final Function<ProvenanceRequestDTOBuilder, ProvenanceRequestDTOBuilder> configurator) {
-    return setRequest(configurator.apply(request != null ? ProvenanceRequestDTOBuilder.of(request) : new ProvenanceRequestDTOBuilder()).build());
+  public ProvenanceDTOBuilder setRequest(final Consumer<ProvenanceRequestDTOBuilder> configurator) {
+    final ProvenanceRequestDTOBuilder builder = (request != null ? ProvenanceRequestDTOBuilder.of(request) : new ProvenanceRequestDTOBuilder());
+    configurator.accept(builder);
+    return setRequest(builder.build());
   }
 
   /**
@@ -118,7 +120,6 @@ public final class ProvenanceDTOBuilder {
       final Closure<ProvenanceRequestDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 
@@ -140,8 +141,10 @@ public final class ProvenanceDTOBuilder {
   /**
    * The provenance results.
    */
-  public ProvenanceDTOBuilder setResults(final Function<ProvenanceResultsDTOBuilder, ProvenanceResultsDTOBuilder> configurator) {
-    return setResults(configurator.apply(results != null ? ProvenanceResultsDTOBuilder.of(results) : new ProvenanceResultsDTOBuilder()).build());
+  public ProvenanceDTOBuilder setResults(final Consumer<ProvenanceResultsDTOBuilder> configurator) {
+    final ProvenanceResultsDTOBuilder builder = (results != null ? ProvenanceResultsDTOBuilder.of(results) : new ProvenanceResultsDTOBuilder());
+    configurator.accept(builder);
+    return setResults(builder.build());
   }
 
   /**
@@ -152,7 +155,6 @@ public final class ProvenanceDTOBuilder {
       final Closure<ProvenanceResultsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

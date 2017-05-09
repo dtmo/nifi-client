@@ -3,7 +3,7 @@ package com.tibtech.nifi.web.api.dto.status;
 import com.tibtech.nifi.web.api.dto.NodeDTOBuilder;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.NodeDTO;
 import org.apache.nifi.web.api.dto.status.NodePortStatusDTO;
 import org.apache.nifi.web.api.dto.status.PortStatusDTO;
@@ -31,8 +31,10 @@ public final class NodePortStatusDTOBuilder {
   /**
    * The node.
    */
-  public NodePortStatusDTOBuilder setNode(final Function<NodeDTOBuilder, NodeDTOBuilder> configurator) {
-    return setNode(configurator.apply(node != null ? NodeDTOBuilder.of(node) : new NodeDTOBuilder()).build());
+  public NodePortStatusDTOBuilder setNode(final Consumer<NodeDTOBuilder> configurator) {
+    final NodeDTOBuilder builder = (node != null ? NodeDTOBuilder.of(node) : new NodeDTOBuilder());
+    configurator.accept(builder);
+    return setNode(builder.build());
   }
 
   /**
@@ -43,7 +45,6 @@ public final class NodePortStatusDTOBuilder {
       final Closure<NodeDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 
@@ -65,8 +66,10 @@ public final class NodePortStatusDTOBuilder {
   /**
    * The port status from the node.
    */
-  public NodePortStatusDTOBuilder setPortStatus(final Function<PortStatusDTOBuilder, PortStatusDTOBuilder> configurator) {
-    return setPortStatus(configurator.apply(portStatus != null ? PortStatusDTOBuilder.of(portStatus) : new PortStatusDTOBuilder()).build());
+  public NodePortStatusDTOBuilder setPortStatus(final Consumer<PortStatusDTOBuilder> configurator) {
+    final PortStatusDTOBuilder builder = (portStatus != null ? PortStatusDTOBuilder.of(portStatus) : new PortStatusDTOBuilder());
+    configurator.accept(builder);
+    return setPortStatus(builder.build());
   }
 
   /**
@@ -77,7 +80,6 @@ public final class NodePortStatusDTOBuilder {
       final Closure<PortStatusDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.Integer;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.NodeSystemDiagnosticsSnapshotDTO;
 import org.apache.nifi.web.api.dto.SystemDiagnosticsSnapshotDTO;
 
@@ -80,8 +80,10 @@ public final class NodeSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The System Diagnostics snapshot from the node.
    */
-  public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(final Function<SystemDiagnosticsSnapshotDTOBuilder, SystemDiagnosticsSnapshotDTOBuilder> configurator) {
-    return setSnapshot(configurator.apply(snapshot != null ? SystemDiagnosticsSnapshotDTOBuilder.of(snapshot) : new SystemDiagnosticsSnapshotDTOBuilder()).build());
+  public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(final Consumer<SystemDiagnosticsSnapshotDTOBuilder> configurator) {
+    final SystemDiagnosticsSnapshotDTOBuilder builder = (snapshot != null ? SystemDiagnosticsSnapshotDTOBuilder.of(snapshot) : new SystemDiagnosticsSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setSnapshot(builder.build());
   }
 
   /**
@@ -92,7 +94,6 @@ public final class NodeSystemDiagnosticsSnapshotDTOBuilder {
       final Closure<SystemDiagnosticsSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

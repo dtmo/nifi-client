@@ -6,7 +6,7 @@ import java.lang.Boolean;
 import java.lang.Integer;
 import java.lang.String;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.provenance.lineage.LineageDTO;
 import org.apache.nifi.web.api.dto.provenance.lineage.LineageRequestDTO;
 import org.apache.nifi.web.api.dto.provenance.lineage.LineageResultsDTO;
@@ -106,8 +106,10 @@ public final class LineageDTOBuilder {
   /**
    * The initial lineage result.
    */
-  public LineageDTOBuilder setRequest(final Function<LineageRequestDTOBuilder, LineageRequestDTOBuilder> configurator) {
-    return setRequest(configurator.apply(request != null ? LineageRequestDTOBuilder.of(request) : new LineageRequestDTOBuilder()).build());
+  public LineageDTOBuilder setRequest(final Consumer<LineageRequestDTOBuilder> configurator) {
+    final LineageRequestDTOBuilder builder = (request != null ? LineageRequestDTOBuilder.of(request) : new LineageRequestDTOBuilder());
+    configurator.accept(builder);
+    return setRequest(builder.build());
   }
 
   /**
@@ -118,7 +120,6 @@ public final class LineageDTOBuilder {
       final Closure<LineageRequestDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 
@@ -140,8 +141,10 @@ public final class LineageDTOBuilder {
   /**
    * The results of the lineage query.
    */
-  public LineageDTOBuilder setResults(final Function<LineageResultsDTOBuilder, LineageResultsDTOBuilder> configurator) {
-    return setResults(configurator.apply(results != null ? LineageResultsDTOBuilder.of(results) : new LineageResultsDTOBuilder()).build());
+  public LineageDTOBuilder setResults(final Consumer<LineageResultsDTOBuilder> configurator) {
+    final LineageResultsDTOBuilder builder = (results != null ? LineageResultsDTOBuilder.of(results) : new LineageResultsDTOBuilder());
+    configurator.accept(builder);
+    return setResults(builder.build());
   }
 
   /**
@@ -152,7 +155,6 @@ public final class LineageDTOBuilder {
       final Closure<LineageResultsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

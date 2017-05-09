@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.String;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.flow.FlowDTO;
 import org.apache.nifi.web.api.dto.flow.ProcessGroupFlowDTO;
 import org.apache.nifi.web.api.entity.FlowBreadcrumbEntity;
@@ -55,8 +55,10 @@ public final class ProcessGroupFlowDTOBuilder {
   /**
    * The flow structure starting at this Process Group.
    */
-  public ProcessGroupFlowDTOBuilder setFlow(final Function<FlowDTOBuilder, FlowDTOBuilder> configurator) {
-    return setFlow(configurator.apply(flow != null ? FlowDTOBuilder.of(flow) : new FlowDTOBuilder()).build());
+  public ProcessGroupFlowDTOBuilder setFlow(final Consumer<FlowDTOBuilder> configurator) {
+    final FlowDTOBuilder builder = (flow != null ? FlowDTOBuilder.of(flow) : new FlowDTOBuilder());
+    configurator.accept(builder);
+    return setFlow(builder.build());
   }
 
   /**
@@ -67,7 +69,6 @@ public final class ProcessGroupFlowDTOBuilder {
       final Closure<FlowDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

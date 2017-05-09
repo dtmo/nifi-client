@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.Integer;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.status.NodePortStatusSnapshotDTO;
 import org.apache.nifi.web.api.dto.status.PortStatusSnapshotDTO;
 
@@ -80,8 +80,10 @@ public final class NodePortStatusSnapshotDTOBuilder {
   /**
    * The port status snapshot from the node.
    */
-  public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(final Function<PortStatusSnapshotDTOBuilder, PortStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? PortStatusSnapshotDTOBuilder.of(statusSnapshot) : new PortStatusSnapshotDTOBuilder()).build());
+  public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<PortStatusSnapshotDTOBuilder> configurator) {
+    final PortStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? PortStatusSnapshotDTOBuilder.of(statusSnapshot) : new PortStatusSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setStatusSnapshot(builder.build());
   }
 
   /**
@@ -92,7 +94,6 @@ public final class NodePortStatusSnapshotDTOBuilder {
       final Closure<PortStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

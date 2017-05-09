@@ -3,7 +3,7 @@ package com.tibtech.nifi.web.api.dto;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.NodeSystemDiagnosticsSnapshotDTO;
 import org.apache.nifi.web.api.dto.SystemDiagnosticsDTO;
 import org.apache.nifi.web.api.dto.SystemDiagnosticsSnapshotDTO;
@@ -31,8 +31,10 @@ public final class SystemDiagnosticsDTOBuilder {
   /**
    * A systems diagnostic snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public SystemDiagnosticsDTOBuilder setAggregateSnapshot(final Function<SystemDiagnosticsSnapshotDTOBuilder, SystemDiagnosticsSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? SystemDiagnosticsSnapshotDTOBuilder.of(aggregateSnapshot) : new SystemDiagnosticsSnapshotDTOBuilder()).build());
+  public SystemDiagnosticsDTOBuilder setAggregateSnapshot(final Consumer<SystemDiagnosticsSnapshotDTOBuilder> configurator) {
+    final SystemDiagnosticsSnapshotDTOBuilder builder = (aggregateSnapshot != null ? SystemDiagnosticsSnapshotDTOBuilder.of(aggregateSnapshot) : new SystemDiagnosticsSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setAggregateSnapshot(builder.build());
   }
 
   /**
@@ -43,7 +45,6 @@ public final class SystemDiagnosticsDTOBuilder {
       final Closure<SystemDiagnosticsSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

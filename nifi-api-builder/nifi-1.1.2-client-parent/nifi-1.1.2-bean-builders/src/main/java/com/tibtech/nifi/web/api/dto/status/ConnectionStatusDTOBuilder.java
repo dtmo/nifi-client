@@ -5,7 +5,7 @@ import groovy.lang.DelegatesTo;
 import java.lang.String;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.status.ConnectionStatusDTO;
 import org.apache.nifi.web.api.dto.status.ConnectionStatusSnapshotDTO;
 import org.apache.nifi.web.api.dto.status.NodeConnectionStatusSnapshotDTO;
@@ -49,8 +49,10 @@ public final class ConnectionStatusDTOBuilder {
   /**
    * The status snapshot that represents the aggregate stats of the cluster
    */
-  public ConnectionStatusDTOBuilder setAggregateSnapshot(final Function<ConnectionStatusSnapshotDTOBuilder, ConnectionStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? ConnectionStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ConnectionStatusSnapshotDTOBuilder()).build());
+  public ConnectionStatusDTOBuilder setAggregateSnapshot(final Consumer<ConnectionStatusSnapshotDTOBuilder> configurator) {
+    final ConnectionStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? ConnectionStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ConnectionStatusSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setAggregateSnapshot(builder.build());
   }
 
   /**
@@ -61,7 +63,6 @@ public final class ConnectionStatusDTOBuilder {
       final Closure<ConnectionStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

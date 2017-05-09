@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.Integer;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.status.NodeRemoteProcessGroupStatusSnapshotDTO;
 import org.apache.nifi.web.api.dto.status.RemoteProcessGroupStatusSnapshotDTO;
 
@@ -80,8 +80,10 @@ public final class NodeRemoteProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The remote process group status snapshot from the node.
    */
-  public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final Function<RemoteProcessGroupStatusSnapshotDTOBuilder, RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? RemoteProcessGroupStatusSnapshotDTOBuilder.of(statusSnapshot) : new RemoteProcessGroupStatusSnapshotDTOBuilder()).build());
+  public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
+    final RemoteProcessGroupStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? RemoteProcessGroupStatusSnapshotDTOBuilder.of(statusSnapshot) : new RemoteProcessGroupStatusSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setStatusSnapshot(builder.build());
   }
 
   /**
@@ -92,7 +94,6 @@ public final class NodeRemoteProcessGroupStatusSnapshotDTOBuilder {
       final Closure<RemoteProcessGroupStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

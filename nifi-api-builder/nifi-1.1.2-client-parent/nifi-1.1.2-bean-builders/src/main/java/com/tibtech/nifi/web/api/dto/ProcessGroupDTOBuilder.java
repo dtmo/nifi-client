@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.Integer;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.FlowSnippetDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
 
@@ -79,8 +79,10 @@ public final class ProcessGroupDTOBuilder extends AbstractComponentDTOBuilder<Pr
   /**
    * The contents of this process group.
    */
-  public ProcessGroupDTOBuilder setContents(final Function<FlowSnippetDTOBuilder, FlowSnippetDTOBuilder> configurator) {
-    return setContents(configurator.apply(contents != null ? FlowSnippetDTOBuilder.of(contents) : new FlowSnippetDTOBuilder()).build());
+  public ProcessGroupDTOBuilder setContents(final Consumer<FlowSnippetDTOBuilder> configurator) {
+    final FlowSnippetDTOBuilder builder = (contents != null ? FlowSnippetDTOBuilder.of(contents) : new FlowSnippetDTOBuilder());
+    configurator.accept(builder);
+    return setContents(builder.build());
   }
 
   /**
@@ -91,7 +93,6 @@ public final class ProcessGroupDTOBuilder extends AbstractComponentDTOBuilder<Pr
       final Closure<FlowSnippetDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

@@ -5,7 +5,7 @@ import groovy.lang.DelegatesTo;
 import java.lang.String;
 import java.util.Date;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.status.NodeRemoteProcessGroupStatusSnapshotDTO;
 import org.apache.nifi.web.api.dto.status.RemoteProcessGroupStatusDTO;
 import org.apache.nifi.web.api.dto.status.RemoteProcessGroupStatusSnapshotDTO;
@@ -45,8 +45,10 @@ public final class RemoteProcessGroupStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(final Function<RemoteProcessGroupStatusSnapshotDTOBuilder, RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
-    return setAggregateSnapshot(configurator.apply(aggregateSnapshot != null ? RemoteProcessGroupStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new RemoteProcessGroupStatusSnapshotDTOBuilder()).build());
+  public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(final Consumer<RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
+    final RemoteProcessGroupStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? RemoteProcessGroupStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new RemoteProcessGroupStatusSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setAggregateSnapshot(builder.build());
   }
 
   /**
@@ -57,7 +59,6 @@ public final class RemoteProcessGroupStatusDTOBuilder {
       final Closure<RemoteProcessGroupStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.Integer;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.status.NodeProcessGroupStatusSnapshotDTO;
 import org.apache.nifi.web.api.dto.status.ProcessGroupStatusSnapshotDTO;
 
@@ -80,8 +80,10 @@ public final class NodeProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The process group status snapshot from the node.
    */
-  public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final Function<ProcessGroupStatusSnapshotDTOBuilder, ProcessGroupStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? ProcessGroupStatusSnapshotDTOBuilder.of(statusSnapshot) : new ProcessGroupStatusSnapshotDTOBuilder()).build());
+  public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<ProcessGroupStatusSnapshotDTOBuilder> configurator) {
+    final ProcessGroupStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? ProcessGroupStatusSnapshotDTOBuilder.of(statusSnapshot) : new ProcessGroupStatusSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setStatusSnapshot(builder.build());
   }
 
   /**
@@ -92,7 +94,6 @@ public final class NodeProcessGroupStatusSnapshotDTOBuilder {
       final Closure<ProcessGroupStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

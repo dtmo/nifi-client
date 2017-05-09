@@ -4,7 +4,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.Integer;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.status.NodeProcessorStatusSnapshotDTO;
 import org.apache.nifi.web.api.dto.status.ProcessorStatusSnapshotDTO;
 
@@ -80,8 +80,10 @@ public final class NodeProcessorStatusSnapshotDTOBuilder {
   /**
    * The processor status snapshot from the node.
    */
-  public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(final Function<ProcessorStatusSnapshotDTOBuilder, ProcessorStatusSnapshotDTOBuilder> configurator) {
-    return setStatusSnapshot(configurator.apply(statusSnapshot != null ? ProcessorStatusSnapshotDTOBuilder.of(statusSnapshot) : new ProcessorStatusSnapshotDTOBuilder()).build());
+  public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<ProcessorStatusSnapshotDTOBuilder> configurator) {
+    final ProcessorStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? ProcessorStatusSnapshotDTOBuilder.of(statusSnapshot) : new ProcessorStatusSnapshotDTOBuilder());
+    configurator.accept(builder);
+    return setStatusSnapshot(builder.build());
   }
 
   /**
@@ -92,7 +94,6 @@ public final class NodeProcessorStatusSnapshotDTOBuilder {
       final Closure<ProcessorStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

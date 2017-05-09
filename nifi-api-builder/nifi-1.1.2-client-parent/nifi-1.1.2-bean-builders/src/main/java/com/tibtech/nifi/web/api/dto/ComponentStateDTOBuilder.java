@@ -3,7 +3,7 @@ package com.tibtech.nifi.web.api.dto;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import java.lang.String;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.ComponentStateDTO;
 import org.apache.nifi.web.api.dto.StateMapDTO;
 
@@ -34,8 +34,10 @@ public final class ComponentStateDTOBuilder {
   /**
    * The cluster state for this component, or null if this NiFi is a standalone instance.
    */
-  public ComponentStateDTOBuilder setClusterState(final Function<StateMapDTOBuilder, StateMapDTOBuilder> configurator) {
-    return setClusterState(configurator.apply(clusterState != null ? StateMapDTOBuilder.of(clusterState) : new StateMapDTOBuilder()).build());
+  public ComponentStateDTOBuilder setClusterState(final Consumer<StateMapDTOBuilder> configurator) {
+    final StateMapDTOBuilder builder = (clusterState != null ? StateMapDTOBuilder.of(clusterState) : new StateMapDTOBuilder());
+    configurator.accept(builder);
+    return setClusterState(builder.build());
   }
 
   /**
@@ -46,7 +48,6 @@ public final class ComponentStateDTOBuilder {
       final Closure<StateMapDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 
@@ -83,8 +84,10 @@ public final class ComponentStateDTOBuilder {
   /**
    * The local state for this component.
    */
-  public ComponentStateDTOBuilder setLocalState(final Function<StateMapDTOBuilder, StateMapDTOBuilder> configurator) {
-    return setLocalState(configurator.apply(localState != null ? StateMapDTOBuilder.of(localState) : new StateMapDTOBuilder()).build());
+  public ComponentStateDTOBuilder setLocalState(final Consumer<StateMapDTOBuilder> configurator) {
+    final StateMapDTOBuilder builder = (localState != null ? StateMapDTOBuilder.of(localState) : new StateMapDTOBuilder());
+    configurator.accept(builder);
+    return setLocalState(builder.build());
   }
 
   /**
@@ -95,7 +98,6 @@ public final class ComponentStateDTOBuilder {
       final Closure<StateMapDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

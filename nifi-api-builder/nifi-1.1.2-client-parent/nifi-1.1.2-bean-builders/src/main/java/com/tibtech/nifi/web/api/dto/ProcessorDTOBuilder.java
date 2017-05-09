@@ -7,7 +7,7 @@ import java.lang.String;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.ProcessorConfigDTO;
 import org.apache.nifi.web.api.dto.ProcessorDTO;
 import org.apache.nifi.web.api.dto.RelationshipDTO;
@@ -59,8 +59,10 @@ public final class ProcessorDTOBuilder extends AbstractComponentDTOBuilder<Proce
   /**
    * The configuration details for the processor. These details will be included in a response if the verbose flag is included in a request.
    */
-  public ProcessorDTOBuilder setConfig(final Function<ProcessorConfigDTOBuilder, ProcessorConfigDTOBuilder> configurator) {
-    return setConfig(configurator.apply(config != null ? ProcessorConfigDTOBuilder.of(config) : new ProcessorConfigDTOBuilder()).build());
+  public ProcessorDTOBuilder setConfig(final Consumer<ProcessorConfigDTOBuilder> configurator) {
+    final ProcessorConfigDTOBuilder builder = (config != null ? ProcessorConfigDTOBuilder.of(config) : new ProcessorConfigDTOBuilder());
+    configurator.accept(builder);
+    return setConfig(builder.build());
   }
 
   /**
@@ -71,7 +73,6 @@ public final class ProcessorDTOBuilder extends AbstractComponentDTOBuilder<Proce
       final Closure<ProcessorConfigDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

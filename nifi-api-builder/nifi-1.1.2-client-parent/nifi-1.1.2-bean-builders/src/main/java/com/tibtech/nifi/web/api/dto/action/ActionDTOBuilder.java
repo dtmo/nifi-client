@@ -7,7 +7,7 @@ import groovy.lang.DelegatesTo;
 import java.lang.Integer;
 import java.lang.String;
 import java.util.Date;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.action.ActionDTO;
 import org.apache.nifi.web.api.dto.action.component.details.ComponentDetailsDTO;
 import org.apache.nifi.web.api.dto.action.details.ActionDetailsDTO;
@@ -49,8 +49,10 @@ public final class ActionDTOBuilder {
   /**
    * The details of the action.
    */
-  public ActionDTOBuilder setActionDetails(final Function<ActionDetailsDTOBuilder, ActionDetailsDTOBuilder> configurator) {
-    return setActionDetails(configurator.apply(actionDetails != null ? ActionDetailsDTOBuilder.of(actionDetails) : new ActionDetailsDTOBuilder()).build());
+  public ActionDTOBuilder setActionDetails(final Consumer<ActionDetailsDTOBuilder> configurator) {
+    final ActionDetailsDTOBuilder builder = (actionDetails != null ? ActionDetailsDTOBuilder.of(actionDetails) : new ActionDetailsDTOBuilder());
+    configurator.accept(builder);
+    return setActionDetails(builder.build());
   }
 
   /**
@@ -61,7 +63,6 @@ public final class ActionDTOBuilder {
       final Closure<ActionDetailsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 
@@ -83,8 +84,10 @@ public final class ActionDTOBuilder {
   /**
    * The details of the source component.
    */
-  public ActionDTOBuilder setComponentDetails(final Function<ComponentDetailsDTOBuilder, ComponentDetailsDTOBuilder> configurator) {
-    return setComponentDetails(configurator.apply(componentDetails != null ? ComponentDetailsDTOBuilder.of(componentDetails) : new ComponentDetailsDTOBuilder()).build());
+  public ActionDTOBuilder setComponentDetails(final Consumer<ComponentDetailsDTOBuilder> configurator) {
+    final ComponentDetailsDTOBuilder builder = (componentDetails != null ? ComponentDetailsDTOBuilder.of(componentDetails) : new ComponentDetailsDTOBuilder());
+    configurator.accept(builder);
+    return setComponentDetails(builder.build());
   }
 
   /**
@@ -95,7 +98,6 @@ public final class ActionDTOBuilder {
       final Closure<ComponentDetailsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 

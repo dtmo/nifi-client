@@ -8,7 +8,7 @@ import java.lang.Long;
 import java.lang.String;
 import java.util.Date;
 import java.util.Set;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.SystemDiagnosticsSnapshotDTO;
 
 public final class SystemDiagnosticsSnapshotDTOBuilder {
@@ -129,8 +129,10 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The flowfile repository storage usage.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(final Function<StorageUsageDTOBuilder, StorageUsageDTOBuilder> configurator) {
-    return setFlowFileRepositoryStorageUsage(configurator.apply(flowFileRepositoryStorageUsage != null ? StorageUsageDTOBuilder.of(flowFileRepositoryStorageUsage) : new StorageUsageDTOBuilder()).build());
+  public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(final Consumer<StorageUsageDTOBuilder> configurator) {
+    final StorageUsageDTOBuilder builder = (flowFileRepositoryStorageUsage != null ? StorageUsageDTOBuilder.of(flowFileRepositoryStorageUsage) : new StorageUsageDTOBuilder());
+    configurator.accept(builder);
+    return setFlowFileRepositoryStorageUsage(builder.build());
   }
 
   /**
@@ -141,7 +143,6 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
       final Closure<StorageUsageDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 
@@ -493,8 +494,10 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The nifi, os, java, and build version information
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(final Function<VersionInfoDTOBuilder, VersionInfoDTOBuilder> configurator) {
-    return setVersionInfo(configurator.apply(versionInfo != null ? VersionInfoDTOBuilder.of(versionInfo) : new VersionInfoDTOBuilder()).build());
+  public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(final Consumer<VersionInfoDTOBuilder> configurator) {
+    final VersionInfoDTOBuilder builder = (versionInfo != null ? VersionInfoDTOBuilder.of(versionInfo) : new VersionInfoDTOBuilder());
+    configurator.accept(builder);
+    return setVersionInfo(builder.build());
   }
 
   /**
@@ -505,7 +508,6 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
       final Closure<VersionInfoDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
       code.call();
-      return c;
     } );
   }
 
