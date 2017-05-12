@@ -8,7 +8,7 @@ dependencies
 	compile "com.sun.jersey:jersey-client:1.19.3"
 	compile "com.sun.jersey.contribs:jersey-multipart:1.19.3"
 
-	compile files("lib/org.apache.nifi/nifi-web-api-${nifiVersion}.jar")
+	compile project(":nifi-client-builders-parent:nifi-1.1.2-web-api")
 	compile "org.apache.nifi:nifi-framework-core-api:${nifiVersion}"
 	compile "org.apache.nifi:nifi-framework-cluster:${nifiVersion}"
 	compile "org.apache.felix:javax.servlet:1.0.0"

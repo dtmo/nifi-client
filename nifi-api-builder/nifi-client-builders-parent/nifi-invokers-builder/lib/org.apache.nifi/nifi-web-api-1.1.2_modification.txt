@@ -1,8 +1,0 @@
-The nifi-web-api-1.1.2.jar file in this directory is a modified version of the NiFi web API.
-The REST end-points have not been altered, but the ApiOperation annotation on the method:
-
-org.apache.nifi.web.api.ProcessGroupResource.getProcessGroups
-
-has been changed to report the correct response type (ProcessGroupsEntity)
-
-This results in a file that is not functionally any different, but better suits the needs of code generation.
