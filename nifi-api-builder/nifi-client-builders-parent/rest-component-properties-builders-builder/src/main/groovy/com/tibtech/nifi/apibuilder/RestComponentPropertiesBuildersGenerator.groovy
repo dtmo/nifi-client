@@ -22,7 +22,7 @@ def writeComponentPropertiesBuilder(Flow flow, Closure packageNameMapper, Closur
 	def packageName = packageNameMapper(componentTypeName.substring(0, componentTypeName.lastIndexOf(".")))
 	def classname = componentTypeName.substring(componentTypeName.lastIndexOf(".") + 1)
 	def builder = new ConfigurableComponentPropertiesBuilderTypeSpecBuilder(packageName, classname)
-	
+
 	builder.componentType = componentTypeName;
 
 	for (PropertyDescriptorDTO d : propertyDescriptorsProducer())
@@ -42,7 +42,7 @@ for (def controllerServiceType : flow.controllerServiceTypes)
 	println "\t" + controllerServiceType.type
 	def propertyDescriptorsProducer =
 	{
-		def controllerService = flow.createControllerService {type = controllerServiceType.getType()}
+		def controllerService = flow.createControllerService controllerServiceType.getType(), {}
 		def propertyDescriptors = controllerService.descriptors.values()
 		controllerService.delete()
 		propertyDescriptors
@@ -57,7 +57,7 @@ for (def processorType : flow.processorTypes)
 	println "\t" + processorType.getType()
 	def propertyDescriptorsProducer =
 	{
-		def processor = root.createProcessor {type = processorType.type}
+		def processor = root.createProcessor 0, 0, processorType.type, {}
 		def propertyDescriptors = processor.config.descriptors.values()
 		processor.delete()
 		propertyDescriptors
@@ -72,7 +72,7 @@ for (def reportingTaskType : flow.reportingTaskTypes)
 	println "\t" + reportingTaskType.type
 	def propertyDescriptorsProducer =
 	{
-		def reportingTask = flow.createReportingTask {type = reportingTaskType.type}
+		def reportingTask = flow.createReportingTask reportingTaskType.type, {}
 		def propertyDescriptors = reportingTask.descriptors.values()
 		reportingTask.delete()
 		propertyDescriptors

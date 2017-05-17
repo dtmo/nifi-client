@@ -37,24 +37,25 @@ public class Flow
 		return new ProcessGroup(transport, new GetProcessGroupInvoker(transport, 0).setId("root").invoke());
 	}
 
-	public ControllerService createControllerService(final Consumer<ControllerServiceDTOBuilder> configurator)
-			throws InvokerException
+	public ControllerService createControllerService(final String type,
+			final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
 	{
 		final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder();
 
 		configurator.accept(controllerServiceDTOBuilder);
 
 		return new ControllerService(transport,
-				new CreateControllerServiceInvoker(transport, 0).setControllerServiceEntity(
-						new ControllerServiceEntityBuilder().setComponent(controllerServiceDTOBuilder.build()).build())
+				new CreateControllerServiceInvoker(transport, 0)
+						.setControllerServiceEntity(new ControllerServiceEntityBuilder()
+								.setComponent(controllerServiceDTOBuilder.setType(type).build()).build())
 						.invoke());
 	}
 
-	public ControllerService createControllerService(
+	public ControllerService createControllerService(final String type,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createControllerService(configurator ->
+		return createControllerService(type, configurator ->
 		{
 			final Closure<ControllerServiceDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -77,25 +78,23 @@ public class Flow
 		return new GetReportingTaskTypesInvoker(transport, 0).invoke().getReportingTaskTypes();
 	}
 
-	public ReportingTask createReportingTask(final Consumer<ReportingTaskDTOBuilder> configurator)
+	public ReportingTask createReportingTask(final String type, final Consumer<ReportingTaskDTOBuilder> configurator)
 			throws InvokerException
 	{
 		final ReportingTaskDTOBuilder reportingTaskDTOBuilder = new ReportingTaskDTOBuilder();
 
 		configurator.accept(reportingTaskDTOBuilder);
 
-		return new ReportingTask(transport,
-				new CreateReportingTaskInvoker(transport, 0)
-						.setReportingTaskEntity(
-								new ReportingTaskEntityBuilder().setComponent(reportingTaskDTOBuilder.build()).build())
-						.invoke());
+		return new ReportingTask(transport, new CreateReportingTaskInvoker(transport, 0).setReportingTaskEntity(
+				new ReportingTaskEntityBuilder().setComponent(reportingTaskDTOBuilder.setType(type).build()).build())
+				.invoke());
 	}
 
-	public ReportingTask createReportingTask(
+	public ReportingTask createReportingTask(final String type,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReportingTaskDTOBuilder.class) final Closure<ReportingTaskDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createReportingTask(configurator ->
+		return createReportingTask(type, configurator ->
 		{
 			final Closure<ReportingTaskDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
