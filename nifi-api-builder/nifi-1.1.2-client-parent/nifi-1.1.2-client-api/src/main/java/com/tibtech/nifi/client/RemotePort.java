@@ -6,16 +6,18 @@ import java.util.function.Consumer;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
 
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
+import com.tibtech.nifi.web.api.dto.RemoteProcessGroupPortDTOBuilder;
 
-public abstract class RemoteProcessGroupPort<T extends RemoteProcessGroupPort<T, B>, B> implements Connectable, Updatable<T, B>
+public abstract class RemotePort<T extends RemotePort<T>>
+		implements Connectable, Updatable<T, RemoteProcessGroupPortDTOBuilder>
 {
 	private final Transport transport;
-	private RemoteProcessGroup remoteProcessGroup;
+	private final RemoteProcessGroup remoteProcessGroup;
 	private final long version;
 	private RemoteProcessGroupPortDTO remoteProcessGroupPortDTO;
 
-	public RemoteProcessGroupPort(final Transport transport, final RemoteProcessGroup remoteProcessGroup,
-			final long version, final RemoteProcessGroupPortDTO remoteProcessGroupPortDTO)
+	public RemotePort(final Transport transport, final RemoteProcessGroup remoteProcessGroup, final long version,
+			final RemoteProcessGroupPortDTO remoteProcessGroupPortDTO)
 	{
 		this.transport = transport;
 		this.remoteProcessGroup = remoteProcessGroup;
@@ -31,6 +33,11 @@ public abstract class RemoteProcessGroupPort<T extends RemoteProcessGroupPort<T,
 	protected long getVersion()
 	{
 		return version;
+	}
+
+	public RemoteProcessGroup getRemoteProcessGroup()
+	{
+		return remoteProcessGroup;
 	}
 
 	protected RemoteProcessGroupPortDTO getRemoteProcessGroupPortDTO()
@@ -85,5 +92,10 @@ public abstract class RemoteProcessGroupPort<T extends RemoteProcessGroupPort<T,
 			final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
 	{
 		return Connection.createConnection(transport, this, destination, selectedRelationships, configurator);
+	}
+
+	public T setTransmitting(final boolean transmitting) throws InvokerException
+	{
+		return update(configurator -> configurator.setTransmitting(transmitting));
 	}
 }

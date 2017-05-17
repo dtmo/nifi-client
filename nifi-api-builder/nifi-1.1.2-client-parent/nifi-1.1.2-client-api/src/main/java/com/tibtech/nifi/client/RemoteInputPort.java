@@ -7,16 +7,15 @@ import org.apache.nifi.web.api.entity.RemoteProcessGroupPortEntity;
 
 import com.tibtech.nifi.web.api.dto.RemoteProcessGroupPortDTOBuilder;
 import com.tibtech.nifi.web.api.entity.RemoteProcessGroupPortEntityBuilder;
-import com.tibtech.nifi.web.api.remoteprocessgroup.UpdateRemoteProcessGroupOutputPortInvoker;
+import com.tibtech.nifi.web.api.remoteprocessgroup.UpdateRemoteProcessGroupInputPortInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class RemoteProcessGroupOutputPort
-		extends RemoteProcessGroupPort<RemoteProcessGroupOutputPort, RemoteProcessGroupPortDTOBuilder>
+public class RemoteInputPort extends RemotePort<RemoteInputPort>
 {
-	public RemoteProcessGroupOutputPort(final Transport transport, final RemoteProcessGroup remoteProcessGroup,
-			final long version, final RemoteProcessGroupPortDTO remoteProcessGroupPortDTO)
+	public RemoteInputPort(final Transport transport, final RemoteProcessGroup remoteProcessGroup, final long version,
+			final RemoteProcessGroupPortDTO remoteProcessGroupPortDTO)
 	{
 		super(transport, remoteProcessGroup, version, remoteProcessGroupPortDTO);
 	}
@@ -24,27 +23,32 @@ public class RemoteProcessGroupOutputPort
 	@Override
 	public ConnectableType getConnectableType()
 	{
-		return ConnectableType.REMOTE_OUTPUT_PORT;
+		return ConnectableType.REMOTE_INPUT_PORT;
 	}
 
-	public RemoteProcessGroupOutputPort update(final Consumer<RemoteProcessGroupPortDTOBuilder> configurator)
-			throws InvokerException
+	@Override
+	public RemoteInputPort update(final Consumer<RemoteProcessGroupPortDTOBuilder> configurator) throws InvokerException
 	{
 		final RemoteProcessGroupPortDTOBuilder remoteProcessGroupPortDTOBuilder = RemoteProcessGroupPortDTOBuilder
 				.of(getRemoteProcessGroupPortDTO()).setGroupId(getParentGroupId());
 
 		configurator.accept(remoteProcessGroupPortDTOBuilder);
 
-		// TODO: Work out what, if anything, to do with this entity.
-		final RemoteProcessGroupPortEntity remoteProcessGroupPortEntity = new UpdateRemoteProcessGroupOutputPortInvoker(
+		// TODO: The entity returned contains the updated revision for the
+		// parent remote process group. We need to trigger an update of that
+		// parent somehow.
+		final RemoteProcessGroupPortEntity remoteProcessGroupPortEntity = new UpdateRemoteProcessGroupInputPortInvoker(
 				getTransport(), getVersion()).setId(getParentGroupId()).setPortId(getId())
 						.setRemoteProcessGroupPortEntity(new RemoteProcessGroupPortEntityBuilder()
 								.setRemoteProcessGroupPort(remoteProcessGroupPortDTOBuilder.build()).build())
 						.invoke();
+
+		setRemoteProcessGroupPortDTO(remoteProcessGroupPortEntity.getRemoteProcessGroupPort());
+
 		return this;
 	}
 
-	public RemoteProcessGroupOutputPort update(
+	public RemoteInputPort update(
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupPortDTOBuilder.class) final Closure<RemoteProcessGroupPortDTOBuilder> closure)
 			throws InvokerException
 	{

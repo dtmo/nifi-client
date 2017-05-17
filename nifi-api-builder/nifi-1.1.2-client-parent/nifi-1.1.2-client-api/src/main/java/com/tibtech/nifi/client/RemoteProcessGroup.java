@@ -206,17 +206,17 @@ public class RemoteProcessGroup
 		return this;
 	}
 
-	public Set<RemoteProcessGroupInputPort> getInputPorts()
+	public Set<RemoteInputPort> getRemoteInputPorts()
 	{
 		return getContents().getInputPorts().stream()
-				.map(inputPortDTO -> new RemoteProcessGroupInputPort(getTransport(), this, getVersion(), inputPortDTO))
+				.map(inputPortDTO -> new RemoteInputPort(getTransport(), this, getVersion(), inputPortDTO))
 				.collect(Collectors.toSet());
 	}
 
-	public Set<RemoteProcessGroupOutputPort> getOutputPorts()
+	public Set<RemoteOutputPort> getRemoteOutputPorts()
 	{
 		return getContents().getOutputPorts().stream().map(
-				outputPortDTO -> new RemoteProcessGroupOutputPort(getTransport(), this, getVersion(), outputPortDTO))
+				outputPortDTO -> new RemoteOutputPort(getTransport(), this, getVersion(), outputPortDTO))
 				.collect(Collectors.toSet());
 	}
 
