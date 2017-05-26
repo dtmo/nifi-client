@@ -1,0 +1,10 @@
+dependencies
+{
+	compile project(":builder-core")
+
+	compile "com.squareup:javapoet:1.8.0"
+	compile "org.reflections:reflections:0.9.10"
+	compile "org.codehaus.groovy:groovy-all:2.4.10"
+
+	compile "commons-cli:commons-cli:1.4"
+}

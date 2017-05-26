@@ -33,10 +33,6 @@ allprojects {
 
 		compile "org.apache.nifi:nifi-client-dto:${nifiVersion}"
 		compile "org.apache.nifi:nifi-api:${nifiVersion}"
-		//    compile "org.apache.nifi:nifi-web-api:${nifiVersion}"
-		compile "org.apache.nifi:nifi-dbcp-service:${nifiVersion}"
-		compile "org.apache.nifi:nifi-jetty-bundle:${nifiVersion}"
-		//    compile "org.apache.nifi:nifi-standard-nar:${nifiVersion}"
 
 		compile "javax.ws.rs:javax.ws.rs-api:2.0.1"
 

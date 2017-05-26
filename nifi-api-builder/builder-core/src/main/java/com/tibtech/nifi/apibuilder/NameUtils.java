@@ -69,6 +69,11 @@ public class NameUtils
 		return propertyNameBuilder.toString();
 	}
 
+	public static String componentsToConstantName(final List<String> components)
+	{
+		return components.stream().map(s -> s.toUpperCase()).collect(Collectors.joining("_"));
+	}
+
 	public static String componentsToConstantName(final List<String> components, final String prefix,
 			final String suffix)
 	{
