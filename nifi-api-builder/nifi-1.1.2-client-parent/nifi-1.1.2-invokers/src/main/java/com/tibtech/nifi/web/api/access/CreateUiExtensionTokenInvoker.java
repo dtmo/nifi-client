@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 
 /**
  * Creates a single use access token for accessing a NiFi UI extension.
+ * <p>The token returned is a base64 encoded string. It is valid for a single request up to five minutes from being issued. It is used as a query parameter name 'access_token'.</p>
  */
 public final class CreateUiExtensionTokenInvoker extends AbstractInvoker<String> {
   public CreateUiExtensionTokenInvoker(final Transport transport, final long version) {

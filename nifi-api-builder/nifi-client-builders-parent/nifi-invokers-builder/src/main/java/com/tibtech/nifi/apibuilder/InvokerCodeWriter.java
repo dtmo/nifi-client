@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.Deque;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -165,41 +166,41 @@ public class InvokerCodeWriter
 	/**
 	 * Determine what HTTP method is being used base on annotations on the
 	 * method (there should only be one!).
-	 * 
+	 *
 	 * @param invokerTypeSpecBuilder
 	 * @param resourceMethod
 	 */
-	private static String getHttpMethod(final Method resourceMethod)
+	private static Optional<String> getHttpMethod(final Method resourceMethod)
 	{
-		final String method;
+		final Optional<String> method;
 
 		if (resourceMethod.getAnnotation(DELETE.class) != null)
 		{
-			method = "DELETE";
+			method = Optional.of("DELETE");
 		}
 		else if (resourceMethod.getAnnotation(HEAD.class) != null)
 		{
-			method = "HEAD";
+			method = Optional.of("HEAD");
 		}
 		else if (resourceMethod.getAnnotation(GET.class) != null)
 		{
-			method = "GET";
+			method = Optional.of("GET");
 		}
 		else if (resourceMethod.getAnnotation(OPTIONS.class) != null)
 		{
-			method = "OPTIONS";
+			method = Optional.of("OPTIONS");
 		}
 		else if (resourceMethod.getAnnotation(POST.class) != null)
 		{
-			method = "POST";
+			method = Optional.of("POST");
 		}
 		else if (resourceMethod.getAnnotation(PUT.class) != null)
 		{
-			method = "PUT";
+			method = Optional.of("PUT");
 		}
 		else
 		{
-			throw new IllegalStateException("Could not find a HTTP method for resource method: " + resourceMethod);
+			method = Optional.empty();
 		}
 
 		return method;
@@ -255,15 +256,32 @@ public class InvokerCodeWriter
 	{
 		final Method endpointMethod = resourceMethodStack.peek();
 		final String invokerName = getInvokerName(endpointMethod);
-		final String httpMethod = getHttpMethod(endpointMethod);
+		final String httpMethod = getHttpMethod(endpointMethod).orElseThrow(
+				() -> new IllegalStateException("Could not find a HTTP method for resource method: " + endpointMethod));
 		final ApiOperation endpointMethodApiAnnotation = endpointMethod.getAnnotation(ApiOperation.class);
-		final String invokerDescription = endpointMethodApiAnnotation != null
-				? endpointMethodApiAnnotation.value() + "\n" : "";
+		final StringBuilder invokerDescriptionBuilder = new StringBuilder();
+		if (endpointMethodApiAnnotation != null)
+		{
+			final String value = endpointMethodApiAnnotation.value();
+			if ((value != null) && (value.isEmpty() == false))
+			{
+				invokerDescriptionBuilder.append(value);
+				invokerDescriptionBuilder.append("\n");
+			}
+
+			final String notes = endpointMethodApiAnnotation.notes();
+			if ((notes != null) && (notes.isEmpty() == false))
+			{
+				invokerDescriptionBuilder.append("<p>");
+				invokerDescriptionBuilder.append(notes);
+				invokerDescriptionBuilder.append("</p>\n");
+			}
+		}
 
 		System.out.println(getInvokerPackageName(resourceClass) + "." + invokerName);
 
 		final InvokerTypeSpecBuilder invokerTypeSpecBuilder = new InvokerTypeSpecBuilder();
-		invokerTypeSpecBuilder.setInvokerComment(invokerDescription);
+		invokerTypeSpecBuilder.setInvokerComment(invokerDescriptionBuilder.toString());
 		invokerTypeSpecBuilder.setResourcePathString(resourcePath);
 		invokerTypeSpecBuilder.setInvokerName(invokerName);
 		invokerTypeSpecBuilder.setResponseType(endpointMethodApiAnnotation.response());
@@ -288,7 +306,7 @@ public class InvokerCodeWriter
 		final String classResourcePath = resourcePathPrefix
 				+ (classPathAnnotation != null ? classPathAnnotation.value() : "");
 
-		Arrays.stream(resourceClass.getMethods()).filter(method -> method.getAnnotation(Path.class) != null)
+		Arrays.stream(resourceClass.getMethods()).filter(method -> getHttpMethod(method).isPresent())
 				.forEach(resourceMethod ->
 				{
 					final Path methodPathAnnotation = resourceMethod.getAnnotation(Path.class);
@@ -321,7 +339,7 @@ public class InvokerCodeWriter
 										packageNameMapper.apply(getInvokerPackageName(resourceClass)),
 										invokerTypeSpec));
 							}
-							catch (IntrospectionException e)
+							catch (final IntrospectionException e)
 							{
 								throw new IllegalStateException("Could not create invoker class", e);
 							}
@@ -343,8 +361,8 @@ public class InvokerCodeWriter
 		final Function<String, String> packageNameMapper = s -> s.replaceFirst("org\\.apache", "com.tibtech");
 
 		final List<PackagedTypeSpec> packagedTypeSpecs = applicationResources.stream()
-				.filter(resourceClass -> resourceClass.getAnnotation(Api.class) == null
-						|| resourceClass.getAnnotation(Api.class).hidden() == false)
+				.filter(resourceClass -> (resourceClass.getAnnotation(Api.class) == null)
+						|| (resourceClass.getAnnotation(Api.class).hidden() == false))
 				.map(resourceClass -> recurseApplicationResources(packageNameMapper, resourceClass, new ArrayDeque<>(),
 						""))
 				.reduce(new ArrayList<>(), (l, r) ->

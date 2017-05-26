@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.ClusterSearchResultsEntity;
 
 /**
  * Searches the cluster for a node with the specified address
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class SearchClusterInvoker extends AbstractInvoker<ClusterSearchResultsEntity> {
   private String q;

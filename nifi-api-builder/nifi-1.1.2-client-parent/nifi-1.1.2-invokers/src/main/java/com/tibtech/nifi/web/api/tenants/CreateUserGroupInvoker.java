@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.UserGroupEntity;
 
 /**
  * Creates a user group
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class CreateUserGroupInvoker extends ComponentEntityInvoker<UserGroupEntity> {
   private UserGroupEntity userGroupEntity;

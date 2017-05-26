@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.CounterEntity;
 
 /**
  * Updates the specified counter. This will reset the counter value to 0
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class UpdateCounterInvoker extends AbstractInvoker<CounterEntity> {
   private String id;

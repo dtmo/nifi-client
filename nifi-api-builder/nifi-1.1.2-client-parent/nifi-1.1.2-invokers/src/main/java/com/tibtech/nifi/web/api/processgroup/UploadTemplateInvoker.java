@@ -5,6 +5,7 @@ import com.tibtech.nifi.client.InvokerException;
 import com.tibtech.nifi.client.Transport;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.IllegalStateException;
 import java.lang.String;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
@@ -70,7 +71,7 @@ public final class UploadTemplateInvoker extends ComponentEntityInvoker<Template
         formDataMultiPart.close();
       }
       catch (final IOException e) {
-        throw new InvokerException("Could not close form data multipart", e);
+        throw new IllegalStateException("Could not close form data multipart", e);
       }
     }
   }

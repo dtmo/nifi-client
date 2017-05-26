@@ -1,4 +1,4 @@
-package com.tibtech.nifi.web.api.counters;
+package com.tibtech.nifi.web.api.systemdiagnostics;
 
 import com.tibtech.nifi.client.AbstractInvoker;
 import com.tibtech.nifi.client.InvokerException;
@@ -8,18 +8,17 @@ import java.lang.String;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import org.apache.nifi.web.api.entity.CountersEntity;
+import org.apache.nifi.web.api.entity.SystemDiagnosticsEntity;
 
 /**
- * Gets the current counters for this NiFi
- * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
+ * Gets the diagnostics for the system NiFi is running on
  */
-public final class GetCountersInvoker extends AbstractInvoker<CountersEntity> {
+public final class GetSystemDiagnosticsInvoker extends AbstractInvoker<SystemDiagnosticsEntity> {
   private Boolean nodewise;
 
   private String clusterNodeId;
 
-  public GetCountersInvoker(final Transport transport, final long version) {
+  public GetSystemDiagnosticsInvoker(final Transport transport, final long version) {
     super(transport, version);
   }
 
@@ -31,7 +30,7 @@ public final class GetCountersInvoker extends AbstractInvoker<CountersEntity> {
 
   /**
    * Whether or not to include the breakdown per node. Optional, defaults to false */
-  public final GetCountersInvoker setNodewise(final Boolean nodewise) {
+  public final GetSystemDiagnosticsInvoker setNodewise(final Boolean nodewise) {
     this.nodewise = nodewise;
     return this;
   }
@@ -44,21 +43,21 @@ public final class GetCountersInvoker extends AbstractInvoker<CountersEntity> {
 
   /**
    * The id of the node where to get the status. */
-  public final GetCountersInvoker setClusterNodeId(final String clusterNodeId) {
+  public final GetSystemDiagnosticsInvoker setClusterNodeId(final String clusterNodeId) {
     this.clusterNodeId = clusterNodeId;
     return this;
   }
 
-  public final CountersEntity invoke() throws InvokerException {
-    // /counters
+  public final SystemDiagnosticsEntity invoke() throws InvokerException {
+    // /system-diagnostics
     WebTarget target = getBaseWebTarget();
-    target = target.path("counters");
+    target = target.path("system-diagnostics");
     target = target.queryParam("nodewise", nodewise);
     target = target.queryParam("clusterNodeId", clusterNodeId);
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Response response = invocationBuilder.method("GET");
     try {
-      return handleResponse(response, CountersEntity.class);
+      return handleResponse(response, SystemDiagnosticsEntity.class);
     }
     finally {
       response.close();

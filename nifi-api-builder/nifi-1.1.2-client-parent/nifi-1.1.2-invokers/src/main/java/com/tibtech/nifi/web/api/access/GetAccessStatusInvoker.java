@@ -10,6 +10,7 @@ import org.apache.nifi.web.api.entity.AccessStatusEntity;
 
 /**
  * Gets the status the client's access
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetAccessStatusInvoker extends AbstractInvoker<AccessStatusEntity> {
   public GetAccessStatusInvoker(final Transport transport, final long version) {

@@ -12,6 +12,7 @@ import org.apache.nifi.web.api.entity.UserEntity;
 
 /**
  * Updates a user
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class UpdateUserInvoker extends ComponentEntityInvoker<UserEntity> {
   private String id;

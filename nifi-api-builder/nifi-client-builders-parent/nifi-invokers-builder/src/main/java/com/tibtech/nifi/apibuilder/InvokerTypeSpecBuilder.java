@@ -49,10 +49,10 @@ public class InvokerTypeSpecBuilder
 
 	private String httpMethod;
 
-	private List<BuilderProperty> pathParameters = new ArrayList<>();
-	private List<BuilderProperty> queryParameters = new ArrayList<>();
-	private List<BuilderProperty> formParameters = new ArrayList<>();
-	private List<BuilderProperty> formDataParameters = new ArrayList<>();
+	private final List<BuilderProperty> pathParameters = new ArrayList<>();
+	private final List<BuilderProperty> queryParameters = new ArrayList<>();
+	private final List<BuilderProperty> formParameters = new ArrayList<>();
+	private final List<BuilderProperty> formDataParameters = new ArrayList<>();
 
 	private BuilderProperty requestEntity = null;
 
@@ -393,7 +393,7 @@ public class InvokerTypeSpecBuilder
 			invokeMethodBuilder.addStatement("formDataMultiPart.close()");
 			invokeMethodBuilder.endControlFlow();
 			invokeMethodBuilder.beginControlFlow("catch (final $T e)", IOException.class);
-			invokeMethodBuilder.addStatement("throw new $T($S, e)", InvokerException.class,
+			invokeMethodBuilder.addStatement("throw new $T($S, e)", IllegalStateException.class,
 					"Could not close form data multipart");
 			invokeMethodBuilder.endControlFlow();
 		}
@@ -432,8 +432,8 @@ public class InvokerTypeSpecBuilder
 		{
 			// clientId and version are special properties that get set by the
 			// invoker framework.
-			if (invokerProperty.getName().equalsIgnoreCase("version") == false
-					&& invokerProperty.getName().equalsIgnoreCase("clientId") == false)
+			if ((invokerProperty.getName().equalsIgnoreCase("version") == false)
+					&& (invokerProperty.getName().equalsIgnoreCase("clientId") == false))
 			{
 				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 						invokerProperty.getComment());
@@ -444,8 +444,8 @@ public class InvokerTypeSpecBuilder
 		{
 			// clientId and version are special properties that get set by the
 			// invoker framework.
-			if (invokerProperty.getName().equalsIgnoreCase("version") == false
-					&& invokerProperty.getName().equalsIgnoreCase("clientId") == false)
+			if ((invokerProperty.getName().equalsIgnoreCase("version") == false)
+					&& (invokerProperty.getName().equalsIgnoreCase("clientId") == false))
 			{
 				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 						invokerProperty.getComment());
@@ -456,8 +456,8 @@ public class InvokerTypeSpecBuilder
 		{
 			// clientId and version are special properties that get set by the
 			// invoker framework.
-			if (invokerProperty.getName().equalsIgnoreCase("version") == false
-					&& invokerProperty.getName().equalsIgnoreCase("clientId") == false)
+			if ((invokerProperty.getName().equalsIgnoreCase("version") == false)
+					&& (invokerProperty.getName().equalsIgnoreCase("clientId") == false))
 			{
 				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 						invokerProperty.getComment());

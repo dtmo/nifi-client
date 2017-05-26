@@ -12,6 +12,7 @@ import org.apache.nifi.web.api.entity.ProcessGroupStatusEntity;
 
 /**
  * Gets the status for a process group
+ * <p>The status for a process group includes status for all descendent components. When invoked on the root group with recursive set to true, it will return the current status of every component in the flow.</p>
  */
 public final class GetProcessGroupStatusInvoker extends AbstractInvoker<ProcessGroupStatusEntity> {
   private String id;

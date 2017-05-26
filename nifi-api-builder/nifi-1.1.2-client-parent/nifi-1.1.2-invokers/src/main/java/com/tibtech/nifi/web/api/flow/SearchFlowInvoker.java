@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.SearchResultsEntity;
 
 /**
  * Performs a search against this NiFi using the specified search term
+ * <p>Only search results from authorized components will be returned.</p>
  */
 public final class SearchFlowInvoker extends AbstractInvoker<SearchResultsEntity> {
   private String q;

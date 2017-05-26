@@ -10,6 +10,7 @@ import org.apache.nifi.web.api.entity.PrioritizerTypesEntity;
 
 /**
  * Retrieves the types of prioritizers that this NiFi supports
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetPrioritizersInvoker extends AbstractInvoker<PrioritizerTypesEntity> {
   public GetPrioritizersInvoker(final Transport transport, final long version) {

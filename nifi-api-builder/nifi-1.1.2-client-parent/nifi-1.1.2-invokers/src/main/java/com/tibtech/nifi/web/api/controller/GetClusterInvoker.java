@@ -10,6 +10,7 @@ import org.apache.nifi.web.api.entity.ClusterEntity;
 
 /**
  * Gets the contents of the cluster
+ * <p>Returns the contents of the cluster including all nodes and their status.</p>
  */
 public final class GetClusterInvoker extends AbstractInvoker<ClusterEntity> {
   public GetClusterInvoker(final Transport transport, final long version) {

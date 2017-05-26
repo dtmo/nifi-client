@@ -10,6 +10,7 @@ import org.apache.nifi.web.api.entity.UserGroupsEntity;
 
 /**
  * Gets all user groups
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetUserGroupsInvoker extends AbstractInvoker<UserGroupsEntity> {
   public GetUserGroupsInvoker(final Transport transport, final long version) {

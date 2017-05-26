@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.TenantsEntity;
 
 /**
  * Searches for a tenant with the specified identity
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class SearchClusterInvoker extends AbstractInvoker<TenantsEntity> {
   private String q;

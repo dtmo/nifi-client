@@ -12,6 +12,7 @@ import org.apache.nifi.web.api.entity.UserGroupEntity;
 
 /**
  * Updates a user group
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class UpdateUserGroupInvoker extends ComponentEntityInvoker<UserGroupEntity> {
   private String id;

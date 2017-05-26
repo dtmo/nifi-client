@@ -10,6 +10,7 @@ import org.apache.nifi.web.api.entity.ProcessorTypesEntity;
 
 /**
  * Retrieves the types of processors that this NiFi supports
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetProcessorTypesInvoker extends AbstractInvoker<ProcessorTypesEntity> {
   public GetProcessorTypesInvoker(final Transport transport, final long version) {

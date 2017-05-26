@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.LineageEntity;
 
 /**
  * Submits a lineage query
+ * <p>Lineage queries may be long running so this endpoint submits a request. The response will include the current state of the query. If the request is not completed the URI in the response can be used at a later time to get the updated state of the query. Once the query has completed the lineage request should be deleted by the client who originally submitted it.</p>
  */
 public final class SubmitLineageRequestInvoker extends AbstractInvoker<LineageEntity> {
   private LineageEntity lineageEntity;

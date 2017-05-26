@@ -10,6 +10,7 @@ import javax.ws.rs.core.Response;
 
 /**
  * Creates a token for accessing the REST API via Kerberos ticket exchange / SPNEGO negotiation
+ * <p>The token returned is formatted as a JSON Web Token (JWT). The token is base64 encoded and comprised of three parts. The header, the body, and the signature. The expiration of the token is a contained within the body. The token can be used in the Authorization header in the format 'Authorization: Bearer <token>'.</p>
  */
 public final class CreateAccessTokenFromTicketInvoker extends AbstractInvoker<String> {
   public CreateAccessTokenFromTicketInvoker(final Transport transport, final long version) {

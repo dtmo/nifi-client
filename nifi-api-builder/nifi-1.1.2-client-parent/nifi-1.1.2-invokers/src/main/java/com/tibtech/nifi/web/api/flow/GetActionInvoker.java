@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.ActionEntity;
 
 /**
  * Gets an action
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetActionInvoker extends AbstractInvoker<ActionEntity> {
   private Integer id;

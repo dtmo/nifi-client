@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.ComponentHistoryEntity;
 
 /**
  * Gets configuration history for a component
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetComponentHistoryInvoker extends AbstractInvoker<ComponentHistoryEntity> {
   private String componentId;

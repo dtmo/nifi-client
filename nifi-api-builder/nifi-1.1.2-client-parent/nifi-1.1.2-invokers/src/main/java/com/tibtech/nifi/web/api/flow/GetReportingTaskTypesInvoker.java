@@ -10,6 +10,7 @@ import org.apache.nifi.web.api.entity.ReportingTaskTypesEntity;
 
 /**
  * Retrieves the types of reporting tasks that this NiFi supports
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetReportingTaskTypesInvoker extends AbstractInvoker<ReportingTaskTypesEntity> {
   public GetReportingTaskTypesInvoker(final Transport transport, final long version) {

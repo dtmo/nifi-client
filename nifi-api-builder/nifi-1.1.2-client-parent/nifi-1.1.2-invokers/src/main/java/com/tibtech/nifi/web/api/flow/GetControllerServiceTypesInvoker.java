@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.ControllerServiceTypesEntity;
 
 /**
  * Retrieves the types of controller services that this NiFi supports
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetControllerServiceTypesInvoker extends AbstractInvoker<ControllerServiceTypesEntity> {
   private String serviceType;

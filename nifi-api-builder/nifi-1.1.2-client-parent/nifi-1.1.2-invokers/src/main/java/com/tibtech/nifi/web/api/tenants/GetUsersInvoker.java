@@ -10,6 +10,7 @@ import org.apache.nifi.web.api.entity.UsersEntity;
 
 /**
  * Gets all users
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetUsersInvoker extends AbstractInvoker<UsersEntity> {
   public GetUsersInvoker(final Transport transport, final long version) {

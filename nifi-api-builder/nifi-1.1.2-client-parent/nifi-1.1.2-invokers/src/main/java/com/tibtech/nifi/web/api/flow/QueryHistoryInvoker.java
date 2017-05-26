@@ -13,6 +13,7 @@ import org.apache.nifi.web.api.entity.HistoryEntity;
 
 /**
  * Gets configuration history
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class QueryHistoryInvoker extends AbstractInvoker<HistoryEntity> {
   private Integer offset;

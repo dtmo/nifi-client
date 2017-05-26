@@ -2,8 +2,8 @@ package com.tibtech.nifi.client;
 
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.StatusType;
 import javax.ws.rs.core.Response.Status.Family;
+import javax.ws.rs.core.Response.StatusType;
 
 import org.apache.nifi.web.api.dto.RevisionDTO;
 
@@ -51,7 +51,7 @@ public abstract class AbstractInvoker<T>
 
 	protected T handleResponse(final Response response, final Class<T> entityClass) throws InvokerException
 	{
-		StatusType statusInfo = response.getStatusInfo();
+		final StatusType statusInfo = response.getStatusInfo();
 		if (statusInfo.getFamily() == Family.SUCCESSFUL)
 		{
 			final T entity = response.readEntity(entityClass);
@@ -61,7 +61,8 @@ public abstract class AbstractInvoker<T>
 		else
 		{
 			final String errorMessage = response.readEntity(String.class);
-			throw new InvokerException("Invocation failed (" + statusInfo.getReasonPhrase() + "): " + errorMessage);
+			throw new InvokerException("Invocation failed (" + statusInfo.getReasonPhrase() + "): " + errorMessage,
+					statusInfo);
 		}
 	}
 }

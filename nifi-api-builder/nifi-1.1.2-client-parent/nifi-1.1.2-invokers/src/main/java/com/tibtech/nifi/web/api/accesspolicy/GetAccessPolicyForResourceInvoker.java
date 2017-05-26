@@ -11,6 +11,7 @@ import org.apache.nifi.web.api.entity.AccessPolicyEntity;
 
 /**
  * Gets an access policy for the specified action and resource
+ * <p>Will return the effective policy if no component specific policy exists for the specified action and resource. Must have Read permissions to the policy with the desired action and resource. Permissions for the policy that is returned will be indicated in the response. This means the client could be authorized to get the policy for a given component but the effective policy may be inherited from an ancestor Process Group. If the client does not have permissions to that policy, the response will not include the policy and the permissions in the response will be marked accordingly. If the client does not have permissions to the policy of the desired action and resource a 403 response will be returned.</p>
  */
 public final class GetAccessPolicyForResourceInvoker extends ComponentEntityInvoker<AccessPolicyEntity> {
   private String action;

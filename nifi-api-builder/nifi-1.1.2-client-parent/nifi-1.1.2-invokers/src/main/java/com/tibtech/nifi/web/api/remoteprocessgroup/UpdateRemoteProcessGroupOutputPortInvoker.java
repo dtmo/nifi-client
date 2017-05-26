@@ -12,6 +12,7 @@ import org.apache.nifi.web.api.entity.RemoteProcessGroupPortEntity;
 
 /**
  * Updates a remote port
+ * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class UpdateRemoteProcessGroupOutputPortInvoker extends ComponentEntityInvoker<RemoteProcessGroupPortEntity> {
   private String id;
