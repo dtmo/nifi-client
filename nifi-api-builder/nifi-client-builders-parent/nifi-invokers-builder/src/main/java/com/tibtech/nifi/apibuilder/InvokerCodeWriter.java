@@ -306,7 +306,8 @@ public class InvokerCodeWriter
 		final String classResourcePath = resourcePathPrefix
 				+ (classPathAnnotation != null ? classPathAnnotation.value() : "");
 
-		Arrays.stream(resourceClass.getMethods()).filter(method -> getHttpMethod(method).isPresent())
+		Arrays.stream(resourceClass.getMethods())
+				.filter(method -> getHttpMethod(method).isPresent() || (method.getAnnotation(Path.class) != null))
 				.forEach(resourceMethod ->
 				{
 					final Path methodPathAnnotation = resourceMethod.getAnnotation(Path.class);
