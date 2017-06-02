@@ -7,7 +7,8 @@ Overview
 --------
 
 `nifi-1.1.2-client-api` is essentially a wrapper around a number of invokers that interact with the NiFi REST API.
-The invokers themselves are automatically generated from the annotations on the nifi-web-api `ApplicationResource` classes.
+The invokers themselves are automatically generated from the annotations on the nifi-web-api `ApplicationResource` classes
+and `nifi-update-attribute-ui` RuleResource class.
 In order to have the necessary classes on the classpath, the `nifi-web-api` classes need to be made available as a jar,
 which it is not by default. Also, there are some errors in the description of the NiFi REST interface that need to be
 corrected for the invoker classes to be automatically generated.

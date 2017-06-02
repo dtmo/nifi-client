@@ -33,8 +33,9 @@ public final class GetFunnelsInvoker extends AbstractInvoker<FunnelsEntity> {
   }
 
   public final FunnelsEntity invoke() throws InvokerException {
-    // /process-groups/{id}/funnels
+    // nifi-api/process-groups/{id}/funnels
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("funnels");

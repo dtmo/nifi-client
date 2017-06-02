@@ -16,10 +16,14 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.CookieParam;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.HEAD;
+import javax.ws.rs.HeaderParam;
+import javax.ws.rs.HttpMethod;
+import javax.ws.rs.MatrixParam;
 import javax.ws.rs.OPTIONS;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -27,11 +31,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import org.apache.nifi.connectable.ConnectableType;
+import org.apache.nifi.update.attributes.api.RuleResource;
 import org.apache.nifi.web.api.ApplicationResource;
-import org.apache.nifi.web.api.entity.Entity;
 import org.apache.nifi.web.api.request.BulletinBoardPatternParameter;
 import org.apache.nifi.web.api.request.ClientIdParameter;
 import org.apache.nifi.web.api.request.ConnectableTypeParameter;
@@ -93,11 +98,26 @@ public class InvokerCodeWriter
 
 				invokerTypeSpecBuilder.addFormDataParameter(name, parameterType, parameterTypeName, comment);
 			}
+			else if (parameter.getAnnotation(MatrixParam.class) != null)
+			{
+				throw new IllegalStateException(
+						"Unsupported MatrixParam found on method: " + resourceMethod + " : " + parameter);
+			}
+			else if (parameter.getAnnotation(CookieParam.class) != null)
+			{
+				throw new IllegalStateException(
+						"Unsupported CookieParam found on method: " + resourceMethod + " : " + parameter);
+			}
+			else if (parameter.getAnnotation(HeaderParam.class) != null)
+			{
+				throw new IllegalStateException(
+						"Unsupported CookieParam found on method: " + resourceMethod + " : " + parameter);
+			}
 			else
 			{
-				// If the parameter is an Entity, then add its members as
-				// invoker properties.
-				if (Entity.class.isAssignableFrom(parameter.getType()))
+				// If the parameter is not annotated as a parameter, and is also
+				// not annotated with @Context then treat it as an entity.
+				if (parameter.getAnnotation(Context.class) == null)
 				{
 					final String entityPropertyName = NameUtils.componentsToCamelCase(
 							NameUtils.getNameComponents(parameter.getType().getSimpleName()), true);
@@ -176,27 +196,27 @@ public class InvokerCodeWriter
 
 		if (resourceMethod.getAnnotation(DELETE.class) != null)
 		{
-			method = Optional.of("DELETE");
+			method = Optional.of(HttpMethod.DELETE);
 		}
 		else if (resourceMethod.getAnnotation(HEAD.class) != null)
 		{
-			method = Optional.of("HEAD");
+			method = Optional.of(HttpMethod.HEAD);
 		}
 		else if (resourceMethod.getAnnotation(GET.class) != null)
 		{
-			method = Optional.of("GET");
+			method = Optional.of(HttpMethod.GET);
 		}
 		else if (resourceMethod.getAnnotation(OPTIONS.class) != null)
 		{
-			method = Optional.of("OPTIONS");
+			method = Optional.of(HttpMethod.OPTIONS);
 		}
 		else if (resourceMethod.getAnnotation(POST.class) != null)
 		{
-			method = Optional.of("POST");
+			method = Optional.of(HttpMethod.POST);
 		}
 		else if (resourceMethod.getAnnotation(PUT.class) != null)
 		{
-			method = Optional.of("PUT");
+			method = Optional.of(HttpMethod.PUT);
 		}
 		else
 		{
@@ -361,16 +381,21 @@ public class InvokerCodeWriter
 
 		final Function<String, String> packageNameMapper = s -> s.replaceFirst("org\\.apache", "com.tibtech");
 
-		final List<PackagedTypeSpec> packagedTypeSpecs = applicationResources.stream()
+		final List<PackagedTypeSpec> packagedTypeSpecs = new ArrayList<>();
+
+		packagedTypeSpecs.addAll(applicationResources.stream()
 				.filter(resourceClass -> (resourceClass.getAnnotation(Api.class) == null)
 						|| (resourceClass.getAnnotation(Api.class).hidden() == false))
 				.map(resourceClass -> recurseApplicationResources(packageNameMapper, resourceClass, new ArrayDeque<>(),
-						""))
+						"nifi-api"))
 				.reduce(new ArrayList<>(), (l, r) ->
 				{
 					l.addAll(r);
 					return l;
-				});
+				}));
+
+		packagedTypeSpecs.addAll(recurseApplicationResources(packageNameMapper, RuleResource.class, new ArrayDeque<>(),
+				"nifi-update-attribute-ui-1.1.2/api"));
 
 		final java.nio.file.Path generatedJavaPath = Paths
 				.get("../../nifi-1.1.2-client-parent/nifi-1.1.2-invokers/src/main/java");

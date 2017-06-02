@@ -34,8 +34,9 @@ public final class SubmitLineageRequestInvoker extends AbstractInvoker<LineageEn
   }
 
   public final LineageEntity invoke() throws InvokerException {
-    // /provenance/lineage
+    // nifi-api/provenance/lineage
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("provenance");
     target = target.path("lineage");
     final Invocation.Builder invocationBuilder = target.request("application/json");

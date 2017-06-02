@@ -33,8 +33,9 @@ public final class DeleteNodeInvoker extends AbstractInvoker<NodeEntity> {
   }
 
   public final NodeEntity invoke() throws InvokerException {
-    // /controller/cluster/nodes/{id}
+    // nifi-api/controller/cluster/nodes/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("controller");
     target = target.path("cluster");
     target = target.path("nodes");

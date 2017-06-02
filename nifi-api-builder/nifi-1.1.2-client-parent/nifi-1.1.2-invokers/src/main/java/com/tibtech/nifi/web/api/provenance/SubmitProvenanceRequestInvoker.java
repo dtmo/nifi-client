@@ -34,8 +34,9 @@ public final class SubmitProvenanceRequestInvoker extends AbstractInvoker<Proven
   }
 
   public final ProvenanceEntity invoke() throws InvokerException {
-    // /provenance
+    // nifi-api/provenance
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("provenance");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Entity<ProvenanceEntity> entity = Entity.entity(provenanceEntity, "application/json");

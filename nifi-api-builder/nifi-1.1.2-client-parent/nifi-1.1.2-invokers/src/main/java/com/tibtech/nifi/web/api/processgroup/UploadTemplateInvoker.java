@@ -50,8 +50,9 @@ public final class UploadTemplateInvoker extends ComponentEntityInvoker<Template
   }
 
   public final TemplateEntity invoke() throws InvokerException {
-    // /process-groups/{id}/templates/upload
+    // nifi-api/process-groups/{id}/templates/upload
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("templates");

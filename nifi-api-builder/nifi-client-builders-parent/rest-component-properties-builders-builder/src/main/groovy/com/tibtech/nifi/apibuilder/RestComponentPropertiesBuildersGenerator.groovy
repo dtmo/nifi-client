@@ -9,7 +9,7 @@ import org.apache.nifi.web.api.dto.PropertyDescriptorDTO
 import com.squareup.javapoet.JavaFile
 import com.tibtech.nifi.client.Flow
 
-def flow = Flow.connect "http://localhost:8080/nifi-api"
+def flow = Flow.connect "http://localhost:8080/"
 
 def root = flow.rootProcessGroup
 

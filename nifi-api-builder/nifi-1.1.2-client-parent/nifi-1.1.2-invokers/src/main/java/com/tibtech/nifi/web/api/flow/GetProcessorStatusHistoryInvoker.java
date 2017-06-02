@@ -33,8 +33,9 @@ public final class GetProcessorStatusHistoryInvoker extends AbstractInvoker<Stat
   }
 
   public final StatusHistoryEntity invoke() throws InvokerException {
-    // /flow/processors/{id}/status/history
+    // nifi-api/flow/processors/{id}/status/history
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("processors");
     target = target.path(id);

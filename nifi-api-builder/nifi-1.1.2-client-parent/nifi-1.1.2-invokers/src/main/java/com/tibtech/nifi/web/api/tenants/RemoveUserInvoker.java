@@ -34,9 +34,9 @@ public final class RemoveUserInvoker extends ComponentEntityInvoker<UserEntity> 
   }
 
   public final UserEntity invoke() throws InvokerException {
-    // tenants/users/{id}
+    // nifi-apitenants/users/{id}
     WebTarget target = getBaseWebTarget();
-    target = target.path("tenants");
+    target = target.path("nifi-apitenants");
     target = target.path("users");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

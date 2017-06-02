@@ -17,8 +17,9 @@ public final class GetControllerServicesFromControllerInvoker extends AbstractIn
   }
 
   public final ControllerServicesEntity invoke() throws InvokerException {
-    // /flow/controller/controller-services
+    // nifi-api/flow/controller/controller-services
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("controller");
     target = target.path("controller-services");

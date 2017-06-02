@@ -64,8 +64,9 @@ public final class GetConnectionStatusInvoker extends AbstractInvoker<Connection
   }
 
   public final ConnectionStatusEntity invoke() throws InvokerException {
-    // /flow/connections/{id}/status
+    // nifi-api/flow/connections/{id}/status
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("connections");
     target = target.path(id);

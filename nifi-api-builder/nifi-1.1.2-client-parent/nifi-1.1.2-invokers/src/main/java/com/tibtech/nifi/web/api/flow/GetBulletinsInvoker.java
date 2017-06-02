@@ -17,8 +17,9 @@ public final class GetBulletinsInvoker extends AbstractInvoker<ControllerBulleti
   }
 
   public final ControllerBulletinsEntity invoke() throws InvokerException {
-    // /flow/controller/bulletins
+    // nifi-api/flow/controller/bulletins
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("controller");
     target = target.path("bulletins");

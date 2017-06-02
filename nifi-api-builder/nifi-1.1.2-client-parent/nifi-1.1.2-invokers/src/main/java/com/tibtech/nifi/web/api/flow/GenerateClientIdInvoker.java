@@ -17,8 +17,9 @@ public final class GenerateClientIdInvoker extends AbstractInvoker<String> {
   }
 
   public final String invoke() throws InvokerException {
-    // /flow/client-id
+    // nifi-api/flow/client-id
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("client-id");
     final Invocation.Builder invocationBuilder = target.request("text/plain");

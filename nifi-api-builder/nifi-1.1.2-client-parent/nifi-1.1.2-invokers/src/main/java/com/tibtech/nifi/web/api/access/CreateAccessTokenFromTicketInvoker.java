@@ -18,8 +18,9 @@ public final class CreateAccessTokenFromTicketInvoker extends AbstractInvoker<St
   }
 
   public final String invoke() throws InvokerException {
-    // /access/kerberos
+    // nifi-api/access/kerberos
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("access");
     target = target.path("kerberos");
     final Invocation.Builder invocationBuilder = target.request("text/plain");

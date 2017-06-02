@@ -49,8 +49,9 @@ public final class UpdateRemoteProcessGroupInvoker extends ComponentEntityInvoke
   }
 
   public final RemoteProcessGroupEntity invoke() throws InvokerException {
-    // /remote-process-groups/{id}
+    // nifi-api/remote-process-groups/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("remote-process-groups");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

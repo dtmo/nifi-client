@@ -50,8 +50,9 @@ public final class CopySnippetInvoker extends AbstractInvoker<FlowSnippetEntity>
   }
 
   public final FlowSnippetEntity invoke() throws InvokerException {
-    // /process-groups/{id}/snippet-instance
+    // nifi-api/process-groups/{id}/snippet-instance
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("snippet-instance");

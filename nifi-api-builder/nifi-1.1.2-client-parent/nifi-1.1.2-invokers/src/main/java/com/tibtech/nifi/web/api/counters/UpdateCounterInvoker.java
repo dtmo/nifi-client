@@ -34,8 +34,9 @@ public final class UpdateCounterInvoker extends AbstractInvoker<CounterEntity> {
   }
 
   public final CounterEntity invoke() throws InvokerException {
-    // /counters/{id}
+    // nifi-api/counters/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("counters");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

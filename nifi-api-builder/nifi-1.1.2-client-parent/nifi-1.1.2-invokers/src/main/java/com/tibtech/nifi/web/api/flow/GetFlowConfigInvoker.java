@@ -17,8 +17,9 @@ public final class GetFlowConfigInvoker extends AbstractInvoker<FlowConfiguratio
   }
 
   public final FlowConfigurationEntity invoke() throws InvokerException {
-    // /flow/config
+    // nifi-api/flow/config
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("config");
     final Invocation.Builder invocationBuilder = target.request("application/json");

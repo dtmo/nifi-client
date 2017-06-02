@@ -65,8 +65,9 @@ public final class UpdateRemoteProcessGroupInputPortInvoker extends ComponentEnt
   }
 
   public final RemoteProcessGroupPortEntity invoke() throws InvokerException {
-    // /remote-process-groups/{id}/input-ports/{port-id}
+    // nifi-api/remote-process-groups/{id}/input-ports/{port-id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("remote-process-groups");
     target = target.path(id);
     target = target.path("input-ports");

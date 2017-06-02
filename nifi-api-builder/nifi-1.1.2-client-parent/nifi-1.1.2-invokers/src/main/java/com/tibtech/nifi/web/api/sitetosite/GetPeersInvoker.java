@@ -17,8 +17,9 @@ public final class GetPeersInvoker extends AbstractInvoker<PeersEntity> {
   }
 
   public final PeersEntity invoke() throws InvokerException {
-    // /site-to-site/peers
+    // nifi-api/site-to-site/peers
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("site-to-site");
     target = target.path("peers");
     final Invocation.Builder invocationBuilder = target.request("application/json, application/xml");

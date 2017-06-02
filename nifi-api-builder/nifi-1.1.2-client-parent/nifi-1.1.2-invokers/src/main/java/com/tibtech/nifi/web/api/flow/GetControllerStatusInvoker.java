@@ -17,8 +17,9 @@ public final class GetControllerStatusInvoker extends AbstractInvoker<Controller
   }
 
   public final ControllerStatusEntity invoke() throws InvokerException {
-    // /flow/status
+    // nifi-api/flow/status
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("status");
     final Invocation.Builder invocationBuilder = target.request("application/json");

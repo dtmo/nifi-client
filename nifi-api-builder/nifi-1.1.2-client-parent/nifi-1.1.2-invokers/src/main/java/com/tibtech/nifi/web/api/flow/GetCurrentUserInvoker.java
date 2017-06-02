@@ -17,8 +17,9 @@ public final class GetCurrentUserInvoker extends AbstractInvoker<CurrentUserEnti
   }
 
   public final CurrentUserEntity invoke() throws InvokerException {
-    // /flow/current-user
+    // nifi-api/flow/current-user
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("current-user");
     final Invocation.Builder invocationBuilder = target.request("application/json");

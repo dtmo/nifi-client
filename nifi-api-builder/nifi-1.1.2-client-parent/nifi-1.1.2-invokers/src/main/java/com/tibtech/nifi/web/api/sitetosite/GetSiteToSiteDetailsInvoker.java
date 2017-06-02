@@ -17,8 +17,9 @@ public final class GetSiteToSiteDetailsInvoker extends AbstractInvoker<Controlle
   }
 
   public final ControllerEntity invoke() throws InvokerException {
-    // /site-to-site
+    // nifi-api/site-to-site
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("site-to-site");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Response response = invocationBuilder.method("GET");

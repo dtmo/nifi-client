@@ -49,8 +49,9 @@ public final class CreateConnectionInvoker extends ComponentEntityInvoker<Connec
   }
 
   public final ConnectionEntity invoke() throws InvokerException {
-    // /process-groups/{id}/connections
+    // nifi-api/process-groups/{id}/connections
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("connections");

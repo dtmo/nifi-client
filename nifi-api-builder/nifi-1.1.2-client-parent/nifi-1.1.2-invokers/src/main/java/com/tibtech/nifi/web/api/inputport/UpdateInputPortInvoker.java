@@ -49,8 +49,9 @@ public final class UpdateInputPortInvoker extends ComponentEntityInvoker<PortEnt
   }
 
   public final PortEntity invoke() throws InvokerException {
-    // /input-ports/{id}
+    // nifi-api/input-ports/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("input-ports");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

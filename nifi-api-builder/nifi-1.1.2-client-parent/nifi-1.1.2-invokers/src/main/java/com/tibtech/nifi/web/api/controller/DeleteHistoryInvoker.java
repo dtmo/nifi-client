@@ -33,8 +33,9 @@ public final class DeleteHistoryInvoker extends AbstractInvoker<HistoryEntity> {
   }
 
   public final HistoryEntity invoke() throws InvokerException {
-    // /controller/history
+    // nifi-api/controller/history
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("controller");
     target = target.path("history");
     target = target.queryParam("endDate", endDate);

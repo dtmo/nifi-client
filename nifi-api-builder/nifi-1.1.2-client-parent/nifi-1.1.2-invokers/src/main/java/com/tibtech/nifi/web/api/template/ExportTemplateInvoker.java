@@ -33,8 +33,9 @@ public final class ExportTemplateInvoker extends AbstractInvoker<TemplateDTO> {
   }
 
   public final TemplateDTO invoke() throws InvokerException {
-    // /templates/{id}/download
+    // nifi-api/templates/{id}/download
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("templates");
     target = target.path(id);
     target = target.path("download");

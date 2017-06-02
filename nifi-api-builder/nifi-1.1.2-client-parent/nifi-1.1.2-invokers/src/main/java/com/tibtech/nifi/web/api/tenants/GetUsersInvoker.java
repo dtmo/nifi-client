@@ -18,9 +18,9 @@ public final class GetUsersInvoker extends AbstractInvoker<UsersEntity> {
   }
 
   public final UsersEntity invoke() throws InvokerException {
-    // tenants/users
+    // nifi-apitenants/users
     WebTarget target = getBaseWebTarget();
-    target = target.path("tenants");
+    target = target.path("nifi-apitenants");
     target = target.path("users");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Response response = invocationBuilder.method("GET");

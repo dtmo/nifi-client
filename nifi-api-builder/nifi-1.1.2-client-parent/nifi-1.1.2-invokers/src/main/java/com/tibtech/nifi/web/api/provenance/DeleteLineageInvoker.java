@@ -48,8 +48,9 @@ public final class DeleteLineageInvoker extends AbstractInvoker<LineageEntity> {
   }
 
   public final LineageEntity invoke() throws InvokerException {
-    // /provenance/lineage/{id}
+    // nifi-api/provenance/lineage/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("provenance");
     target = target.path("lineage");
     target = target.path(id);

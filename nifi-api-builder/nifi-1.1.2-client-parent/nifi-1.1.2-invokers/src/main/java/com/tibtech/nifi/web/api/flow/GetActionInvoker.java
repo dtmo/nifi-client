@@ -34,8 +34,9 @@ public final class GetActionInvoker extends AbstractInvoker<ActionEntity> {
   }
 
   public final ActionEntity invoke() throws InvokerException {
-    // /flow/history/{id}
+    // nifi-api/flow/history/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("history");
     target = target.path(String.valueOf(id));

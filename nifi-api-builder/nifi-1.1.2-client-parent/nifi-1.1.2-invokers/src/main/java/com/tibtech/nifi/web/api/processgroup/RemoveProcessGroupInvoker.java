@@ -33,8 +33,9 @@ public final class RemoveProcessGroupInvoker extends ComponentEntityInvoker<Proc
   }
 
   public final ProcessGroupEntity invoke() throws InvokerException {
-    // /process-groups/{id}
+    // nifi-api/process-groups/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

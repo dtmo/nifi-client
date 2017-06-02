@@ -17,8 +17,9 @@ public final class GetLoginConfigInvoker extends AbstractInvoker<AccessConfigura
   }
 
   public final AccessConfigurationEntity invoke() throws InvokerException {
-    // /access/config
+    // nifi-api/access/config
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("access");
     target = target.path("config");
     final Invocation.Builder invocationBuilder = target.request("application/json");

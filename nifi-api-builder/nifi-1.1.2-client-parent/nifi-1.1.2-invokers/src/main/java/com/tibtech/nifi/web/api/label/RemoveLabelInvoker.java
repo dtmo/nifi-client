@@ -33,8 +33,9 @@ public final class RemoveLabelInvoker extends ComponentEntityInvoker<LabelEntity
   }
 
   public final LabelEntity invoke() throws InvokerException {
-    // /labels/{id}
+    // nifi-api/labels/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("labels");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

@@ -1,2 +1,5 @@
 dependencies
-{ compile project(":nifi-${nifiVersion}-client-parent:nifi-${nifiVersion}-invoker-core") }
+{
+	compile project(":nifi-${nifiVersion}-client-parent:nifi-${nifiVersion}-invoker-core")
+	compile project(":nifi-${nifiVersion}-client-parent:nifi-${nifiVersion}-update-attribute-dto")
+}

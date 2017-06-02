@@ -34,9 +34,9 @@ public final class GetUserInvoker extends ComponentEntityInvoker<UserEntity> {
   }
 
   public final UserEntity invoke() throws InvokerException {
-    // tenants/users/{id}
+    // nifi-apitenants/users/{id}
     WebTarget target = getBaseWebTarget();
-    target = target.path("tenants");
+    target = target.path("nifi-apitenants");
     target = target.path("users");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

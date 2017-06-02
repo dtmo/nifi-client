@@ -33,8 +33,9 @@ public final class GetStateInvoker extends AbstractInvoker<ComponentStateDTO> {
   }
 
   public final ComponentStateDTO invoke() throws InvokerException {
-    // /processors/{id}/state
+    // nifi-api/processors/{id}/state
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("processors");
     target = target.path(id);
     target = target.path("state");

@@ -33,8 +33,9 @@ public final class RemoveOutputPortInvoker extends ComponentEntityInvoker<PortEn
   }
 
   public final PortEntity invoke() throws InvokerException {
-    // /output-ports/{id}
+    // nifi-api/output-ports/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("output-ports");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

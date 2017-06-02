@@ -34,8 +34,9 @@ public final class SearchClusterInvoker extends AbstractInvoker<ClusterSearchRes
   }
 
   public final ClusterSearchResultsEntity invoke() throws InvokerException {
-    // /flow/cluster/search-results
+    // nifi-api/flow/cluster/search-results
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("cluster");
     target = target.path("search-results");

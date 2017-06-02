@@ -30,8 +30,9 @@ public final class SearchFlowInvoker extends AbstractInvoker<SearchResultsEntity
   }
 
   public final SearchResultsEntity invoke() throws InvokerException {
-    // /flow/search-results
+    // nifi-api/flow/search-results
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("search-results");
     target = target.queryParam("q", q);

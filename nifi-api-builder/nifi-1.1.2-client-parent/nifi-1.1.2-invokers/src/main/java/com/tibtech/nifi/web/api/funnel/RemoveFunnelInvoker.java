@@ -33,8 +33,9 @@ public final class RemoveFunnelInvoker extends ComponentEntityInvoker<FunnelEnti
   }
 
   public final FunnelEntity invoke() throws InvokerException {
-    // /funnels/{id}
+    // nifi-api/funnels/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("funnels");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

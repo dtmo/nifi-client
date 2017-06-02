@@ -33,8 +33,9 @@ public final class DeleteConnectionInvoker extends ComponentEntityInvoker<Connec
   }
 
   public final ConnectionEntity invoke() throws InvokerException {
-    // /connections/{id}
+    // nifi-api/connections/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("connections");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

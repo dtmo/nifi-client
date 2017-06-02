@@ -64,8 +64,9 @@ public final class GetRemoteProcessGroupStatusInvoker extends AbstractInvoker<Pr
   }
 
   public final ProcessorStatusEntity invoke() throws InvokerException {
-    // /flow/remote-process-groups/{id}/status
+    // nifi-api/flow/remote-process-groups/{id}/status
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("remote-process-groups");
     target = target.path(id);

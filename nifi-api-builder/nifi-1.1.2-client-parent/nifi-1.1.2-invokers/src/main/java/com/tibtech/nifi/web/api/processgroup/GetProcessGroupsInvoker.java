@@ -33,8 +33,9 @@ public final class GetProcessGroupsInvoker extends AbstractInvoker<ProcessGroups
   }
 
   public final ProcessGroupsEntity invoke() throws InvokerException {
-    // /process-groups/{id}/process-groups
+    // nifi-api/process-groups/{id}/process-groups
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("process-groups");

@@ -33,8 +33,9 @@ public final class GetConnectionStatusHistoryInvoker extends AbstractInvoker<Sta
   }
 
   public final StatusHistoryEntity invoke() throws InvokerException {
-    // /flow/connections/{id}/status/history
+    // nifi-api/flow/connections/{id}/status/history
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("connections");
     target = target.path(id);

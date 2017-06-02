@@ -17,8 +17,9 @@ public final class GetBannersInvoker extends AbstractInvoker<BannerEntity> {
   }
 
   public final BannerEntity invoke() throws InvokerException {
-    // /flow/banners
+    // nifi-api/flow/banners
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("banners");
     final Invocation.Builder invocationBuilder = target.request("application/json");

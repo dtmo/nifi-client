@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import org.apache.nifi.update.attributes.dto.RuleDTO;
+import org.apache.nifi.update.attributes.entity.RuleEntity;
 import org.apache.nifi.web.api.dto.AboutDTO;
 import org.apache.nifi.web.api.entity.Entity;
 
@@ -23,7 +25,13 @@ public class JavaBeanBuilderCodeWriter
 		packagedTypeSpecs.addAll(JavaBeanBuilderFactory.getPackagesAndTypeSpecs(Entity.class.getPackage().getName(),
 				s -> s.endsWith("Entity"), packageNameMapper));
 
-		final Path generatedJavaPath = Paths.get("../../nifi-1.1.2-client-parent/nifi-1.1.2-bean-builders/src/main/java");
+		packagedTypeSpecs.addAll(JavaBeanBuilderFactory.getPackagesAndTypeSpecs(RuleDTO.class.getPackage().getName(),
+				s -> s.endsWith("DTO"), packageNameMapper));
+		packagedTypeSpecs.addAll(JavaBeanBuilderFactory.getPackagesAndTypeSpecs(RuleEntity.class.getPackage().getName(),
+				s -> s.endsWith("Entity"), packageNameMapper));
+
+		final Path generatedJavaPath = Paths
+				.get("../../nifi-1.1.2-client-parent/nifi-1.1.2-bean-builders/src/main/java");
 
 		for (final PackagedTypeSpec packagedTypeSpec : packagedTypeSpecs)
 		{

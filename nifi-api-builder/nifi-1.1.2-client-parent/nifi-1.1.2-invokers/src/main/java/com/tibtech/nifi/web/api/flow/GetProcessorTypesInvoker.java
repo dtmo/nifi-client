@@ -18,8 +18,9 @@ public final class GetProcessorTypesInvoker extends AbstractInvoker<ProcessorTyp
   }
 
   public final ProcessorTypesEntity invoke() throws InvokerException {
-    // /flow/processor-types
+    // nifi-api/flow/processor-types
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("processor-types");
     final Invocation.Builder invocationBuilder = target.request("application/json");

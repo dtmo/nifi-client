@@ -33,8 +33,9 @@ public final class GetFunnelInvoker extends ComponentEntityInvoker<FunnelEntity>
   }
 
   public final FunnelEntity invoke() throws InvokerException {
-    // /funnels/{id}
+    // nifi-api/funnels/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("funnels");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

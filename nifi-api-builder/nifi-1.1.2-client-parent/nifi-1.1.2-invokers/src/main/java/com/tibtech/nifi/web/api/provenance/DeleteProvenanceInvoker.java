@@ -48,8 +48,9 @@ public final class DeleteProvenanceInvoker extends AbstractInvoker<ProvenanceEnt
   }
 
   public final ProvenanceEntity invoke() throws InvokerException {
-    // /provenance/{id}
+    // nifi-api/provenance/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("provenance");
     target = target.path(id);
     target = target.queryParam("clusterNodeId", clusterNodeId);

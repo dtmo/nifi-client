@@ -33,8 +33,9 @@ public final class RemoveTemplateInvoker extends ComponentEntityInvoker<Template
   }
 
   public final TemplateEntity invoke() throws InvokerException {
-    // /templates/{id}
+    // nifi-api/templates/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("templates");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

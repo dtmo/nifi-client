@@ -33,8 +33,9 @@ public final class GetControllerServicesFromGroupInvoker extends AbstractInvoker
   }
 
   public final ControllerServicesEntity invoke() throws InvokerException {
-    // /flow/process-groups/{id}/controller-services
+    // nifi-api/flow/process-groups/{id}/controller-services
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("process-groups");
     target = target.path(id);

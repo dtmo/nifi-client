@@ -18,8 +18,9 @@ public final class GetClusterInvoker extends AbstractInvoker<ClusterEntity> {
   }
 
   public final ClusterEntity invoke() throws InvokerException {
-    // /controller/cluster
+    // nifi-api/controller/cluster
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("controller");
     target = target.path("cluster");
     final Invocation.Builder invocationBuilder = target.request("application/json");

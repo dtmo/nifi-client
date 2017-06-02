@@ -49,8 +49,9 @@ public final class GetProvenanceEventInvoker extends AbstractInvoker<ProvenanceE
   }
 
   public final ProvenanceEventEntity invoke() throws InvokerException {
-    // /provenance-events/{id}
+    // nifi-api/provenance-events/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("provenance-events");
     target = target.path(String.valueOf(id));
     target = target.queryParam("clusterNodeId", clusterNodeId);

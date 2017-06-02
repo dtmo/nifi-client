@@ -34,8 +34,9 @@ public final class SubmitReplayInvoker extends AbstractInvoker<ProvenanceEventEn
   }
 
   public final ProvenanceEventEntity invoke() throws InvokerException {
-    // /provenance-events/replays
+    // nifi-api/provenance-events/replays
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("provenance-events");
     target = target.path("replays");
     final Invocation.Builder invocationBuilder = target.request("application/json");

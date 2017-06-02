@@ -34,8 +34,9 @@ public final class GetControllerServiceTypesInvoker extends AbstractInvoker<Cont
   }
 
   public final ControllerServiceTypesEntity invoke() throws InvokerException {
-    // /flow/controller-service-types
+    // nifi-api/flow/controller-service-types
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("controller-service-types");
     target = target.queryParam("serviceType", serviceType);

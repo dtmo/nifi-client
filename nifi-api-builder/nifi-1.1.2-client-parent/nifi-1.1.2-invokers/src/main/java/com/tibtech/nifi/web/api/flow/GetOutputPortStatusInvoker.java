@@ -64,8 +64,9 @@ public final class GetOutputPortStatusInvoker extends AbstractInvoker<PortStatus
   }
 
   public final PortStatusEntity invoke() throws InvokerException {
-    // /flow/output-ports/{id}/status
+    // nifi-api/flow/output-ports/{id}/status
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("output-ports");
     target = target.path(id);

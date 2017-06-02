@@ -33,8 +33,9 @@ public final class ClearStateInvoker extends AbstractInvoker<ComponentStateDTO> 
   }
 
   public final ComponentStateDTO invoke() throws InvokerException {
-    // /reporting-tasks/{id}/state/clear-requests
+    // nifi-api/reporting-tasks/{id}/state/clear-requests
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("reporting-tasks");
     target = target.path(id);
     target = target.path("state");

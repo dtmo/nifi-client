@@ -33,8 +33,9 @@ public final class CreateSnippetInvoker extends AbstractInvoker<SnippetEntity> {
   }
 
   public final SnippetEntity invoke() throws InvokerException {
-    // /snippets
+    // nifi-api/snippets
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("snippets");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Entity<SnippetEntity> entity = Entity.entity(snippetEntity, "application/json");

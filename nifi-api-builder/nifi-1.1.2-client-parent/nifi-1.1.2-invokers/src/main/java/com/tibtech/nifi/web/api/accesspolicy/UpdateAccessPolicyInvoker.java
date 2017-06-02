@@ -49,8 +49,9 @@ public final class UpdateAccessPolicyInvoker extends ComponentEntityInvoker<Acce
   }
 
   public final AccessPolicyEntity invoke() throws InvokerException {
-    // /policies/{id}
+    // nifi-api/policies/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("policies");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

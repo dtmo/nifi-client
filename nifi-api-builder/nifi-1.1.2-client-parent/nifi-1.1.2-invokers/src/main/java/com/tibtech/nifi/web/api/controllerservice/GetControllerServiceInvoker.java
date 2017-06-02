@@ -33,8 +33,9 @@ public final class GetControllerServiceInvoker extends ComponentEntityInvoker<Co
   }
 
   public final ControllerServiceEntity invoke() throws InvokerException {
-    // /controller-services/{id}
+    // nifi-api/controller-services/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("controller-services");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

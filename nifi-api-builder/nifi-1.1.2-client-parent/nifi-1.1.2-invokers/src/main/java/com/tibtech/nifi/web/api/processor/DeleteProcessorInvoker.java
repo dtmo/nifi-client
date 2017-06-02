@@ -33,8 +33,9 @@ public final class DeleteProcessorInvoker extends ComponentEntityInvoker<Process
   }
 
   public final ProcessorEntity invoke() throws InvokerException {
-    // /processors/{id}
+    // nifi-api/processors/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("processors");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

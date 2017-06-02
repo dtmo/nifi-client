@@ -3,8 +3,10 @@ package com.tibtech.nifi.web.api.datatransfer;
 import com.tibtech.nifi.client.AbstractInvoker;
 import com.tibtech.nifi.client.InvokerException;
 import com.tibtech.nifi.client.Transport;
+import java.io.InputStream;
 import java.lang.Integer;
 import java.lang.String;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
@@ -19,6 +21,8 @@ public final class CommitInputPortTransactionInvoker extends AbstractInvoker<Tra
   private String transactionId;
 
   private Integer responseCode;
+
+  private InputStream inputStream;
 
   public CommitInputPortTransactionInvoker(final Transport transport, final long version) {
     super(transport, version);
@@ -63,9 +67,19 @@ public final class CommitInputPortTransactionInvoker extends AbstractInvoker<Tra
     return this;
   }
 
+  public final InputStream getInputStream() {
+    return inputStream;
+  }
+
+  public final CommitInputPortTransactionInvoker setInputStream(final InputStream inputStream) {
+    this.inputStream = inputStream;
+    return this;
+  }
+
   public final TransactionResultEntity invoke() throws InvokerException {
-    // /data-transfer/input-ports/{portId}/transactions/{transactionId}
+    // nifi-api/data-transfer/input-ports/{portId}/transactions/{transactionId}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("data-transfer");
     target = target.path("input-ports");
     target = target.path(portId);
@@ -73,7 +87,8 @@ public final class CommitInputPortTransactionInvoker extends AbstractInvoker<Tra
     target = target.path(transactionId);
     target = target.queryParam("responseCode", responseCode);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    final Response response = invocationBuilder.method("DELETE");
+    final Entity<InputStream> entity = Entity.entity(inputStream, "application/octet-stream");
+    final Response response = invocationBuilder.method("DELETE", entity);
     try {
       return handleResponse(response, TransactionResultEntity.class);
     }

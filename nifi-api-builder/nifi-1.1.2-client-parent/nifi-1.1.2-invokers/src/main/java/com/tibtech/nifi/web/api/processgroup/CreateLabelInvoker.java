@@ -49,8 +49,9 @@ public final class CreateLabelInvoker extends ComponentEntityInvoker<LabelEntity
   }
 
   public final LabelEntity invoke() throws InvokerException {
-    // /process-groups/{id}/labels
+    // nifi-api/process-groups/{id}/labels
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("labels");

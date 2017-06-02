@@ -33,8 +33,9 @@ public final class CreateDropRequestInvoker extends AbstractInvoker<DropRequestE
   }
 
   public final DropRequestEntity invoke() throws InvokerException {
-    // /flowfile-queues/{id}/drop-requests
+    // nifi-api/flowfile-queues/{id}/drop-requests
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flowfile-queues");
     target = target.path(id);
     target = target.path("drop-requests");

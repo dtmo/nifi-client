@@ -63,8 +63,9 @@ public final class GetFlowFileInvoker extends AbstractInvoker<FlowFileEntity> {
   }
 
   public final FlowFileEntity invoke() throws InvokerException {
-    // /flowfile-queues/{id}/flowfiles/{flowfile-uuid}
+    // nifi-api/flowfile-queues/{id}/flowfiles/{flowfile-uuid}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flowfile-queues");
     target = target.path(id);
     target = target.path("flowfiles");

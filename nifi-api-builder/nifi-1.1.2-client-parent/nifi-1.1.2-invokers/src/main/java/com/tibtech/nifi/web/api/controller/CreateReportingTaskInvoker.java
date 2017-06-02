@@ -33,8 +33,9 @@ public final class CreateReportingTaskInvoker extends ComponentEntityInvoker<Rep
   }
 
   public final ReportingTaskEntity invoke() throws InvokerException {
-    // /controller/reporting-tasks
+    // nifi-api/controller/reporting-tasks
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("controller");
     target = target.path("reporting-tasks");
     final Invocation.Builder invocationBuilder = target.request("application/json");

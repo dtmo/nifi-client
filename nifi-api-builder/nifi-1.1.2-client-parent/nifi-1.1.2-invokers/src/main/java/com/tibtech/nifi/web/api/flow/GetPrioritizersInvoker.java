@@ -18,8 +18,9 @@ public final class GetPrioritizersInvoker extends AbstractInvoker<PrioritizerTyp
   }
 
   public final PrioritizerTypesEntity invoke() throws InvokerException {
-    // /flow/prioritizers
+    // nifi-api/flow/prioritizers
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("prioritizers");
     final Invocation.Builder invocationBuilder = target.request("application/json");

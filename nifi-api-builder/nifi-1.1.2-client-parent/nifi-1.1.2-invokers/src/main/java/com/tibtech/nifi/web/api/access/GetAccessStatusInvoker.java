@@ -18,8 +18,9 @@ public final class GetAccessStatusInvoker extends AbstractInvoker<AccessStatusEn
   }
 
   public final AccessStatusEntity invoke() throws InvokerException {
-    // /access
+    // nifi-api/access
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("access");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Response response = invocationBuilder.method("GET");

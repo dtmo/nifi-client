@@ -49,8 +49,9 @@ public final class UpdateConnectionInvoker extends ComponentEntityInvoker<Connec
   }
 
   public final ConnectionEntity invoke() throws InvokerException {
-    // /connections/{id}
+    // nifi-api/connections/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("connections");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

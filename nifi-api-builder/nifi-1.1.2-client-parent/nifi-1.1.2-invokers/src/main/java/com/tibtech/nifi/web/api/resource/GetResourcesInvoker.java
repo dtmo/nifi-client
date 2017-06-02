@@ -17,8 +17,9 @@ public final class GetResourcesInvoker extends AbstractInvoker<ResourcesEntity> 
   }
 
   public final ResourcesEntity invoke() throws InvokerException {
-    // /resources
+    // nifi-api/resources
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("resources");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     final Response response = invocationBuilder.method("GET");

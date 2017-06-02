@@ -33,8 +33,9 @@ public final class RemoveAccessPolicyInvoker extends ComponentEntityInvoker<Acce
   }
 
   public final AccessPolicyEntity invoke() throws InvokerException {
-    // /policies/{id}
+    // nifi-api/policies/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("policies");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

@@ -17,8 +17,9 @@ public final class GetSearchOptionsInvoker extends AbstractInvoker<ProvenanceOpt
   }
 
   public final ProvenanceOptionsEntity invoke() throws InvokerException {
-    // /provenance/search-options
+    // nifi-api/provenance/search-options
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("provenance");
     target = target.path("search-options");
     final Invocation.Builder invocationBuilder = target.request("application/json");

@@ -34,8 +34,9 @@ public final class GetComponentHistoryInvoker extends AbstractInvoker<ComponentH
   }
 
   public final ComponentHistoryEntity invoke() throws InvokerException {
-    // /flow/history/components/{componentId}
+    // nifi-api/flow/history/components/{componentId}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("history");
     target = target.path("components");

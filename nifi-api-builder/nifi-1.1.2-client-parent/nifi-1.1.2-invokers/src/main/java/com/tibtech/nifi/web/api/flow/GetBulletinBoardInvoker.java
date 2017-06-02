@@ -110,8 +110,9 @@ public final class GetBulletinBoardInvoker extends AbstractInvoker<BulletinBoard
   }
 
   public final BulletinBoardEntity invoke() throws InvokerException {
-    // /flow/bulletin-board
+    // nifi-api/flow/bulletin-board
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("bulletin-board");
     target = target.queryParam("after", after);

@@ -17,8 +17,9 @@ public final class GetAboutInfoInvoker extends AbstractInvoker<AboutEntity> {
   }
 
   public final AboutEntity invoke() throws InvokerException {
-    // /flow/about
+    // nifi-api/flow/about
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("about");
     final Invocation.Builder invocationBuilder = target.request("application/json");

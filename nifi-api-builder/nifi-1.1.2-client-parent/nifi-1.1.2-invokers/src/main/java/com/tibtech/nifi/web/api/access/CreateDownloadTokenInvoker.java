@@ -18,8 +18,9 @@ public final class CreateDownloadTokenInvoker extends AbstractInvoker<String> {
   }
 
   public final String invoke() throws InvokerException {
-    // /access/download-token
+    // nifi-api/access/download-token
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("access");
     target = target.path("download-token");
     final Invocation.Builder invocationBuilder = target.request("text/plain");

@@ -49,8 +49,9 @@ public final class GetInputContentInvoker extends AbstractInvoker<Void> {
   }
 
   public final Void invoke() throws InvokerException {
-    // /provenance-events/{id}/content/input
+    // nifi-api/provenance-events/{id}/content/input
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("provenance-events");
     target = target.path(String.valueOf(id));
     target = target.path("content");

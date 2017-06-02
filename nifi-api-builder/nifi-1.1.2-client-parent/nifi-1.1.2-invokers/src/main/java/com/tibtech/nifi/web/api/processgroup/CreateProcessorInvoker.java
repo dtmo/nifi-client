@@ -49,8 +49,9 @@ public final class CreateProcessorInvoker extends ComponentEntityInvoker<Process
   }
 
   public final ProcessorEntity invoke() throws InvokerException {
-    // /process-groups/{id}/processors
+    // nifi-api/process-groups/{id}/processors
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("processors");

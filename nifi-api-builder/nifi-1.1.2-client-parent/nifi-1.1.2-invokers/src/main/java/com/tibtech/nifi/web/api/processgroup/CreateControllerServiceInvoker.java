@@ -49,8 +49,9 @@ public final class CreateControllerServiceInvoker extends ComponentEntityInvoker
   }
 
   public final ControllerServiceEntity invoke() throws InvokerException {
-    // /process-groups/{id}/controller-services
+    // nifi-api/process-groups/{id}/controller-services
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("controller-services");

@@ -34,9 +34,9 @@ public final class CreateUserGroupInvoker extends ComponentEntityInvoker<UserGro
   }
 
   public final UserGroupEntity invoke() throws InvokerException {
-    // tenants/user-groups
+    // nifi-apitenants/user-groups
     WebTarget target = getBaseWebTarget();
-    target = target.path("tenants");
+    target = target.path("nifi-apitenants");
     target = target.path("user-groups");
     final Invocation.Builder invocationBuilder = target.request("application/json");
     userGroupEntity.setRevision(createRevisionDto());

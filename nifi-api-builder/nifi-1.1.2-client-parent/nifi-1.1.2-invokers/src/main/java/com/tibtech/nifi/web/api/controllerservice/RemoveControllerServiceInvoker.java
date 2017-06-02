@@ -33,8 +33,9 @@ public final class RemoveControllerServiceInvoker extends ComponentEntityInvoker
   }
 
   public final ControllerServiceEntity invoke() throws InvokerException {
-    // /controller-services/{id}
+    // nifi-api/controller-services/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("controller-services");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

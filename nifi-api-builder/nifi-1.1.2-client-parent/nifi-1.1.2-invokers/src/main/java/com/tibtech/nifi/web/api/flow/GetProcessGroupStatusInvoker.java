@@ -80,8 +80,9 @@ public final class GetProcessGroupStatusInvoker extends AbstractInvoker<ProcessG
   }
 
   public final ProcessGroupStatusEntity invoke() throws InvokerException {
-    // /flow/process-groups/{id}/status
+    // nifi-api/flow/process-groups/{id}/status
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("process-groups");
     target = target.path(id);

@@ -50,8 +50,9 @@ public final class InstantiateTemplateInvoker extends AbstractInvoker<FlowEntity
   }
 
   public final FlowEntity invoke() throws InvokerException {
-    // /process-groups/{id}/template-instance
+    // nifi-api/process-groups/{id}/template-instance
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("template-instance");

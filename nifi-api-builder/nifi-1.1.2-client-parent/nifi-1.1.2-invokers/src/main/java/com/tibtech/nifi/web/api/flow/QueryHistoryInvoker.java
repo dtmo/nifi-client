@@ -141,8 +141,9 @@ public final class QueryHistoryInvoker extends AbstractInvoker<HistoryEntity> {
   }
 
   public final HistoryEntity invoke() throws InvokerException {
-    // /flow/history
+    // nifi-api/flow/history
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("history");
     target = target.queryParam("offset", offset);

@@ -33,8 +33,9 @@ public final class CreateFlowFileListingInvoker extends AbstractInvoker<ListingR
   }
 
   public final ListingRequestEntity invoke() throws InvokerException {
-    // /flowfile-queues/{id}/listing-requests
+    // nifi-api/flowfile-queues/{id}/listing-requests
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flowfile-queues");
     target = target.path(id);
     target = target.path("listing-requests");

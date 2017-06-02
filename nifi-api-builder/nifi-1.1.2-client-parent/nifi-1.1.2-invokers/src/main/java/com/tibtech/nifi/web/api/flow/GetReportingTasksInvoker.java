@@ -17,8 +17,9 @@ public final class GetReportingTasksInvoker extends AbstractInvoker<ReportingTas
   }
 
   public final ReportingTasksEntity invoke() throws InvokerException {
-    // /flow/reporting-tasks
+    // nifi-api/flow/reporting-tasks
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("reporting-tasks");
     final Invocation.Builder invocationBuilder = target.request("application/json");

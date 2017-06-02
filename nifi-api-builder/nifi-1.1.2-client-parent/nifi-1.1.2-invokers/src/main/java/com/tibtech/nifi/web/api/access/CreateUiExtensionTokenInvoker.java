@@ -18,8 +18,9 @@ public final class CreateUiExtensionTokenInvoker extends AbstractInvoker<String>
   }
 
   public final String invoke() throws InvokerException {
-    // /access/ui-extension-token
+    // nifi-api/access/ui-extension-token
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("access");
     target = target.path("ui-extension-token");
     final Invocation.Builder invocationBuilder = target.request("text/plain");

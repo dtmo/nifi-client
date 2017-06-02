@@ -42,8 +42,9 @@ public final class CreateAccessTokenInvoker extends AbstractInvoker<String> {
   }
 
   public final String invoke() throws InvokerException {
-    // /access/token
+    // nifi-api/access/token
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("access");
     target = target.path("token");
     final Form form = new Form();

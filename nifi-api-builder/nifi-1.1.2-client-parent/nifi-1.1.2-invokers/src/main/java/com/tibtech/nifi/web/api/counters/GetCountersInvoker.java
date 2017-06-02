@@ -50,8 +50,9 @@ public final class GetCountersInvoker extends AbstractInvoker<CountersEntity> {
   }
 
   public final CountersEntity invoke() throws InvokerException {
-    // /counters
+    // nifi-api/counters
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("counters");
     target = target.queryParam("nodewise", nodewise);
     target = target.queryParam("clusterNodeId", clusterNodeId);

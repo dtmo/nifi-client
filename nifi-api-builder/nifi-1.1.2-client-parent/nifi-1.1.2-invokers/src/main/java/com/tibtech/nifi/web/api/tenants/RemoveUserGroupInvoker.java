@@ -34,9 +34,9 @@ public final class RemoveUserGroupInvoker extends ComponentEntityInvoker<UserGro
   }
 
   public final UserGroupEntity invoke() throws InvokerException {
-    // tenants/user-groups/{id}
+    // nifi-apitenants/user-groups/{id}
     WebTarget target = getBaseWebTarget();
-    target = target.path("tenants");
+    target = target.path("nifi-apitenants");
     target = target.path("user-groups");
     target = target.path(id);
     target = target.queryParam("version", getVersion());

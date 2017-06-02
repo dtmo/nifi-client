@@ -49,8 +49,9 @@ public final class GetAccessPolicyForResourceInvoker extends ComponentEntityInvo
   }
 
   public final AccessPolicyEntity invoke() throws InvokerException {
-    // /policies/{action}/{resource: .+}
+    // nifi-api/policies/{action}/{resource: .+}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("policies");
     target = target.path(action);
     target = target.path(resource);

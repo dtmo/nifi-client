@@ -49,8 +49,9 @@ public final class ScheduleComponentsInvoker extends AbstractInvoker<ScheduleCom
   }
 
   public final ScheduleComponentsEntity invoke() throws InvokerException {
-    // /flow/process-groups/{id}
+    // nifi-api/flow/process-groups/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("process-groups");
     target = target.path(id);

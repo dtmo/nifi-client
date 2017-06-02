@@ -17,8 +17,9 @@ public final class GetTemplatesInvoker extends AbstractInvoker<TemplatesEntity> 
   }
 
   public final TemplatesEntity invoke() throws InvokerException {
-    // /flow/templates
+    // nifi-api/flow/templates
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("templates");
     final Invocation.Builder invocationBuilder = target.request("application/json");

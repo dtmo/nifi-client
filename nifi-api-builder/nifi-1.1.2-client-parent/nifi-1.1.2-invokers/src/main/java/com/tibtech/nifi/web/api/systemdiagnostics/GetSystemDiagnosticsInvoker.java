@@ -49,8 +49,9 @@ public final class GetSystemDiagnosticsInvoker extends AbstractInvoker<SystemDia
   }
 
   public final SystemDiagnosticsEntity invoke() throws InvokerException {
-    // /system-diagnostics
+    // nifi-api/system-diagnostics
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("system-diagnostics");
     target = target.queryParam("nodewise", nodewise);
     target = target.queryParam("clusterNodeId", clusterNodeId);

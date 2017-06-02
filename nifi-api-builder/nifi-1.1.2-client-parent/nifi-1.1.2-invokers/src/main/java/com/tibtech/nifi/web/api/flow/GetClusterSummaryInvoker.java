@@ -17,8 +17,9 @@ public final class GetClusterSummaryInvoker extends AbstractInvoker<ClusteSummar
   }
 
   public final ClusteSummaryEntity invoke() throws InvokerException {
-    // /flow/cluster/summary
+    // nifi-api/flow/cluster/summary
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("cluster");
     target = target.path("summary");

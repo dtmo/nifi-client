@@ -63,8 +63,9 @@ public final class DownloadFlowFileContentInvoker extends AbstractInvoker<Void> 
   }
 
   public final Void invoke() throws InvokerException {
-    // /flowfile-queues/{id}/flowfiles/{flowfile-uuid}/content
+    // nifi-api/flowfile-queues/{id}/flowfiles/{flowfile-uuid}/content
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flowfile-queues");
     target = target.path(id);
     target = target.path("flowfiles");

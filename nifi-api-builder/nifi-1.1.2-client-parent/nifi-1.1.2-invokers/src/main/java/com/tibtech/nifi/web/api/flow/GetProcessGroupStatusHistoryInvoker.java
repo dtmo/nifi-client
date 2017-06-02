@@ -33,8 +33,9 @@ public final class GetProcessGroupStatusHistoryInvoker extends AbstractInvoker<S
   }
 
   public final StatusHistoryEntity invoke() throws InvokerException {
-    // /flow/process-groups/{id}/status/history
+    // nifi-api/flow/process-groups/{id}/status/history
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("process-groups");
     target = target.path(id);

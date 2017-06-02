@@ -33,8 +33,9 @@ public final class GetControllerServiceReferencesInvoker extends ComponentEntity
   }
 
   public final ControllerServiceEntity invoke() throws InvokerException {
-    // /controller-services/{id}/references
+    // nifi-api/controller-services/{id}/references
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("controller-services");
     target = target.path(id);
     target = target.path("references");

@@ -49,8 +49,9 @@ public final class UpdateProcessGroupInvoker extends ComponentEntityInvoker<Proc
   }
 
   public final ProcessGroupEntity invoke() throws InvokerException {
-    // /process-groups/{id}
+    // nifi-api/process-groups/{id}
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");

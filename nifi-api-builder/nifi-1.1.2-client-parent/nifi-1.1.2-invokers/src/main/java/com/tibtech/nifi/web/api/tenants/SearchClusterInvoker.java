@@ -34,9 +34,9 @@ public final class SearchClusterInvoker extends AbstractInvoker<TenantsEntity> {
   }
 
   public final TenantsEntity invoke() throws InvokerException {
-    // tenants/search-results
+    // nifi-apitenants/search-results
     WebTarget target = getBaseWebTarget();
-    target = target.path("tenants");
+    target = target.path("nifi-apitenants");
     target = target.path("search-results");
     target = target.queryParam("q", q);
     final Invocation.Builder invocationBuilder = target.request("application/json");

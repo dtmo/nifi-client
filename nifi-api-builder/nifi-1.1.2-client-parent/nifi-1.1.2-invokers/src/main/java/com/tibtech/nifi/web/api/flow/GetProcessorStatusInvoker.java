@@ -64,8 +64,9 @@ public final class GetProcessorStatusInvoker extends AbstractInvoker<ProcessorSt
   }
 
   public final ProcessorStatusEntity invoke() throws InvokerException {
-    // /flow/processors/{id}/status
+    // nifi-api/flow/processors/{id}/status
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("flow");
     target = target.path("processors");
     target = target.path(id);

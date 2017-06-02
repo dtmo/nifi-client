@@ -33,8 +33,9 @@ public final class UpdateControllerConfigInvoker extends AbstractInvoker<Control
   }
 
   public final ControllerConfigurationEntity invoke() throws InvokerException {
-    // /controller/config
+    // nifi-api/controller/config
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("controller");
     target = target.path("config");
     final Invocation.Builder invocationBuilder = target.request("application/json");

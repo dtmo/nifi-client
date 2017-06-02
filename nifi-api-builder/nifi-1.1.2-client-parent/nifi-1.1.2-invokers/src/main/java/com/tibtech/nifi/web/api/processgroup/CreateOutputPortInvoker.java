@@ -49,8 +49,9 @@ public final class CreateOutputPortInvoker extends ComponentEntityInvoker<PortEn
   }
 
   public final PortEntity invoke() throws InvokerException {
-    // /process-groups/{id}/output-ports
+    // nifi-api/process-groups/{id}/output-ports
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("process-groups");
     target = target.path(id);
     target = target.path("output-ports");

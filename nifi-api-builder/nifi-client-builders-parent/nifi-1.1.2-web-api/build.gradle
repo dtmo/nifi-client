@@ -1,6 +1,5 @@
 apply plugin: "java"
 
-
 dependencies
 {
 	compileOnly "org.apache.nifi:nifi-web-utils:1.1.2"

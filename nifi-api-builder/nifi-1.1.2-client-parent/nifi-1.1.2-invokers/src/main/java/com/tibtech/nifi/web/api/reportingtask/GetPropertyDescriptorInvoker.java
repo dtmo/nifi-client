@@ -48,8 +48,9 @@ public final class GetPropertyDescriptorInvoker extends AbstractInvoker<Property
   }
 
   public final PropertyDescriptorEntity invoke() throws InvokerException {
-    // /reporting-tasks/{id}/descriptors
+    // nifi-api/reporting-tasks/{id}/descriptors
     WebTarget target = getBaseWebTarget();
+    target = target.path("nifi-api");
     target = target.path("reporting-tasks");
     target = target.path(id);
     target = target.path("descriptors");
