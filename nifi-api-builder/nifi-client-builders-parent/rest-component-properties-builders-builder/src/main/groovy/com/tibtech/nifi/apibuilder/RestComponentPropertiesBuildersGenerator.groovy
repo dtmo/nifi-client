@@ -13,7 +13,7 @@ def flow = Flow.connect "http://localhost:8080/"
 
 def root = flow.rootProcessGroup
 
-def outputPath = Paths.get("../../nifi-1.1.2-client-parent/nifi-1.1.2-component-properties-builders/src/main/java/")
+def outputPath = Paths.get("../../nifi-1-client-parent/nifi-1.7.0-component-properties-builders/src/main/java/")
 def packageNameMapper = {String s -> s.replaceFirst("org\\.apache", "com.tibtech")}
 
 def writeComponentPropertiesBuilder(Flow flow, Closure packageNameMapper, Closure propertyDescriptorsProducer, Path outputPath, DocumentedTypeDTO docmentedTypeDTO)

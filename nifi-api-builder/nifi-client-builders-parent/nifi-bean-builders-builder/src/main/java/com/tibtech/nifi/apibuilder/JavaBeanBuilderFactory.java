@@ -21,7 +21,7 @@ import org.reflections.scanners.SubTypesScanner;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.wordnik.swagger.annotations.ApiModelProperty;
+import io.swagger.annotations.ApiModelProperty;
 
 public class JavaBeanBuilderFactory
 {
@@ -39,27 +39,33 @@ public class JavaBeanBuilderFactory
 
 		final PropertyDescriptor[] propertyDescriptors = Introspector.getBeanInfo(dtoClass).getPropertyDescriptors();
 
-		for (final PropertyDescriptor propertyDescriptor : propertyDescriptors)
+		// Concrete classes that are extended have abstract superclass builders that handle all the
+		// work. Therefore, in the case where the class and superclass are the same, we do not bother
+		// dealing with property descriptors, as it is already done by the abstract super builder.
+		if (dtoClass != superclass)
 		{
-			if (declaredFieldNames.contains(propertyDescriptor.getName()))
+			for (final PropertyDescriptor propertyDescriptor : propertyDescriptors)
 			{
-				// The property is declared on this class, so we need to handle
-				// it as part of this builder.
-				final Method writeMethod = propertyDescriptor.getWriteMethod();
-				if (writeMethod != null)
+				if (declaredFieldNames.contains(propertyDescriptor.getName()))
 				{
-					final Method readMethod = ClassUtils.getReadMethod(dtoClass, propertyDescriptor);
-					final ApiModelProperty apiModelProperty = readMethod.getAnnotation(ApiModelProperty.class);
-					final String comment = apiModelProperty != null ? apiModelProperty.value() + "\n" : "";
-
-					// Get the parameterized type name for the property to
-					// handle.
-					final TypeName fieldTypeName = ClassUtils.getFieldTypeName(dtoClass, propertyDescriptor.getName());
-
-					final Class<?> propertyType = propertyDescriptor.getPropertyType();
-					objectBuilderBuilder.addBuilderProperty(
-							new BuilderProperty(propertyDescriptor.getName(), propertyType, fieldTypeName, comment,
-									beanBuilders.keySet().contains(propertyType), beanBuilders.get(propertyType)));
+					// The property is declared on this class, so we need to handle
+					// it as part of this builder.
+					final Method writeMethod = propertyDescriptor.getWriteMethod();
+					if (writeMethod != null)
+					{
+						final Method readMethod = ClassUtils.getReadMethod(dtoClass, propertyDescriptor);
+						final ApiModelProperty apiModelProperty = readMethod.getAnnotation(ApiModelProperty.class);
+						final String comment = apiModelProperty != null ? apiModelProperty.value() + "\n" : "";
+		
+						// Get the parameterized type name for the property to
+						// handle.
+						final TypeName fieldTypeName = ClassUtils.getFieldTypeName(dtoClass, propertyDescriptor.getName());
+		
+						final Class<?> propertyType = propertyDescriptor.getPropertyType();
+						objectBuilderBuilder.addBuilderProperty(
+								new BuilderProperty(propertyDescriptor.getName(), propertyType, fieldTypeName, comment,
+										beanBuilders.keySet().contains(propertyType), beanBuilders.get(propertyType)));
+					}
 				}
 			}
 		}

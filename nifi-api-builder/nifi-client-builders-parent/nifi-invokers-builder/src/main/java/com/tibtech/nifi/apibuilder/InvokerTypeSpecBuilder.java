@@ -19,6 +19,8 @@ import javax.ws.rs.core.Form;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.nifi.web.api.entity.ComponentEntity;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
@@ -36,6 +38,7 @@ import com.tibtech.nifi.client.Transport;
 
 public class InvokerTypeSpecBuilder
 {
+	private static final Logger LOGGER = LogManager.getLogger(InvokerTypeSpecBuilder.class);
 	private static final Pattern PATH_VARIABLE_PATTERN = Pattern.compile("\\{([^:]*)(:.*)?\\}");
 	private String invokerName;
 	private String invokerComment;

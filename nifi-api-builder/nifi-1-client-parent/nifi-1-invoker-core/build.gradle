@@ -1,0 +1,10 @@
+dependencies
+{
+	compile "org.apache.nifi:nifi-client-dto:1.7.0"
+
+	compile "javax.ws.rs:javax.ws.rs-api:2.0.1"
+
+	compile "org.glassfish.jersey.core:jersey-client:${jerseyVersion}"
+	compile "org.glassfish.jersey.media:jersey-media-json-jackson:${jerseyVersion}"
+	compile "org.glassfish.jersey.media:jersey-media-multipart:${jerseyVersion}"
+}

@@ -1,0 +1,10 @@
+dependencies
+{
+	compile "org.apache.nifi:nifi-framework-core-api:1.7.0"
+	compile "org.apache.nifi:nifi-client-dto:1.7.0"
+	compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+	compile project(":nifi-1-client-parent:nifi-1-invoker-core")
+	compile project(":nifi-1-client-parent:nifi-1.7.0-component-properties-builders")
+	compile project(":nifi-1-client-parent:nifi-1.7.0-bean-builders")
+	compile project(":nifi-1-client-parent:nifi-1.7.0-invokers")
+}

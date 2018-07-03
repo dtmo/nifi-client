@@ -1,0 +1,13 @@
+ext
+{
+	nifiVersion = "1.1.2"
+	jerseyVersion = "2.26"
+}
+
+subprojects
+{
+	apply plugin: "java"
+
+	dependencies
+	{ testImplementation "junit:junit:4.12" }
+}

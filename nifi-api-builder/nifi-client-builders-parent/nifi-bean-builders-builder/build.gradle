@@ -6,10 +6,10 @@ dependencies
 {
 	compile project(":nifi-client-builders-parent:builder-core")
 	
-	compile "org.apache.nifi:nifi-client-dto:${nifiVersion}"
-	compile project(":nifi-${nifiVersion}-client-parent:nifi-${nifiVersion}-update-attribute-dto")
+	compile "org.apache.nifi:nifi-client-dto:1.7.0"
+	compile project(":nifi-1-client-parent:nifi-1.7.0-update-attribute-dto")
 	
-	compile "com.squareup:javapoet:1.8.0"
+	compile "com.squareup:javapoet:1.11.1"
 	compile "org.reflections:reflections:0.9.10"
 	compile "org.codehaus.groovy:groovy-all:2.4.10"
 

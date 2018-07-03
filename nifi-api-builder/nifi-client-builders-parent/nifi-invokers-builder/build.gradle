@@ -3,18 +3,21 @@ apply plugin: "java"
 dependencies
 {
 	compile project(":nifi-client-builders-parent:builder-core")
-	compile project(":nifi-1.1.2-client-parent:nifi-1.1.2-invoker-core")
+	compile project(":nifi-1-client-parent:nifi-1-invoker-core")
+	compile project(":nifi-client-builders-parent:nifi-1.7.0-web-api")
+	compile project(":nifi-client-builders-parent:nifi-1.7.0-update-attribute-ui")
+	
+	compile "org.apache.logging.log4j:log4j-api:2.11.0"
+	compile "org.apache.logging.log4j:log4j-core:2.11.0"
 	
 	compile "com.sun.jersey:jersey-client:1.19.3"
 	compile "com.sun.jersey.contribs:jersey-multipart:1.19.3"
 	
-	compile project(":nifi-client-builders-parent:nifi-${nifiVersion}-web-api")
-	compile project(":nifi-client-builders-parent:nifi-${nifiVersion}-update-attribute-ui")
-	compile "org.apache.nifi:nifi-framework-core-api:${nifiVersion}"
-	compile "org.apache.nifi:nifi-framework-cluster:${nifiVersion}"
+	compile "org.apache.nifi:nifi-framework-core-api:1.7.0"
+	compile "org.apache.nifi:nifi-framework-cluster:1.7.0"
 	compile "org.apache.felix:javax.servlet:1.0.0"
 	
-	compile "com.squareup:javapoet:1.8.0"
+	compile "com.squareup:javapoet:1.11.1"
 	compile "org.reflections:reflections:0.9.10"
 	compile "org.eclipse.jdt:org.eclipse.jdt.core:3.12.2"
 

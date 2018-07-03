@@ -213,7 +213,7 @@ public class JavaBeanBuilderTypeSpecBuilder
 	}
 
 	protected void addSetBuilderValuesMethod(final TypeSpec.Builder typeSpecBuilder, final String builderClassName,
-			final String builderSuperclassName)
+			final String builderSuperclassName) throws IntrospectionException
 	{
 		// Convert the simple class name into a variable name.
 		final String beanName = Character.toLowerCase(beanType.getSimpleName().charAt(0))
@@ -236,12 +236,14 @@ public class JavaBeanBuilderTypeSpecBuilder
 					SET_BUILDER_VALUES_METHOD_NAME, builderObjectName, beanName);
 		}
 
+		final BeanInfo beanInfo = Introspector.getBeanInfo(beanType);
 		for (final BuilderProperty builderProperty : builderProperties)
 		{
-			final String setterMethod = "set" + Character.toUpperCase(builderProperty.getName().charAt(0))
-					+ builderProperty.getName().substring(1);
-			final String getterMethod = "get" + Character.toUpperCase(builderProperty.getName().charAt(0))
-					+ builderProperty.getName().substring(1);
+			final PropertyDescriptor propertyDescriptor = Arrays.stream(beanInfo.getPropertyDescriptors())
+					.filter(d -> d.getName().equals(builderProperty.getName())).findFirst().orElse(null);
+			
+			final String setterMethod = propertyDescriptor.getWriteMethod().getName();
+			final String getterMethod = ClassUtils.getReadMethod(beanType, propertyDescriptor).getName();
 
 			// Add the related set line to the builder method.
 			setPropertyValuesMethodSpecBuilder.addStatement("$L.$L($L.$L())", builderObjectName, setterMethod, beanName,

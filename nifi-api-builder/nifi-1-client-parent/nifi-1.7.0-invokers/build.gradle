@@ -1,0 +1,6 @@
+dependencies
+{
+	compile project(":nifi-1-client-parent:nifi-1-invoker-core")
+	compile project(":nifi-1-client-parent:nifi-1.7.0-update-attribute-dto")
+	compile "org.apache.nifi:nifi-client-dto:1.7.0"
+}

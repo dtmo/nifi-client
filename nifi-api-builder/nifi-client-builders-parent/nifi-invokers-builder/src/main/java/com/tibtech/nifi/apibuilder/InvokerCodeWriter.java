@@ -14,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.CookieParam;
@@ -34,6 +35,8 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.nifi.connectable.ConnectableType;
 import org.apache.nifi.update.attributes.api.RuleResource;
 import org.apache.nifi.web.api.ApplicationResource;
@@ -52,15 +55,20 @@ import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.sun.jersey.multipart.FormDataParam;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 
 public class InvokerCodeWriter
 {
+	private static final Logger LOGGER = LogManager.getLogger(InvokerCodeWriter.class);
+	
 	private static void addInvokerProperties(final InvokerTypeSpecBuilder invokerTypeSpecBuilder,
 			final Method resourceMethod) throws IntrospectionException
 	{
+		LOGGER.debug("Adding invoker properties: {}", resourceMethod);
+		
 		final Parameter[] parameters = resourceMethod.getParameters();
 		for (final Parameter parameter : parameters)
 		{
@@ -132,7 +140,7 @@ public class InvokerCodeWriter
 	{
 		final TypeName parameterTypeName;
 		final Class<?> mappedParameterType = mapParameterType(parameter);
-		if (mappedParameterType != parameter.getClass())
+		if (mappedParameterType != parameter.getType())
 		{
 			parameterTypeName = ClassName.get(mappedParameterType);
 		}
@@ -298,7 +306,7 @@ public class InvokerCodeWriter
 			}
 		}
 
-		System.out.println(getInvokerPackageName(resourceClass) + "." + invokerName);
+		LOGGER.info("Creating invoker: {}.{}", getInvokerPackageName(resourceClass), invokerName);
 
 		final InvokerTypeSpecBuilder invokerTypeSpecBuilder = new InvokerTypeSpecBuilder();
 		invokerTypeSpecBuilder.setInvokerComment(invokerDescriptionBuilder.toString());
@@ -320,6 +328,8 @@ public class InvokerCodeWriter
 	private static List<PackagedTypeSpec> recurseApplicationResources(final Function<String, String> packageNameMapper,
 			final Class<?> resourceClass, final Deque<Method> resourceMethodStack, final String resourcePathPrefix)
 	{
+		LOGGER.debug("Recursing application resource: {}", resourceClass);
+		
 		final List<PackagedTypeSpec> packagedTypeSpecs = new ArrayList<>();
 
 		final Path classPathAnnotation = resourceClass.getAnnotation(Path.class);
@@ -331,9 +341,16 @@ public class InvokerCodeWriter
 				.forEach(resourceMethod ->
 				{
 					final Path methodPathAnnotation = resourceMethod.getAnnotation(Path.class);
-					final String resourcePath = Paths
-							.get(classResourcePath, methodPathAnnotation != null ? methodPathAnnotation.value() : "")
-							.toString();
+					// The path annotation may well contain regular expressions prefixed with colons, which
+					// the Paths class will not like the look of. We will need to strip the regex syntax
+					// from the path before processing it.
+					final String methodPathValue = methodPathAnnotation != null ? methodPathAnnotation.value() : "";
+					final String strippedMethodPathValue = methodPathValue.replaceAll(":[^}]*\\}", "}");
+					
+					// Calling Paths.get on Windows platform returns a string with separators the wrong way around. Tsk.
+					final String resourcePath = StreamSupport
+							.stream(Paths.get(classResourcePath, strippedMethodPathValue).spliterator(), false)
+							.map(path -> path.toString()).collect(Collectors.joining("/"));
 
 					// We accumulate the methods that take us to the end-point
 					// so that they can all contribute parameters to the final
@@ -395,10 +412,10 @@ public class InvokerCodeWriter
 				}));
 
 		packagedTypeSpecs.addAll(recurseApplicationResources(packageNameMapper, RuleResource.class, new ArrayDeque<>(),
-				"nifi-update-attribute-ui-1.1.2/api"));
+				"nifi-update-attribute-ui-1.7.0/api"));
 
 		final java.nio.file.Path generatedJavaPath = Paths
-				.get("../../nifi-1.1.2-client-parent/nifi-1.1.2-invokers/src/main/java");
+				.get("../../nifi-1-client-parent/nifi-1.7.0-invokers/src/main/java");
 
 		for (final PackagedTypeSpec packagedTypeSpec : packagedTypeSpecs)
 		{

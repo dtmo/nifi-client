@@ -31,7 +31,7 @@ public class JavaBeanBuilderCodeWriter
 				s -> s.endsWith("Entity"), packageNameMapper));
 
 		final Path generatedJavaPath = Paths
-				.get("../../nifi-1.1.2-client-parent/nifi-1.1.2-bean-builders/src/main/java");
+				.get("../../nifi-1-client-parent/nifi-1.7.0-bean-builders/src/main/java");
 
 		for (final PackagedTypeSpec packagedTypeSpec : packagedTypeSpecs)
 		{
