@@ -1,5 +1,6 @@
 package com.tibtech.nifi.client;
 
+import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -295,12 +296,13 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 				.collect(Collectors.toSet());
 	}
 
-	public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y,
+	public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final String targetUri,
 			final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
 		final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = new RemoteProcessGroupDTOBuilder()
 				.setParentGroupId(getParentGroupId())
-				.setPosition(new PositionDTO(x, y));
+				.setPosition(new PositionDTO(x, y))
+				.setTargetUris(targetUri);
 
 		configurator.accept(remoteProcessGroupDTOBuilder);
 
@@ -311,10 +313,27 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 				.invoke());
 	}
 
-	public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y,
+	public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final String targetUri,
 			final Closure<RemoteProcessGroup> closure) throws InvokerException
 	{
-		return createRemoteProcessGroup(x, y, configurator ->
+		return createRemoteProcessGroup(x, y, targetUri, configurator ->
+		{
+			final Closure<RemoteProcessGroup> code = closure.rehydrate(closure, this, this);
+			code.setResolveStrategy(Closure.DELEGATE_ONLY);
+			code.call();
+		});
+	}
+
+	public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final List<String> targetUris,
+			final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
+	{
+		return createRemoteProcessGroup(x, y, targetUris.stream().collect(Collectors.joining(",")), configurator);
+	}
+
+	public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final List<String> targetUris,
+			final Closure<RemoteProcessGroup> closure) throws InvokerException
+	{
+		return createRemoteProcessGroup(x, y, targetUris, configurator ->
 		{
 			final Closure<RemoteProcessGroup> code = closure.rehydrate(closure, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
