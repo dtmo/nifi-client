@@ -415,6 +415,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 		return super.update(closure);
 	}
 
+	@Override
 	public void delete() throws InvokerException
 	{
 		new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();

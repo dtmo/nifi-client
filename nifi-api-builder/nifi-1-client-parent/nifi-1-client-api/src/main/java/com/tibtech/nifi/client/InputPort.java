@@ -44,6 +44,7 @@ public class InputPort extends Port<InputPort>
 		return this;
 	}
 
+	@Override
 	public void delete() throws InvokerException
 	{
 		new RemoveInputPortInvoker(getTransport(), getVersion()).setId(getId());

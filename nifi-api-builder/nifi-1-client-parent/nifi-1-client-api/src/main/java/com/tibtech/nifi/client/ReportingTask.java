@@ -151,6 +151,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 		return super.update(closure);
 	}
 
+	@Override
 	public void delete() throws InvokerException
 	{
 		new RemoveReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke();

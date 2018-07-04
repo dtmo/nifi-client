@@ -244,6 +244,7 @@ public class RemoteProcessGroup
         return super.update(closure);
     }
 
+    @Override
     public void delete() throws InvokerException
     {
         new RemoveRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();

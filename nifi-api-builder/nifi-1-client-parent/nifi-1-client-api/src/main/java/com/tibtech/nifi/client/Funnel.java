@@ -32,6 +32,7 @@ public class Funnel extends ConnectableComponent<Funnel, FunnelEntity, FunnelDTO
 		return ConnectableType.FUNNEL;
 	}
 
+	@Override
 	public void delete() throws InvokerException
 	{
 		new RemoveFunnelInvoker(getTransport(), getVersion()).setId(getId()).invoke();

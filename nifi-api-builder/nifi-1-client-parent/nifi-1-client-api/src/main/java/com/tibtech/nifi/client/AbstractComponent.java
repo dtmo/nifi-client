@@ -7,7 +7,7 @@ import org.apache.nifi.web.api.entity.ComponentEntity;
 
 import java.util.List;
 
-public abstract class AbstractComponent<T extends ComponentEntity> implements Component
+public abstract class AbstractComponent<T extends ComponentEntity> implements Deletable
 {
     private final Transport transport;
 

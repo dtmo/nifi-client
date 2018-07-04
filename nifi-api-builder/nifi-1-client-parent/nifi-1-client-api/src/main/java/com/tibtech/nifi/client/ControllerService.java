@@ -130,6 +130,7 @@ public class ControllerService
         return super.update(closure);
     }
 
+    @Override
     public void delete() throws InvokerException
     {
         new RemoveControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke();

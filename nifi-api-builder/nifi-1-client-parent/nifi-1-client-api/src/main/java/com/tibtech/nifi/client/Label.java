@@ -71,6 +71,7 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
 		return this;
 	}
 
+	@Override
 	public void delete() throws InvokerException
 	{
 		new RemoveLabelInvoker(getTransport(), getVersion()).setId(getId()).invoke();

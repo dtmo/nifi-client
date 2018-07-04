@@ -23,6 +23,7 @@ public class OutputPort extends Port<OutputPort>
 		return ConnectableType.OUTPUT_PORT;
 	}
 
+	@Override
 	public void delete() throws InvokerException
 	{
 		new RemoveOutputPortInvoker(getTransport(), getVersion()).setId(getId());

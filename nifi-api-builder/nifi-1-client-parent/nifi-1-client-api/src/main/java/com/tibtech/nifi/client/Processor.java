@@ -112,6 +112,7 @@ public class Processor extends ConnectableComponent<Processor, ProcessorEntity, 
 		return ConnectableType.PROCESSOR;
 	}
 
+	@Override
 	public void delete() throws InvokerException
 	{
 		new DeleteProcessorInvoker(getTransport(), getVersion()).setId(getId()).invoke();

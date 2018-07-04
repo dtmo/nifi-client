@@ -120,6 +120,7 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
         return getConnectionDTO().getzIndex();
     }
 
+    @Override
     public void delete() throws InvokerException
     {
         new DeleteConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke();
