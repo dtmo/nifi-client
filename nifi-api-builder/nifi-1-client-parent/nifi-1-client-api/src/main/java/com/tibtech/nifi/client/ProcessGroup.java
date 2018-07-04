@@ -124,14 +124,16 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public Funnel createFunnel(final double x, final double y, final Consumer<FunnelDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder().setParentGroupId(getId());
+		final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder()
+				.setParentGroupId(getId())
+				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(funnelDTOBuilder);
 
 		return new Funnel(getTransport(),
 				new CreateFunnelInvoker(getTransport(), 0).setId(getId())
 						.setFunnelEntity(new FunnelEntityBuilder()
-								.setComponent(funnelDTOBuilder.setPosition(new PositionDTO(x, y)).build()).build())
+								.setComponent(funnelDTOBuilder.build()).build())
 						.invoke());
 	}
 
@@ -156,14 +158,16 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public InputPort createInputPort(final double x, final double y, final Consumer<PortDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final PortDTOBuilder portDTOBuilder = new PortDTOBuilder().setParentGroupId(getId());
+		final PortDTOBuilder portDTOBuilder = new PortDTOBuilder()
+				.setParentGroupId(getId())
+				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(portDTOBuilder);
 
 		return new InputPort(getTransport(),
 				new CreateInputPortInvoker(getTransport(), 0).setId(getId())
 						.setPortEntity(new PortEntityBuilder()
-								.setComponent(portDTOBuilder.setPosition(new PositionDTO(x, y)).build()).build())
+								.setComponent(portDTOBuilder.build()).build())
 						.invoke());
 	}
 
@@ -188,14 +192,16 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public OutputPort createOutputPort(final double x, final double y, final Consumer<PortDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final PortDTOBuilder portDTOBuilder = new PortDTOBuilder().setParentGroupId(getId());
+		final PortDTOBuilder portDTOBuilder = new PortDTOBuilder()
+				.setParentGroupId(getId())
+				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(portDTOBuilder);
 
 		return new OutputPort(getTransport(),
 				new CreateOutputPortInvoker(getTransport(), 0).setId(getId())
 						.setPortEntity(new PortEntityBuilder()
-								.setComponent(portDTOBuilder.setPosition(new PositionDTO(x, y)).build()).build())
+								.setComponent(portDTOBuilder.build()).build())
 						.invoke());
 	}
 
@@ -220,13 +226,16 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public Processor createProcessor(final double x, final double y, final String type,
 			final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
 	{
-		final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder().setParentGroupId(getId());
+		final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder()
+				.setParentGroupId(getId())
+				.setPosition(new PositionDTO(x, y))
+				.setType(type);
 
 		configurator.accept(processorDTOBuilder);
 
 		return new Processor(getTransport(), new CreateProcessorInvoker(getTransport(), 0).setId(getId())
 				.setProcessorEntity(new ProcessorEntityBuilder()
-						.setComponent(processorDTOBuilder.setPosition(new PositionDTO(x, y)).setType(type).build())
+						.setComponent(processorDTOBuilder.build())
 						.build())
 				.invoke());
 	}
@@ -249,26 +258,29 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 				.map(processorEntity -> new Processor(getTransport(), processorEntity)).collect(Collectors.toSet());
 	}
 
-	public ProcessGroup createProcessGroup(final double x, final double y,
+	public ProcessGroup createProcessGroup(final double x, final double y, final String name,
 			final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
 		final ProcessGroupDTOBuilder processGroupDTOBuilder = new ProcessGroupDTOBuilder()
-				.setParentGroupId(getParentGroupId());
+				.setParentGroupId(getParentGroupId())
+				.setPosition(new PositionDTO(x, y))
+				.setName(name);
 
 		configurator.accept(processGroupDTOBuilder);
 
 		return new ProcessGroup(getTransport(), new CreateProcessGroupInvoker(getTransport(), 0)
 				.setId(getParentGroupId())
 				.setProcessGroupEntity(new ProcessGroupEntityBuilder()
-						.setComponent(processGroupDTOBuilder.setPosition(new PositionDTO(x, y)).build()).build())
+						.setComponent(processGroupDTOBuilder.build())
+						.build())
 				.invoke());
 	}
 
-	public ProcessGroup createProcessGroup(final double x, final double y,
+	public ProcessGroup createProcessGroup(final double x, final double y, final String name,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupDTOBuilder.class) final Closure<ProcessGroupDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createProcessGroup(x, y, configurator ->
+		return createProcessGroup(x, y, name, configurator ->
 		{
 			final Closure<ProcessGroupDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -287,14 +299,15 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
 		final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = new RemoteProcessGroupDTOBuilder()
-				.setParentGroupId(getParentGroupId());
+				.setParentGroupId(getParentGroupId())
+				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(remoteProcessGroupDTOBuilder);
 
 		return new RemoteProcessGroup(getTransport(), new CreateRemoteProcessGroupInvoker(getTransport(), 0)
 				.setId(getId())
 				.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
-						.setComponent(remoteProcessGroupDTOBuilder.setPosition(new PositionDTO(x, y)).build()).build())
+						.setComponent(remoteProcessGroupDTOBuilder.build()).build())
 				.invoke());
 	}
 
@@ -320,14 +333,16 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public Label createLabel(final double x, final double y, final Consumer<LabelDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final LabelDTOBuilder labelDTOBuilder = new LabelDTOBuilder().setParentGroupId(getId());
+		final LabelDTOBuilder labelDTOBuilder = new LabelDTOBuilder()
+				.setParentGroupId(getId())
+				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(labelDTOBuilder);
 
 		return new Label(getTransport(),
 				new CreateLabelInvoker(getTransport(), 0).setId(getId())
 						.setLabelEntity(new LabelEntityBuilder()
-								.setComponent(labelDTOBuilder.setPosition(new PositionDTO(x, y)).build()).build())
+								.setComponent(labelDTOBuilder.build()).build())
 						.invoke());
 	}
 

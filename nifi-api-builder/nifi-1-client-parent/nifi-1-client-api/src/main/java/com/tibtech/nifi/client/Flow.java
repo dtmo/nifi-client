@@ -40,14 +40,15 @@ public class Flow
 	public ControllerService createControllerService(final String type,
 			final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
 	{
-		final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder();
+		final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder()
+				.setType(type);
 
 		configurator.accept(controllerServiceDTOBuilder);
 
 		return new ControllerService(transport,
 				new CreateControllerServiceInvoker(transport, 0)
 						.setControllerServiceEntity(new ControllerServiceEntityBuilder()
-								.setComponent(controllerServiceDTOBuilder.setType(type).build()).build())
+								.setComponent(controllerServiceDTOBuilder.build()).build())
 						.invoke());
 	}
 
@@ -81,12 +82,13 @@ public class Flow
 	public ReportingTask createReportingTask(final String type, final Consumer<ReportingTaskDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final ReportingTaskDTOBuilder reportingTaskDTOBuilder = new ReportingTaskDTOBuilder();
+		final ReportingTaskDTOBuilder reportingTaskDTOBuilder = new ReportingTaskDTOBuilder()
+				.setType(type);
 
 		configurator.accept(reportingTaskDTOBuilder);
 
 		return new ReportingTask(transport, new CreateReportingTaskInvoker(transport, 0).setReportingTaskEntity(
-				new ReportingTaskEntityBuilder().setComponent(reportingTaskDTOBuilder.setType(type).build()).build())
+				new ReportingTaskEntityBuilder().setComponent(reportingTaskDTOBuilder.build()).build())
 				.invoke());
 	}
 
