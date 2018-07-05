@@ -13,39 +13,81 @@ import com.tibtech.nifi.web.api.label.GetLabelInvoker;
 import com.tibtech.nifi.web.api.label.RemoveLabelInvoker;
 import com.tibtech.nifi.web.api.label.UpdateLabelInvoker;
 
+/**
+ * Label represents a NiFi label to provide documentation to a flow.
+ */
 public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilder>
+		implements Deletable, Refreshable<Label, LabelDTOBuilder>
 {
-	public Label(final Transport transport, final LabelEntity componentEntity)
+	/**
+	 * Constructs a new instance of Label.
+	 * 
+	 * @param transport The transport with to communicate with the NiFi server.
+	 * @param labelEntity The label entity.
+	 */
+	public Label(final Transport transport, final LabelEntity labelEntity)
 	{
-		super(transport, componentEntity);
+		super(transport, labelEntity);
 	}
 
+	/**
+	 * Returns the LabelDTO that describes the label.
+	 * 
+	 * @return The LabelDTO that describes the label.
+	 */
 	protected LabelDTO getLabelDTO()
 	{
 		return getComponentEntity().getComponent();
 	}
 
+	/**
+	 * Returns the width of the label in pixels when at a 1:1 scale.
+	 * 
+	 * @return The width of the label in pixels when at a 1:1 scale.
+	 */
 	public Double getWidth()
 	{
 		return getLabelDTO().getWidth();
 	}
 
+	/**
+	 * Returns the height of the label in pixels when at a 1:1 scale.
+	 * 
+	 * @return The height of the label in pixels when at a 1:1 scale.
+	 */
 	public Double getHeight()
 	{
 		return getLabelDTO().getHeight();
 	}
 
+	/**
+	 * Returns the text that appears in the label.
+	 * 
+	 * @return The text that appears in the label.
+	 */
 	public String getLabel()
 	{
 		return getLabelDTO().getLabel();
 	}
 
+	/**
+	 * Returns the ID of process group containing the component.
+	 * 
+	 * @return The ID of process group containing the component.
+	 */
 	public String getParentGroupId()
 	{
 		return getLabelDTO().getParentGroupId();
 	}
 
-	public Map<String, String> getStyle()
+	/**
+	 * Returns the styles for this label (font-size : 12px, background-color : #eee,
+	 * etc).
+	 * 
+	 * @return The styles for this label (font-size : 12px, background-color : #eee,
+	 *         etc).
+	 */
+	public Map<String, String> getStyles()
 	{
 		return Collections.unmodifiableMap(getLabelDTO().getStyle());
 	}

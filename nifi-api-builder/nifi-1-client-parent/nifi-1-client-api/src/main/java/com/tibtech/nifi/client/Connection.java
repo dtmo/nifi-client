@@ -23,156 +23,153 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
 public class Connection extends UpdatableComponent<Connection, ConnectionEntity, ConnectionDTOBuilder>
+		implements Deletable, Refreshable<Connection, ConnectionDTOBuilder>
 {
-    public static Connection createConnection(final Transport transport, final Connectable source,
-                                              final Connectable destination, final Collection<String> selectedRelationships,
-                                              final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
-    {
-        final ConnectionDTOBuilder connectionDTOBuilder = new ConnectionDTOBuilder()
-                .setSource(new ConnectableDTOBuilder().setId(source.getId()).setGroupId(source.getParentGroupId())
-                        .setType(source.getConnectableType().name()).build())
-                .setDestination(new ConnectableDTOBuilder().setId(destination.getId())
-                        .setGroupId(destination.getParentGroupId()).setType(destination.getConnectableType().name())
-                        .build())
-                .setSelectedRelationships(new HashSet<>(selectedRelationships));
+	public static Connection createConnection(final Transport transport, final Connectable source,
+			final Connectable destination, final Collection<String> selectedRelationships,
+			final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
+	{
+		final ConnectionDTOBuilder connectionDTOBuilder = new ConnectionDTOBuilder()
+				.setSource(new ConnectableDTOBuilder().setId(source.getId()).setGroupId(source.getParentGroupId())
+						.setType(source.getConnectableType().name()).build())
+				.setDestination(new ConnectableDTOBuilder().setId(destination.getId())
+						.setGroupId(destination.getParentGroupId()).setType(destination.getConnectableType().name())
+						.build())
+				.setSelectedRelationships(new HashSet<>(selectedRelationships));
 
-        configurator.accept(connectionDTOBuilder);
+		configurator.accept(connectionDTOBuilder);
 
-        final ConnectionEntity connectionEntity = new CreateConnectionInvoker(transport, 0)
-                .setId(source.getParentGroupId())
-                .setConnectionEntity(new ConnectionEntityBuilder().setComponent(connectionDTOBuilder.build()).build())
-                .invoke();
-        return new Connection(transport, connectionEntity);
-    }
+		final ConnectionEntity connectionEntity = new CreateConnectionInvoker(transport, 0)
+				.setId(source.getParentGroupId())
+				.setConnectionEntity(new ConnectionEntityBuilder().setComponent(connectionDTOBuilder.build()).build())
+				.invoke();
+		return new Connection(transport, connectionEntity);
+	}
 
-    public Connection(final Transport transport, final ConnectionEntity connectionEntity)
-    {
-        super(transport, connectionEntity);
-    }
+	public Connection(final Transport transport, final ConnectionEntity connectionEntity)
+	{
+		super(transport, connectionEntity);
+	}
 
-    private ConnectionDTO getConnectionDTO()
-    {
-        return getComponentEntity().getComponent();
-    }
+	private ConnectionDTO getConnectionDTO()
+	{
+		return getComponentEntity().getComponent();
+	}
 
-    public Set<String> getAvailableRelationships()
-    {
-        return getConnectionDTO().getAvailableRelationships();
-    }
+	public Set<String> getAvailableRelationships()
+	{
+		return getConnectionDTO().getAvailableRelationships();
+	}
 
-    public String getBackPressureDataSizeThreshold()
-    {
-        return getConnectionDTO().getBackPressureDataSizeThreshold();
-    }
+	public String getBackPressureDataSizeThreshold()
+	{
+		return getConnectionDTO().getBackPressureDataSizeThreshold();
+	}
 
-    public Long getBackPressureObjectThreshold()
-    {
-        return getConnectionDTO().getBackPressureObjectThreshold();
-    }
+	public Long getBackPressureObjectThreshold()
+	{
+		return getConnectionDTO().getBackPressureObjectThreshold();
+	}
 
-    public List<PositionDTO> getBends()
-    {
-        return getConnectionDTO().getBends();
-    }
+	public List<PositionDTO> getBends()
+	{
+		return getConnectionDTO().getBends();
+	}
 
-    public ConnectableDTO getDestination()
-    {
-        return getConnectionDTO().getDestination();
-    }
+	public ConnectableDTO getDestination()
+	{
+		return getConnectionDTO().getDestination();
+	}
 
-    public String getFlowFileExpiration()
-    {
-        return getConnectionDTO().getFlowFileExpiration();
-    }
+	public String getFlowFileExpiration()
+	{
+		return getConnectionDTO().getFlowFileExpiration();
+	}
 
-    public Integer getLabelIndex()
-    {
-        return getConnectionDTO().getLabelIndex();
-    }
+	public Integer getLabelIndex()
+	{
+		return getConnectionDTO().getLabelIndex();
+	}
 
-    public String getName()
-    {
-        return getConnectionDTO().getName();
-    }
+	public String getName()
+	{
+		return getConnectionDTO().getName();
+	}
 
-    public String getParentGroupId()
-    {
-        return getConnectionDTO().getParentGroupId();
-    }
+	public String getParentGroupId()
+	{
+		return getConnectionDTO().getParentGroupId();
+	}
 
-    public List<String> getPrioritizers()
-    {
-        return getConnectionDTO().getPrioritizers();
-    }
+	public List<String> getPrioritizers()
+	{
+		return getConnectionDTO().getPrioritizers();
+	}
 
-    public Set<String> getSelectedRelationships()
-    {
-        return getConnectionDTO().getSelectedRelationships();
-    }
+	public Set<String> getSelectedRelationships()
+	{
+		return getConnectionDTO().getSelectedRelationships();
+	}
 
-    public ConnectableDTO getSource()
-    {
-        return getConnectionDTO().getSource();
-    }
+	public ConnectableDTO getSource()
+	{
+		return getConnectionDTO().getSource();
+	}
 
-    public Long getzIndex()
-    {
-        return getConnectionDTO().getzIndex();
-    }
+	public Long getzIndex()
+	{
+		return getConnectionDTO().getzIndex();
+	}
 
-    @Override
-    public void delete() throws InvokerException
-    {
-        new DeleteConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke();
-    }
+	@Override
+	public void delete() throws InvokerException
+	{
+		new DeleteConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+	}
 
-    @Override
-    public Connection refresh() throws InvokerException
-    {
-        setComponentEntity(new GetConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+	@Override
+	public Connection refresh() throws InvokerException
+	{
+		setComponentEntity(new GetConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke());
 
-        return this;
-    }
+		return this;
+	}
 
-    @Override
-    public Connection update(final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
-    {
-        final ConnectionDTOBuilder connectionDTOBuilder = ConnectionDTOBuilder.of(getConnectionDTO());
+	@Override
+	public Connection update(final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
+	{
+		final ConnectionDTOBuilder connectionDTOBuilder = ConnectionDTOBuilder.of(getConnectionDTO());
 
-        configurator.accept(connectionDTOBuilder);
+		configurator.accept(connectionDTOBuilder);
 
-        setComponentEntity(new UpdateConnectionInvoker(getTransport(), getVersion()).setId(getId())
-                .setConnectionEntity(new ConnectionEntityBuilder().setComponent(connectionDTOBuilder.build()).build())
-                .invoke());
-        return this;
-    }
+		setComponentEntity(new UpdateConnectionInvoker(getTransport(), getVersion()).setId(getId())
+				.setConnectionEntity(new ConnectionEntityBuilder().setComponent(connectionDTOBuilder.build()).build())
+				.invoke());
+		return this;
+	}
 
-    @Override
-    public Connection update(
-            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure)
-            throws InvokerException
-    {
-        return super.update(closure);
-    }
+	@Override
+	public Connection update(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure)
+			throws InvokerException
+	{
+		return super.update(closure);
+	}
 
-    /**
-     * Reconnects the connection to the specified destination.
-     *
-     * @param destination
-     * @return
-     * @throws InvokerException
-     */
-    public Connection reconnectTo(final Connectable destination) throws InvokerException
-    {
-        setComponentEntity(new UpdateConnectionInvoker(getTransport(), getVersion())
-                .setId(getId())
-                .setConnectionEntity(new ConnectionEntityBuilder()
-                        .setComponent(ConnectionDTOBuilder.of(getConnectionDTO())
-                                .setDestination(destination.asConnectableDTO())
-                                .build())
-                        .build())
-                .invoke());
+	/**
+	 * Reconnects the connection to the specified destination.
+	 *
+	 * @param destination The new destination for the connection.
+	 * @return The updated connection.
+	 * @throws InvokerException if there is a problem updating the connection destination.
+	 */
+	public Connection reconnectTo(final Connectable destination) throws InvokerException
+	{
+		setComponentEntity(new UpdateConnectionInvoker(getTransport(), getVersion()).setId(getId())
+				.setConnectionEntity(new ConnectionEntityBuilder().setComponent(ConnectionDTOBuilder
+						.of(getConnectionDTO()).setDestination(destination.asConnectableDTO()).build()).build())
+				.invoke());
 
-        return this;
-    }
+		return this;
+	}
 }

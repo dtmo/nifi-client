@@ -7,13 +7,13 @@ import org.apache.nifi.web.api.entity.ComponentEntity;
 
 import java.util.List;
 
-public abstract class AbstractComponent<T extends ComponentEntity> implements Deletable
+public abstract class AbstractComponent<E extends ComponentEntity> implements Component
 {
     private final Transport transport;
 
-    private T componentEntity;
+    private E componentEntity;
 
-    public AbstractComponent(final Transport transport, final T componentEntity)
+    protected AbstractComponent(final Transport transport, final E componentEntity)
     {
         this.transport = transport;
         this.componentEntity = componentEntity;
@@ -25,12 +25,12 @@ public abstract class AbstractComponent<T extends ComponentEntity> implements De
         return transport;
     }
 
-    public T getComponentEntity()
+    public E getComponentEntity()
     {
         return componentEntity;
     }
 
-    protected void setComponentEntity(T componentEntity)
+    protected void setComponentEntity(E componentEntity)
     {
         this.componentEntity = componentEntity;
     }

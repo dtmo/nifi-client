@@ -9,7 +9,8 @@ import org.apache.nifi.web.api.entity.PortEntity;
 
 import com.tibtech.nifi.web.api.dto.PortDTOBuilder;
 
-public abstract class Port<T extends Port<T>> extends ConnectableComponent<T, PortEntity, PortDTOBuilder>
+public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, PortEntity, PortDTOBuilder>
+		implements Connectable, Deletable, Refreshable<T, PortDTOBuilder>
 {
 	public Port(final Transport transport, final PortEntity portEntity)
 	{
@@ -20,7 +21,7 @@ public abstract class Port<T extends Port<T>> extends ConnectableComponent<T, Po
 	{
 		return getComponentEntity().getComponent();
 	}
-	
+
 	@Override
 	public String getParentGroupId()
 	{

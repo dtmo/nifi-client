@@ -1,6 +1,37 @@
 package com.tibtech.nifi.client;
 
+/**
+ * ConnectableType represents a type of connectable component.
+ */
 public enum ConnectableType
 {
-	PROCESSOR, REMOTE_INPUT_PORT, REMOTE_OUTPUT_PORT, INPUT_PORT, OUTPUT_PORT, FUNNEL,
+	/**
+	 * A processor.
+	 */
+	PROCESSOR,
+	
+	/**
+	 * A remote input port.
+	 */
+	REMOTE_INPUT_PORT,
+	
+	/**
+	 * A remote output port.
+	 */
+	REMOTE_OUTPUT_PORT,
+	
+	/**
+	 * An input port.
+	 */
+	INPUT_PORT,
+	
+	/**
+	 * An output port.
+	 */
+	OUTPUT_PORT,
+	
+	/**
+	 * A funnel.
+	 */
+	FUNNEL,
 }

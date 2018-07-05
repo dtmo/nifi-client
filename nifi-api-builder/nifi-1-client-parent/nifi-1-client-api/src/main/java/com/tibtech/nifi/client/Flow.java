@@ -1,5 +1,6 @@
 package com.tibtech.nifi.client;
 
+import java.io.InputStream;
 import java.util.Set;
 import java.util.function.Consumer;
 
@@ -19,6 +20,7 @@ import com.tibtech.nifi.web.api.flow.GetControllerServiceTypesInvoker;
 import com.tibtech.nifi.web.api.flow.GetProcessorTypesInvoker;
 import com.tibtech.nifi.web.api.flow.GetReportingTaskTypesInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.UploadTemplateInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -104,6 +106,18 @@ public class Flow
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
 		});
+	}
+
+	/**
+	 * Uploads a snippet of flow XML as a template.
+	 * 
+	 * @param inputStream The template XML to upload.
+	 * @return The Template representing the uploaded XML.
+	 * @throws InvokerException if there was a problem uploading the template.
+	 */
+	public Template uploadTemplate(final InputStream inputStream) throws InvokerException
+	{
+		return new Template(transport, new UploadTemplateInvoker(transport, 0).setInputStream(inputStream).invoke());
 	}
 
 	/**

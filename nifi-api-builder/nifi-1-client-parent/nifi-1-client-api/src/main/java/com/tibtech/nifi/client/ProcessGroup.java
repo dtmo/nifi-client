@@ -8,6 +8,8 @@ import java.util.stream.Collectors;
 import org.apache.nifi.web.api.dto.FlowSnippetDTO;
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
+import org.apache.nifi.web.api.dto.flow.FlowDTO;
+import org.apache.nifi.web.api.entity.FlowEntity;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 
 import com.tibtech.nifi.web.api.dto.FunnelDTOBuilder;
@@ -17,6 +19,7 @@ import com.tibtech.nifi.web.api.dto.ProcessGroupDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
 import com.tibtech.nifi.web.api.dto.RemoteProcessGroupDTOBuilder;
 import com.tibtech.nifi.web.api.entity.FunnelEntityBuilder;
+import com.tibtech.nifi.web.api.entity.InstantiateTemplateRequestEntityBuilder;
 import com.tibtech.nifi.web.api.entity.LabelEntityBuilder;
 import com.tibtech.nifi.web.api.entity.PortEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessGroupEntityBuilder;
@@ -38,6 +41,7 @@ import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessorsInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetRemoteProcessGroupsInvoker;
+import com.tibtech.nifi.web.api.processgroup.InstantiateTemplateInvoker;
 import com.tibtech.nifi.web.api.processgroup.RemoveProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.UpdateProcessGroupInvoker;
 
@@ -45,6 +49,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
 public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupEntity, ProcessGroupDTOBuilder>
+		implements Deletable, Refreshable<ProcessGroup, ProcessGroupDTOBuilder>
 {
 	public ProcessGroup(final Transport transport, final ProcessGroupEntity processGroupEntity)
 	{
@@ -125,25 +130,20 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public Funnel createFunnel(final double x, final double y, final Consumer<FunnelDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder()
-				.setParentGroupId(getId())
+		final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder().setParentGroupId(getId())
 				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(funnelDTOBuilder);
 
-		return new Funnel(getTransport(),
-				new CreateFunnelInvoker(getTransport(), 0).setId(getId())
-						.setFunnelEntity(new FunnelEntityBuilder()
-								.setComponent(funnelDTOBuilder.build()).build())
-						.invoke());
+		return new Funnel(getTransport(), new CreateFunnelInvoker(getTransport(), 0).setId(getId())
+				.setFunnelEntity(new FunnelEntityBuilder().setComponent(funnelDTOBuilder.build()).build()).invoke());
 	}
 
 	public Funnel createFunnel(final double x, final double y,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FunnelDTOBuilder.class) final Closure<FunnelDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createFunnel(x, y, configurator ->
-		{
+		return createFunnel(x, y, configurator -> {
 			final Closure<FunnelDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
@@ -159,25 +159,20 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public InputPort createInputPort(final double x, final double y, final Consumer<PortDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final PortDTOBuilder portDTOBuilder = new PortDTOBuilder()
-				.setParentGroupId(getId())
+		final PortDTOBuilder portDTOBuilder = new PortDTOBuilder().setParentGroupId(getId())
 				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(portDTOBuilder);
 
-		return new InputPort(getTransport(),
-				new CreateInputPortInvoker(getTransport(), 0).setId(getId())
-						.setPortEntity(new PortEntityBuilder()
-								.setComponent(portDTOBuilder.build()).build())
-						.invoke());
+		return new InputPort(getTransport(), new CreateInputPortInvoker(getTransport(), 0).setId(getId())
+				.setPortEntity(new PortEntityBuilder().setComponent(portDTOBuilder.build()).build()).invoke());
 	}
 
 	public InputPort createInputPort(final double x, final double y,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortDTOBuilder.class) final Closure<PortDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createInputPort(x, y, configurator ->
-		{
+		return createInputPort(x, y, configurator -> {
 			final Closure<PortDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
@@ -193,25 +188,20 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public OutputPort createOutputPort(final double x, final double y, final Consumer<PortDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final PortDTOBuilder portDTOBuilder = new PortDTOBuilder()
-				.setParentGroupId(getId())
+		final PortDTOBuilder portDTOBuilder = new PortDTOBuilder().setParentGroupId(getId())
 				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(portDTOBuilder);
 
-		return new OutputPort(getTransport(),
-				new CreateOutputPortInvoker(getTransport(), 0).setId(getId())
-						.setPortEntity(new PortEntityBuilder()
-								.setComponent(portDTOBuilder.build()).build())
-						.invoke());
+		return new OutputPort(getTransport(), new CreateOutputPortInvoker(getTransport(), 0).setId(getId())
+				.setPortEntity(new PortEntityBuilder().setComponent(portDTOBuilder.build()).build()).invoke());
 	}
 
 	public OutputPort createOutputPort(final double x, final double y,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortDTOBuilder.class) final Closure<PortDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createOutputPort(x, y, configurator ->
-		{
+		return createOutputPort(x, y, configurator -> {
 			final Closure<PortDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
@@ -227,26 +217,23 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public Processor createProcessor(final double x, final double y, final String type,
 			final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
 	{
-		final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder()
-				.setParentGroupId(getId())
-				.setPosition(new PositionDTO(x, y))
-				.setType(type);
+		final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder().setParentGroupId(getId())
+				.setPosition(new PositionDTO(x, y)).setType(type);
 
 		configurator.accept(processorDTOBuilder);
 
-		return new Processor(getTransport(), new CreateProcessorInvoker(getTransport(), 0).setId(getId())
-				.setProcessorEntity(new ProcessorEntityBuilder()
-						.setComponent(processorDTOBuilder.build())
-						.build())
-				.invoke());
+		return new Processor(getTransport(),
+				new CreateProcessorInvoker(getTransport(), 0).setId(getId())
+						.setProcessorEntity(
+								new ProcessorEntityBuilder().setComponent(processorDTOBuilder.build()).build())
+						.invoke());
 	}
 
 	public Processor createProcessor(final double x, final double y, final String type,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createProcessor(x, y, type, configurator ->
-		{
+		return createProcessor(x, y, type, configurator -> {
 			final Closure<ProcessorDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
@@ -263,26 +250,22 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
 		final ProcessGroupDTOBuilder processGroupDTOBuilder = new ProcessGroupDTOBuilder()
-				.setParentGroupId(getParentGroupId())
-				.setPosition(new PositionDTO(x, y))
-				.setName(name);
+				.setParentGroupId(getParentGroupId()).setPosition(new PositionDTO(x, y)).setName(name);
 
 		configurator.accept(processGroupDTOBuilder);
 
-		return new ProcessGroup(getTransport(), new CreateProcessGroupInvoker(getTransport(), 0)
-				.setId(getParentGroupId())
-				.setProcessGroupEntity(new ProcessGroupEntityBuilder()
-						.setComponent(processGroupDTOBuilder.build())
-						.build())
-				.invoke());
+		return new ProcessGroup(getTransport(),
+				new CreateProcessGroupInvoker(getTransport(), 0).setId(getParentGroupId())
+						.setProcessGroupEntity(
+								new ProcessGroupEntityBuilder().setComponent(processGroupDTOBuilder.build()).build())
+						.invoke());
 	}
 
 	public ProcessGroup createProcessGroup(final double x, final double y, final String name,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupDTOBuilder.class) final Closure<ProcessGroupDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createProcessGroup(x, y, name, configurator ->
-		{
+		return createProcessGroup(x, y, name, configurator -> {
 			final Closure<ProcessGroupDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
@@ -300,24 +283,21 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 			final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
 	{
 		final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = new RemoteProcessGroupDTOBuilder()
-				.setParentGroupId(getParentGroupId())
-				.setPosition(new PositionDTO(x, y))
-				.setTargetUris(targetUri);
+				.setParentGroupId(getParentGroupId()).setPosition(new PositionDTO(x, y)).setTargetUris(targetUri);
 
 		configurator.accept(remoteProcessGroupDTOBuilder);
 
-		return new RemoteProcessGroup(getTransport(), new CreateRemoteProcessGroupInvoker(getTransport(), 0)
-				.setId(getId())
-				.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
-						.setComponent(remoteProcessGroupDTOBuilder.build()).build())
-				.invoke());
+		return new RemoteProcessGroup(getTransport(),
+				new CreateRemoteProcessGroupInvoker(getTransport(), 0).setId(getId())
+						.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
+								.setComponent(remoteProcessGroupDTOBuilder.build()).build())
+						.invoke());
 	}
 
 	public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final String targetUri,
 			final Closure<RemoteProcessGroup> closure) throws InvokerException
 	{
-		return createRemoteProcessGroup(x, y, targetUri, configurator ->
-		{
+		return createRemoteProcessGroup(x, y, targetUri, configurator -> {
 			final Closure<RemoteProcessGroup> code = closure.rehydrate(closure, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
@@ -333,8 +313,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final List<String> targetUris,
 			final Closure<RemoteProcessGroup> closure) throws InvokerException
 	{
-		return createRemoteProcessGroup(x, y, targetUris, configurator ->
-		{
+		return createRemoteProcessGroup(x, y, targetUris, configurator -> {
 			final Closure<RemoteProcessGroup> code = closure.rehydrate(closure, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
@@ -352,25 +331,20 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public Label createLabel(final double x, final double y, final Consumer<LabelDTOBuilder> configurator)
 			throws InvokerException
 	{
-		final LabelDTOBuilder labelDTOBuilder = new LabelDTOBuilder()
-				.setParentGroupId(getId())
+		final LabelDTOBuilder labelDTOBuilder = new LabelDTOBuilder().setParentGroupId(getId())
 				.setPosition(new PositionDTO(x, y));
 
 		configurator.accept(labelDTOBuilder);
 
-		return new Label(getTransport(),
-				new CreateLabelInvoker(getTransport(), 0).setId(getId())
-						.setLabelEntity(new LabelEntityBuilder()
-								.setComponent(labelDTOBuilder.build()).build())
-						.invoke());
+		return new Label(getTransport(), new CreateLabelInvoker(getTransport(), 0).setId(getId())
+				.setLabelEntity(new LabelEntityBuilder().setComponent(labelDTOBuilder.build()).build()).invoke());
 	}
 
 	public Label createLabel(final double x, final double y,
 			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Label.class) final Closure<LabelDTOBuilder> closure)
 			throws InvokerException
 	{
-		return createLabel(x, y, configurator ->
-		{
+		return createLabel(x, y, configurator -> {
 			final Closure<LabelDTOBuilder> code = closure.rehydrate(configurator, this, this);
 			code.setResolveStrategy(Closure.DELEGATE_ONLY);
 			code.call();
@@ -419,5 +393,14 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 	public void delete() throws InvokerException
 	{
 		new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+	}
+
+	public void instantiateTemplate(final double x, final double y, final Template template) throws InvokerException
+	{
+		final FlowEntity flowEntity = new InstantiateTemplateInvoker(getTransport(), getVersion()).setId(getId())
+				.setInstantiateTemplateRequestEntity(new InstantiateTemplateRequestEntityBuilder().setOriginX(x)
+						.setOriginY(y).setTemplateId(template.getId()).build())
+				.invoke();
+		final FlowDTO flowDTO = flowEntity.getFlow();
 	}
 }

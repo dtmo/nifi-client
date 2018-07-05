@@ -19,6 +19,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
 public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTaskEntity, ReportingTaskDTOBuilder>
+		implements Deletable, Refreshable<ReportingTask, ReportingTaskDTOBuilder>
 {
 	public ReportingTask(final Transport transport, final ReportingTaskEntity reportingTaskEntity)
 	{

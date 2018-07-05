@@ -25,228 +25,227 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
 public class RemoteProcessGroup
-        extends UpdatableComponent<RemoteProcessGroup, RemoteProcessGroupEntity, RemoteProcessGroupDTOBuilder>
+		extends UpdatableComponent<RemoteProcessGroup, RemoteProcessGroupEntity, RemoteProcessGroupDTOBuilder>
+		implements Deletable, Refreshable<RemoteProcessGroup, RemoteProcessGroupDTOBuilder>
 {
-    public RemoteProcessGroup(final Transport transport, final RemoteProcessGroupEntity remoteProcessGroupEntity)
-    {
-        super(transport, remoteProcessGroupEntity);
-    }
+	public RemoteProcessGroup(final Transport transport, final RemoteProcessGroupEntity remoteProcessGroupEntity)
+	{
+		super(transport, remoteProcessGroupEntity);
+	}
 
-    protected RemoteProcessGroupDTO getRemoteProcessGroupDTO()
-    {
-        return getComponentEntity().getComponent();
-    }
+	protected RemoteProcessGroupDTO getRemoteProcessGroupDTO()
+	{
+		return getComponentEntity().getComponent();
+	}
 
-    public RemoteProcessGroupDTO getComponent()
-    {
-        return getComponentEntity().getComponent();
-    }
+	public RemoteProcessGroupDTO getComponent()
+	{
+		return getComponentEntity().getComponent();
+	}
 
-    public Integer getInputPortCount()
-    {
-        return getComponentEntity().getInputPortCount();
-    }
+	public Integer getInputPortCount()
+	{
+		return getComponentEntity().getInputPortCount();
+	}
 
-    public Integer getOutputPortCount()
-    {
-        return getComponentEntity().getOutputPortCount();
-    }
+	public Integer getOutputPortCount()
+	{
+		return getComponentEntity().getOutputPortCount();
+	}
 
-    public RevisionDTO getRevision()
-    {
-        return getComponentEntity().getRevision();
-    }
+	public RevisionDTO getRevision()
+	{
+		return getComponentEntity().getRevision();
+	}
 
-    public RemoteProcessGroupStatusDTO getStatus()
-    {
-        return getComponentEntity().getStatus();
-    }
+	public RemoteProcessGroupStatusDTO getStatus()
+	{
+		return getComponentEntity().getStatus();
+	}
 
-    public String getUri()
-    {
-        return getComponentEntity().getUri();
-    }
+	public String getUri()
+	{
+		return getComponentEntity().getUri();
+	}
 
-    public Integer getActiveRemoteInputPortCount()
-    {
-        return getRemoteProcessGroupDTO().getActiveRemoteInputPortCount();
-    }
+	public Integer getActiveRemoteInputPortCount()
+	{
+		return getRemoteProcessGroupDTO().getActiveRemoteInputPortCount();
+	}
 
-    public Integer getActiveRemoteOutputPortCount()
-    {
-        return getRemoteProcessGroupDTO().getActiveRemoteOutputPortCount();
-    }
+	public Integer getActiveRemoteOutputPortCount()
+	{
+		return getRemoteProcessGroupDTO().getActiveRemoteOutputPortCount();
+	}
 
-    public Collection<String> getAuthorizationIssues()
-    {
-        return getRemoteProcessGroupDTO().getAuthorizationIssues();
-    }
+	public Collection<String> getAuthorizationIssues()
+	{
+		return getRemoteProcessGroupDTO().getAuthorizationIssues();
+	}
 
-    public String getComments()
-    {
-        return getRemoteProcessGroupDTO().getComments();
-    }
+	public String getComments()
+	{
+		return getRemoteProcessGroupDTO().getComments();
+	}
 
-    public String getCommunicationsTimeout()
-    {
-        return getRemoteProcessGroupDTO().getCommunicationsTimeout();
-    }
+	public String getCommunicationsTimeout()
+	{
+		return getRemoteProcessGroupDTO().getCommunicationsTimeout();
+	}
 
-    public RemoteProcessGroupContentsDTO getContents()
-    {
-        return getRemoteProcessGroupDTO().getContents();
-    }
+	public RemoteProcessGroupContentsDTO getContents()
+	{
+		return getRemoteProcessGroupDTO().getContents();
+	}
 
-    public Date getFlowRefreshed()
-    {
-        return getRemoteProcessGroupDTO().getFlowRefreshed();
-    }
+	public Date getFlowRefreshed()
+	{
+		return getRemoteProcessGroupDTO().getFlowRefreshed();
+	}
 
-    public Integer getInactiveRemoteInputPortCount()
-    {
-        return getRemoteProcessGroupDTO().getInactiveRemoteInputPortCount();
-    }
+	public Integer getInactiveRemoteInputPortCount()
+	{
+		return getRemoteProcessGroupDTO().getInactiveRemoteInputPortCount();
+	}
 
-    public Integer getInactiveRemoteOutputPortCount()
-    {
-        return getRemoteProcessGroupDTO().getInactiveRemoteOutputPortCount();
-    }
+	public Integer getInactiveRemoteOutputPortCount()
+	{
+		return getRemoteProcessGroupDTO().getInactiveRemoteOutputPortCount();
+	}
 
-    public String getName()
-    {
-        return getRemoteProcessGroupDTO().getName();
-    }
+	public String getName()
+	{
+		return getRemoteProcessGroupDTO().getName();
+	}
 
-    public String getParentGroupId()
-    {
-        return getRemoteProcessGroupDTO().getParentGroupId();
-    }
+	public String getParentGroupId()
+	{
+		return getRemoteProcessGroupDTO().getParentGroupId();
+	}
 
-    public String getProxyHost()
-    {
-        return getRemoteProcessGroupDTO().getProxyHost();
-    }
+	public String getProxyHost()
+	{
+		return getRemoteProcessGroupDTO().getProxyHost();
+	}
 
-    public String getProxyPassword()
-    {
-        return getRemoteProcessGroupDTO().getProxyPassword();
-    }
+	public String getProxyPassword()
+	{
+		return getRemoteProcessGroupDTO().getProxyPassword();
+	}
 
-    public Integer getProxyPort()
-    {
-        return getRemoteProcessGroupDTO().getProxyPort();
-    }
+	public Integer getProxyPort()
+	{
+		return getRemoteProcessGroupDTO().getProxyPort();
+	}
 
-    public String getProxyUser()
-    {
-        return getRemoteProcessGroupDTO().getProxyUser();
-    }
+	public String getProxyUser()
+	{
+		return getRemoteProcessGroupDTO().getProxyUser();
+	}
 
-    public String getTargetUri()
-    {
-        return getRemoteProcessGroupDTO().getTargetUri();
-    }
+	public String getTargetUri()
+	{
+		return getRemoteProcessGroupDTO().getTargetUri();
+	}
 
-    public String getTransportProtocol()
-    {
-        return getRemoteProcessGroupDTO().getTransportProtocol();
-    }
+	public String getTransportProtocol()
+	{
+		return getRemoteProcessGroupDTO().getTransportProtocol();
+	}
 
-    public String getYieldDuration()
-    {
-        return getRemoteProcessGroupDTO().getYieldDuration();
-    }
+	public String getYieldDuration()
+	{
+		return getRemoteProcessGroupDTO().getYieldDuration();
+	}
 
-    public RemoteProcessGroup enableTransmission() throws InvokerException
-    {
-        return setTransmitting(true);
-    }
+	public RemoteProcessGroup enableTransmission() throws InvokerException
+	{
+		return setTransmitting(true);
+	}
 
-    public RemoteProcessGroup disableTransmission() throws InvokerException
-    {
-        return setTransmitting(false);
-    }
+	public RemoteProcessGroup disableTransmission() throws InvokerException
+	{
+		return setTransmitting(false);
+	}
 
-    public RemoteProcessGroup setTransmitting(final boolean transmitting) throws InvokerException
-    {
-        refresh();
+	public RemoteProcessGroup setTransmitting(final boolean transmitting) throws InvokerException
+	{
+		refresh();
 
-        final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = RemoteProcessGroupContentsDTOBuilder
-                .of(getContents());
+		final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = RemoteProcessGroupContentsDTOBuilder
+				.of(getContents());
 
-        final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = getContents().getInputPorts();
-        if (remoteInputPortDTOs != null)
-        {
-            remoteProcessGroupContentsDTOBuilder
-                    .setInputPorts(
-                            remoteInputPortDTOs
-                                    .stream().map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder
-                                    .of(remoteInputPortDTO).setTransmitting(transmitting).build())
-                                    .collect(Collectors.toSet()));
-        }
+		final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = getContents().getInputPorts();
+		if (remoteInputPortDTOs != null)
+		{
+			remoteProcessGroupContentsDTOBuilder
+					.setInputPorts(
+							remoteInputPortDTOs
+									.stream().map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder
+											.of(remoteInputPortDTO).setTransmitting(transmitting).build())
+									.collect(Collectors.toSet()));
+		}
 
-        final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = getContents().getOutputPorts();
-        if (remoteInputPortDTOs != null)
-        {
-            remoteProcessGroupContentsDTOBuilder
-                    .setOutputPorts(remoteOutputPortDTOs
-                            .stream().map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder
-                                    .of(remoteOutputPortDTO).setTransmitting(transmitting).build())
-                            .collect(Collectors.toSet()));
-        }
+		final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = getContents().getOutputPorts();
+		if (remoteInputPortDTOs != null)
+		{
+			remoteProcessGroupContentsDTOBuilder
+					.setOutputPorts(remoteOutputPortDTOs
+							.stream().map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder
+									.of(remoteOutputPortDTO).setTransmitting(transmitting).build())
+							.collect(Collectors.toSet()));
+		}
 
-        return update(configurator -> configurator.setContents(remoteProcessGroupContentsDTOBuilder.build()));
-    }
+		return update(configurator -> configurator.setContents(remoteProcessGroupContentsDTOBuilder.build()));
+	}
 
-    @Override
-    public RemoteProcessGroup refresh() throws InvokerException
-    {
-        setComponentEntity(new GetRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+	@Override
+	public RemoteProcessGroup refresh() throws InvokerException
+	{
+		setComponentEntity(new GetRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke());
 
-        return this;
-    }
+		return this;
+	}
 
-    public Set<RemoteInputPort> getRemoteInputPorts()
-    {
-        return getContents().getInputPorts().stream()
-                .map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO))
-                .collect(Collectors.toSet());
-    }
+	public Set<RemoteInputPort> getRemoteInputPorts()
+	{
+		return getContents().getInputPorts().stream().map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO))
+				.collect(Collectors.toSet());
+	}
 
-    public Set<RemoteOutputPort> getRemoteOutputPorts()
-    {
-        return getContents().getOutputPorts().stream().map(
-                outputPortDTO -> new RemoteOutputPort(this, outputPortDTO))
-                .collect(Collectors.toSet());
-    }
+	public Set<RemoteOutputPort> getRemoteOutputPorts()
+	{
+		return getContents().getOutputPorts().stream().map(outputPortDTO -> new RemoteOutputPort(this, outputPortDTO))
+				.collect(Collectors.toSet());
+	}
 
-    @Override
-    public RemoteProcessGroup update(final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
-    {
-        final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = RemoteProcessGroupDTOBuilder
-                .of(getRemoteProcessGroupDTO());
+	@Override
+	public RemoteProcessGroup update(final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
+	{
+		final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = RemoteProcessGroupDTOBuilder
+				.of(getRemoteProcessGroupDTO());
 
-        configurator.accept(remoteProcessGroupDTOBuilder);
+		configurator.accept(remoteProcessGroupDTOBuilder);
 
-        setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId())
-                .setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
-                        .setComponent(remoteProcessGroupDTOBuilder.build()).build())
-                .invoke());
+		setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId())
+				.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
+						.setComponent(remoteProcessGroupDTOBuilder.build()).build())
+				.invoke());
 
-        return this;
-    }
+		return this;
+	}
 
-    @Override
-    public RemoteProcessGroup update(
-            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupDTOBuilder.class) final Closure<RemoteProcessGroupDTOBuilder> closure)
-            throws InvokerException
-    {
-        return super.update(closure);
-    }
+	@Override
+	public RemoteProcessGroup update(
+			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupDTOBuilder.class) final Closure<RemoteProcessGroupDTOBuilder> closure)
+			throws InvokerException
+	{
+		return super.update(closure);
+	}
 
-    @Override
-    public void delete() throws InvokerException
-    {
-        new RemoveRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
-    }
+	@Override
+	public void delete() throws InvokerException
+	{
+		new RemoveRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+	}
 }

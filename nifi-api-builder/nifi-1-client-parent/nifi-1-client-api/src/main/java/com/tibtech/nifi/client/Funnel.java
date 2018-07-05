@@ -13,8 +13,20 @@ import com.tibtech.nifi.web.api.funnel.UpdateFunnelInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class Funnel extends ConnectableComponent<Funnel, FunnelEntity, FunnelDTOBuilder>
+/**
+ * Funnel represents a NiFi funnel used to combine the data from several
+ * connections into a single connection.
+ */
+public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBuilder>
+		implements Connectable, Deletable, Refreshable<Funnel, FunnelDTOBuilder>
 {
+	/**
+	 * Constructs a new instance of Funnel.
+	 * 
+	 * @param transport The transport with which to communicate with the NiFi
+	 *        server.
+	 * @param funnelEntity The funnel entity.
+	 */
 	public Funnel(final Transport transport, final FunnelEntity funnelEntity)
 	{
 		super(transport, funnelEntity);

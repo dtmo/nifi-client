@@ -19,7 +19,8 @@ import com.tibtech.nifi.web.api.processor.UpdateProcessorInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
-public class Processor extends ConnectableComponent<Processor, ProcessorEntity, ProcessorDTOBuilder>
+public class Processor extends UpdatableComponent<Processor, ProcessorEntity, ProcessorDTOBuilder>
+		implements Connectable, Deletable, Refreshable<Processor, ProcessorDTOBuilder>
 {
 	public Processor(final Transport transport, final ProcessorEntity processorEntity)
 	{
