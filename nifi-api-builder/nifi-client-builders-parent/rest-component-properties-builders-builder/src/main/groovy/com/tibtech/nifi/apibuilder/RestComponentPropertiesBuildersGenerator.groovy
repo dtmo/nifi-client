@@ -7,43 +7,44 @@ import org.apache.nifi.web.api.dto.DocumentedTypeDTO
 import org.apache.nifi.web.api.dto.PropertyDescriptorDTO
 
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.TypeSpec
+import com.tibtech.nifi.client.ControllerService
 import com.tibtech.nifi.client.Flow
+import com.tibtech.nifi.client.ProcessGroup
+import com.tibtech.nifi.client.Processor
+import com.tibtech.nifi.client.ReportingTask
 
-def flow = Flow.connect "http://localhost:8080/"
+Flow flow = Flow.connect "http://localhost:8080/"
 
-def root = flow.rootProcessGroup
+ProcessGroup root = flow.rootProcessGroup
 
-def outputPath = Paths.get("../../nifi-1-client-parent/nifi-1.7.0-component-properties-builders/src/main/java/")
+Path outputPath = Paths.get("../../nifi-1-client-parent/nifi-1.7.0-component-properties-builders/src/main/java/")
 def packageNameMapper = {String s -> s.replaceFirst("org\\.apache", "com.tibtech")}
 
-def writeComponentPropertiesBuilder(Flow flow, Closure packageNameMapper, Closure propertyDescriptorsProducer, Path outputPath, DocumentedTypeDTO docmentedTypeDTO)
-{
+def writeComponentPropertiesBuilder(Flow flow, Closure packageNameMapper, Closure propertyDescriptorsProducer, Path outputPath, DocumentedTypeDTO docmentedTypeDTO) {
 	String componentTypeName = docmentedTypeDTO.getType()
-	def packageName = packageNameMapper(componentTypeName.substring(0, componentTypeName.lastIndexOf(".")))
-	def classname = componentTypeName.substring(componentTypeName.lastIndexOf(".") + 1)
-	def builder = new ConfigurableComponentPropertiesBuilderTypeSpecBuilder(packageName, classname)
+	String packageName = packageNameMapper(componentTypeName.substring(0, componentTypeName.lastIndexOf(".")))
+	String classname = componentTypeName.substring(componentTypeName.lastIndexOf(".") + 1)
+	ConfigurableComponentPropertiesBuilderTypeSpecBuilder builder = new ConfigurableComponentPropertiesBuilderTypeSpecBuilder(packageName, classname)
 
 	builder.componentType = componentTypeName;
 
-	for (PropertyDescriptorDTO d : propertyDescriptorsProducer())
-	{
+	for (PropertyDescriptorDTO d : propertyDescriptorsProducer()) {
 		builder.addConfigurableComponentProperty(new ConfigurableComponentProperty(d.name, d.description))
 	}
 
-	def typeSpec = builder.build()
-	def javaFile = JavaFile.builder(packageName, typeSpec).build()
+	TypeSpec typeSpec = builder.build()
+	JavaFile javaFile = JavaFile.builder(packageName, typeSpec).build()
 
 	javaFile.writeTo(outputPath)
 }
 
 println "Controller service types:"
-for (def controllerServiceType : flow.controllerServiceTypes)
-{
+for (DocumentedTypeDTO controllerServiceType : flow.controllerServiceTypes) {
 	println "\t" + controllerServiceType.type
-	def propertyDescriptorsProducer =
-	{
-		def controllerService = flow.createControllerService controllerServiceType.getType(), {}
-		def propertyDescriptors = controllerService.descriptors.values()
+	def propertyDescriptorsProducer = {
+		ControllerService controllerService = flow.createControllerService controllerServiceType.getType(), {}
+		Collection<PropertyDescriptorDTO> propertyDescriptors = controllerService.descriptors.values()
 		controllerService.delete()
 		propertyDescriptors
 	}
@@ -52,13 +53,11 @@ for (def controllerServiceType : flow.controllerServiceTypes)
 }
 
 println "\nProcessor types: "
-for (def processorType : flow.processorTypes)
-{
+for (DocumentedTypeDTO processorType : flow.processorTypes) {
 	println "\t" + processorType.getType()
-	def propertyDescriptorsProducer =
-	{
-		def processor = root.createProcessor 0, 0, processorType.type, {}
-		def propertyDescriptors = processor.config.descriptors.values()
+	def propertyDescriptorsProducer = {
+		Processor processor = root.createProcessor 0, 0, processorType.type, {}
+		Collection<PropertyDescriptorDTO> propertyDescriptors = processor.config.descriptors.values()
 		processor.delete()
 		propertyDescriptors
 	}
@@ -67,13 +66,11 @@ for (def processorType : flow.processorTypes)
 }
 
 println "\nReporting Task types: "
-for (def reportingTaskType : flow.reportingTaskTypes)
-{
+for (DocumentedTypeDTO reportingTaskType : flow.reportingTaskTypes) {
 	println "\t" + reportingTaskType.type
-	def propertyDescriptorsProducer =
-	{
-		def reportingTask = flow.createReportingTask reportingTaskType.type, {}
-		def propertyDescriptors = reportingTask.descriptors.values()
+	def propertyDescriptorsProducer = {
+		ReportingTask reportingTask = flow.createReportingTask reportingTaskType.type, {}
+		Collection<PropertyDescriptorDTO> propertyDescriptors = reportingTask.descriptors.values()
 		reportingTask.delete()
 		propertyDescriptors
 	}

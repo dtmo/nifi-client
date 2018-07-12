@@ -47,6 +47,7 @@ import org.apache.nifi.web.api.request.DateTimeParameter;
 import org.apache.nifi.web.api.request.DoubleParameter;
 import org.apache.nifi.web.api.request.IntegerParameter;
 import org.apache.nifi.web.api.request.LongParameter;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.reflections.Reflections;
 import org.reflections.scanners.SubTypesScanner;
 
@@ -54,7 +55,6 @@ import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
-import com.sun.jersey.multipart.FormDataParam;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

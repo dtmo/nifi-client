@@ -328,7 +328,7 @@ public class InvokerTypeSpecBuilder
 					}
 					else
 					{
-						invokeMethodBuilder.addStatement("formDataMultiPart.field($S, $L)", formDataParameter.getName(),
+						invokeMethodBuilder.addStatement("formDataMultiPart.field($S, String.valueOf($L))", formDataParameter.getName(),
 								propertyName);
 					}
 				}
