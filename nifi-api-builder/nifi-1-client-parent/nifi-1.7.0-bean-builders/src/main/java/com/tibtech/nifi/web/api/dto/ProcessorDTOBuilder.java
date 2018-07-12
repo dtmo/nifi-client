@@ -79,7 +79,8 @@ public final class ProcessorDTOBuilder extends AbstractComponentDTOBuilder<Proce
   /**
    * The details of the artifact that bundled this processor type.
    */
-  public ProcessorDTOBuilder setBundle(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
+  public ProcessorDTOBuilder setBundle(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
     return setBundle(c -> {
       final Closure<BundleDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -114,7 +115,8 @@ public final class ProcessorDTOBuilder extends AbstractComponentDTOBuilder<Proce
   /**
    * The configuration details for the processor. These details will be included in a response if the verbose flag is included in a request.
    */
-  public ProcessorDTOBuilder setConfig(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorConfigDTOBuilder.class) final Closure<ProcessorConfigDTOBuilder> closure) {
+  public ProcessorDTOBuilder setConfig(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorConfigDTOBuilder.class) final Closure<ProcessorConfigDTOBuilder> closure) {
     return setConfig(c -> {
       final Closure<ProcessorConfigDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -327,7 +329,8 @@ public final class ProcessorDTOBuilder extends AbstractComponentDTOBuilder<Proce
   /**
    * Whether the processor supports parallel processing.
    */
-  public ProcessorDTOBuilder setSupportsParallelProcessing(final Boolean supportsParallelProcessing) {
+  public ProcessorDTOBuilder setSupportsParallelProcessing(
+      final Boolean supportsParallelProcessing) {
     this.supportsParallelProcessing = supportsParallelProcessing;
     return this;
   }

@@ -48,7 +48,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * Information about the Content Repository's usage
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setContentRepositoryStorageUsage(final Set<RepositoryUsageDTO> contentRepositoryStorageUsage) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setContentRepositoryStorageUsage(
+      final Set<RepositoryUsageDTO> contentRepositoryStorageUsage) {
     this.contentRepositoryStorageUsage = contentRepositoryStorageUsage;
     return this;
   }
@@ -93,7 +94,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * Information about the FlowFile Repository's usage
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(final RepositoryUsageDTO flowFileRepositoryStorageUsage) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(
+      final RepositoryUsageDTO flowFileRepositoryStorageUsage) {
     this.flowFileRepositoryStorageUsage = flowFileRepositoryStorageUsage;
     return this;
   }
@@ -101,7 +103,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * Information about the FlowFile Repository's usage
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(final Consumer<RepositoryUsageDTOBuilder> configurator) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(
+      final Consumer<RepositoryUsageDTOBuilder> configurator) {
     final RepositoryUsageDTOBuilder builder = (flowFileRepositoryStorageUsage != null ? RepositoryUsageDTOBuilder.of(flowFileRepositoryStorageUsage) : new RepositoryUsageDTOBuilder());
     configurator.accept(builder);
     return setFlowFileRepositoryStorageUsage(builder.build());
@@ -110,7 +113,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * Information about the FlowFile Repository's usage
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RepositoryUsageDTOBuilder.class) final Closure<RepositoryUsageDTOBuilder> closure) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RepositoryUsageDTOBuilder.class) final Closure<RepositoryUsageDTOBuilder> closure) {
     return setFlowFileRepositoryStorageUsage(c -> {
       final Closure<RepositoryUsageDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -128,7 +132,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * Diagnostic information about the JVM's garbage collections
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setGarbageCollectionDiagnostics(final List<GarbageCollectionDiagnosticsDTO> garbageCollectionDiagnostics) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setGarbageCollectionDiagnostics(
+      final List<GarbageCollectionDiagnosticsDTO> garbageCollectionDiagnostics) {
     this.garbageCollectionDiagnostics = garbageCollectionDiagnostics;
     return this;
   }
@@ -173,7 +178,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The maximum number of open file descriptors that are available to each process
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setMaxOpenFileDescriptors(final Long maxOpenFileDescriptors) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setMaxOpenFileDescriptors(
+      final Long maxOpenFileDescriptors) {
     this.maxOpenFileDescriptors = maxOpenFileDescriptors;
     return this;
   }
@@ -188,7 +194,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The number of files that are open by the NiFi process
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setOpenFileDescriptors(final Long openFileDescriptors) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setOpenFileDescriptors(
+      final Long openFileDescriptors) {
     this.openFileDescriptors = openFileDescriptors;
     return this;
   }
@@ -218,7 +225,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The number of bytes of RAM available on the system
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setPhysicalMemoryBytes(final Long physicalMemoryBytes) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setPhysicalMemoryBytes(
+      final Long physicalMemoryBytes) {
     this.physicalMemoryBytes = physicalMemoryBytes;
     return this;
   }
@@ -233,7 +241,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * Information about the Provenance Repository's usage
    */
-  public JVMSystemDiagnosticsSnapshotDTOBuilder setProvenanceRepositoryStorageUsage(final Set<RepositoryUsageDTO> provenanceRepositoryStorageUsage) {
+  public JVMSystemDiagnosticsSnapshotDTOBuilder setProvenanceRepositoryStorageUsage(
+      final Set<RepositoryUsageDTO> provenanceRepositoryStorageUsage) {
     this.provenanceRepositoryStorageUsage = provenanceRepositoryStorageUsage;
     return this;
   }
@@ -255,7 +264,8 @@ public final class JVMSystemDiagnosticsSnapshotDTOBuilder {
     return jVMSystemDiagnosticsSnapshotDTO;
   }
 
-  public static JVMSystemDiagnosticsSnapshotDTOBuilder of(final JVMSystemDiagnosticsSnapshotDTO jVMSystemDiagnosticsSnapshotDTO) {
+  public static JVMSystemDiagnosticsSnapshotDTOBuilder of(
+      final JVMSystemDiagnosticsSnapshotDTO jVMSystemDiagnosticsSnapshotDTO) {
     final JVMSystemDiagnosticsSnapshotDTOBuilder jVMSystemDiagnosticsSnapshotDTOBuilder = new JVMSystemDiagnosticsSnapshotDTOBuilder();
     jVMSystemDiagnosticsSnapshotDTOBuilder.setContentRepositoryStorageUsage(jVMSystemDiagnosticsSnapshotDTO.getContentRepositoryStorageUsage());
     jVMSystemDiagnosticsSnapshotDTOBuilder.setCpuCores(jVMSystemDiagnosticsSnapshotDTO.getCpuCores());

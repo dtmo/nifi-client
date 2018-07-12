@@ -31,7 +31,8 @@ public final class ProcessGroupStatusDTOBuilder {
   /**
    * The aggregate status of all nodes in the cluster
    */
-  public ProcessGroupStatusDTOBuilder setAggregateSnapshot(final ProcessGroupStatusSnapshotDTO aggregateSnapshot) {
+  public ProcessGroupStatusDTOBuilder setAggregateSnapshot(
+      final ProcessGroupStatusSnapshotDTO aggregateSnapshot) {
     this.aggregateSnapshot = aggregateSnapshot;
     return this;
   }
@@ -39,7 +40,8 @@ public final class ProcessGroupStatusDTOBuilder {
   /**
    * The aggregate status of all nodes in the cluster
    */
-  public ProcessGroupStatusDTOBuilder setAggregateSnapshot(final Consumer<ProcessGroupStatusSnapshotDTOBuilder> configurator) {
+  public ProcessGroupStatusDTOBuilder setAggregateSnapshot(
+      final Consumer<ProcessGroupStatusSnapshotDTOBuilder> configurator) {
     final ProcessGroupStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? ProcessGroupStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ProcessGroupStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setAggregateSnapshot(builder.build());
@@ -48,7 +50,8 @@ public final class ProcessGroupStatusDTOBuilder {
   /**
    * The aggregate status of all nodes in the cluster
    */
-  public ProcessGroupStatusDTOBuilder setAggregateSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupStatusSnapshotDTOBuilder.class) final Closure<ProcessGroupStatusSnapshotDTOBuilder> closure) {
+  public ProcessGroupStatusDTOBuilder setAggregateSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupStatusSnapshotDTOBuilder.class) final Closure<ProcessGroupStatusSnapshotDTOBuilder> closure) {
     return setAggregateSnapshot(c -> {
       final Closure<ProcessGroupStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -96,7 +99,8 @@ public final class ProcessGroupStatusDTOBuilder {
   /**
    * The status reported by each node in the cluster. If the NiFi instance is a standalone instance, rather than a clustered instance, this value may be null.
    */
-  public ProcessGroupStatusDTOBuilder setNodeSnapshots(final List<NodeProcessGroupStatusSnapshotDTO> nodeSnapshots) {
+  public ProcessGroupStatusDTOBuilder setNodeSnapshots(
+      final List<NodeProcessGroupStatusSnapshotDTO> nodeSnapshots) {
     this.nodeSnapshots = nodeSnapshots;
     return this;
   }

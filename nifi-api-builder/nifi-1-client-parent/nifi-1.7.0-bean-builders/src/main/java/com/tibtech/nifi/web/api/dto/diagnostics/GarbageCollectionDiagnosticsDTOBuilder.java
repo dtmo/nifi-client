@@ -20,7 +20,8 @@ public final class GarbageCollectionDiagnosticsDTOBuilder {
   /**
    * The name of the Memory Manager that this Garbage Collection information pertains to
    */
-  public GarbageCollectionDiagnosticsDTOBuilder setMemoryManagerName(final String memoryManagerName) {
+  public GarbageCollectionDiagnosticsDTOBuilder setMemoryManagerName(
+      final String memoryManagerName) {
     this.memoryManagerName = memoryManagerName;
     return this;
   }
@@ -35,7 +36,8 @@ public final class GarbageCollectionDiagnosticsDTOBuilder {
   /**
    * A list of snapshots that have been taken to determine the health of the JVM's heap
    */
-  public GarbageCollectionDiagnosticsDTOBuilder setSnapshots(final List<GCDiagnosticsSnapshotDTO> snapshots) {
+  public GarbageCollectionDiagnosticsDTOBuilder setSnapshots(
+      final List<GCDiagnosticsSnapshotDTO> snapshots) {
     this.snapshots = snapshots;
     return this;
   }
@@ -47,7 +49,8 @@ public final class GarbageCollectionDiagnosticsDTOBuilder {
     return garbageCollectionDiagnosticsDTO;
   }
 
-  public static GarbageCollectionDiagnosticsDTOBuilder of(final GarbageCollectionDiagnosticsDTO garbageCollectionDiagnosticsDTO) {
+  public static GarbageCollectionDiagnosticsDTOBuilder of(
+      final GarbageCollectionDiagnosticsDTO garbageCollectionDiagnosticsDTO) {
     final GarbageCollectionDiagnosticsDTOBuilder garbageCollectionDiagnosticsDTOBuilder = new GarbageCollectionDiagnosticsDTOBuilder();
     garbageCollectionDiagnosticsDTOBuilder.setMemoryManagerName(garbageCollectionDiagnosticsDTO.getMemoryManagerName());
     garbageCollectionDiagnosticsDTOBuilder.setSnapshots(garbageCollectionDiagnosticsDTO.getSnapshots());

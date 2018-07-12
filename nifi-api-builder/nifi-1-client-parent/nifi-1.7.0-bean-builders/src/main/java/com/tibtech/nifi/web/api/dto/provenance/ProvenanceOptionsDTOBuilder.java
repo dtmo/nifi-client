@@ -17,7 +17,8 @@ public final class ProvenanceOptionsDTOBuilder {
   /**
    * The available searchable field for the NiFi.
    */
-  public ProvenanceOptionsDTOBuilder setSearchableFields(final List<ProvenanceSearchableFieldDTO> searchableFields) {
+  public ProvenanceOptionsDTOBuilder setSearchableFields(
+      final List<ProvenanceSearchableFieldDTO> searchableFields) {
     this.searchableFields = searchableFields;
     return this;
   }

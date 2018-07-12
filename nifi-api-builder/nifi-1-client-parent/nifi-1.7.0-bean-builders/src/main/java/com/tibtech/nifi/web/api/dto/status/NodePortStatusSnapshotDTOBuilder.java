@@ -72,7 +72,8 @@ public final class NodePortStatusSnapshotDTOBuilder {
   /**
    * The port status snapshot from the node.
    */
-  public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(final PortStatusSnapshotDTO statusSnapshot) {
+  public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(
+      final PortStatusSnapshotDTO statusSnapshot) {
     this.statusSnapshot = statusSnapshot;
     return this;
   }
@@ -80,7 +81,8 @@ public final class NodePortStatusSnapshotDTOBuilder {
   /**
    * The port status snapshot from the node.
    */
-  public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<PortStatusSnapshotDTOBuilder> configurator) {
+  public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(
+      final Consumer<PortStatusSnapshotDTOBuilder> configurator) {
     final PortStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? PortStatusSnapshotDTOBuilder.of(statusSnapshot) : new PortStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setStatusSnapshot(builder.build());
@@ -89,7 +91,8 @@ public final class NodePortStatusSnapshotDTOBuilder {
   /**
    * The port status snapshot from the node.
    */
-  public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortStatusSnapshotDTOBuilder.class) final Closure<PortStatusSnapshotDTOBuilder> closure) {
+  public NodePortStatusSnapshotDTOBuilder setStatusSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortStatusSnapshotDTOBuilder.class) final Closure<PortStatusSnapshotDTOBuilder> closure) {
     return setStatusSnapshot(c -> {
       final Closure<PortStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -106,7 +109,8 @@ public final class NodePortStatusSnapshotDTOBuilder {
     return nodePortStatusSnapshotDTO;
   }
 
-  public static NodePortStatusSnapshotDTOBuilder of(final NodePortStatusSnapshotDTO nodePortStatusSnapshotDTO) {
+  public static NodePortStatusSnapshotDTOBuilder of(
+      final NodePortStatusSnapshotDTO nodePortStatusSnapshotDTO) {
     final NodePortStatusSnapshotDTOBuilder nodePortStatusSnapshotDTOBuilder = new NodePortStatusSnapshotDTOBuilder();
     nodePortStatusSnapshotDTOBuilder.setAddress(nodePortStatusSnapshotDTO.getAddress());
     nodePortStatusSnapshotDTOBuilder.setApiPort(nodePortStatusSnapshotDTO.getApiPort());

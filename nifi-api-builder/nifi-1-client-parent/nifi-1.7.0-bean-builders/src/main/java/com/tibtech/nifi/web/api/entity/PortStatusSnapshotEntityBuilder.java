@@ -40,7 +40,8 @@ public final class PortStatusSnapshotEntityBuilder extends AbstractEntityBuilder
     return portStatusSnapshot;
   }
 
-  public PortStatusSnapshotEntityBuilder setPortStatusSnapshot(final PortStatusSnapshotDTO portStatusSnapshot) {
+  public PortStatusSnapshotEntityBuilder setPortStatusSnapshot(
+      final PortStatusSnapshotDTO portStatusSnapshot) {
     this.portStatusSnapshot = portStatusSnapshot;
     return this;
   }
@@ -54,7 +55,8 @@ public final class PortStatusSnapshotEntityBuilder extends AbstractEntityBuilder
     return portStatusSnapshotEntity;
   }
 
-  public static PortStatusSnapshotEntityBuilder of(final PortStatusSnapshotEntity portStatusSnapshotEntity) {
+  public static PortStatusSnapshotEntityBuilder of(
+      final PortStatusSnapshotEntity portStatusSnapshotEntity) {
     final PortStatusSnapshotEntityBuilder portStatusSnapshotEntityBuilder = new PortStatusSnapshotEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(portStatusSnapshotEntityBuilder, portStatusSnapshotEntity);
     portStatusSnapshotEntityBuilder.setCanRead(portStatusSnapshotEntity.getCanRead());

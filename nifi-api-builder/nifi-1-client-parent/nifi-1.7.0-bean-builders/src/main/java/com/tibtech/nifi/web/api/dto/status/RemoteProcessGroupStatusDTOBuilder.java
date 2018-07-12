@@ -37,7 +37,8 @@ public final class RemoteProcessGroupStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(final RemoteProcessGroupStatusSnapshotDTO aggregateSnapshot) {
+  public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(
+      final RemoteProcessGroupStatusSnapshotDTO aggregateSnapshot) {
     this.aggregateSnapshot = aggregateSnapshot;
     return this;
   }
@@ -45,7 +46,8 @@ public final class RemoteProcessGroupStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(final Consumer<RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
+  public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(
+      final Consumer<RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
     final RemoteProcessGroupStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? RemoteProcessGroupStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new RemoteProcessGroupStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setAggregateSnapshot(builder.build());
@@ -54,7 +56,8 @@ public final class RemoteProcessGroupStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupStatusSnapshotDTOBuilder.class) final Closure<RemoteProcessGroupStatusSnapshotDTOBuilder> closure) {
+  public RemoteProcessGroupStatusDTOBuilder setAggregateSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupStatusSnapshotDTOBuilder.class) final Closure<RemoteProcessGroupStatusSnapshotDTOBuilder> closure) {
     return setAggregateSnapshot(c -> {
       final Closure<RemoteProcessGroupStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -117,7 +120,8 @@ public final class RemoteProcessGroupStatusDTOBuilder {
   /**
    * A status snapshot for each node in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this may be null.
    */
-  public RemoteProcessGroupStatusDTOBuilder setNodeSnapshots(final List<NodeRemoteProcessGroupStatusSnapshotDTO> nodeSnapshots) {
+  public RemoteProcessGroupStatusDTOBuilder setNodeSnapshots(
+      final List<NodeRemoteProcessGroupStatusSnapshotDTO> nodeSnapshots) {
     this.nodeSnapshots = nodeSnapshots;
     return this;
   }
@@ -180,7 +184,8 @@ public final class RemoteProcessGroupStatusDTOBuilder {
     return remoteProcessGroupStatusDTO;
   }
 
-  public static RemoteProcessGroupStatusDTOBuilder of(final RemoteProcessGroupStatusDTO remoteProcessGroupStatusDTO) {
+  public static RemoteProcessGroupStatusDTOBuilder of(
+      final RemoteProcessGroupStatusDTO remoteProcessGroupStatusDTO) {
     final RemoteProcessGroupStatusDTOBuilder remoteProcessGroupStatusDTOBuilder = new RemoteProcessGroupStatusDTOBuilder();
     remoteProcessGroupStatusDTOBuilder.setAggregateSnapshot(remoteProcessGroupStatusDTO.getAggregateSnapshot());
     remoteProcessGroupStatusDTOBuilder.setGroupId(remoteProcessGroupStatusDTO.getGroupId());

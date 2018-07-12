@@ -40,7 +40,8 @@ public final class RemoteProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The number of active threads for the remote process group.
    */
-  public RemoteProcessGroupStatusSnapshotDTOBuilder setActiveThreadCount(final Integer activeThreadCount) {
+  public RemoteProcessGroupStatusSnapshotDTOBuilder setActiveThreadCount(
+      final Integer activeThreadCount) {
     this.activeThreadCount = activeThreadCount;
     return this;
   }
@@ -85,7 +86,8 @@ public final class RemoteProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The number of FlowFiles received from the remote process group in the last 5 minutes.
    */
-  public RemoteProcessGroupStatusSnapshotDTOBuilder setFlowFilesReceived(final Integer flowFilesReceived) {
+  public RemoteProcessGroupStatusSnapshotDTOBuilder setFlowFilesReceived(
+      final Integer flowFilesReceived) {
     this.flowFilesReceived = flowFilesReceived;
     return this;
   }
@@ -205,7 +207,8 @@ public final class RemoteProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The transmission status of the remote process group.
    */
-  public RemoteProcessGroupStatusSnapshotDTOBuilder setTransmissionStatus(final String transmissionStatus) {
+  public RemoteProcessGroupStatusSnapshotDTOBuilder setTransmissionStatus(
+      final String transmissionStatus) {
     this.transmissionStatus = transmissionStatus;
     return this;
   }
@@ -227,7 +230,8 @@ public final class RemoteProcessGroupStatusSnapshotDTOBuilder {
     return remoteProcessGroupStatusSnapshotDTO;
   }
 
-  public static RemoteProcessGroupStatusSnapshotDTOBuilder of(final RemoteProcessGroupStatusSnapshotDTO remoteProcessGroupStatusSnapshotDTO) {
+  public static RemoteProcessGroupStatusSnapshotDTOBuilder of(
+      final RemoteProcessGroupStatusSnapshotDTO remoteProcessGroupStatusSnapshotDTO) {
     final RemoteProcessGroupStatusSnapshotDTOBuilder remoteProcessGroupStatusSnapshotDTOBuilder = new RemoteProcessGroupStatusSnapshotDTOBuilder();
     remoteProcessGroupStatusSnapshotDTOBuilder.setActiveThreadCount(remoteProcessGroupStatusSnapshotDTO.getActiveThreadCount());
     remoteProcessGroupStatusSnapshotDTOBuilder.setBytesReceived(remoteProcessGroupStatusSnapshotDTO.getBytesReceived());

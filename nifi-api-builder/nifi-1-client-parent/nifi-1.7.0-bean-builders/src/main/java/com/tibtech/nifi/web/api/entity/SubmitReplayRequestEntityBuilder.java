@@ -47,7 +47,8 @@ public final class SubmitReplayRequestEntityBuilder extends AbstractEntityBuilde
     return submitReplayRequestEntity;
   }
 
-  public static SubmitReplayRequestEntityBuilder of(final SubmitReplayRequestEntity submitReplayRequestEntity) {
+  public static SubmitReplayRequestEntityBuilder of(
+      final SubmitReplayRequestEntity submitReplayRequestEntity) {
     final SubmitReplayRequestEntityBuilder submitReplayRequestEntityBuilder = new SubmitReplayRequestEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(submitReplayRequestEntityBuilder, submitReplayRequestEntity);
     submitReplayRequestEntityBuilder.setClusterNodeId(submitReplayRequestEntity.getClusterNodeId());

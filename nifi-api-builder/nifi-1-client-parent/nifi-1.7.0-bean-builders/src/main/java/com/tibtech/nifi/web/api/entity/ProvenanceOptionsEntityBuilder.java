@@ -10,7 +10,8 @@ public final class ProvenanceOptionsEntityBuilder extends AbstractEntityBuilder<
     return provenanceOptions;
   }
 
-  public ProvenanceOptionsEntityBuilder setProvenanceOptions(final ProvenanceOptionsDTO provenanceOptions) {
+  public ProvenanceOptionsEntityBuilder setProvenanceOptions(
+      final ProvenanceOptionsDTO provenanceOptions) {
     this.provenanceOptions = provenanceOptions;
     return this;
   }
@@ -22,7 +23,8 @@ public final class ProvenanceOptionsEntityBuilder extends AbstractEntityBuilder<
     return provenanceOptionsEntity;
   }
 
-  public static ProvenanceOptionsEntityBuilder of(final ProvenanceOptionsEntity provenanceOptionsEntity) {
+  public static ProvenanceOptionsEntityBuilder of(
+      final ProvenanceOptionsEntity provenanceOptionsEntity) {
     final ProvenanceOptionsEntityBuilder provenanceOptionsEntityBuilder = new ProvenanceOptionsEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(provenanceOptionsEntityBuilder, provenanceOptionsEntity);
     provenanceOptionsEntityBuilder.setProvenanceOptions(provenanceOptionsEntity.getProvenanceOptions());

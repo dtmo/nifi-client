@@ -19,7 +19,8 @@ public final class VariableRegistryUpdateRequestEntityBuilder extends AbstractEn
   /**
    * The revision for the Process Group that owns this variable registry.
    */
-  public VariableRegistryUpdateRequestEntityBuilder setProcessGroupRevision(final RevisionDTO processGroupRevision) {
+  public VariableRegistryUpdateRequestEntityBuilder setProcessGroupRevision(
+      final RevisionDTO processGroupRevision) {
     this.processGroupRevision = processGroupRevision;
     return this;
   }
@@ -34,7 +35,8 @@ public final class VariableRegistryUpdateRequestEntityBuilder extends AbstractEn
   /**
    * The Variable Registry Update Request
    */
-  public VariableRegistryUpdateRequestEntityBuilder setRequest(final VariableRegistryUpdateRequestDTO request) {
+  public VariableRegistryUpdateRequestEntityBuilder setRequest(
+      final VariableRegistryUpdateRequestDTO request) {
     this.request = request;
     return this;
   }
@@ -47,7 +49,8 @@ public final class VariableRegistryUpdateRequestEntityBuilder extends AbstractEn
     return variableRegistryUpdateRequestEntity;
   }
 
-  public static VariableRegistryUpdateRequestEntityBuilder of(final VariableRegistryUpdateRequestEntity variableRegistryUpdateRequestEntity) {
+  public static VariableRegistryUpdateRequestEntityBuilder of(
+      final VariableRegistryUpdateRequestEntity variableRegistryUpdateRequestEntity) {
     final VariableRegistryUpdateRequestEntityBuilder variableRegistryUpdateRequestEntityBuilder = new VariableRegistryUpdateRequestEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(variableRegistryUpdateRequestEntityBuilder, variableRegistryUpdateRequestEntity);
     variableRegistryUpdateRequestEntityBuilder.setProcessGroupRevision(variableRegistryUpdateRequestEntity.getProcessGroupRevision());

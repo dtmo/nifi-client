@@ -62,7 +62,8 @@ public final class ConnectionDTOBuilder extends AbstractComponentDTOBuilder<Conn
   /**
    * The object data size threshold for determining when back pressure is applied. Updating this value is a passive change in the sense that it won't impact whether existing files over the limit are affected but it does help feeder processors to stop pushing too much into this work queue.
    */
-  public ConnectionDTOBuilder setBackPressureDataSizeThreshold(final String backPressureDataSizeThreshold) {
+  public ConnectionDTOBuilder setBackPressureDataSizeThreshold(
+      final String backPressureDataSizeThreshold) {
     this.backPressureDataSizeThreshold = backPressureDataSizeThreshold;
     return this;
   }
@@ -77,7 +78,8 @@ public final class ConnectionDTOBuilder extends AbstractComponentDTOBuilder<Conn
   /**
    * The object count threshold for determining when back pressure is applied. Updating this value is a passive change in the sense that it won't impact whether existing files over the limit are affected but it does help feeder processors to stop pushing too much into this work queue.
    */
-  public ConnectionDTOBuilder setBackPressureObjectThreshold(final Long backPressureObjectThreshold) {
+  public ConnectionDTOBuilder setBackPressureObjectThreshold(
+      final Long backPressureObjectThreshold) {
     this.backPressureObjectThreshold = backPressureObjectThreshold;
     return this;
   }
@@ -124,7 +126,8 @@ public final class ConnectionDTOBuilder extends AbstractComponentDTOBuilder<Conn
   /**
    * The destination of the connection.
    */
-  public ConnectionDTOBuilder setDestination(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectableDTOBuilder.class) final Closure<ConnectableDTOBuilder> closure) {
+  public ConnectionDTOBuilder setDestination(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectableDTOBuilder.class) final Closure<ConnectableDTOBuilder> closure) {
     return setDestination(c -> {
       final Closure<ConnectableDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -234,7 +237,8 @@ public final class ConnectionDTOBuilder extends AbstractComponentDTOBuilder<Conn
   /**
    * The source of the connection.
    */
-  public ConnectionDTOBuilder setSource(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectableDTOBuilder.class) final Closure<ConnectableDTOBuilder> closure) {
+  public ConnectionDTOBuilder setSource(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectableDTOBuilder.class) final Closure<ConnectableDTOBuilder> closure) {
     return setSource(c -> {
       final Closure<ConnectableDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

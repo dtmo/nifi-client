@@ -92,7 +92,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The active thread count for this process group.
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setActiveThreadCount(final Integer activeThreadCount) {
+  public ProcessGroupStatusSnapshotDTOBuilder setActiveThreadCount(
+      final Integer activeThreadCount) {
     this.activeThreadCount = activeThreadCount;
     return this;
   }
@@ -227,7 +228,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The status of all connections in the process group.
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setConnectionStatusSnapshots(final Collection<ConnectionStatusSnapshotEntity> connectionStatusSnapshots) {
+  public ProcessGroupStatusSnapshotDTOBuilder setConnectionStatusSnapshots(
+      final Collection<ConnectionStatusSnapshotEntity> connectionStatusSnapshots) {
     this.connectionStatusSnapshots = connectionStatusSnapshots;
     return this;
   }
@@ -287,7 +289,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The number of FlowFiles received from external sources by components within this ProcessGroup in the last 5 minutes
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setFlowFilesReceived(final Integer flowFilesReceived) {
+  public ProcessGroupStatusSnapshotDTOBuilder setFlowFilesReceived(
+      final Integer flowFilesReceived) {
     this.flowFilesReceived = flowFilesReceived;
     return this;
   }
@@ -317,7 +320,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The number of FlowFiles transferred in this ProcessGroup in the last 5 minutes
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setFlowFilesTransferred(final Integer flowFilesTransferred) {
+  public ProcessGroupStatusSnapshotDTOBuilder setFlowFilesTransferred(
+      final Integer flowFilesTransferred) {
     this.flowFilesTransferred = flowFilesTransferred;
     return this;
   }
@@ -362,7 +366,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The status of all input ports in the process group.
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setInputPortStatusSnapshots(final Collection<PortStatusSnapshotEntity> inputPortStatusSnapshots) {
+  public ProcessGroupStatusSnapshotDTOBuilder setInputPortStatusSnapshots(
+      final Collection<PortStatusSnapshotEntity> inputPortStatusSnapshots) {
     this.inputPortStatusSnapshots = inputPortStatusSnapshots;
     return this;
   }
@@ -407,7 +412,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The status of all output ports in the process group.
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setOutputPortStatusSnapshots(final Collection<PortStatusSnapshotEntity> outputPortStatusSnapshots) {
+  public ProcessGroupStatusSnapshotDTOBuilder setOutputPortStatusSnapshots(
+      final Collection<PortStatusSnapshotEntity> outputPortStatusSnapshots) {
     this.outputPortStatusSnapshots = outputPortStatusSnapshots;
     return this;
   }
@@ -422,7 +428,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The status of all process groups in the process group.
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setProcessGroupStatusSnapshots(final Collection<ProcessGroupStatusSnapshotEntity> processGroupStatusSnapshots) {
+  public ProcessGroupStatusSnapshotDTOBuilder setProcessGroupStatusSnapshots(
+      final Collection<ProcessGroupStatusSnapshotEntity> processGroupStatusSnapshots) {
     this.processGroupStatusSnapshots = processGroupStatusSnapshots;
     return this;
   }
@@ -437,7 +444,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The status of all processors in the process group.
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setProcessorStatusSnapshots(final Collection<ProcessorStatusSnapshotEntity> processorStatusSnapshots) {
+  public ProcessGroupStatusSnapshotDTOBuilder setProcessorStatusSnapshots(
+      final Collection<ProcessorStatusSnapshotEntity> processorStatusSnapshots) {
     this.processorStatusSnapshots = processorStatusSnapshots;
     return this;
   }
@@ -527,7 +535,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The status of all remote process groups in the process group.
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setRemoteProcessGroupStatusSnapshots(final Collection<RemoteProcessGroupStatusSnapshotEntity> remoteProcessGroupStatusSnapshots) {
+  public ProcessGroupStatusSnapshotDTOBuilder setRemoteProcessGroupStatusSnapshots(
+      final Collection<RemoteProcessGroupStatusSnapshotEntity> remoteProcessGroupStatusSnapshots) {
     this.remoteProcessGroupStatusSnapshots = remoteProcessGroupStatusSnapshots;
     return this;
   }
@@ -557,7 +566,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The number of threads currently terminated for the process group.
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setTerminatedThreadCount(final Integer terminatedThreadCount) {
+  public ProcessGroupStatusSnapshotDTOBuilder setTerminatedThreadCount(
+      final Integer terminatedThreadCount) {
     this.terminatedThreadCount = terminatedThreadCount;
     return this;
   }
@@ -587,7 +597,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The current state of the Process Group, as it relates to the Versioned Flow
    */
-  public ProcessGroupStatusSnapshotDTOBuilder setVersionedFlowState(final String versionedFlowState) {
+  public ProcessGroupStatusSnapshotDTOBuilder setVersionedFlowState(
+      final String versionedFlowState) {
     this.versionedFlowState = versionedFlowState;
     return this;
   }
@@ -647,7 +658,8 @@ public final class ProcessGroupStatusSnapshotDTOBuilder {
     return processGroupStatusSnapshotDTO;
   }
 
-  public static ProcessGroupStatusSnapshotDTOBuilder of(final ProcessGroupStatusSnapshotDTO processGroupStatusSnapshotDTO) {
+  public static ProcessGroupStatusSnapshotDTOBuilder of(
+      final ProcessGroupStatusSnapshotDTO processGroupStatusSnapshotDTO) {
     final ProcessGroupStatusSnapshotDTOBuilder processGroupStatusSnapshotDTOBuilder = new ProcessGroupStatusSnapshotDTOBuilder();
     processGroupStatusSnapshotDTOBuilder.setActiveThreadCount(processGroupStatusSnapshotDTO.getActiveThreadCount());
     processGroupStatusSnapshotDTOBuilder.setBytesIn(processGroupStatusSnapshotDTO.getBytesIn());

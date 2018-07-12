@@ -81,7 +81,8 @@ public final class ProvenanceSearchableFieldDTOBuilder {
     return provenanceSearchableFieldDTO;
   }
 
-  public static ProvenanceSearchableFieldDTOBuilder of(final ProvenanceSearchableFieldDTO provenanceSearchableFieldDTO) {
+  public static ProvenanceSearchableFieldDTOBuilder of(
+      final ProvenanceSearchableFieldDTO provenanceSearchableFieldDTO) {
     final ProvenanceSearchableFieldDTOBuilder provenanceSearchableFieldDTOBuilder = new ProvenanceSearchableFieldDTOBuilder();
     provenanceSearchableFieldDTOBuilder.setField(provenanceSearchableFieldDTO.getField());
     provenanceSearchableFieldDTOBuilder.setId(provenanceSearchableFieldDTO.getId());

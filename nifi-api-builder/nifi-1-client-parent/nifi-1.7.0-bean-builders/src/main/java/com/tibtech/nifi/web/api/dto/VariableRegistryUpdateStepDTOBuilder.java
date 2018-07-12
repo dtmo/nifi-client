@@ -63,7 +63,8 @@ public final class VariableRegistryUpdateStepDTOBuilder {
     return variableRegistryUpdateStepDTO;
   }
 
-  public static VariableRegistryUpdateStepDTOBuilder of(final VariableRegistryUpdateStepDTO variableRegistryUpdateStepDTO) {
+  public static VariableRegistryUpdateStepDTOBuilder of(
+      final VariableRegistryUpdateStepDTO variableRegistryUpdateStepDTO) {
     final VariableRegistryUpdateStepDTOBuilder variableRegistryUpdateStepDTOBuilder = new VariableRegistryUpdateStepDTOBuilder();
     variableRegistryUpdateStepDTOBuilder.setComplete(variableRegistryUpdateStepDTO.isComplete());
     variableRegistryUpdateStepDTOBuilder.setDescription(variableRegistryUpdateStepDTO.getDescription());

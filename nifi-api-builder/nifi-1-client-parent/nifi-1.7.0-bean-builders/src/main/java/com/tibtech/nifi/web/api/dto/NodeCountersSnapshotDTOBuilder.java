@@ -80,7 +80,8 @@ public final class NodeCountersSnapshotDTOBuilder {
   /**
    * The counters from the node.
    */
-  public NodeCountersSnapshotDTOBuilder setSnapshot(final Consumer<CountersSnapshotDTOBuilder> configurator) {
+  public NodeCountersSnapshotDTOBuilder setSnapshot(
+      final Consumer<CountersSnapshotDTOBuilder> configurator) {
     final CountersSnapshotDTOBuilder builder = (snapshot != null ? CountersSnapshotDTOBuilder.of(snapshot) : new CountersSnapshotDTOBuilder());
     configurator.accept(builder);
     return setSnapshot(builder.build());
@@ -89,7 +90,8 @@ public final class NodeCountersSnapshotDTOBuilder {
   /**
    * The counters from the node.
    */
-  public NodeCountersSnapshotDTOBuilder setSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = CountersSnapshotDTOBuilder.class) final Closure<CountersSnapshotDTOBuilder> closure) {
+  public NodeCountersSnapshotDTOBuilder setSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = CountersSnapshotDTOBuilder.class) final Closure<CountersSnapshotDTOBuilder> closure) {
     return setSnapshot(c -> {
       final Closure<CountersSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -106,7 +108,8 @@ public final class NodeCountersSnapshotDTOBuilder {
     return nodeCountersSnapshotDTO;
   }
 
-  public static NodeCountersSnapshotDTOBuilder of(final NodeCountersSnapshotDTO nodeCountersSnapshotDTO) {
+  public static NodeCountersSnapshotDTOBuilder of(
+      final NodeCountersSnapshotDTO nodeCountersSnapshotDTO) {
     final NodeCountersSnapshotDTOBuilder nodeCountersSnapshotDTOBuilder = new NodeCountersSnapshotDTOBuilder();
     nodeCountersSnapshotDTOBuilder.setAddress(nodeCountersSnapshotDTO.getAddress());
     nodeCountersSnapshotDTOBuilder.setApiPort(nodeCountersSnapshotDTO.getApiPort());

@@ -23,7 +23,8 @@ public final class TenantCollectionEntityBuilder extends AbstractComponentEntity
     return tenantCollectionEntity;
   }
 
-  public static TenantCollectionEntityBuilder of(final TenantCollectionEntity tenantCollectionEntity) {
+  public static TenantCollectionEntityBuilder of(
+      final TenantCollectionEntity tenantCollectionEntity) {
     final TenantCollectionEntityBuilder tenantCollectionEntityBuilder = new TenantCollectionEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(tenantCollectionEntityBuilder, tenantCollectionEntity);
     tenantCollectionEntityBuilder.setTenants(tenantCollectionEntity.getTenants());

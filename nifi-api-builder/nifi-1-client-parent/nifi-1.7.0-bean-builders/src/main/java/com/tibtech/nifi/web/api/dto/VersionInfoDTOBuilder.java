@@ -190,7 +190,8 @@ public final class VersionInfoDTOBuilder {
     return versionInfoDTO;
   }
 
-  public static VersionInfoDTOBuilder of(final SystemDiagnosticsSnapshotDTO.VersionInfoDTO versionInfoDTO) {
+  public static VersionInfoDTOBuilder of(
+      final SystemDiagnosticsSnapshotDTO.VersionInfoDTO versionInfoDTO) {
     final VersionInfoDTOBuilder versionInfoDTOBuilder = new VersionInfoDTOBuilder();
     versionInfoDTOBuilder.setBuildBranch(versionInfoDTO.getBuildBranch());
     versionInfoDTOBuilder.setBuildRevision(versionInfoDTO.getBuildRevision());

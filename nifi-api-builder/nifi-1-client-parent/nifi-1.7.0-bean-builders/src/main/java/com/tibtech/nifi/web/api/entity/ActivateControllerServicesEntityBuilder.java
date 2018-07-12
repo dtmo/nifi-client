@@ -25,7 +25,8 @@ public final class ActivateControllerServicesEntityBuilder extends AbstractEntit
   /**
    * Optional services to schedule. If not specified, all authorized descendant controller services will be used.
    */
-  public ActivateControllerServicesEntityBuilder setComponents(final Map<String, RevisionDTO> components) {
+  public ActivateControllerServicesEntityBuilder setComponents(
+      final Map<String, RevisionDTO> components) {
     this.components = components;
     return this;
   }
@@ -40,7 +41,8 @@ public final class ActivateControllerServicesEntityBuilder extends AbstractEntit
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public ActivateControllerServicesEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public ActivateControllerServicesEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -85,7 +87,8 @@ public final class ActivateControllerServicesEntityBuilder extends AbstractEntit
     return activateControllerServicesEntity;
   }
 
-  public static ActivateControllerServicesEntityBuilder of(final ActivateControllerServicesEntity activateControllerServicesEntity) {
+  public static ActivateControllerServicesEntityBuilder of(
+      final ActivateControllerServicesEntity activateControllerServicesEntity) {
     final ActivateControllerServicesEntityBuilder activateControllerServicesEntityBuilder = new ActivateControllerServicesEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(activateControllerServicesEntityBuilder, activateControllerServicesEntity);
     activateControllerServicesEntityBuilder.setComponents(activateControllerServicesEntity.getComponents());

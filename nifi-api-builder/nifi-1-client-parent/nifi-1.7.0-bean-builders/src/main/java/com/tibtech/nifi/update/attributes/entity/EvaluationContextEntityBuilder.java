@@ -32,7 +32,8 @@ public final class EvaluationContextEntityBuilder {
     return disconnectedNodeAcknowledged;
   }
 
-  public EvaluationContextEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public EvaluationContextEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -84,7 +85,8 @@ public final class EvaluationContextEntityBuilder {
     return evaluationContextEntity;
   }
 
-  public static EvaluationContextEntityBuilder of(final EvaluationContextEntity evaluationContextEntity) {
+  public static EvaluationContextEntityBuilder of(
+      final EvaluationContextEntity evaluationContextEntity) {
     final EvaluationContextEntityBuilder evaluationContextEntityBuilder = new EvaluationContextEntityBuilder();
     evaluationContextEntityBuilder.setClientId(evaluationContextEntity.getClientId());
     evaluationContextEntityBuilder.setDisconnectedNodeAcknowledged(evaluationContextEntity.isDisconnectedNodeAcknowledged());

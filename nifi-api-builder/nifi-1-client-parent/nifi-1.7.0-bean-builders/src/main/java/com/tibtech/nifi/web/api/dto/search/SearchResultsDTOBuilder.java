@@ -29,7 +29,8 @@ public final class SearchResultsDTOBuilder {
   /**
    * The connections that matched the search.
    */
-  public SearchResultsDTOBuilder setConnectionResults(final List<ComponentSearchResultDTO> connectionResults) {
+  public SearchResultsDTOBuilder setConnectionResults(
+      final List<ComponentSearchResultDTO> connectionResults) {
     this.connectionResults = connectionResults;
     return this;
   }
@@ -44,7 +45,8 @@ public final class SearchResultsDTOBuilder {
   /**
    * The funnels that matched the search.
    */
-  public SearchResultsDTOBuilder setFunnelResults(final List<ComponentSearchResultDTO> funnelResults) {
+  public SearchResultsDTOBuilder setFunnelResults(
+      final List<ComponentSearchResultDTO> funnelResults) {
     this.funnelResults = funnelResults;
     return this;
   }
@@ -59,7 +61,8 @@ public final class SearchResultsDTOBuilder {
   /**
    * The input ports that matched the search.
    */
-  public SearchResultsDTOBuilder setInputPortResults(final List<ComponentSearchResultDTO> inputPortResults) {
+  public SearchResultsDTOBuilder setInputPortResults(
+      final List<ComponentSearchResultDTO> inputPortResults) {
     this.inputPortResults = inputPortResults;
     return this;
   }
@@ -74,7 +77,8 @@ public final class SearchResultsDTOBuilder {
   /**
    * The output ports that matched the search.
    */
-  public SearchResultsDTOBuilder setOutputPortResults(final List<ComponentSearchResultDTO> outputPortResults) {
+  public SearchResultsDTOBuilder setOutputPortResults(
+      final List<ComponentSearchResultDTO> outputPortResults) {
     this.outputPortResults = outputPortResults;
     return this;
   }
@@ -89,7 +93,8 @@ public final class SearchResultsDTOBuilder {
   /**
    * The process groups that matched the search.
    */
-  public SearchResultsDTOBuilder setProcessGroupResults(final List<ComponentSearchResultDTO> processGroupResults) {
+  public SearchResultsDTOBuilder setProcessGroupResults(
+      final List<ComponentSearchResultDTO> processGroupResults) {
     this.processGroupResults = processGroupResults;
     return this;
   }
@@ -104,7 +109,8 @@ public final class SearchResultsDTOBuilder {
   /**
    * The processors that matched the search.
    */
-  public SearchResultsDTOBuilder setProcessorResults(final List<ComponentSearchResultDTO> processorResults) {
+  public SearchResultsDTOBuilder setProcessorResults(
+      final List<ComponentSearchResultDTO> processorResults) {
     this.processorResults = processorResults;
     return this;
   }
@@ -119,7 +125,8 @@ public final class SearchResultsDTOBuilder {
   /**
    * The remote process groups that matched the search.
    */
-  public SearchResultsDTOBuilder setRemoteProcessGroupResults(final List<ComponentSearchResultDTO> remoteProcessGroupResults) {
+  public SearchResultsDTOBuilder setRemoteProcessGroupResults(
+      final List<ComponentSearchResultDTO> remoteProcessGroupResults) {
     this.remoteProcessGroupResults = remoteProcessGroupResults;
     return this;
   }

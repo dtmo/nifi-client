@@ -31,7 +31,8 @@ public final class CountersDTOBuilder {
   /**
    * A Counters snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public CountersDTOBuilder setAggregateSnapshot(final Consumer<CountersSnapshotDTOBuilder> configurator) {
+  public CountersDTOBuilder setAggregateSnapshot(
+      final Consumer<CountersSnapshotDTOBuilder> configurator) {
     final CountersSnapshotDTOBuilder builder = (aggregateSnapshot != null ? CountersSnapshotDTOBuilder.of(aggregateSnapshot) : new CountersSnapshotDTOBuilder());
     configurator.accept(builder);
     return setAggregateSnapshot(builder.build());
@@ -40,7 +41,8 @@ public final class CountersDTOBuilder {
   /**
    * A Counters snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public CountersDTOBuilder setAggregateSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = CountersSnapshotDTOBuilder.class) final Closure<CountersSnapshotDTOBuilder> closure) {
+  public CountersDTOBuilder setAggregateSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = CountersSnapshotDTOBuilder.class) final Closure<CountersSnapshotDTOBuilder> closure) {
     return setAggregateSnapshot(c -> {
       final Closure<CountersSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

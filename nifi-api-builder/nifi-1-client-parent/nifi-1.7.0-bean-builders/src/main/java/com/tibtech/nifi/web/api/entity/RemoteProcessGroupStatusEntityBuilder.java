@@ -22,7 +22,8 @@ public final class RemoteProcessGroupStatusEntityBuilder extends AbstractEntityB
     return remoteProcessGroupStatus;
   }
 
-  public RemoteProcessGroupStatusEntityBuilder setRemoteProcessGroupStatus(final RemoteProcessGroupStatusDTO remoteProcessGroupStatus) {
+  public RemoteProcessGroupStatusEntityBuilder setRemoteProcessGroupStatus(
+      final RemoteProcessGroupStatusDTO remoteProcessGroupStatus) {
     this.remoteProcessGroupStatus = remoteProcessGroupStatus;
     return this;
   }
@@ -35,7 +36,8 @@ public final class RemoteProcessGroupStatusEntityBuilder extends AbstractEntityB
     return remoteProcessGroupStatusEntity;
   }
 
-  public static RemoteProcessGroupStatusEntityBuilder of(final RemoteProcessGroupStatusEntity remoteProcessGroupStatusEntity) {
+  public static RemoteProcessGroupStatusEntityBuilder of(
+      final RemoteProcessGroupStatusEntity remoteProcessGroupStatusEntity) {
     final RemoteProcessGroupStatusEntityBuilder remoteProcessGroupStatusEntityBuilder = new RemoteProcessGroupStatusEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(remoteProcessGroupStatusEntityBuilder, remoteProcessGroupStatusEntity);
     remoteProcessGroupStatusEntityBuilder.setCanRead(remoteProcessGroupStatusEntity.getCanRead());

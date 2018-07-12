@@ -24,7 +24,8 @@ public final class CopySnippetRequestEntityBuilder extends AbstractEntityBuilder
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public CopySnippetRequestEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public CopySnippetRequestEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -84,7 +85,8 @@ public final class CopySnippetRequestEntityBuilder extends AbstractEntityBuilder
     return copySnippetRequestEntity;
   }
 
-  public static CopySnippetRequestEntityBuilder of(final CopySnippetRequestEntity copySnippetRequestEntity) {
+  public static CopySnippetRequestEntityBuilder of(
+      final CopySnippetRequestEntity copySnippetRequestEntity) {
     final CopySnippetRequestEntityBuilder copySnippetRequestEntityBuilder = new CopySnippetRequestEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(copySnippetRequestEntityBuilder, copySnippetRequestEntity);
     copySnippetRequestEntityBuilder.setDisconnectedNodeAcknowledged(copySnippetRequestEntity.isDisconnectedNodeAcknowledged());

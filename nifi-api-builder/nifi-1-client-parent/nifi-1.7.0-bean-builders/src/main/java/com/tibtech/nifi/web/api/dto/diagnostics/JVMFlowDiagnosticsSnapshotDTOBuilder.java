@@ -27,7 +27,8 @@ public final class JVMFlowDiagnosticsSnapshotDTOBuilder {
   /**
    * The number of event-driven threads that are active
    */
-  public JVMFlowDiagnosticsSnapshotDTOBuilder setActiveEventDrivenThreads(final Integer activeEventDrivenThreads) {
+  public JVMFlowDiagnosticsSnapshotDTOBuilder setActiveEventDrivenThreads(
+      final Integer activeEventDrivenThreads) {
     this.activeEventDrivenThreads = activeEventDrivenThreads;
     return this;
   }
@@ -42,7 +43,8 @@ public final class JVMFlowDiagnosticsSnapshotDTOBuilder {
   /**
    * The number of timer-driven threads that are active
    */
-  public JVMFlowDiagnosticsSnapshotDTOBuilder setActiveTimerDrivenThreads(final Integer activeTimerDrivenThreads) {
+  public JVMFlowDiagnosticsSnapshotDTOBuilder setActiveTimerDrivenThreads(
+      final Integer activeTimerDrivenThreads) {
     this.activeTimerDrivenThreads = activeTimerDrivenThreads;
     return this;
   }
@@ -102,7 +104,8 @@ public final class JVMFlowDiagnosticsSnapshotDTOBuilder {
     return jVMFlowDiagnosticsSnapshotDTO;
   }
 
-  public static JVMFlowDiagnosticsSnapshotDTOBuilder of(final JVMFlowDiagnosticsSnapshotDTO jVMFlowDiagnosticsSnapshotDTO) {
+  public static JVMFlowDiagnosticsSnapshotDTOBuilder of(
+      final JVMFlowDiagnosticsSnapshotDTO jVMFlowDiagnosticsSnapshotDTO) {
     final JVMFlowDiagnosticsSnapshotDTOBuilder jVMFlowDiagnosticsSnapshotDTOBuilder = new JVMFlowDiagnosticsSnapshotDTOBuilder();
     jVMFlowDiagnosticsSnapshotDTOBuilder.setActiveEventDrivenThreads(jVMFlowDiagnosticsSnapshotDTO.getActiveEventDrivenThreads());
     jVMFlowDiagnosticsSnapshotDTOBuilder.setActiveTimerDrivenThreads(jVMFlowDiagnosticsSnapshotDTO.getActiveTimerDrivenThreads());

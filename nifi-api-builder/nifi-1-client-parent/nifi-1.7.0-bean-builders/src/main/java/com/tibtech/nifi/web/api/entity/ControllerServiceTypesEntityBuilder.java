@@ -11,7 +11,8 @@ public final class ControllerServiceTypesEntityBuilder extends AbstractEntityBui
     return controllerServiceTypes;
   }
 
-  public ControllerServiceTypesEntityBuilder setControllerServiceTypes(final Set<DocumentedTypeDTO> controllerServiceTypes) {
+  public ControllerServiceTypesEntityBuilder setControllerServiceTypes(
+      final Set<DocumentedTypeDTO> controllerServiceTypes) {
     this.controllerServiceTypes = controllerServiceTypes;
     return this;
   }
@@ -23,7 +24,8 @@ public final class ControllerServiceTypesEntityBuilder extends AbstractEntityBui
     return controllerServiceTypesEntity;
   }
 
-  public static ControllerServiceTypesEntityBuilder of(final ControllerServiceTypesEntity controllerServiceTypesEntity) {
+  public static ControllerServiceTypesEntityBuilder of(
+      final ControllerServiceTypesEntity controllerServiceTypesEntity) {
     final ControllerServiceTypesEntityBuilder controllerServiceTypesEntityBuilder = new ControllerServiceTypesEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(controllerServiceTypesEntityBuilder, controllerServiceTypesEntity);
     controllerServiceTypesEntityBuilder.setControllerServiceTypes(controllerServiceTypesEntity.getControllerServiceTypes());

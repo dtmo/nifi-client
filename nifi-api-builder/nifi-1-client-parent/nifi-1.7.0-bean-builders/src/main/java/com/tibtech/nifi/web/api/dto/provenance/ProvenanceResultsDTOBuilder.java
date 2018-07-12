@@ -79,7 +79,8 @@ public final class ProvenanceResultsDTOBuilder {
   /**
    * The provenance events that matched the search criteria.
    */
-  public ProvenanceResultsDTOBuilder setProvenanceEvents(final List<ProvenanceEventDTO> provenanceEvents) {
+  public ProvenanceResultsDTOBuilder setProvenanceEvents(
+      final List<ProvenanceEventDTO> provenanceEvents) {
     this.provenanceEvents = provenanceEvents;
     return this;
   }

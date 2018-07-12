@@ -80,7 +80,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * Number of available processors if supported by the underlying system.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setAvailableProcessors(final Integer availableProcessors) {
+  public SystemDiagnosticsSnapshotDTOBuilder setAvailableProcessors(
+      final Integer availableProcessors) {
     this.availableProcessors = availableProcessors;
     return this;
   }
@@ -95,7 +96,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The content repository storage usage.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setContentRepositoryStorageUsage(final Set<SystemDiagnosticsSnapshotDTO.StorageUsageDTO> contentRepositoryStorageUsage) {
+  public SystemDiagnosticsSnapshotDTOBuilder setContentRepositoryStorageUsage(
+      final Set<SystemDiagnosticsSnapshotDTO.StorageUsageDTO> contentRepositoryStorageUsage) {
     this.contentRepositoryStorageUsage = contentRepositoryStorageUsage;
     return this;
   }
@@ -125,7 +127,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The flowfile repository storage usage.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(final SystemDiagnosticsSnapshotDTO.StorageUsageDTO flowFileRepositoryStorageUsage) {
+  public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(
+      final SystemDiagnosticsSnapshotDTO.StorageUsageDTO flowFileRepositoryStorageUsage) {
     this.flowFileRepositoryStorageUsage = flowFileRepositoryStorageUsage;
     return this;
   }
@@ -133,7 +136,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The flowfile repository storage usage.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(final Consumer<StorageUsageDTOBuilder> configurator) {
+  public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(
+      final Consumer<StorageUsageDTOBuilder> configurator) {
     final StorageUsageDTOBuilder builder = (flowFileRepositoryStorageUsage != null ? StorageUsageDTOBuilder.of(flowFileRepositoryStorageUsage) : new StorageUsageDTOBuilder());
     configurator.accept(builder);
     return setFlowFileRepositoryStorageUsage(builder.build());
@@ -142,7 +146,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The flowfile repository storage usage.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StorageUsageDTOBuilder.class) final Closure<StorageUsageDTOBuilder> closure) {
+  public SystemDiagnosticsSnapshotDTOBuilder setFlowFileRepositoryStorageUsage(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StorageUsageDTOBuilder.class) final Closure<StorageUsageDTOBuilder> closure) {
     return setFlowFileRepositoryStorageUsage(c -> {
       final Closure<StorageUsageDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -220,7 +225,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The garbage collection details.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setGarbageCollection(final Set<SystemDiagnosticsSnapshotDTO.GarbageCollectionDTO> garbageCollection) {
+  public SystemDiagnosticsSnapshotDTOBuilder setGarbageCollection(
+      final Set<SystemDiagnosticsSnapshotDTO.GarbageCollectionDTO> garbageCollection) {
     this.garbageCollection = garbageCollection;
     return this;
   }
@@ -310,7 +316,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * Utilization of non heap.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setNonHeapUtilization(final String nonHeapUtilization) {
+  public SystemDiagnosticsSnapshotDTOBuilder setNonHeapUtilization(
+      final String nonHeapUtilization) {
     this.nonHeapUtilization = nonHeapUtilization;
     return this;
   }
@@ -325,7 +332,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The processor load average if supported by the underlying system.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setProcessorLoadAverage(final Double processorLoadAverage) {
+  public SystemDiagnosticsSnapshotDTOBuilder setProcessorLoadAverage(
+      final Double processorLoadAverage) {
     this.processorLoadAverage = processorLoadAverage;
     return this;
   }
@@ -340,7 +348,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The provenance repository storage usage.
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setProvenanceRepositoryStorageUsage(final Set<SystemDiagnosticsSnapshotDTO.StorageUsageDTO> provenanceRepositoryStorageUsage) {
+  public SystemDiagnosticsSnapshotDTOBuilder setProvenanceRepositoryStorageUsage(
+      final Set<SystemDiagnosticsSnapshotDTO.StorageUsageDTO> provenanceRepositoryStorageUsage) {
     this.provenanceRepositoryStorageUsage = provenanceRepositoryStorageUsage;
     return this;
   }
@@ -520,7 +529,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The nifi, os, java, and build version information
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(final SystemDiagnosticsSnapshotDTO.VersionInfoDTO versionInfo) {
+  public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(
+      final SystemDiagnosticsSnapshotDTO.VersionInfoDTO versionInfo) {
     this.versionInfo = versionInfo;
     return this;
   }
@@ -528,7 +538,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The nifi, os, java, and build version information
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(final Consumer<VersionInfoDTOBuilder> configurator) {
+  public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(
+      final Consumer<VersionInfoDTOBuilder> configurator) {
     final VersionInfoDTOBuilder builder = (versionInfo != null ? VersionInfoDTOBuilder.of(versionInfo) : new VersionInfoDTOBuilder());
     configurator.accept(builder);
     return setVersionInfo(builder.build());
@@ -537,7 +548,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The nifi, os, java, and build version information
    */
-  public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = VersionInfoDTOBuilder.class) final Closure<VersionInfoDTOBuilder> closure) {
+  public SystemDiagnosticsSnapshotDTOBuilder setVersionInfo(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = VersionInfoDTOBuilder.class) final Closure<VersionInfoDTOBuilder> closure) {
     return setVersionInfo(c -> {
       final Closure<VersionInfoDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -579,7 +591,8 @@ public final class SystemDiagnosticsSnapshotDTOBuilder {
     return systemDiagnosticsSnapshotDTO;
   }
 
-  public static SystemDiagnosticsSnapshotDTOBuilder of(final SystemDiagnosticsSnapshotDTO systemDiagnosticsSnapshotDTO) {
+  public static SystemDiagnosticsSnapshotDTOBuilder of(
+      final SystemDiagnosticsSnapshotDTO systemDiagnosticsSnapshotDTO) {
     final SystemDiagnosticsSnapshotDTOBuilder systemDiagnosticsSnapshotDTOBuilder = new SystemDiagnosticsSnapshotDTOBuilder();
     systemDiagnosticsSnapshotDTOBuilder.setAvailableProcessors(systemDiagnosticsSnapshotDTO.getAvailableProcessors());
     systemDiagnosticsSnapshotDTOBuilder.setContentRepositoryStorageUsage(systemDiagnosticsSnapshotDTO.getContentRepositoryStorageUsage());

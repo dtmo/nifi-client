@@ -29,7 +29,8 @@ public final class InstantiateTemplateRequestEntityBuilder extends AbstractEntit
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public InstantiateTemplateRequestEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public InstantiateTemplateRequestEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -121,7 +122,8 @@ public final class InstantiateTemplateRequestEntityBuilder extends AbstractEntit
     return instantiateTemplateRequestEntity;
   }
 
-  public static InstantiateTemplateRequestEntityBuilder of(final InstantiateTemplateRequestEntity instantiateTemplateRequestEntity) {
+  public static InstantiateTemplateRequestEntityBuilder of(
+      final InstantiateTemplateRequestEntity instantiateTemplateRequestEntity) {
     final InstantiateTemplateRequestEntityBuilder instantiateTemplateRequestEntityBuilder = new InstantiateTemplateRequestEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(instantiateTemplateRequestEntityBuilder, instantiateTemplateRequestEntity);
     instantiateTemplateRequestEntityBuilder.setDisconnectedNodeAcknowledged(instantiateTemplateRequestEntity.isDisconnectedNodeAcknowledged());

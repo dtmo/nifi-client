@@ -39,7 +39,8 @@ public final class ControllerServiceApiDTOBuilder {
   /**
    * The details of the artifact that bundled this service interface.
    */
-  public ControllerServiceApiDTOBuilder setBundle(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
+  public ControllerServiceApiDTOBuilder setBundle(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
     return setBundle(c -> {
       final Closure<BundleDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -69,7 +70,8 @@ public final class ControllerServiceApiDTOBuilder {
     return controllerServiceApiDTO;
   }
 
-  public static ControllerServiceApiDTOBuilder of(final ControllerServiceApiDTO controllerServiceApiDTO) {
+  public static ControllerServiceApiDTOBuilder of(
+      final ControllerServiceApiDTO controllerServiceApiDTO) {
     final ControllerServiceApiDTOBuilder controllerServiceApiDTOBuilder = new ControllerServiceApiDTOBuilder();
     controllerServiceApiDTOBuilder.setBundle(controllerServiceApiDTO.getBundle());
     controllerServiceApiDTOBuilder.setType(controllerServiceApiDTO.getType());

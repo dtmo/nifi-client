@@ -58,7 +58,8 @@ public final class ConnectionDiagnosticsDTOBuilder {
   /**
    * Total number of FlowFiles that exist in the Connection's Active Queue, immediately available to be offered up to a component
    */
-  public ConnectionDiagnosticsDTOBuilder setActiveQueueFlowFileCount(final int activeQueueFlowFileCount) {
+  public ConnectionDiagnosticsDTOBuilder setActiveQueueFlowFileCount(
+      final int activeQueueFlowFileCount) {
     this.activeQueueFlowFileCount = activeQueueFlowFileCount;
     return this;
   }
@@ -73,7 +74,8 @@ public final class ConnectionDiagnosticsDTOBuilder {
   /**
    * Whether or not all of the FlowFiles in the Active Queue are penalized
    */
-  public ConnectionDiagnosticsDTOBuilder setAllActiveQueueFlowFilesPenalized(final Boolean allActiveQueueFlowFilesPenalized) {
+  public ConnectionDiagnosticsDTOBuilder setAllActiveQueueFlowFilesPenalized(
+      final Boolean allActiveQueueFlowFilesPenalized) {
     this.allActiveQueueFlowFilesPenalized = allActiveQueueFlowFilesPenalized;
     return this;
   }
@@ -88,7 +90,8 @@ public final class ConnectionDiagnosticsDTOBuilder {
   /**
    * Whether or not any of the FlowFiles in the Active Queue are penalized
    */
-  public ConnectionDiagnosticsDTOBuilder setAnyActiveQueueFlowFilesPenalized(final Boolean anyActiveQueueFlowFilesPenalized) {
+  public ConnectionDiagnosticsDTOBuilder setAnyActiveQueueFlowFilesPenalized(
+      final Boolean anyActiveQueueFlowFilesPenalized) {
     this.anyActiveQueueFlowFilesPenalized = anyActiveQueueFlowFilesPenalized;
     return this;
   }
@@ -111,7 +114,8 @@ public final class ConnectionDiagnosticsDTOBuilder {
   /**
    * Information about the Connection
    */
-  public ConnectionDiagnosticsDTOBuilder setConnection(final Consumer<ConnectionDTOBuilder> configurator) {
+  public ConnectionDiagnosticsDTOBuilder setConnection(
+      final Consumer<ConnectionDTOBuilder> configurator) {
     final ConnectionDTOBuilder builder = (connection != null ? ConnectionDTOBuilder.of(connection) : new ConnectionDTOBuilder());
     configurator.accept(builder);
     return setConnection(builder.build());
@@ -120,7 +124,8 @@ public final class ConnectionDiagnosticsDTOBuilder {
   /**
    * Information about the Connection
    */
-  public ConnectionDiagnosticsDTOBuilder setConnection(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure) {
+  public ConnectionDiagnosticsDTOBuilder setConnection(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure) {
     return setConnection(c -> {
       final Closure<ConnectionDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -250,7 +255,8 @@ public final class ConnectionDiagnosticsDTOBuilder {
     return connectionDiagnosticsDTO;
   }
 
-  public static ConnectionDiagnosticsDTOBuilder of(final ConnectionDiagnosticsDTO connectionDiagnosticsDTO) {
+  public static ConnectionDiagnosticsDTOBuilder of(
+      final ConnectionDiagnosticsDTO connectionDiagnosticsDTO) {
     final ConnectionDiagnosticsDTOBuilder connectionDiagnosticsDTOBuilder = new ConnectionDiagnosticsDTOBuilder();
     connectionDiagnosticsDTOBuilder.setActiveQueueByteCount(connectionDiagnosticsDTO.getActiveQueueByteCount());
     connectionDiagnosticsDTOBuilder.setActiveQueueFlowFileCount(connectionDiagnosticsDTO.getActiveQueueFlowFileCount());

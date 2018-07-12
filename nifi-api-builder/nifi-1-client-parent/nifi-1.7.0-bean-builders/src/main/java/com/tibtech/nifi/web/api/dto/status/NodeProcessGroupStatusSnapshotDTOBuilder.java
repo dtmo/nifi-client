@@ -72,7 +72,8 @@ public final class NodeProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The process group status snapshot from the node.
    */
-  public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final ProcessGroupStatusSnapshotDTO statusSnapshot) {
+  public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(
+      final ProcessGroupStatusSnapshotDTO statusSnapshot) {
     this.statusSnapshot = statusSnapshot;
     return this;
   }
@@ -80,7 +81,8 @@ public final class NodeProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The process group status snapshot from the node.
    */
-  public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<ProcessGroupStatusSnapshotDTOBuilder> configurator) {
+  public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(
+      final Consumer<ProcessGroupStatusSnapshotDTOBuilder> configurator) {
     final ProcessGroupStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? ProcessGroupStatusSnapshotDTOBuilder.of(statusSnapshot) : new ProcessGroupStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setStatusSnapshot(builder.build());
@@ -89,7 +91,8 @@ public final class NodeProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The process group status snapshot from the node.
    */
-  public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupStatusSnapshotDTOBuilder.class) final Closure<ProcessGroupStatusSnapshotDTOBuilder> closure) {
+  public NodeProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupStatusSnapshotDTOBuilder.class) final Closure<ProcessGroupStatusSnapshotDTOBuilder> closure) {
     return setStatusSnapshot(c -> {
       final Closure<ProcessGroupStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -106,7 +109,8 @@ public final class NodeProcessGroupStatusSnapshotDTOBuilder {
     return nodeProcessGroupStatusSnapshotDTO;
   }
 
-  public static NodeProcessGroupStatusSnapshotDTOBuilder of(final NodeProcessGroupStatusSnapshotDTO nodeProcessGroupStatusSnapshotDTO) {
+  public static NodeProcessGroupStatusSnapshotDTOBuilder of(
+      final NodeProcessGroupStatusSnapshotDTO nodeProcessGroupStatusSnapshotDTO) {
     final NodeProcessGroupStatusSnapshotDTOBuilder nodeProcessGroupStatusSnapshotDTOBuilder = new NodeProcessGroupStatusSnapshotDTOBuilder();
     nodeProcessGroupStatusSnapshotDTOBuilder.setAddress(nodeProcessGroupStatusSnapshotDTO.getAddress());
     nodeProcessGroupStatusSnapshotDTOBuilder.setApiPort(nodeProcessGroupStatusSnapshotDTO.getApiPort());

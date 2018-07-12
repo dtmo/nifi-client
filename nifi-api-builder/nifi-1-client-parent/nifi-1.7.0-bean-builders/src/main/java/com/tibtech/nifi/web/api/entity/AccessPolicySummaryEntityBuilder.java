@@ -22,7 +22,8 @@ public final class AccessPolicySummaryEntityBuilder extends AbstractComponentEnt
     return accessPolicySummaryEntity;
   }
 
-  public static AccessPolicySummaryEntityBuilder of(final AccessPolicySummaryEntity accessPolicySummaryEntity) {
+  public static AccessPolicySummaryEntityBuilder of(
+      final AccessPolicySummaryEntity accessPolicySummaryEntity) {
     final AccessPolicySummaryEntityBuilder accessPolicySummaryEntityBuilder = new AccessPolicySummaryEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(accessPolicySummaryEntityBuilder, accessPolicySummaryEntity);
     accessPolicySummaryEntityBuilder.setComponent(accessPolicySummaryEntity.getComponent());

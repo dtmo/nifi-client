@@ -11,7 +11,8 @@ public final class ReportingTasksEntityBuilder extends AbstractEntityBuilder<Rep
     return reportingTasks;
   }
 
-  public ReportingTasksEntityBuilder setReportingTasks(final Set<ReportingTaskEntity> reportingTasks) {
+  public ReportingTasksEntityBuilder setReportingTasks(
+      final Set<ReportingTaskEntity> reportingTasks) {
     this.reportingTasks = reportingTasks;
     return this;
   }

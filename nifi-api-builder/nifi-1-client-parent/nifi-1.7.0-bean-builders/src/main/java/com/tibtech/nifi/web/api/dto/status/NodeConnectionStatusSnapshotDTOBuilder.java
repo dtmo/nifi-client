@@ -72,7 +72,8 @@ public final class NodeConnectionStatusSnapshotDTOBuilder {
   /**
    * The connection status snapshot from the node.
    */
-  public NodeConnectionStatusSnapshotDTOBuilder setStatusSnapshot(final ConnectionStatusSnapshotDTO statusSnapshot) {
+  public NodeConnectionStatusSnapshotDTOBuilder setStatusSnapshot(
+      final ConnectionStatusSnapshotDTO statusSnapshot) {
     this.statusSnapshot = statusSnapshot;
     return this;
   }
@@ -80,7 +81,8 @@ public final class NodeConnectionStatusSnapshotDTOBuilder {
   /**
    * The connection status snapshot from the node.
    */
-  public NodeConnectionStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<ConnectionStatusSnapshotDTOBuilder> configurator) {
+  public NodeConnectionStatusSnapshotDTOBuilder setStatusSnapshot(
+      final Consumer<ConnectionStatusSnapshotDTOBuilder> configurator) {
     final ConnectionStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? ConnectionStatusSnapshotDTOBuilder.of(statusSnapshot) : new ConnectionStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setStatusSnapshot(builder.build());
@@ -89,7 +91,8 @@ public final class NodeConnectionStatusSnapshotDTOBuilder {
   /**
    * The connection status snapshot from the node.
    */
-  public NodeConnectionStatusSnapshotDTOBuilder setStatusSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionStatusSnapshotDTOBuilder.class) final Closure<ConnectionStatusSnapshotDTOBuilder> closure) {
+  public NodeConnectionStatusSnapshotDTOBuilder setStatusSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionStatusSnapshotDTOBuilder.class) final Closure<ConnectionStatusSnapshotDTOBuilder> closure) {
     return setStatusSnapshot(c -> {
       final Closure<ConnectionStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -106,7 +109,8 @@ public final class NodeConnectionStatusSnapshotDTOBuilder {
     return nodeConnectionStatusSnapshotDTO;
   }
 
-  public static NodeConnectionStatusSnapshotDTOBuilder of(final NodeConnectionStatusSnapshotDTO nodeConnectionStatusSnapshotDTO) {
+  public static NodeConnectionStatusSnapshotDTOBuilder of(
+      final NodeConnectionStatusSnapshotDTO nodeConnectionStatusSnapshotDTO) {
     final NodeConnectionStatusSnapshotDTOBuilder nodeConnectionStatusSnapshotDTOBuilder = new NodeConnectionStatusSnapshotDTOBuilder();
     nodeConnectionStatusSnapshotDTOBuilder.setAddress(nodeConnectionStatusSnapshotDTO.getAddress());
     nodeConnectionStatusSnapshotDTOBuilder.setApiPort(nodeConnectionStatusSnapshotDTO.getApiPort());

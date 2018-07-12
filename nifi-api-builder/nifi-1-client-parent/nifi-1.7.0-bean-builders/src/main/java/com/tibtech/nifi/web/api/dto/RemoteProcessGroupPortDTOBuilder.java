@@ -54,7 +54,8 @@ public final class RemoteProcessGroupPortDTOBuilder {
   /**
    * The batch settings for data transmission.
    */
-  public RemoteProcessGroupPortDTOBuilder setBatchSettings(final Consumer<BatchSettingsDTOBuilder> configurator) {
+  public RemoteProcessGroupPortDTOBuilder setBatchSettings(
+      final Consumer<BatchSettingsDTOBuilder> configurator) {
     final BatchSettingsDTOBuilder builder = (batchSettings != null ? BatchSettingsDTOBuilder.of(batchSettings) : new BatchSettingsDTOBuilder());
     configurator.accept(builder);
     return setBatchSettings(builder.build());
@@ -63,7 +64,8 @@ public final class RemoteProcessGroupPortDTOBuilder {
   /**
    * The batch settings for data transmission.
    */
-  public RemoteProcessGroupPortDTOBuilder setBatchSettings(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BatchSettingsDTOBuilder.class) final Closure<BatchSettingsDTOBuilder> closure) {
+  public RemoteProcessGroupPortDTOBuilder setBatchSettings(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BatchSettingsDTOBuilder.class) final Closure<BatchSettingsDTOBuilder> closure) {
     return setBatchSettings(c -> {
       final Closure<BatchSettingsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -96,7 +98,8 @@ public final class RemoteProcessGroupPortDTOBuilder {
   /**
    * The number of task that may transmit flowfiles to the target port concurrently.
    */
-  public RemoteProcessGroupPortDTOBuilder setConcurrentlySchedulableTaskCount(final Integer concurrentlySchedulableTaskCount) {
+  public RemoteProcessGroupPortDTOBuilder setConcurrentlySchedulableTaskCount(
+      final Integer concurrentlySchedulableTaskCount) {
     this.concurrentlySchedulableTaskCount = concurrentlySchedulableTaskCount;
     return this;
   }
@@ -246,7 +249,8 @@ public final class RemoteProcessGroupPortDTOBuilder {
   /**
    * The ID of the corresponding component that is under version control
    */
-  public RemoteProcessGroupPortDTOBuilder setVersionedComponentId(final String versionedComponentId) {
+  public RemoteProcessGroupPortDTOBuilder setVersionedComponentId(
+      final String versionedComponentId) {
     this.versionedComponentId = versionedComponentId;
     return this;
   }
@@ -269,7 +273,8 @@ public final class RemoteProcessGroupPortDTOBuilder {
     return remoteProcessGroupPortDTO;
   }
 
-  public static RemoteProcessGroupPortDTOBuilder of(final RemoteProcessGroupPortDTO remoteProcessGroupPortDTO) {
+  public static RemoteProcessGroupPortDTOBuilder of(
+      final RemoteProcessGroupPortDTO remoteProcessGroupPortDTO) {
     final RemoteProcessGroupPortDTOBuilder remoteProcessGroupPortDTOBuilder = new RemoteProcessGroupPortDTOBuilder();
     remoteProcessGroupPortDTOBuilder.setBatchSettings(remoteProcessGroupPortDTO.getBatchSettings());
     remoteProcessGroupPortDTOBuilder.setComments(remoteProcessGroupPortDTO.getComments());

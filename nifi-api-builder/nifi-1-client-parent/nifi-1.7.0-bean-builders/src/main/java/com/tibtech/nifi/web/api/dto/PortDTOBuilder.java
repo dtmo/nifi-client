@@ -51,7 +51,8 @@ public final class PortDTOBuilder extends AbstractComponentDTOBuilder<PortDTOBui
   /**
    * The number of tasks that should be concurrently scheduled for the port.
    */
-  public PortDTOBuilder setConcurrentlySchedulableTaskCount(final Integer concurrentlySchedulableTaskCount) {
+  public PortDTOBuilder setConcurrentlySchedulableTaskCount(
+      final Integer concurrentlySchedulableTaskCount) {
     this.concurrentlySchedulableTaskCount = concurrentlySchedulableTaskCount;
     return this;
   }

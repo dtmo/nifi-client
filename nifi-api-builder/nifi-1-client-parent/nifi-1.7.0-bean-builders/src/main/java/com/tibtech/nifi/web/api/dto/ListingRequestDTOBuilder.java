@@ -75,7 +75,8 @@ public final class ListingRequestDTOBuilder {
   /**
    * The FlowFile summaries. The summaries will be populated once the request has completed.
    */
-  public ListingRequestDTOBuilder setFlowFileSummaries(final List<FlowFileSummaryDTO> flowFileSummaries) {
+  public ListingRequestDTOBuilder setFlowFileSummaries(
+      final List<FlowFileSummaryDTO> flowFileSummaries) {
     this.flowFileSummaries = flowFileSummaries;
     return this;
   }
@@ -167,7 +168,8 @@ public final class ListingRequestDTOBuilder {
   /**
    * The size of the queue
    */
-  public ListingRequestDTOBuilder setQueueSize(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueueSizeDTOBuilder.class) final Closure<QueueSizeDTOBuilder> closure) {
+  public ListingRequestDTOBuilder setQueueSize(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = QueueSizeDTOBuilder.class) final Closure<QueueSizeDTOBuilder> closure) {
     return setQueueSize(c -> {
       final Closure<QueueSizeDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

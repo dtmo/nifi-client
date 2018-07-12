@@ -27,7 +27,8 @@ public final class AccessConfigurationDTOBuilder {
     return accessConfigurationDTO;
   }
 
-  public static AccessConfigurationDTOBuilder of(final AccessConfigurationDTO accessConfigurationDTO) {
+  public static AccessConfigurationDTOBuilder of(
+      final AccessConfigurationDTO accessConfigurationDTO) {
     final AccessConfigurationDTOBuilder accessConfigurationDTOBuilder = new AccessConfigurationDTOBuilder();
     accessConfigurationDTOBuilder.setSupportsLogin(accessConfigurationDTO.getSupportsLogin());
     return accessConfigurationDTOBuilder;

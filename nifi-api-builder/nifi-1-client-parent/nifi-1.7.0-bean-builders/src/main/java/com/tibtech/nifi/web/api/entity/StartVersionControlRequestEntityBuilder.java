@@ -22,7 +22,8 @@ public final class StartVersionControlRequestEntityBuilder extends AbstractEntit
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public StartVersionControlRequestEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public StartVersionControlRequestEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -37,7 +38,8 @@ public final class StartVersionControlRequestEntityBuilder extends AbstractEntit
   /**
    * The Revision of the Process Group under Version Control
    */
-  public StartVersionControlRequestEntityBuilder setProcessGroupRevision(final RevisionDTO processGroupRevision) {
+  public StartVersionControlRequestEntityBuilder setProcessGroupRevision(
+      final RevisionDTO processGroupRevision) {
     this.processGroupRevision = processGroupRevision;
     return this;
   }
@@ -52,7 +54,8 @@ public final class StartVersionControlRequestEntityBuilder extends AbstractEntit
   /**
    * The versioned flow
    */
-  public StartVersionControlRequestEntityBuilder setVersionedFlow(final VersionedFlowDTO versionedFlow) {
+  public StartVersionControlRequestEntityBuilder setVersionedFlow(
+      final VersionedFlowDTO versionedFlow) {
     this.versionedFlow = versionedFlow;
     return this;
   }
@@ -66,7 +69,8 @@ public final class StartVersionControlRequestEntityBuilder extends AbstractEntit
     return startVersionControlRequestEntity;
   }
 
-  public static StartVersionControlRequestEntityBuilder of(final StartVersionControlRequestEntity startVersionControlRequestEntity) {
+  public static StartVersionControlRequestEntityBuilder of(
+      final StartVersionControlRequestEntity startVersionControlRequestEntity) {
     final StartVersionControlRequestEntityBuilder startVersionControlRequestEntityBuilder = new StartVersionControlRequestEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(startVersionControlRequestEntityBuilder, startVersionControlRequestEntity);
     startVersionControlRequestEntityBuilder.setDisconnectedNodeAcknowledged(startVersionControlRequestEntity.isDisconnectedNodeAcknowledged());

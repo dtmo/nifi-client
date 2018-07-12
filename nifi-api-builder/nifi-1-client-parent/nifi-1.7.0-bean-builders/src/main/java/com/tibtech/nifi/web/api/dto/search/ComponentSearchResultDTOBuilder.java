@@ -99,7 +99,8 @@ public final class ComponentSearchResultDTOBuilder {
   /**
    * The parent group of the component that matched the search.
    */
-  public ComponentSearchResultDTOBuilder setParentGroup(final Consumer<SearchResultGroupDTOBuilder> configurator) {
+  public ComponentSearchResultDTOBuilder setParentGroup(
+      final Consumer<SearchResultGroupDTOBuilder> configurator) {
     final SearchResultGroupDTOBuilder builder = (parentGroup != null ? SearchResultGroupDTOBuilder.of(parentGroup) : new SearchResultGroupDTOBuilder());
     configurator.accept(builder);
     return setParentGroup(builder.build());
@@ -108,7 +109,8 @@ public final class ComponentSearchResultDTOBuilder {
   /**
    * The parent group of the component that matched the search.
    */
-  public ComponentSearchResultDTOBuilder setParentGroup(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SearchResultGroupDTOBuilder.class) final Closure<SearchResultGroupDTOBuilder> closure) {
+  public ComponentSearchResultDTOBuilder setParentGroup(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SearchResultGroupDTOBuilder.class) final Closure<SearchResultGroupDTOBuilder> closure) {
     return setParentGroup(c -> {
       final Closure<SearchResultGroupDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -126,7 +128,8 @@ public final class ComponentSearchResultDTOBuilder {
   /**
    * The nearest versioned ancestor group of the component that matched the search.
    */
-  public ComponentSearchResultDTOBuilder setVersionedGroup(final SearchResultGroupDTO versionedGroup) {
+  public ComponentSearchResultDTOBuilder setVersionedGroup(
+      final SearchResultGroupDTO versionedGroup) {
     this.versionedGroup = versionedGroup;
     return this;
   }
@@ -134,7 +137,8 @@ public final class ComponentSearchResultDTOBuilder {
   /**
    * The nearest versioned ancestor group of the component that matched the search.
    */
-  public ComponentSearchResultDTOBuilder setVersionedGroup(final Consumer<SearchResultGroupDTOBuilder> configurator) {
+  public ComponentSearchResultDTOBuilder setVersionedGroup(
+      final Consumer<SearchResultGroupDTOBuilder> configurator) {
     final SearchResultGroupDTOBuilder builder = (versionedGroup != null ? SearchResultGroupDTOBuilder.of(versionedGroup) : new SearchResultGroupDTOBuilder());
     configurator.accept(builder);
     return setVersionedGroup(builder.build());
@@ -143,7 +147,8 @@ public final class ComponentSearchResultDTOBuilder {
   /**
    * The nearest versioned ancestor group of the component that matched the search.
    */
-  public ComponentSearchResultDTOBuilder setVersionedGroup(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SearchResultGroupDTOBuilder.class) final Closure<SearchResultGroupDTOBuilder> closure) {
+  public ComponentSearchResultDTOBuilder setVersionedGroup(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SearchResultGroupDTOBuilder.class) final Closure<SearchResultGroupDTOBuilder> closure) {
     return setVersionedGroup(c -> {
       final Closure<SearchResultGroupDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -162,7 +167,8 @@ public final class ComponentSearchResultDTOBuilder {
     return componentSearchResultDTO;
   }
 
-  public static ComponentSearchResultDTOBuilder of(final ComponentSearchResultDTO componentSearchResultDTO) {
+  public static ComponentSearchResultDTOBuilder of(
+      final ComponentSearchResultDTO componentSearchResultDTO) {
     final ComponentSearchResultDTOBuilder componentSearchResultDTOBuilder = new ComponentSearchResultDTOBuilder();
     componentSearchResultDTOBuilder.setGroupId(componentSearchResultDTO.getGroupId());
     componentSearchResultDTOBuilder.setId(componentSearchResultDTO.getId());

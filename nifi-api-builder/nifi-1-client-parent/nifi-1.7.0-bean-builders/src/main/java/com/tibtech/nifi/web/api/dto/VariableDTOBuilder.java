@@ -24,7 +24,8 @@ public final class VariableDTOBuilder {
   /**
    * A set of all components that will be affected if the value of this variable is changed
    */
-  public VariableDTOBuilder setAffectedComponents(final Set<AffectedComponentEntity> affectedComponents) {
+  public VariableDTOBuilder setAffectedComponents(
+      final Set<AffectedComponentEntity> affectedComponents) {
     this.affectedComponents = affectedComponents;
     return this;
   }

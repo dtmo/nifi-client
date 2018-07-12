@@ -135,7 +135,8 @@ public final class VersionInfoDTOBuilder {
     return versionInfoDTO;
   }
 
-  public static VersionInfoDTOBuilder of(final JVMDiagnosticsSnapshotDTO.VersionInfoDTO versionInfoDTO) {
+  public static VersionInfoDTOBuilder of(
+      final JVMDiagnosticsSnapshotDTO.VersionInfoDTO versionInfoDTO) {
     final VersionInfoDTOBuilder versionInfoDTOBuilder = new VersionInfoDTOBuilder();
     versionInfoDTOBuilder.setJavaVendor(versionInfoDTO.getJavaVendor());
     versionInfoDTOBuilder.setJavaVersion(versionInfoDTO.getJavaVersion());

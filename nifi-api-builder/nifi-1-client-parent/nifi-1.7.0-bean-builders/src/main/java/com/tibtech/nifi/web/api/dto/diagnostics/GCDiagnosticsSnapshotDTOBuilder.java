@@ -64,7 +64,8 @@ public final class GCDiagnosticsSnapshotDTOBuilder {
     return gCDiagnosticsSnapshotDTO;
   }
 
-  public static GCDiagnosticsSnapshotDTOBuilder of(final GCDiagnosticsSnapshotDTO gCDiagnosticsSnapshotDTO) {
+  public static GCDiagnosticsSnapshotDTOBuilder of(
+      final GCDiagnosticsSnapshotDTO gCDiagnosticsSnapshotDTO) {
     final GCDiagnosticsSnapshotDTOBuilder gCDiagnosticsSnapshotDTOBuilder = new GCDiagnosticsSnapshotDTOBuilder();
     gCDiagnosticsSnapshotDTOBuilder.setCollectionCount(gCDiagnosticsSnapshotDTO.getCollectionCount());
     gCDiagnosticsSnapshotDTOBuilder.setCollectionMillis(gCDiagnosticsSnapshotDTO.getCollectionMillis());

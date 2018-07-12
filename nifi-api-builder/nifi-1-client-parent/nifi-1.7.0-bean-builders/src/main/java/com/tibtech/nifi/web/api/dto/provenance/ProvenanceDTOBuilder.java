@@ -115,7 +115,8 @@ public final class ProvenanceDTOBuilder {
   /**
    * The provenance request.
    */
-  public ProvenanceDTOBuilder setRequest(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProvenanceRequestDTOBuilder.class) final Closure<ProvenanceRequestDTOBuilder> closure) {
+  public ProvenanceDTOBuilder setRequest(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProvenanceRequestDTOBuilder.class) final Closure<ProvenanceRequestDTOBuilder> closure) {
     return setRequest(c -> {
       final Closure<ProvenanceRequestDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -150,7 +151,8 @@ public final class ProvenanceDTOBuilder {
   /**
    * The provenance results.
    */
-  public ProvenanceDTOBuilder setResults(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProvenanceResultsDTOBuilder.class) final Closure<ProvenanceResultsDTOBuilder> closure) {
+  public ProvenanceDTOBuilder setResults(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProvenanceResultsDTOBuilder.class) final Closure<ProvenanceResultsDTOBuilder> closure) {
     return setResults(c -> {
       final Closure<ProvenanceResultsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

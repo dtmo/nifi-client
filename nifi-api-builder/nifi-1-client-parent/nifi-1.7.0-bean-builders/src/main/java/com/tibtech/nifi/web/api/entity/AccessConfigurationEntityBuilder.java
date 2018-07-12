@@ -22,7 +22,8 @@ public final class AccessConfigurationEntityBuilder extends AbstractEntityBuilde
     return accessConfigurationEntity;
   }
 
-  public static AccessConfigurationEntityBuilder of(final AccessConfigurationEntity accessConfigurationEntity) {
+  public static AccessConfigurationEntityBuilder of(
+      final AccessConfigurationEntity accessConfigurationEntity) {
     final AccessConfigurationEntityBuilder accessConfigurationEntityBuilder = new AccessConfigurationEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(accessConfigurationEntityBuilder, accessConfigurationEntity);
     accessConfigurationEntityBuilder.setConfig(accessConfigurationEntity.getConfig());

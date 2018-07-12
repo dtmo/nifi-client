@@ -72,7 +72,8 @@ public final class NodeProcessorStatusSnapshotDTOBuilder {
   /**
    * The processor status snapshot from the node.
    */
-  public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(final ProcessorStatusSnapshotDTO statusSnapshot) {
+  public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(
+      final ProcessorStatusSnapshotDTO statusSnapshot) {
     this.statusSnapshot = statusSnapshot;
     return this;
   }
@@ -80,7 +81,8 @@ public final class NodeProcessorStatusSnapshotDTOBuilder {
   /**
    * The processor status snapshot from the node.
    */
-  public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<ProcessorStatusSnapshotDTOBuilder> configurator) {
+  public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(
+      final Consumer<ProcessorStatusSnapshotDTOBuilder> configurator) {
     final ProcessorStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? ProcessorStatusSnapshotDTOBuilder.of(statusSnapshot) : new ProcessorStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setStatusSnapshot(builder.build());
@@ -89,7 +91,8 @@ public final class NodeProcessorStatusSnapshotDTOBuilder {
   /**
    * The processor status snapshot from the node.
    */
-  public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorStatusSnapshotDTOBuilder.class) final Closure<ProcessorStatusSnapshotDTOBuilder> closure) {
+  public NodeProcessorStatusSnapshotDTOBuilder setStatusSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorStatusSnapshotDTOBuilder.class) final Closure<ProcessorStatusSnapshotDTOBuilder> closure) {
     return setStatusSnapshot(c -> {
       final Closure<ProcessorStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -106,7 +109,8 @@ public final class NodeProcessorStatusSnapshotDTOBuilder {
     return nodeProcessorStatusSnapshotDTO;
   }
 
-  public static NodeProcessorStatusSnapshotDTOBuilder of(final NodeProcessorStatusSnapshotDTO nodeProcessorStatusSnapshotDTO) {
+  public static NodeProcessorStatusSnapshotDTOBuilder of(
+      final NodeProcessorStatusSnapshotDTO nodeProcessorStatusSnapshotDTO) {
     final NodeProcessorStatusSnapshotDTOBuilder nodeProcessorStatusSnapshotDTOBuilder = new NodeProcessorStatusSnapshotDTOBuilder();
     nodeProcessorStatusSnapshotDTOBuilder.setAddress(nodeProcessorStatusSnapshotDTO.getAddress());
     nodeProcessorStatusSnapshotDTOBuilder.setApiPort(nodeProcessorStatusSnapshotDTO.getApiPort());

@@ -28,7 +28,8 @@ public final class RemoteProcessGroupDetailsDTOBuilder extends AbstractComponent
     return remoteProcessGroupDetailsDTO;
   }
 
-  public static RemoteProcessGroupDetailsDTOBuilder of(final RemoteProcessGroupDetailsDTO remoteProcessGroupDetailsDTO) {
+  public static RemoteProcessGroupDetailsDTOBuilder of(
+      final RemoteProcessGroupDetailsDTO remoteProcessGroupDetailsDTO) {
     final RemoteProcessGroupDetailsDTOBuilder remoteProcessGroupDetailsDTOBuilder = new RemoteProcessGroupDetailsDTOBuilder();
     AbstractComponentDetailsDTOBuilder.setBuilderValues(remoteProcessGroupDetailsDTOBuilder, remoteProcessGroupDetailsDTO);
     remoteProcessGroupDetailsDTOBuilder.setUri(remoteProcessGroupDetailsDTO.getUri());

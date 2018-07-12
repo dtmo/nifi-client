@@ -40,7 +40,8 @@ public final class ProcessGroupStatusSnapshotEntityBuilder extends AbstractEntit
     return processGroupStatusSnapshot;
   }
 
-  public ProcessGroupStatusSnapshotEntityBuilder setProcessGroupStatusSnapshot(final ProcessGroupStatusSnapshotDTO processGroupStatusSnapshot) {
+  public ProcessGroupStatusSnapshotEntityBuilder setProcessGroupStatusSnapshot(
+      final ProcessGroupStatusSnapshotDTO processGroupStatusSnapshot) {
     this.processGroupStatusSnapshot = processGroupStatusSnapshot;
     return this;
   }
@@ -54,7 +55,8 @@ public final class ProcessGroupStatusSnapshotEntityBuilder extends AbstractEntit
     return processGroupStatusSnapshotEntity;
   }
 
-  public static ProcessGroupStatusSnapshotEntityBuilder of(final ProcessGroupStatusSnapshotEntity processGroupStatusSnapshotEntity) {
+  public static ProcessGroupStatusSnapshotEntityBuilder of(
+      final ProcessGroupStatusSnapshotEntity processGroupStatusSnapshotEntity) {
     final ProcessGroupStatusSnapshotEntityBuilder processGroupStatusSnapshotEntityBuilder = new ProcessGroupStatusSnapshotEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(processGroupStatusSnapshotEntityBuilder, processGroupStatusSnapshotEntity);
     processGroupStatusSnapshotEntityBuilder.setCanRead(processGroupStatusSnapshotEntity.getCanRead());

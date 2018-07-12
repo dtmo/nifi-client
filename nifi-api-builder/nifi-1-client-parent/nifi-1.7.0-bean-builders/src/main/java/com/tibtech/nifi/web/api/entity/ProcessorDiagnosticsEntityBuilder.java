@@ -9,7 +9,8 @@ public final class ProcessorDiagnosticsEntityBuilder extends AbstractComponentEn
     return processorDiagnosticsEntity;
   }
 
-  public static ProcessorDiagnosticsEntityBuilder of(final ProcessorDiagnosticsEntity processorDiagnosticsEntity) {
+  public static ProcessorDiagnosticsEntityBuilder of(
+      final ProcessorDiagnosticsEntity processorDiagnosticsEntity) {
     final ProcessorDiagnosticsEntityBuilder processorDiagnosticsEntityBuilder = new ProcessorDiagnosticsEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(processorDiagnosticsEntityBuilder, processorDiagnosticsEntity);
     return processorDiagnosticsEntityBuilder;

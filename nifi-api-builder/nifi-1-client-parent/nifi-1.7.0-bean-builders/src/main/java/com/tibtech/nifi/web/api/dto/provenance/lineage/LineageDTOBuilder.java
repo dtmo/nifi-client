@@ -115,7 +115,8 @@ public final class LineageDTOBuilder {
   /**
    * The initial lineage result.
    */
-  public LineageDTOBuilder setRequest(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = LineageRequestDTOBuilder.class) final Closure<LineageRequestDTOBuilder> closure) {
+  public LineageDTOBuilder setRequest(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = LineageRequestDTOBuilder.class) final Closure<LineageRequestDTOBuilder> closure) {
     return setRequest(c -> {
       final Closure<LineageRequestDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -150,7 +151,8 @@ public final class LineageDTOBuilder {
   /**
    * The results of the lineage query.
    */
-  public LineageDTOBuilder setResults(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = LineageResultsDTOBuilder.class) final Closure<LineageResultsDTOBuilder> closure) {
+  public LineageDTOBuilder setResults(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = LineageResultsDTOBuilder.class) final Closure<LineageResultsDTOBuilder> closure) {
     return setResults(c -> {
       final Closure<LineageResultsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

@@ -22,7 +22,8 @@ public final class ConnectionStatusEntityBuilder extends AbstractEntityBuilder<C
     return connectionStatus;
   }
 
-  public ConnectionStatusEntityBuilder setConnectionStatus(final ConnectionStatusDTO connectionStatus) {
+  public ConnectionStatusEntityBuilder setConnectionStatus(
+      final ConnectionStatusDTO connectionStatus) {
     this.connectionStatus = connectionStatus;
     return this;
   }
@@ -35,7 +36,8 @@ public final class ConnectionStatusEntityBuilder extends AbstractEntityBuilder<C
     return connectionStatusEntity;
   }
 
-  public static ConnectionStatusEntityBuilder of(final ConnectionStatusEntity connectionStatusEntity) {
+  public static ConnectionStatusEntityBuilder of(
+      final ConnectionStatusEntity connectionStatusEntity) {
     final ConnectionStatusEntityBuilder connectionStatusEntityBuilder = new ConnectionStatusEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(connectionStatusEntityBuilder, connectionStatusEntity);
     connectionStatusEntityBuilder.setCanRead(connectionStatusEntity.getCanRead());

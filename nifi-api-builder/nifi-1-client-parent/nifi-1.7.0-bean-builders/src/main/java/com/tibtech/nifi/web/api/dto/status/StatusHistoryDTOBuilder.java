@@ -30,7 +30,8 @@ public final class StatusHistoryDTOBuilder {
   /**
    * A list of StatusSnapshotDTO objects that provide the actual metric values for the component. If the NiFi instance is clustered, this will represent the aggregate status across all nodes. If the NiFi instance is not clustered, this will represent the status of the entire NiFi instance.
    */
-  public StatusHistoryDTOBuilder setAggregateSnapshots(final List<StatusSnapshotDTO> aggregateSnapshots) {
+  public StatusHistoryDTOBuilder setAggregateSnapshots(
+      final List<StatusSnapshotDTO> aggregateSnapshots) {
     this.aggregateSnapshots = aggregateSnapshots;
     return this;
   }
@@ -45,7 +46,8 @@ public final class StatusHistoryDTOBuilder {
   /**
    * A Map of key/value pairs that describe the component that the status history belongs to
    */
-  public StatusHistoryDTOBuilder setComponentDetails(final LinkedHashMap<String, String> componentDetails) {
+  public StatusHistoryDTOBuilder setComponentDetails(
+      final LinkedHashMap<String, String> componentDetails) {
     this.componentDetails = componentDetails;
     return this;
   }
@@ -60,7 +62,8 @@ public final class StatusHistoryDTOBuilder {
   /**
    * The Descriptors that provide information on each of the metrics provided in the status history
    */
-  public StatusHistoryDTOBuilder setFieldDescriptors(final List<StatusDescriptorDTO> fieldDescriptors) {
+  public StatusHistoryDTOBuilder setFieldDescriptors(
+      final List<StatusDescriptorDTO> fieldDescriptors) {
     this.fieldDescriptors = fieldDescriptors;
     return this;
   }
@@ -90,7 +93,8 @@ public final class StatusHistoryDTOBuilder {
   /**
    * The NodeStatusSnapshotsDTO objects that provide the actual metric values for the component, for each node. If the NiFi instance is not clustered, this value will be null.
    */
-  public StatusHistoryDTOBuilder setNodeSnapshots(final List<NodeStatusSnapshotsDTO> nodeSnapshots) {
+  public StatusHistoryDTOBuilder setNodeSnapshots(
+      final List<NodeStatusSnapshotsDTO> nodeSnapshots) {
     this.nodeSnapshots = nodeSnapshots;
     return this;
   }

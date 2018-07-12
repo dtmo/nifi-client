@@ -10,7 +10,8 @@ public final class ComponentHistoryEntityBuilder extends AbstractEntityBuilder<C
     return componentHistory;
   }
 
-  public ComponentHistoryEntityBuilder setComponentHistory(final ComponentHistoryDTO componentHistory) {
+  public ComponentHistoryEntityBuilder setComponentHistory(
+      final ComponentHistoryDTO componentHistory) {
     this.componentHistory = componentHistory;
     return this;
   }
@@ -22,7 +23,8 @@ public final class ComponentHistoryEntityBuilder extends AbstractEntityBuilder<C
     return componentHistoryEntity;
   }
 
-  public static ComponentHistoryEntityBuilder of(final ComponentHistoryEntity componentHistoryEntity) {
+  public static ComponentHistoryEntityBuilder of(
+      final ComponentHistoryEntity componentHistoryEntity) {
     final ComponentHistoryEntityBuilder componentHistoryEntityBuilder = new ComponentHistoryEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(componentHistoryEntityBuilder, componentHistoryEntity);
     componentHistoryEntityBuilder.setComponentHistory(componentHistoryEntity.getComponentHistory());

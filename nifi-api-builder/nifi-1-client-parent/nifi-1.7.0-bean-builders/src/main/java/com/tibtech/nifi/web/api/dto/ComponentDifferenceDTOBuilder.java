@@ -101,7 +101,8 @@ public final class ComponentDifferenceDTOBuilder {
     return componentDifferenceDTO;
   }
 
-  public static ComponentDifferenceDTOBuilder of(final ComponentDifferenceDTO componentDifferenceDTO) {
+  public static ComponentDifferenceDTOBuilder of(
+      final ComponentDifferenceDTO componentDifferenceDTO) {
     final ComponentDifferenceDTOBuilder componentDifferenceDTOBuilder = new ComponentDifferenceDTOBuilder();
     componentDifferenceDTOBuilder.setComponentId(componentDifferenceDTO.getComponentId());
     componentDifferenceDTOBuilder.setComponentName(componentDifferenceDTO.getComponentName());

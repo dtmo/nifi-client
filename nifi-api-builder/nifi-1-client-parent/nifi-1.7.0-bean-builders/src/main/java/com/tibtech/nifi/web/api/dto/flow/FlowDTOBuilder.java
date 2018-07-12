@@ -142,7 +142,8 @@ public final class FlowDTOBuilder {
   /**
    * The remote process groups in this flow.
    */
-  public FlowDTOBuilder setRemoteProcessGroups(final Set<RemoteProcessGroupEntity> remoteProcessGroups) {
+  public FlowDTOBuilder setRemoteProcessGroups(
+      final Set<RemoteProcessGroupEntity> remoteProcessGroups) {
     this.remoteProcessGroups = remoteProcessGroups;
     return this;
   }

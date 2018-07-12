@@ -10,7 +10,8 @@ public final class PropertyDescriptorEntityBuilder extends AbstractEntityBuilder
     return propertyDescriptor;
   }
 
-  public PropertyDescriptorEntityBuilder setPropertyDescriptor(final PropertyDescriptorDTO propertyDescriptor) {
+  public PropertyDescriptorEntityBuilder setPropertyDescriptor(
+      final PropertyDescriptorDTO propertyDescriptor) {
     this.propertyDescriptor = propertyDescriptor;
     return this;
   }
@@ -22,7 +23,8 @@ public final class PropertyDescriptorEntityBuilder extends AbstractEntityBuilder
     return propertyDescriptorEntity;
   }
 
-  public static PropertyDescriptorEntityBuilder of(final PropertyDescriptorEntity propertyDescriptorEntity) {
+  public static PropertyDescriptorEntityBuilder of(
+      final PropertyDescriptorEntity propertyDescriptorEntity) {
     final PropertyDescriptorEntityBuilder propertyDescriptorEntityBuilder = new PropertyDescriptorEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(propertyDescriptorEntityBuilder, propertyDescriptorEntity);
     propertyDescriptorEntityBuilder.setPropertyDescriptor(propertyDescriptorEntity.getPropertyDescriptor());

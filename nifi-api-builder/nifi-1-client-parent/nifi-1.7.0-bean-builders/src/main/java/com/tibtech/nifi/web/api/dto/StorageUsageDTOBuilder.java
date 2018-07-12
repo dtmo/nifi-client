@@ -154,7 +154,8 @@ public final class StorageUsageDTOBuilder {
     return storageUsageDTO;
   }
 
-  public static StorageUsageDTOBuilder of(final SystemDiagnosticsSnapshotDTO.StorageUsageDTO storageUsageDTO) {
+  public static StorageUsageDTOBuilder of(
+      final SystemDiagnosticsSnapshotDTO.StorageUsageDTO storageUsageDTO) {
     final StorageUsageDTOBuilder storageUsageDTOBuilder = new StorageUsageDTOBuilder();
     storageUsageDTOBuilder.setFreeSpace(storageUsageDTO.getFreeSpace());
     storageUsageDTOBuilder.setFreeSpaceBytes(storageUsageDTO.getFreeSpaceBytes());

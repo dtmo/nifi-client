@@ -41,7 +41,8 @@ public final class ConnectionStatusDTOBuilder {
   /**
    * The status snapshot that represents the aggregate stats of the cluster
    */
-  public ConnectionStatusDTOBuilder setAggregateSnapshot(final ConnectionStatusSnapshotDTO aggregateSnapshot) {
+  public ConnectionStatusDTOBuilder setAggregateSnapshot(
+      final ConnectionStatusSnapshotDTO aggregateSnapshot) {
     this.aggregateSnapshot = aggregateSnapshot;
     return this;
   }
@@ -49,7 +50,8 @@ public final class ConnectionStatusDTOBuilder {
   /**
    * The status snapshot that represents the aggregate stats of the cluster
    */
-  public ConnectionStatusDTOBuilder setAggregateSnapshot(final Consumer<ConnectionStatusSnapshotDTOBuilder> configurator) {
+  public ConnectionStatusDTOBuilder setAggregateSnapshot(
+      final Consumer<ConnectionStatusSnapshotDTOBuilder> configurator) {
     final ConnectionStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? ConnectionStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ConnectionStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setAggregateSnapshot(builder.build());
@@ -58,7 +60,8 @@ public final class ConnectionStatusDTOBuilder {
   /**
    * The status snapshot that represents the aggregate stats of the cluster
    */
-  public ConnectionStatusDTOBuilder setAggregateSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionStatusSnapshotDTOBuilder.class) final Closure<ConnectionStatusSnapshotDTOBuilder> closure) {
+  public ConnectionStatusDTOBuilder setAggregateSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionStatusSnapshotDTOBuilder.class) final Closure<ConnectionStatusSnapshotDTOBuilder> closure) {
     return setAggregateSnapshot(c -> {
       final Closure<ConnectionStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -151,7 +154,8 @@ public final class ConnectionStatusDTOBuilder {
   /**
    * A list of status snapshots for each node
    */
-  public ConnectionStatusDTOBuilder setNodeSnapshots(final List<NodeConnectionStatusSnapshotDTO> nodeSnapshots) {
+  public ConnectionStatusDTOBuilder setNodeSnapshots(
+      final List<NodeConnectionStatusSnapshotDTO> nodeSnapshots) {
     this.nodeSnapshots = nodeSnapshots;
     return this;
   }

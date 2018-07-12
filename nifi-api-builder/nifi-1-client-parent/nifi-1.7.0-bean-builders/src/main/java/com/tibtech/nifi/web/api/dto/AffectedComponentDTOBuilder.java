@@ -120,7 +120,8 @@ public final class AffectedComponentDTOBuilder {
   /**
    * The validation errors for the component.
    */
-  public AffectedComponentDTOBuilder setValidationErrors(final Collection<String> validationErrors) {
+  public AffectedComponentDTOBuilder setValidationErrors(
+      final Collection<String> validationErrors) {
     this.validationErrors = validationErrors;
     return this;
   }

@@ -10,7 +10,8 @@ public final class ControllerServiceReferencingComponentEntityBuilder extends Ab
     return component;
   }
 
-  public ControllerServiceReferencingComponentEntityBuilder setComponent(final ControllerServiceReferencingComponentDTO component) {
+  public ControllerServiceReferencingComponentEntityBuilder setComponent(
+      final ControllerServiceReferencingComponentDTO component) {
     this.component = component;
     return this;
   }
@@ -22,7 +23,8 @@ public final class ControllerServiceReferencingComponentEntityBuilder extends Ab
     return controllerServiceReferencingComponentEntity;
   }
 
-  public static ControllerServiceReferencingComponentEntityBuilder of(final ControllerServiceReferencingComponentEntity controllerServiceReferencingComponentEntity) {
+  public static ControllerServiceReferencingComponentEntityBuilder of(
+      final ControllerServiceReferencingComponentEntity controllerServiceReferencingComponentEntity) {
     final ControllerServiceReferencingComponentEntityBuilder controllerServiceReferencingComponentEntityBuilder = new ControllerServiceReferencingComponentEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(controllerServiceReferencingComponentEntityBuilder, controllerServiceReferencingComponentEntity);
     controllerServiceReferencingComponentEntityBuilder.setComponent(controllerServiceReferencingComponentEntity.getComponent());

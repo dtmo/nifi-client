@@ -10,7 +10,8 @@ public final class ControllerStatusEntityBuilder extends AbstractEntityBuilder<C
     return controllerStatus;
   }
 
-  public ControllerStatusEntityBuilder setControllerStatus(final ControllerStatusDTO controllerStatus) {
+  public ControllerStatusEntityBuilder setControllerStatus(
+      final ControllerStatusDTO controllerStatus) {
     this.controllerStatus = controllerStatus;
     return this;
   }
@@ -22,7 +23,8 @@ public final class ControllerStatusEntityBuilder extends AbstractEntityBuilder<C
     return controllerStatusEntity;
   }
 
-  public static ControllerStatusEntityBuilder of(final ControllerStatusEntity controllerStatusEntity) {
+  public static ControllerStatusEntityBuilder of(
+      final ControllerStatusEntity controllerStatusEntity) {
     final ControllerStatusEntityBuilder controllerStatusEntityBuilder = new ControllerStatusEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(controllerStatusEntityBuilder, controllerStatusEntity);
     controllerStatusEntityBuilder.setControllerStatus(controllerStatusEntity.getControllerStatus());

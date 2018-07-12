@@ -19,7 +19,8 @@ public final class VersionedFlowUpdateRequestEntityBuilder extends AbstractEntit
   /**
    * The revision for the Process Group that owns this variable registry.
    */
-  public VersionedFlowUpdateRequestEntityBuilder setProcessGroupRevision(final RevisionDTO processGroupRevision) {
+  public VersionedFlowUpdateRequestEntityBuilder setProcessGroupRevision(
+      final RevisionDTO processGroupRevision) {
     this.processGroupRevision = processGroupRevision;
     return this;
   }
@@ -34,7 +35,8 @@ public final class VersionedFlowUpdateRequestEntityBuilder extends AbstractEntit
   /**
    * The Versioned Flow Update Request
    */
-  public VersionedFlowUpdateRequestEntityBuilder setRequest(final VersionedFlowUpdateRequestDTO request) {
+  public VersionedFlowUpdateRequestEntityBuilder setRequest(
+      final VersionedFlowUpdateRequestDTO request) {
     this.request = request;
     return this;
   }
@@ -47,7 +49,8 @@ public final class VersionedFlowUpdateRequestEntityBuilder extends AbstractEntit
     return versionedFlowUpdateRequestEntity;
   }
 
-  public static VersionedFlowUpdateRequestEntityBuilder of(final VersionedFlowUpdateRequestEntity versionedFlowUpdateRequestEntity) {
+  public static VersionedFlowUpdateRequestEntityBuilder of(
+      final VersionedFlowUpdateRequestEntity versionedFlowUpdateRequestEntity) {
     final VersionedFlowUpdateRequestEntityBuilder versionedFlowUpdateRequestEntityBuilder = new VersionedFlowUpdateRequestEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(versionedFlowUpdateRequestEntityBuilder, versionedFlowUpdateRequestEntity);
     versionedFlowUpdateRequestEntityBuilder.setProcessGroupRevision(versionedFlowUpdateRequestEntity.getProcessGroupRevision());

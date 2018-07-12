@@ -45,7 +45,8 @@ public final class PropertyDescriptorDTOBuilder {
   /**
    * Allowable values for the property. If empty then the allowed values are not constrained.
    */
-  public PropertyDescriptorDTOBuilder setAllowableValues(final List<AllowableValueEntity> allowableValues) {
+  public PropertyDescriptorDTOBuilder setAllowableValues(
+      final List<AllowableValueEntity> allowableValues) {
     this.allowableValues = allowableValues;
     return this;
   }
@@ -120,7 +121,8 @@ public final class PropertyDescriptorDTOBuilder {
   /**
    * Scope of the Expression Language evaluation for the property.
    */
-  public PropertyDescriptorDTOBuilder setExpressionLanguageScope(final String expressionLanguageScope) {
+  public PropertyDescriptorDTOBuilder setExpressionLanguageScope(
+      final String expressionLanguageScope) {
     this.expressionLanguageScope = expressionLanguageScope;
     return this;
   }
@@ -135,7 +137,8 @@ public final class PropertyDescriptorDTOBuilder {
   /**
    * If the property identifies a controller service this returns the fully qualified type.
    */
-  public PropertyDescriptorDTOBuilder setIdentifiesControllerService(final String identifiesControllerService) {
+  public PropertyDescriptorDTOBuilder setIdentifiesControllerService(
+      final String identifiesControllerService) {
     this.identifiesControllerService = identifiesControllerService;
     return this;
   }
@@ -150,7 +153,8 @@ public final class PropertyDescriptorDTOBuilder {
   /**
    * If the property identifies a controller service this returns the bundle of the type, null otherwise.
    */
-  public PropertyDescriptorDTOBuilder setIdentifiesControllerServiceBundle(final BundleDTO identifiesControllerServiceBundle) {
+  public PropertyDescriptorDTOBuilder setIdentifiesControllerServiceBundle(
+      final BundleDTO identifiesControllerServiceBundle) {
     this.identifiesControllerServiceBundle = identifiesControllerServiceBundle;
     return this;
   }
@@ -158,7 +162,8 @@ public final class PropertyDescriptorDTOBuilder {
   /**
    * If the property identifies a controller service this returns the bundle of the type, null otherwise.
    */
-  public PropertyDescriptorDTOBuilder setIdentifiesControllerServiceBundle(final Consumer<BundleDTOBuilder> configurator) {
+  public PropertyDescriptorDTOBuilder setIdentifiesControllerServiceBundle(
+      final Consumer<BundleDTOBuilder> configurator) {
     final BundleDTOBuilder builder = (identifiesControllerServiceBundle != null ? BundleDTOBuilder.of(identifiesControllerServiceBundle) : new BundleDTOBuilder());
     configurator.accept(builder);
     return setIdentifiesControllerServiceBundle(builder.build());
@@ -167,7 +172,8 @@ public final class PropertyDescriptorDTOBuilder {
   /**
    * If the property identifies a controller service this returns the bundle of the type, null otherwise.
    */
-  public PropertyDescriptorDTOBuilder setIdentifiesControllerServiceBundle(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
+  public PropertyDescriptorDTOBuilder setIdentifiesControllerServiceBundle(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
     return setIdentifiesControllerServiceBundle(c -> {
       final Closure<BundleDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

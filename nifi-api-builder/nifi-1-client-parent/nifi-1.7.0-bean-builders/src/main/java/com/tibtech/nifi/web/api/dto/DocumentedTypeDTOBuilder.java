@@ -57,7 +57,8 @@ public final class DocumentedTypeDTOBuilder {
   /**
    * The details of the artifact that bundled this type.
    */
-  public DocumentedTypeDTOBuilder setBundle(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
+  public DocumentedTypeDTOBuilder setBundle(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
     return setBundle(c -> {
       final Closure<BundleDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -75,7 +76,8 @@ public final class DocumentedTypeDTOBuilder {
   /**
    * If this type represents a ControllerService, this lists the APIs it implements.
    */
-  public DocumentedTypeDTOBuilder setControllerServiceApis(final List<ControllerServiceApiDTO> controllerServiceApis) {
+  public DocumentedTypeDTOBuilder setControllerServiceApis(
+      final List<ControllerServiceApiDTO> controllerServiceApis) {
     this.controllerServiceApis = controllerServiceApis;
     return this;
   }
@@ -120,7 +122,8 @@ public final class DocumentedTypeDTOBuilder {
   /**
    * An optional collection of explicit restrictions. If specified, these explicit restrictions will be enfored.
    */
-  public DocumentedTypeDTOBuilder setExplicitRestrictions(final Set<ExplicitRestrictionDTO> explicitRestrictions) {
+  public DocumentedTypeDTOBuilder setExplicitRestrictions(
+      final Set<ExplicitRestrictionDTO> explicitRestrictions) {
     this.explicitRestrictions = explicitRestrictions;
     return this;
   }

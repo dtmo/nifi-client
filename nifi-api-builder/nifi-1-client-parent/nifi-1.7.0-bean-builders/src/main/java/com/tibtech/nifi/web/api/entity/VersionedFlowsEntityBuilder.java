@@ -11,7 +11,8 @@ public final class VersionedFlowsEntityBuilder extends AbstractEntityBuilder<Ver
     return versionedFlows;
   }
 
-  public VersionedFlowsEntityBuilder setVersionedFlows(final Set<VersionedFlowEntity> versionedFlows) {
+  public VersionedFlowsEntityBuilder setVersionedFlows(
+      final Set<VersionedFlowEntity> versionedFlows) {
     this.versionedFlows = versionedFlows;
     return this;
   }

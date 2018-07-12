@@ -40,7 +40,8 @@ public final class ScheduleComponentsEntityBuilder extends AbstractEntityBuilder
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public ScheduleComponentsEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public ScheduleComponentsEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -85,7 +86,8 @@ public final class ScheduleComponentsEntityBuilder extends AbstractEntityBuilder
     return scheduleComponentsEntity;
   }
 
-  public static ScheduleComponentsEntityBuilder of(final ScheduleComponentsEntity scheduleComponentsEntity) {
+  public static ScheduleComponentsEntityBuilder of(
+      final ScheduleComponentsEntity scheduleComponentsEntity) {
     final ScheduleComponentsEntityBuilder scheduleComponentsEntityBuilder = new ScheduleComponentsEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(scheduleComponentsEntityBuilder, scheduleComponentsEntity);
     scheduleComponentsEntityBuilder.setComponents(scheduleComponentsEntity.getComponents());

@@ -34,7 +34,8 @@ public final class FlowConfigurationDTOBuilder {
   /**
    * The interval in seconds between the automatic NiFi refresh requests.
    */
-  public FlowConfigurationDTOBuilder setAutoRefreshIntervalSeconds(final Long autoRefreshIntervalSeconds) {
+  public FlowConfigurationDTOBuilder setAutoRefreshIntervalSeconds(
+      final Long autoRefreshIntervalSeconds) {
     this.autoRefreshIntervalSeconds = autoRefreshIntervalSeconds;
     return this;
   }
@@ -64,7 +65,8 @@ public final class FlowConfigurationDTOBuilder {
   /**
    * The default back pressure data size threshold.
    */
-  public FlowConfigurationDTOBuilder setDefaultBackPressureDataSizeThreshold(final String defaultBackPressureDataSizeThreshold) {
+  public FlowConfigurationDTOBuilder setDefaultBackPressureDataSizeThreshold(
+      final String defaultBackPressureDataSizeThreshold) {
     this.defaultBackPressureDataSizeThreshold = defaultBackPressureDataSizeThreshold;
     return this;
   }
@@ -79,7 +81,8 @@ public final class FlowConfigurationDTOBuilder {
   /**
    * The default back pressure object threshold.
    */
-  public FlowConfigurationDTOBuilder setDefaultBackPressureObjectThreshold(final Long defaultBackPressureObjectThreshold) {
+  public FlowConfigurationDTOBuilder setDefaultBackPressureObjectThreshold(
+      final Long defaultBackPressureObjectThreshold) {
     this.defaultBackPressureObjectThreshold = defaultBackPressureObjectThreshold;
     return this;
   }
@@ -94,7 +97,8 @@ public final class FlowConfigurationDTOBuilder {
   /**
    * Whether this NiFi supports a configurable authorizer.
    */
-  public FlowConfigurationDTOBuilder setSupportsConfigurableAuthorizer(final Boolean supportsConfigurableAuthorizer) {
+  public FlowConfigurationDTOBuilder setSupportsConfigurableAuthorizer(
+      final Boolean supportsConfigurableAuthorizer) {
     this.supportsConfigurableAuthorizer = supportsConfigurableAuthorizer;
     return this;
   }
@@ -109,7 +113,8 @@ public final class FlowConfigurationDTOBuilder {
   /**
    * Whether this NiFi supports configurable users and groups.
    */
-  public FlowConfigurationDTOBuilder setSupportsConfigurableUsersAndGroups(final Boolean supportsConfigurableUsersAndGroups) {
+  public FlowConfigurationDTOBuilder setSupportsConfigurableUsersAndGroups(
+      final Boolean supportsConfigurableUsersAndGroups) {
     this.supportsConfigurableUsersAndGroups = supportsConfigurableUsersAndGroups;
     return this;
   }
@@ -124,7 +129,8 @@ public final class FlowConfigurationDTOBuilder {
   /**
    * Whether this NiFi supports a managed authorizer. Managed authorizers can visualize users, groups, and policies in the UI.
    */
-  public FlowConfigurationDTOBuilder setSupportsManagedAuthorizer(final Boolean supportsManagedAuthorizer) {
+  public FlowConfigurationDTOBuilder setSupportsManagedAuthorizer(
+      final Boolean supportsManagedAuthorizer) {
     this.supportsManagedAuthorizer = supportsManagedAuthorizer;
     return this;
   }

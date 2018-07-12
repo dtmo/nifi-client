@@ -123,7 +123,8 @@ public final class ControllerStatusDTOBuilder {
   /**
    * The number of inactive remote ports in the NiFi.
    */
-  public ControllerStatusDTOBuilder setInactiveRemotePortCount(final Integer inactiveRemotePortCount) {
+  public ControllerStatusDTOBuilder setInactiveRemotePortCount(
+      final Integer inactiveRemotePortCount) {
     this.inactiveRemotePortCount = inactiveRemotePortCount;
     return this;
   }
@@ -153,7 +154,8 @@ public final class ControllerStatusDTOBuilder {
   /**
    * The number of locally modified and stale versioned process groups in the NiFi.
    */
-  public ControllerStatusDTOBuilder setLocallyModifiedAndStaleCount(final Integer locallyModifiedAndStaleCount) {
+  public ControllerStatusDTOBuilder setLocallyModifiedAndStaleCount(
+      final Integer locallyModifiedAndStaleCount) {
     this.locallyModifiedAndStaleCount = locallyModifiedAndStaleCount;
     return this;
   }

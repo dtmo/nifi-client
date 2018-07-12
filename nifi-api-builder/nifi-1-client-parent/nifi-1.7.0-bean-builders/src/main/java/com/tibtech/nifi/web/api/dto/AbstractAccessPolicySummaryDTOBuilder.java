@@ -82,7 +82,8 @@ public abstract class AbstractAccessPolicySummaryDTOBuilder<T extends AbstractAc
     accessPolicySummaryDTO.setResource(resource);
   }
 
-  protected static void setBuilderValues(final AbstractAccessPolicySummaryDTOBuilder abstractAccessPolicySummaryDTOBuilder,
+  protected static void setBuilderValues(
+      final AbstractAccessPolicySummaryDTOBuilder abstractAccessPolicySummaryDTOBuilder,
       final AccessPolicySummaryDTO accessPolicySummaryDTO) {
     AbstractComponentDTOBuilder.setBuilderValues(abstractAccessPolicySummaryDTOBuilder, accessPolicySummaryDTO);
     abstractAccessPolicySummaryDTOBuilder.setAction(accessPolicySummaryDTO.getAction());

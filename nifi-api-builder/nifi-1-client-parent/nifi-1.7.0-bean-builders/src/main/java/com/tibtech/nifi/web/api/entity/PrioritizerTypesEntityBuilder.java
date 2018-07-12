@@ -11,7 +11,8 @@ public final class PrioritizerTypesEntityBuilder extends AbstractEntityBuilder<P
     return prioritizerTypes;
   }
 
-  public PrioritizerTypesEntityBuilder setPrioritizerTypes(final Set<DocumentedTypeDTO> prioritizerTypes) {
+  public PrioritizerTypesEntityBuilder setPrioritizerTypes(
+      final Set<DocumentedTypeDTO> prioritizerTypes) {
     this.prioritizerTypes = prioritizerTypes;
     return this;
   }
@@ -23,7 +24,8 @@ public final class PrioritizerTypesEntityBuilder extends AbstractEntityBuilder<P
     return prioritizerTypesEntity;
   }
 
-  public static PrioritizerTypesEntityBuilder of(final PrioritizerTypesEntity prioritizerTypesEntity) {
+  public static PrioritizerTypesEntityBuilder of(
+      final PrioritizerTypesEntity prioritizerTypesEntity) {
     final PrioritizerTypesEntityBuilder prioritizerTypesEntityBuilder = new PrioritizerTypesEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(prioritizerTypesEntityBuilder, prioritizerTypesEntity);
     prioritizerTypesEntityBuilder.setPrioritizerTypes(prioritizerTypesEntity.getPrioritizerTypes());

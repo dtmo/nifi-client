@@ -80,7 +80,8 @@ public final class NodeGCDiagnosticsSnapshotDTOBuilder {
   /**
    * The Garbage Collection Diagnostics Snapshot
    */
-  public NodeGCDiagnosticsSnapshotDTOBuilder setSnapshot(final Consumer<GCDiagnosticsSnapshotDTOBuilder> configurator) {
+  public NodeGCDiagnosticsSnapshotDTOBuilder setSnapshot(
+      final Consumer<GCDiagnosticsSnapshotDTOBuilder> configurator) {
     final GCDiagnosticsSnapshotDTOBuilder builder = (snapshot != null ? GCDiagnosticsSnapshotDTOBuilder.of(snapshot) : new GCDiagnosticsSnapshotDTOBuilder());
     configurator.accept(builder);
     return setSnapshot(builder.build());
@@ -89,7 +90,8 @@ public final class NodeGCDiagnosticsSnapshotDTOBuilder {
   /**
    * The Garbage Collection Diagnostics Snapshot
    */
-  public NodeGCDiagnosticsSnapshotDTOBuilder setSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GCDiagnosticsSnapshotDTOBuilder.class) final Closure<GCDiagnosticsSnapshotDTOBuilder> closure) {
+  public NodeGCDiagnosticsSnapshotDTOBuilder setSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = GCDiagnosticsSnapshotDTOBuilder.class) final Closure<GCDiagnosticsSnapshotDTOBuilder> closure) {
     return setSnapshot(c -> {
       final Closure<GCDiagnosticsSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -106,7 +108,8 @@ public final class NodeGCDiagnosticsSnapshotDTOBuilder {
     return nodeGCDiagnosticsSnapshotDTO;
   }
 
-  public static NodeGCDiagnosticsSnapshotDTOBuilder of(final NodeGCDiagnosticsSnapshotDTO nodeGCDiagnosticsSnapshotDTO) {
+  public static NodeGCDiagnosticsSnapshotDTOBuilder of(
+      final NodeGCDiagnosticsSnapshotDTO nodeGCDiagnosticsSnapshotDTO) {
     final NodeGCDiagnosticsSnapshotDTOBuilder nodeGCDiagnosticsSnapshotDTOBuilder = new NodeGCDiagnosticsSnapshotDTOBuilder();
     nodeGCDiagnosticsSnapshotDTOBuilder.setAddress(nodeGCDiagnosticsSnapshotDTO.getAddress());
     nodeGCDiagnosticsSnapshotDTOBuilder.setApiPort(nodeGCDiagnosticsSnapshotDTO.getApiPort());

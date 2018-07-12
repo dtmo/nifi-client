@@ -345,7 +345,8 @@ public final class ProcessorStatusSnapshotDTOBuilder {
   /**
    * The number of threads currently terminated for the processor.
    */
-  public ProcessorStatusSnapshotDTOBuilder setTerminatedThreadCount(final Integer terminatedThreadCount) {
+  public ProcessorStatusSnapshotDTOBuilder setTerminatedThreadCount(
+      final Integer terminatedThreadCount) {
     this.terminatedThreadCount = terminatedThreadCount;
     return this;
   }
@@ -407,7 +408,8 @@ public final class ProcessorStatusSnapshotDTOBuilder {
     return processorStatusSnapshotDTO;
   }
 
-  public static ProcessorStatusSnapshotDTOBuilder of(final ProcessorStatusSnapshotDTO processorStatusSnapshotDTO) {
+  public static ProcessorStatusSnapshotDTOBuilder of(
+      final ProcessorStatusSnapshotDTO processorStatusSnapshotDTO) {
     final ProcessorStatusSnapshotDTOBuilder processorStatusSnapshotDTOBuilder = new ProcessorStatusSnapshotDTOBuilder();
     processorStatusSnapshotDTOBuilder.setActiveThreadCount(processorStatusSnapshotDTO.getActiveThreadCount());
     processorStatusSnapshotDTOBuilder.setBytesIn(processorStatusSnapshotDTO.getBytesIn());

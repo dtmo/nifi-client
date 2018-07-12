@@ -19,7 +19,8 @@ public final class SnippetEntityBuilder extends AbstractEntityBuilder<SnippetEnt
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public SnippetEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public SnippetEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }

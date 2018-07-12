@@ -28,7 +28,8 @@ public final class ProcessGroupFlowEntityBuilder extends AbstractEntityBuilder<P
     return processGroupFlow;
   }
 
-  public ProcessGroupFlowEntityBuilder setProcessGroupFlow(final ProcessGroupFlowDTO processGroupFlow) {
+  public ProcessGroupFlowEntityBuilder setProcessGroupFlow(
+      final ProcessGroupFlowDTO processGroupFlow) {
     this.processGroupFlow = processGroupFlow;
     return this;
   }
@@ -41,7 +42,8 @@ public final class ProcessGroupFlowEntityBuilder extends AbstractEntityBuilder<P
     return processGroupFlowEntity;
   }
 
-  public static ProcessGroupFlowEntityBuilder of(final ProcessGroupFlowEntity processGroupFlowEntity) {
+  public static ProcessGroupFlowEntityBuilder of(
+      final ProcessGroupFlowEntity processGroupFlowEntity) {
     final ProcessGroupFlowEntityBuilder processGroupFlowEntityBuilder = new ProcessGroupFlowEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(processGroupFlowEntityBuilder, processGroupFlowEntity);
     processGroupFlowEntityBuilder.setPermissions(processGroupFlowEntity.getPermissions());

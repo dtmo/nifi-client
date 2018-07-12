@@ -46,7 +46,8 @@ public final class PortStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public PortStatusDTOBuilder setAggregateSnapshot(final Consumer<PortStatusSnapshotDTOBuilder> configurator) {
+  public PortStatusDTOBuilder setAggregateSnapshot(
+      final Consumer<PortStatusSnapshotDTOBuilder> configurator) {
     final PortStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? PortStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new PortStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setAggregateSnapshot(builder.build());
@@ -55,7 +56,8 @@ public final class PortStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public PortStatusDTOBuilder setAggregateSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortStatusSnapshotDTOBuilder.class) final Closure<PortStatusSnapshotDTOBuilder> closure) {
+  public PortStatusDTOBuilder setAggregateSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortStatusSnapshotDTOBuilder.class) final Closure<PortStatusSnapshotDTOBuilder> closure) {
     return setAggregateSnapshot(c -> {
       final Closure<PortStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -118,7 +120,8 @@ public final class PortStatusDTOBuilder {
   /**
    * A status snapshot for each node in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this may be null.
    */
-  public PortStatusDTOBuilder setNodeSnapshots(final List<NodePortStatusSnapshotDTO> nodeSnapshots) {
+  public PortStatusDTOBuilder setNodeSnapshots(
+      final List<NodePortStatusSnapshotDTO> nodeSnapshots) {
     this.nodeSnapshots = nodeSnapshots;
     return this;
   }

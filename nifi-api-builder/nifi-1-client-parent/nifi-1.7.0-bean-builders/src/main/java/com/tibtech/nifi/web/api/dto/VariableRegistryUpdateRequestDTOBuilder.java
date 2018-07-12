@@ -37,7 +37,8 @@ public final class VariableRegistryUpdateRequestDTOBuilder {
   /**
    * A set of all components that will be affected if the value of this variable is changed
    */
-  public VariableRegistryUpdateRequestDTOBuilder setAffectedComponents(final Set<AffectedComponentEntity> affectedComponents) {
+  public VariableRegistryUpdateRequestDTOBuilder setAffectedComponents(
+      final Set<AffectedComponentEntity> affectedComponents) {
     this.affectedComponents = affectedComponents;
     return this;
   }
@@ -142,7 +143,8 @@ public final class VariableRegistryUpdateRequestDTOBuilder {
   /**
    * The steps that are required in order to complete the request, along with the status of each
    */
-  public VariableRegistryUpdateRequestDTOBuilder setUpdateSteps(final List<VariableRegistryUpdateStepDTO> updateSteps) {
+  public VariableRegistryUpdateRequestDTOBuilder setUpdateSteps(
+      final List<VariableRegistryUpdateStepDTO> updateSteps) {
     this.updateSteps = updateSteps;
     return this;
   }
@@ -176,7 +178,8 @@ public final class VariableRegistryUpdateRequestDTOBuilder {
     return variableRegistryUpdateRequestDTO;
   }
 
-  public static VariableRegistryUpdateRequestDTOBuilder of(final VariableRegistryUpdateRequestDTO variableRegistryUpdateRequestDTO) {
+  public static VariableRegistryUpdateRequestDTOBuilder of(
+      final VariableRegistryUpdateRequestDTO variableRegistryUpdateRequestDTO) {
     final VariableRegistryUpdateRequestDTOBuilder variableRegistryUpdateRequestDTOBuilder = new VariableRegistryUpdateRequestDTOBuilder();
     variableRegistryUpdateRequestDTOBuilder.setAffectedComponents(variableRegistryUpdateRequestDTO.getAffectedComponents());
     variableRegistryUpdateRequestDTOBuilder.setComplete(variableRegistryUpdateRequestDTO.isComplete());

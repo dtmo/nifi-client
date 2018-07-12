@@ -108,7 +108,8 @@ public final class ReportingTaskDTOBuilder extends AbstractComponentDTOBuilder<R
   /**
    * The details of the artifact that bundled this processor type.
    */
-  public ReportingTaskDTOBuilder setBundle(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
+  public ReportingTaskDTOBuilder setBundle(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
     return setBundle(c -> {
       final Closure<BundleDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -156,7 +157,8 @@ public final class ReportingTaskDTOBuilder extends AbstractComponentDTOBuilder<R
   /**
    * The default scheduling period for the different scheduling strategies.
    */
-  public ReportingTaskDTOBuilder setDefaultSchedulingPeriod(final Map<String, String> defaultSchedulingPeriod) {
+  public ReportingTaskDTOBuilder setDefaultSchedulingPeriod(
+      final Map<String, String> defaultSchedulingPeriod) {
     this.defaultSchedulingPeriod = defaultSchedulingPeriod;
     return this;
   }
@@ -186,7 +188,8 @@ public final class ReportingTaskDTOBuilder extends AbstractComponentDTOBuilder<R
   /**
    * The descriptors for the reporting tasks properties.
    */
-  public ReportingTaskDTOBuilder setDescriptors(final Map<String, PropertyDescriptorDTO> descriptors) {
+  public ReportingTaskDTOBuilder setDescriptors(
+      final Map<String, PropertyDescriptorDTO> descriptors) {
     this.descriptors = descriptors;
     return this;
   }
@@ -201,7 +204,8 @@ public final class ReportingTaskDTOBuilder extends AbstractComponentDTOBuilder<R
   /**
    * Whether the reporting task has multiple versions available.
    */
-  public ReportingTaskDTOBuilder setMultipleVersionsAvailable(final Boolean multipleVersionsAvailable) {
+  public ReportingTaskDTOBuilder setMultipleVersionsAvailable(
+      final Boolean multipleVersionsAvailable) {
     this.multipleVersionsAvailable = multipleVersionsAvailable;
     return this;
   }

@@ -69,7 +69,8 @@ public final class CurrentUserEntityBuilder extends AbstractEntityBuilder<Curren
   /**
    * Permissions for specific component restrictions.
    */
-  public CurrentUserEntityBuilder setComponentRestrictionPermissions(final Set<ComponentRestrictionPermissionDTO> componentRestrictionPermissions) {
+  public CurrentUserEntityBuilder setComponentRestrictionPermissions(
+      final Set<ComponentRestrictionPermissionDTO> componentRestrictionPermissions) {
     this.componentRestrictionPermissions = componentRestrictionPermissions;
     return this;
   }
@@ -84,7 +85,8 @@ public final class CurrentUserEntityBuilder extends AbstractEntityBuilder<Curren
   /**
    * Permissions for accessing the controller.
    */
-  public CurrentUserEntityBuilder setControllerPermissions(final PermissionsDTO controllerPermissions) {
+  public CurrentUserEntityBuilder setControllerPermissions(
+      final PermissionsDTO controllerPermissions) {
     this.controllerPermissions = controllerPermissions;
     return this;
   }
@@ -144,7 +146,8 @@ public final class CurrentUserEntityBuilder extends AbstractEntityBuilder<Curren
   /**
    * Permissions for querying provenance.
    */
-  public CurrentUserEntityBuilder setProvenancePermissions(final PermissionsDTO provenancePermissions) {
+  public CurrentUserEntityBuilder setProvenancePermissions(
+      final PermissionsDTO provenancePermissions) {
     this.provenancePermissions = provenancePermissions;
     return this;
   }
@@ -159,7 +162,8 @@ public final class CurrentUserEntityBuilder extends AbstractEntityBuilder<Curren
   /**
    * Permissions for accessing restricted components. Note: the read permission are not used and will always be false.
    */
-  public CurrentUserEntityBuilder setRestrictedComponentsPermissions(final PermissionsDTO restrictedComponentsPermissions) {
+  public CurrentUserEntityBuilder setRestrictedComponentsPermissions(
+      final PermissionsDTO restrictedComponentsPermissions) {
     this.restrictedComponentsPermissions = restrictedComponentsPermissions;
     return this;
   }

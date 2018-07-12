@@ -157,7 +157,8 @@ public final class VersionedFlowUpdateRequestDTOBuilder {
   /**
    * The VersionControlInformation that describes where the Versioned Flow is located; this may not be populated until the request is completed.
    */
-  public VersionedFlowUpdateRequestDTOBuilder setVersionControlInformation(final VersionControlInformationDTO versionControlInformation) {
+  public VersionedFlowUpdateRequestDTOBuilder setVersionControlInformation(
+      final VersionControlInformationDTO versionControlInformation) {
     this.versionControlInformation = versionControlInformation;
     return this;
   }
@@ -165,7 +166,8 @@ public final class VersionedFlowUpdateRequestDTOBuilder {
   /**
    * The VersionControlInformation that describes where the Versioned Flow is located; this may not be populated until the request is completed.
    */
-  public VersionedFlowUpdateRequestDTOBuilder setVersionControlInformation(final Consumer<VersionControlInformationDTOBuilder> configurator) {
+  public VersionedFlowUpdateRequestDTOBuilder setVersionControlInformation(
+      final Consumer<VersionControlInformationDTOBuilder> configurator) {
     final VersionControlInformationDTOBuilder builder = (versionControlInformation != null ? VersionControlInformationDTOBuilder.of(versionControlInformation) : new VersionControlInformationDTOBuilder());
     configurator.accept(builder);
     return setVersionControlInformation(builder.build());
@@ -174,7 +176,8 @@ public final class VersionedFlowUpdateRequestDTOBuilder {
   /**
    * The VersionControlInformation that describes where the Versioned Flow is located; this may not be populated until the request is completed.
    */
-  public VersionedFlowUpdateRequestDTOBuilder setVersionControlInformation(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = VersionControlInformationDTOBuilder.class) final Closure<VersionControlInformationDTOBuilder> closure) {
+  public VersionedFlowUpdateRequestDTOBuilder setVersionControlInformation(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = VersionControlInformationDTOBuilder.class) final Closure<VersionControlInformationDTOBuilder> closure) {
     return setVersionControlInformation(c -> {
       final Closure<VersionControlInformationDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -196,7 +199,8 @@ public final class VersionedFlowUpdateRequestDTOBuilder {
     return versionedFlowUpdateRequestDTO;
   }
 
-  public static VersionedFlowUpdateRequestDTOBuilder of(final VersionedFlowUpdateRequestDTO versionedFlowUpdateRequestDTO) {
+  public static VersionedFlowUpdateRequestDTOBuilder of(
+      final VersionedFlowUpdateRequestDTO versionedFlowUpdateRequestDTO) {
     final VersionedFlowUpdateRequestDTOBuilder versionedFlowUpdateRequestDTOBuilder = new VersionedFlowUpdateRequestDTOBuilder();
     versionedFlowUpdateRequestDTOBuilder.setComplete(versionedFlowUpdateRequestDTO.isComplete());
     versionedFlowUpdateRequestDTOBuilder.setFailureReason(versionedFlowUpdateRequestDTO.getFailureReason());

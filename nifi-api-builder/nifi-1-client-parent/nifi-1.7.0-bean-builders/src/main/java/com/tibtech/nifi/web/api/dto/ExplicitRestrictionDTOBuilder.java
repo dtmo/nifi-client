@@ -37,7 +37,8 @@ public final class ExplicitRestrictionDTOBuilder {
   /**
    * The required permission necessary for this restriction.
    */
-  public ExplicitRestrictionDTOBuilder setRequiredPermission(final RequiredPermissionDTO requiredPermission) {
+  public ExplicitRestrictionDTOBuilder setRequiredPermission(
+      final RequiredPermissionDTO requiredPermission) {
     this.requiredPermission = requiredPermission;
     return this;
   }
@@ -45,7 +46,8 @@ public final class ExplicitRestrictionDTOBuilder {
   /**
    * The required permission necessary for this restriction.
    */
-  public ExplicitRestrictionDTOBuilder setRequiredPermission(final Consumer<RequiredPermissionDTOBuilder> configurator) {
+  public ExplicitRestrictionDTOBuilder setRequiredPermission(
+      final Consumer<RequiredPermissionDTOBuilder> configurator) {
     final RequiredPermissionDTOBuilder builder = (requiredPermission != null ? RequiredPermissionDTOBuilder.of(requiredPermission) : new RequiredPermissionDTOBuilder());
     configurator.accept(builder);
     return setRequiredPermission(builder.build());
@@ -54,7 +56,8 @@ public final class ExplicitRestrictionDTOBuilder {
   /**
    * The required permission necessary for this restriction.
    */
-  public ExplicitRestrictionDTOBuilder setRequiredPermission(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RequiredPermissionDTOBuilder.class) final Closure<RequiredPermissionDTOBuilder> closure) {
+  public ExplicitRestrictionDTOBuilder setRequiredPermission(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RequiredPermissionDTOBuilder.class) final Closure<RequiredPermissionDTOBuilder> closure) {
     return setRequiredPermission(c -> {
       final Closure<RequiredPermissionDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -69,7 +72,8 @@ public final class ExplicitRestrictionDTOBuilder {
     return explicitRestrictionDTO;
   }
 
-  public static ExplicitRestrictionDTOBuilder of(final ExplicitRestrictionDTO explicitRestrictionDTO) {
+  public static ExplicitRestrictionDTOBuilder of(
+      final ExplicitRestrictionDTO explicitRestrictionDTO) {
     final ExplicitRestrictionDTOBuilder explicitRestrictionDTOBuilder = new ExplicitRestrictionDTOBuilder();
     explicitRestrictionDTOBuilder.setExplanation(explicitRestrictionDTO.getExplanation());
     explicitRestrictionDTOBuilder.setRequiredPermission(explicitRestrictionDTO.getRequiredPermission());

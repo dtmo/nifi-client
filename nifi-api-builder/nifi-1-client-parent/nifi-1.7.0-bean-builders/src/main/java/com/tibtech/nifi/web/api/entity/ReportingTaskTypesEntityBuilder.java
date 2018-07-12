@@ -11,7 +11,8 @@ public final class ReportingTaskTypesEntityBuilder extends AbstractEntityBuilder
     return reportingTaskTypes;
   }
 
-  public ReportingTaskTypesEntityBuilder setReportingTaskTypes(final Set<DocumentedTypeDTO> reportingTaskTypes) {
+  public ReportingTaskTypesEntityBuilder setReportingTaskTypes(
+      final Set<DocumentedTypeDTO> reportingTaskTypes) {
     this.reportingTaskTypes = reportingTaskTypes;
     return this;
   }
@@ -23,7 +24,8 @@ public final class ReportingTaskTypesEntityBuilder extends AbstractEntityBuilder
     return reportingTaskTypesEntity;
   }
 
-  public static ReportingTaskTypesEntityBuilder of(final ReportingTaskTypesEntity reportingTaskTypesEntity) {
+  public static ReportingTaskTypesEntityBuilder of(
+      final ReportingTaskTypesEntity reportingTaskTypesEntity) {
     final ReportingTaskTypesEntityBuilder reportingTaskTypesEntityBuilder = new ReportingTaskTypesEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(reportingTaskTypesEntityBuilder, reportingTaskTypesEntity);
     reportingTaskTypesEntityBuilder.setReportingTaskTypes(reportingTaskTypesEntity.getReportingTaskTypes());

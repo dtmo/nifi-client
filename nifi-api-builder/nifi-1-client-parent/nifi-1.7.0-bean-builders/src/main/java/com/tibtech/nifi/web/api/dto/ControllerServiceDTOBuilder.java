@@ -92,7 +92,8 @@ public final class ControllerServiceDTOBuilder extends AbstractComponentDTOBuild
   /**
    * The details of the artifact that bundled this processor type.
    */
-  public ControllerServiceDTOBuilder setBundle(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
+  public ControllerServiceDTOBuilder setBundle(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
     return setBundle(c -> {
       final Closure<BundleDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -125,7 +126,8 @@ public final class ControllerServiceDTOBuilder extends AbstractComponentDTOBuild
   /**
    * Lists the APIs this Controller Service implements.
    */
-  public ControllerServiceDTOBuilder setControllerServiceApis(final List<ControllerServiceApiDTO> controllerServiceApis) {
+  public ControllerServiceDTOBuilder setControllerServiceApis(
+      final List<ControllerServiceApiDTO> controllerServiceApis) {
     this.controllerServiceApis = controllerServiceApis;
     return this;
   }
@@ -170,7 +172,8 @@ public final class ControllerServiceDTOBuilder extends AbstractComponentDTOBuild
   /**
    * The descriptors for the controller service properties.
    */
-  public ControllerServiceDTOBuilder setDescriptors(final Map<String, PropertyDescriptorDTO> descriptors) {
+  public ControllerServiceDTOBuilder setDescriptors(
+      final Map<String, PropertyDescriptorDTO> descriptors) {
     this.descriptors = descriptors;
     return this;
   }
@@ -185,7 +188,8 @@ public final class ControllerServiceDTOBuilder extends AbstractComponentDTOBuild
   /**
    * Whether the controller service has multiple versions available.
    */
-  public ControllerServiceDTOBuilder setMultipleVersionsAvailable(final Boolean multipleVersionsAvailable) {
+  public ControllerServiceDTOBuilder setMultipleVersionsAvailable(
+      final Boolean multipleVersionsAvailable) {
     this.multipleVersionsAvailable = multipleVersionsAvailable;
     return this;
   }
@@ -245,7 +249,8 @@ public final class ControllerServiceDTOBuilder extends AbstractComponentDTOBuild
   /**
    * All components referencing this controller service.
    */
-  public ControllerServiceDTOBuilder setReferencingComponents(final Set<ControllerServiceReferencingComponentEntity> referencingComponents) {
+  public ControllerServiceDTOBuilder setReferencingComponents(
+      final Set<ControllerServiceReferencingComponentEntity> referencingComponents) {
     this.referencingComponents = referencingComponents;
     return this;
   }
@@ -305,7 +310,8 @@ public final class ControllerServiceDTOBuilder extends AbstractComponentDTOBuild
   /**
    * The validation errors from the controller service. These validation errors represent the problems with the controller service that must be resolved before it can be enabled.
    */
-  public ControllerServiceDTOBuilder setValidationErrors(final Collection<String> validationErrors) {
+  public ControllerServiceDTOBuilder setValidationErrors(
+      final Collection<String> validationErrors) {
     this.validationErrors = validationErrors;
     return this;
   }

@@ -17,7 +17,8 @@ public final class FlowComparisonEntityBuilder extends AbstractEntityBuilder<Flo
   /**
    * The list of differences for each component in the flow that is not the same between the two flows
    */
-  public FlowComparisonEntityBuilder setComponentDifferences(final Set<ComponentDifferenceDTO> componentDifferences) {
+  public FlowComparisonEntityBuilder setComponentDifferences(
+      final Set<ComponentDifferenceDTO> componentDifferences) {
     this.componentDifferences = componentDifferences;
     return this;
   }

@@ -72,7 +72,8 @@ public final class NodeRemoteProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The remote process group status snapshot from the node.
    */
-  public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final RemoteProcessGroupStatusSnapshotDTO statusSnapshot) {
+  public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(
+      final RemoteProcessGroupStatusSnapshotDTO statusSnapshot) {
     this.statusSnapshot = statusSnapshot;
     return this;
   }
@@ -80,7 +81,8 @@ public final class NodeRemoteProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The remote process group status snapshot from the node.
    */
-  public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(final Consumer<RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
+  public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(
+      final Consumer<RemoteProcessGroupStatusSnapshotDTOBuilder> configurator) {
     final RemoteProcessGroupStatusSnapshotDTOBuilder builder = (statusSnapshot != null ? RemoteProcessGroupStatusSnapshotDTOBuilder.of(statusSnapshot) : new RemoteProcessGroupStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setStatusSnapshot(builder.build());
@@ -89,7 +91,8 @@ public final class NodeRemoteProcessGroupStatusSnapshotDTOBuilder {
   /**
    * The remote process group status snapshot from the node.
    */
-  public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupStatusSnapshotDTOBuilder.class) final Closure<RemoteProcessGroupStatusSnapshotDTOBuilder> closure) {
+  public NodeRemoteProcessGroupStatusSnapshotDTOBuilder setStatusSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupStatusSnapshotDTOBuilder.class) final Closure<RemoteProcessGroupStatusSnapshotDTOBuilder> closure) {
     return setStatusSnapshot(c -> {
       final Closure<RemoteProcessGroupStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -106,7 +109,8 @@ public final class NodeRemoteProcessGroupStatusSnapshotDTOBuilder {
     return nodeRemoteProcessGroupStatusSnapshotDTO;
   }
 
-  public static NodeRemoteProcessGroupStatusSnapshotDTOBuilder of(final NodeRemoteProcessGroupStatusSnapshotDTO nodeRemoteProcessGroupStatusSnapshotDTO) {
+  public static NodeRemoteProcessGroupStatusSnapshotDTOBuilder of(
+      final NodeRemoteProcessGroupStatusSnapshotDTO nodeRemoteProcessGroupStatusSnapshotDTO) {
     final NodeRemoteProcessGroupStatusSnapshotDTOBuilder nodeRemoteProcessGroupStatusSnapshotDTOBuilder = new NodeRemoteProcessGroupStatusSnapshotDTOBuilder();
     nodeRemoteProcessGroupStatusSnapshotDTOBuilder.setAddress(nodeRemoteProcessGroupStatusSnapshotDTO.getAddress());
     nodeRemoteProcessGroupStatusSnapshotDTOBuilder.setApiPort(nodeRemoteProcessGroupStatusSnapshotDTO.getApiPort());

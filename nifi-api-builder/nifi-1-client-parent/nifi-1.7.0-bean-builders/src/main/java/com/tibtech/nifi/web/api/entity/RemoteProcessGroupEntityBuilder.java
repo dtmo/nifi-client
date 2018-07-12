@@ -78,7 +78,8 @@ public final class RemoteProcessGroupEntityBuilder extends AbstractComponentEnti
     return remoteProcessGroupEntity;
   }
 
-  public static RemoteProcessGroupEntityBuilder of(final RemoteProcessGroupEntity remoteProcessGroupEntity) {
+  public static RemoteProcessGroupEntityBuilder of(
+      final RemoteProcessGroupEntity remoteProcessGroupEntity) {
     final RemoteProcessGroupEntityBuilder remoteProcessGroupEntityBuilder = new RemoteProcessGroupEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(remoteProcessGroupEntityBuilder, remoteProcessGroupEntity);
     remoteProcessGroupEntityBuilder.setComponent(remoteProcessGroupEntity.getComponent());

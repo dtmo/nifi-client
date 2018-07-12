@@ -371,7 +371,8 @@ public final class ConnectionStatusSnapshotDTOBuilder {
     return connectionStatusSnapshotDTO;
   }
 
-  public static ConnectionStatusSnapshotDTOBuilder of(final ConnectionStatusSnapshotDTO connectionStatusSnapshotDTO) {
+  public static ConnectionStatusSnapshotDTOBuilder of(
+      final ConnectionStatusSnapshotDTO connectionStatusSnapshotDTO) {
     final ConnectionStatusSnapshotDTOBuilder connectionStatusSnapshotDTOBuilder = new ConnectionStatusSnapshotDTOBuilder();
     connectionStatusSnapshotDTOBuilder.setBytesIn(connectionStatusSnapshotDTO.getBytesIn());
     connectionStatusSnapshotDTOBuilder.setBytesOut(connectionStatusSnapshotDTO.getBytesOut());

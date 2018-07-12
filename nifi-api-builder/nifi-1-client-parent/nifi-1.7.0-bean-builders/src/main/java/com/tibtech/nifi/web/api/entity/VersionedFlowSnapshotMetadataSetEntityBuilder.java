@@ -11,7 +11,8 @@ public final class VersionedFlowSnapshotMetadataSetEntityBuilder extends Abstrac
     return versionedFlowSnapshotMetadataSet;
   }
 
-  public VersionedFlowSnapshotMetadataSetEntityBuilder setVersionedFlowSnapshotMetadataSet(final Set<VersionedFlowSnapshotMetadataEntity> versionedFlowSnapshotMetadataSet) {
+  public VersionedFlowSnapshotMetadataSetEntityBuilder setVersionedFlowSnapshotMetadataSet(
+      final Set<VersionedFlowSnapshotMetadataEntity> versionedFlowSnapshotMetadataSet) {
     this.versionedFlowSnapshotMetadataSet = versionedFlowSnapshotMetadataSet;
     return this;
   }
@@ -23,7 +24,8 @@ public final class VersionedFlowSnapshotMetadataSetEntityBuilder extends Abstrac
     return versionedFlowSnapshotMetadataSetEntity;
   }
 
-  public static VersionedFlowSnapshotMetadataSetEntityBuilder of(final VersionedFlowSnapshotMetadataSetEntity versionedFlowSnapshotMetadataSetEntity) {
+  public static VersionedFlowSnapshotMetadataSetEntityBuilder of(
+      final VersionedFlowSnapshotMetadataSetEntity versionedFlowSnapshotMetadataSetEntity) {
     final VersionedFlowSnapshotMetadataSetEntityBuilder versionedFlowSnapshotMetadataSetEntityBuilder = new VersionedFlowSnapshotMetadataSetEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(versionedFlowSnapshotMetadataSetEntityBuilder, versionedFlowSnapshotMetadataSetEntity);
     versionedFlowSnapshotMetadataSetEntityBuilder.setVersionedFlowSnapshotMetadataSet(versionedFlowSnapshotMetadataSetEntity.getVersionedFlowSnapshotMetadataSet());

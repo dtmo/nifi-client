@@ -22,7 +22,8 @@ public final class ControllerServiceEntityBuilder extends AbstractComponentEntit
     return controllerServiceEntity;
   }
 
-  public static ControllerServiceEntityBuilder of(final ControllerServiceEntity controllerServiceEntity) {
+  public static ControllerServiceEntityBuilder of(
+      final ControllerServiceEntity controllerServiceEntity) {
     final ControllerServiceEntityBuilder controllerServiceEntityBuilder = new ControllerServiceEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(controllerServiceEntityBuilder, controllerServiceEntity);
     controllerServiceEntityBuilder.setComponent(controllerServiceEntity.getComponent());

@@ -6,7 +6,8 @@ public abstract class AbstractActionDetailsDTOBuilder<T extends AbstractActionDe
   protected void setPropertyValues(final ActionDetailsDTO actionDetailsDTO) {
   }
 
-  protected static void setBuilderValues(final AbstractActionDetailsDTOBuilder abstractActionDetailsDTOBuilder,
+  protected static void setBuilderValues(
+      final AbstractActionDetailsDTOBuilder abstractActionDetailsDTOBuilder,
       final ActionDetailsDTO actionDetailsDTO) {
   }
 }

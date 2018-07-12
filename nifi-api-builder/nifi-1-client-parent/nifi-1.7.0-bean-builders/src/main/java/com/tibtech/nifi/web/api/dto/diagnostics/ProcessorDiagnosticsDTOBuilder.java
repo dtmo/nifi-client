@@ -43,7 +43,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Information about the Controller Service's Class Loader
    */
-  public ProcessorDiagnosticsDTOBuilder setClassLoaderDiagnostics(final ClassLoaderDiagnosticsDTO classLoaderDiagnostics) {
+  public ProcessorDiagnosticsDTOBuilder setClassLoaderDiagnostics(
+      final ClassLoaderDiagnosticsDTO classLoaderDiagnostics) {
     this.classLoaderDiagnostics = classLoaderDiagnostics;
     return this;
   }
@@ -51,7 +52,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Information about the Controller Service's Class Loader
    */
-  public ProcessorDiagnosticsDTOBuilder setClassLoaderDiagnostics(final Consumer<ClassLoaderDiagnosticsDTOBuilder> configurator) {
+  public ProcessorDiagnosticsDTOBuilder setClassLoaderDiagnostics(
+      final Consumer<ClassLoaderDiagnosticsDTOBuilder> configurator) {
     final ClassLoaderDiagnosticsDTOBuilder builder = (classLoaderDiagnostics != null ? ClassLoaderDiagnosticsDTOBuilder.of(classLoaderDiagnostics) : new ClassLoaderDiagnosticsDTOBuilder());
     configurator.accept(builder);
     return setClassLoaderDiagnostics(builder.build());
@@ -60,7 +62,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Information about the Controller Service's Class Loader
    */
-  public ProcessorDiagnosticsDTOBuilder setClassLoaderDiagnostics(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ClassLoaderDiagnosticsDTOBuilder.class) final Closure<ClassLoaderDiagnosticsDTOBuilder> closure) {
+  public ProcessorDiagnosticsDTOBuilder setClassLoaderDiagnostics(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ClassLoaderDiagnosticsDTOBuilder.class) final Closure<ClassLoaderDiagnosticsDTOBuilder> closure) {
     return setClassLoaderDiagnostics(c -> {
       final Closure<ClassLoaderDiagnosticsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -78,7 +81,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Diagnostic Information about all incoming Connections
    */
-  public ProcessorDiagnosticsDTOBuilder setIncomingConnections(final Set<ConnectionDiagnosticsDTO> incomingConnections) {
+  public ProcessorDiagnosticsDTOBuilder setIncomingConnections(
+      final Set<ConnectionDiagnosticsDTO> incomingConnections) {
     this.incomingConnections = incomingConnections;
     return this;
   }
@@ -101,7 +105,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Diagnostic Information about the JVM and system-level diagnostics
    */
-  public ProcessorDiagnosticsDTOBuilder setJvmDiagnostics(final Consumer<JVMDiagnosticsDTOBuilder> configurator) {
+  public ProcessorDiagnosticsDTOBuilder setJvmDiagnostics(
+      final Consumer<JVMDiagnosticsDTOBuilder> configurator) {
     final JVMDiagnosticsDTOBuilder builder = (jvmDiagnostics != null ? JVMDiagnosticsDTOBuilder.of(jvmDiagnostics) : new JVMDiagnosticsDTOBuilder());
     configurator.accept(builder);
     return setJvmDiagnostics(builder.build());
@@ -110,7 +115,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Diagnostic Information about the JVM and system-level diagnostics
    */
-  public ProcessorDiagnosticsDTOBuilder setJvmDiagnostics(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JVMDiagnosticsDTOBuilder.class) final Closure<JVMDiagnosticsDTOBuilder> closure) {
+  public ProcessorDiagnosticsDTOBuilder setJvmDiagnostics(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JVMDiagnosticsDTOBuilder.class) final Closure<JVMDiagnosticsDTOBuilder> closure) {
     return setJvmDiagnostics(c -> {
       final Closure<JVMDiagnosticsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -128,7 +134,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Diagnostic Information about all outgoing Connections
    */
-  public ProcessorDiagnosticsDTOBuilder setOutgoingConnections(final Set<ConnectionDiagnosticsDTO> outgoingConnections) {
+  public ProcessorDiagnosticsDTOBuilder setOutgoingConnections(
+      final Set<ConnectionDiagnosticsDTO> outgoingConnections) {
     this.outgoingConnections = outgoingConnections;
     return this;
   }
@@ -151,7 +158,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Information about the Processor for which the Diagnostic Report is generated
    */
-  public ProcessorDiagnosticsDTOBuilder setProcessor(final Consumer<ProcessorDTOBuilder> configurator) {
+  public ProcessorDiagnosticsDTOBuilder setProcessor(
+      final Consumer<ProcessorDTOBuilder> configurator) {
     final ProcessorDTOBuilder builder = (processor != null ? ProcessorDTOBuilder.of(processor) : new ProcessorDTOBuilder());
     configurator.accept(builder);
     return setProcessor(builder.build());
@@ -160,7 +168,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Information about the Processor for which the Diagnostic Report is generated
    */
-  public ProcessorDiagnosticsDTOBuilder setProcessor(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure) {
+  public ProcessorDiagnosticsDTOBuilder setProcessor(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure) {
     return setProcessor(c -> {
       final Closure<ProcessorDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -178,7 +187,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * The Status for the Processor for which the Diagnostic Report is generated
    */
-  public ProcessorDiagnosticsDTOBuilder setProcessorStatus(final ProcessorStatusDTO processorStatus) {
+  public ProcessorDiagnosticsDTOBuilder setProcessorStatus(
+      final ProcessorStatusDTO processorStatus) {
     this.processorStatus = processorStatus;
     return this;
   }
@@ -186,7 +196,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * The Status for the Processor for which the Diagnostic Report is generated
    */
-  public ProcessorDiagnosticsDTOBuilder setProcessorStatus(final Consumer<ProcessorStatusDTOBuilder> configurator) {
+  public ProcessorDiagnosticsDTOBuilder setProcessorStatus(
+      final Consumer<ProcessorStatusDTOBuilder> configurator) {
     final ProcessorStatusDTOBuilder builder = (processorStatus != null ? ProcessorStatusDTOBuilder.of(processorStatus) : new ProcessorStatusDTOBuilder());
     configurator.accept(builder);
     return setProcessorStatus(builder.build());
@@ -195,7 +206,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * The Status for the Processor for which the Diagnostic Report is generated
    */
-  public ProcessorDiagnosticsDTOBuilder setProcessorStatus(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorStatusDTOBuilder.class) final Closure<ProcessorStatusDTOBuilder> closure) {
+  public ProcessorDiagnosticsDTOBuilder setProcessorStatus(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorStatusDTOBuilder.class) final Closure<ProcessorStatusDTOBuilder> closure) {
     return setProcessorStatus(c -> {
       final Closure<ProcessorStatusDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -213,7 +225,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
   /**
    * Diagnostic Information about all Controller Services that the Processor is referencing
    */
-  public ProcessorDiagnosticsDTOBuilder setReferencedControllerServices(final Set<ControllerServiceDiagnosticsDTO> referencedControllerServices) {
+  public ProcessorDiagnosticsDTOBuilder setReferencedControllerServices(
+      final Set<ControllerServiceDiagnosticsDTO> referencedControllerServices) {
     this.referencedControllerServices = referencedControllerServices;
     return this;
   }
@@ -246,7 +259,8 @@ public final class ProcessorDiagnosticsDTOBuilder {
     return processorDiagnosticsDTO;
   }
 
-  public static ProcessorDiagnosticsDTOBuilder of(final ProcessorDiagnosticsDTO processorDiagnosticsDTO) {
+  public static ProcessorDiagnosticsDTOBuilder of(
+      final ProcessorDiagnosticsDTO processorDiagnosticsDTO) {
     final ProcessorDiagnosticsDTOBuilder processorDiagnosticsDTOBuilder = new ProcessorDiagnosticsDTOBuilder();
     processorDiagnosticsDTOBuilder.setClassLoaderDiagnostics(processorDiagnosticsDTO.getClassLoaderDiagnostics());
     processorDiagnosticsDTOBuilder.setIncomingConnections(processorDiagnosticsDTO.getIncomingConnections());

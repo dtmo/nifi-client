@@ -91,7 +91,8 @@ public final class ProcessGroupEntityBuilder extends AbstractComponentEntityBuil
   /**
    * The number of inactive remote ports in the process group.
    */
-  public ProcessGroupEntityBuilder setInactiveRemotePortCount(final Integer inactiveRemotePortCount) {
+  public ProcessGroupEntityBuilder setInactiveRemotePortCount(
+      final Integer inactiveRemotePortCount) {
     this.inactiveRemotePortCount = inactiveRemotePortCount;
     return this;
   }
@@ -136,7 +137,8 @@ public final class ProcessGroupEntityBuilder extends AbstractComponentEntityBuil
   /**
    * The number of locally modified and stale versioned process groups in the process group.
    */
-  public ProcessGroupEntityBuilder setLocallyModifiedAndStaleCount(final Integer locallyModifiedAndStaleCount) {
+  public ProcessGroupEntityBuilder setLocallyModifiedAndStaleCount(
+      final Integer locallyModifiedAndStaleCount) {
     this.locallyModifiedAndStaleCount = locallyModifiedAndStaleCount;
     return this;
   }
@@ -271,7 +273,8 @@ public final class ProcessGroupEntityBuilder extends AbstractComponentEntityBuil
   /**
    * Returns the Versioned Flow that describes the contents of the Versioned Flow to be imported
    */
-  public ProcessGroupEntityBuilder setVersionedFlowSnapshot(final VersionedFlowSnapshot versionedFlowSnapshot) {
+  public ProcessGroupEntityBuilder setVersionedFlowSnapshot(
+      final VersionedFlowSnapshot versionedFlowSnapshot) {
     this.versionedFlowSnapshot = versionedFlowSnapshot;
     return this;
   }

@@ -40,7 +40,8 @@ public final class RemoteProcessGroupStatusSnapshotEntityBuilder extends Abstrac
     return remoteProcessGroupStatusSnapshot;
   }
 
-  public RemoteProcessGroupStatusSnapshotEntityBuilder setRemoteProcessGroupStatusSnapshot(final RemoteProcessGroupStatusSnapshotDTO remoteProcessGroupStatusSnapshot) {
+  public RemoteProcessGroupStatusSnapshotEntityBuilder setRemoteProcessGroupStatusSnapshot(
+      final RemoteProcessGroupStatusSnapshotDTO remoteProcessGroupStatusSnapshot) {
     this.remoteProcessGroupStatusSnapshot = remoteProcessGroupStatusSnapshot;
     return this;
   }
@@ -54,7 +55,8 @@ public final class RemoteProcessGroupStatusSnapshotEntityBuilder extends Abstrac
     return remoteProcessGroupStatusSnapshotEntity;
   }
 
-  public static RemoteProcessGroupStatusSnapshotEntityBuilder of(final RemoteProcessGroupStatusSnapshotEntity remoteProcessGroupStatusSnapshotEntity) {
+  public static RemoteProcessGroupStatusSnapshotEntityBuilder of(
+      final RemoteProcessGroupStatusSnapshotEntity remoteProcessGroupStatusSnapshotEntity) {
     final RemoteProcessGroupStatusSnapshotEntityBuilder remoteProcessGroupStatusSnapshotEntityBuilder = new RemoteProcessGroupStatusSnapshotEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(remoteProcessGroupStatusSnapshotEntityBuilder, remoteProcessGroupStatusSnapshotEntity);
     remoteProcessGroupStatusSnapshotEntityBuilder.setCanRead(remoteProcessGroupStatusSnapshotEntity.getCanRead());

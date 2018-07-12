@@ -140,7 +140,8 @@ public abstract class AbstractComponentEntityBuilder<T extends AbstractComponent
     componentEntity.setUri(uri);
   }
 
-  protected static void setBuilderValues(final AbstractComponentEntityBuilder abstractComponentEntityBuilder,
+  protected static void setBuilderValues(
+      final AbstractComponentEntityBuilder abstractComponentEntityBuilder,
       final ComponentEntity componentEntity) {
     AbstractEntityBuilder.setBuilderValues(abstractComponentEntityBuilder, componentEntity);
     abstractComponentEntityBuilder.setBulletins(componentEntity.getBulletins());

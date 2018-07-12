@@ -73,7 +73,8 @@ public abstract class AbstractComponentDTOBuilder<T extends AbstractComponentDTO
   /**
    * The position of this component in the UI if applicable.
    */
-  public AbstractComponentDTOBuilder setPosition(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PositionDTOBuilder.class) final Closure<PositionDTOBuilder> closure) {
+  public AbstractComponentDTOBuilder setPosition(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PositionDTOBuilder.class) final Closure<PositionDTOBuilder> closure) {
     return setPosition(c -> {
       final Closure<PositionDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -103,7 +104,8 @@ public abstract class AbstractComponentDTOBuilder<T extends AbstractComponentDTO
     componentDTO.setVersionedComponentId(versionedComponentId);
   }
 
-  protected static void setBuilderValues(final AbstractComponentDTOBuilder abstractComponentDTOBuilder,
+  protected static void setBuilderValues(
+      final AbstractComponentDTOBuilder abstractComponentDTOBuilder,
       final ComponentDTO componentDTO) {
     abstractComponentDTOBuilder.setId(componentDTO.getId());
     abstractComponentDTOBuilder.setParentGroupId(componentDTO.getParentGroupId());

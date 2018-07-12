@@ -43,7 +43,8 @@ public final class ComponentStateDTOBuilder {
   /**
    * The cluster state for this component, or null if this NiFi is a standalone instance.
    */
-  public ComponentStateDTOBuilder setClusterState(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StateMapDTOBuilder.class) final Closure<StateMapDTOBuilder> closure) {
+  public ComponentStateDTOBuilder setClusterState(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StateMapDTOBuilder.class) final Closure<StateMapDTOBuilder> closure) {
     return setClusterState(c -> {
       final Closure<StateMapDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -93,7 +94,8 @@ public final class ComponentStateDTOBuilder {
   /**
    * The local state for this component.
    */
-  public ComponentStateDTOBuilder setLocalState(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StateMapDTOBuilder.class) final Closure<StateMapDTOBuilder> closure) {
+  public ComponentStateDTOBuilder setLocalState(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = StateMapDTOBuilder.class) final Closure<StateMapDTOBuilder> closure) {
     return setLocalState(c -> {
       final Closure<StateMapDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

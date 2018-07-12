@@ -39,7 +39,8 @@ public final class ClassLoaderDiagnosticsDTOBuilder {
   /**
    * Information about the Bundle that the ClassLoader belongs to, if any
    */
-  public ClassLoaderDiagnosticsDTOBuilder setBundle(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
+  public ClassLoaderDiagnosticsDTOBuilder setBundle(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = BundleDTOBuilder.class) final Closure<BundleDTOBuilder> closure) {
     return setBundle(c -> {
       final Closure<BundleDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -57,7 +58,8 @@ public final class ClassLoaderDiagnosticsDTOBuilder {
   /**
    * A ClassLoaderDiagnosticsDTO that provides information about the parent ClassLoader
    */
-  public ClassLoaderDiagnosticsDTOBuilder setParentClassLoader(final ClassLoaderDiagnosticsDTO parentClassLoader) {
+  public ClassLoaderDiagnosticsDTOBuilder setParentClassLoader(
+      final ClassLoaderDiagnosticsDTO parentClassLoader) {
     this.parentClassLoader = parentClassLoader;
     return this;
   }
@@ -65,7 +67,8 @@ public final class ClassLoaderDiagnosticsDTOBuilder {
   /**
    * A ClassLoaderDiagnosticsDTO that provides information about the parent ClassLoader
    */
-  public ClassLoaderDiagnosticsDTOBuilder setParentClassLoader(final Consumer<ClassLoaderDiagnosticsDTOBuilder> configurator) {
+  public ClassLoaderDiagnosticsDTOBuilder setParentClassLoader(
+      final Consumer<ClassLoaderDiagnosticsDTOBuilder> configurator) {
     final ClassLoaderDiagnosticsDTOBuilder builder = (parentClassLoader != null ? ClassLoaderDiagnosticsDTOBuilder.of(parentClassLoader) : new ClassLoaderDiagnosticsDTOBuilder());
     configurator.accept(builder);
     return setParentClassLoader(builder.build());
@@ -74,7 +77,8 @@ public final class ClassLoaderDiagnosticsDTOBuilder {
   /**
    * A ClassLoaderDiagnosticsDTO that provides information about the parent ClassLoader
    */
-  public ClassLoaderDiagnosticsDTOBuilder setParentClassLoader(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ClassLoaderDiagnosticsDTOBuilder.class) final Closure<ClassLoaderDiagnosticsDTOBuilder> closure) {
+  public ClassLoaderDiagnosticsDTOBuilder setParentClassLoader(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ClassLoaderDiagnosticsDTOBuilder.class) final Closure<ClassLoaderDiagnosticsDTOBuilder> closure) {
     return setParentClassLoader(c -> {
       final Closure<ClassLoaderDiagnosticsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -89,7 +93,8 @@ public final class ClassLoaderDiagnosticsDTOBuilder {
     return classLoaderDiagnosticsDTO;
   }
 
-  public static ClassLoaderDiagnosticsDTOBuilder of(final ClassLoaderDiagnosticsDTO classLoaderDiagnosticsDTO) {
+  public static ClassLoaderDiagnosticsDTOBuilder of(
+      final ClassLoaderDiagnosticsDTO classLoaderDiagnosticsDTO) {
     final ClassLoaderDiagnosticsDTOBuilder classLoaderDiagnosticsDTOBuilder = new ClassLoaderDiagnosticsDTOBuilder();
     classLoaderDiagnosticsDTOBuilder.setBundle(classLoaderDiagnosticsDTO.getBundle());
     classLoaderDiagnosticsDTOBuilder.setParentClassLoader(classLoaderDiagnosticsDTO.getParentClassLoader());

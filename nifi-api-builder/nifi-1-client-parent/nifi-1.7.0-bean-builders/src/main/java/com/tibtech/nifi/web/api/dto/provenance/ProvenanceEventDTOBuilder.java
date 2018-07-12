@@ -402,7 +402,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The container in which the input content claim lives.
    */
-  public ProvenanceEventDTOBuilder setInputContentClaimContainer(final String inputContentClaimContainer) {
+  public ProvenanceEventDTOBuilder setInputContentClaimContainer(
+      final String inputContentClaimContainer) {
     this.inputContentClaimContainer = inputContentClaimContainer;
     return this;
   }
@@ -417,7 +418,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The file size of the input content claim formatted.
    */
-  public ProvenanceEventDTOBuilder setInputContentClaimFileSize(final String inputContentClaimFileSize) {
+  public ProvenanceEventDTOBuilder setInputContentClaimFileSize(
+      final String inputContentClaimFileSize) {
     this.inputContentClaimFileSize = inputContentClaimFileSize;
     return this;
   }
@@ -432,7 +434,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The file size of the intput content claim in bytes.
    */
-  public ProvenanceEventDTOBuilder setInputContentClaimFileSizeBytes(final Long inputContentClaimFileSizeBytes) {
+  public ProvenanceEventDTOBuilder setInputContentClaimFileSizeBytes(
+      final Long inputContentClaimFileSizeBytes) {
     this.inputContentClaimFileSizeBytes = inputContentClaimFileSizeBytes;
     return this;
   }
@@ -447,7 +450,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The identifier of the input content claim.
    */
-  public ProvenanceEventDTOBuilder setInputContentClaimIdentifier(final String inputContentClaimIdentifier) {
+  public ProvenanceEventDTOBuilder setInputContentClaimIdentifier(
+      final String inputContentClaimIdentifier) {
     this.inputContentClaimIdentifier = inputContentClaimIdentifier;
     return this;
   }
@@ -477,7 +481,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The section in which the input content claim lives.
    */
-  public ProvenanceEventDTOBuilder setInputContentClaimSection(final String inputContentClaimSection) {
+  public ProvenanceEventDTOBuilder setInputContentClaimSection(
+      final String inputContentClaimSection) {
     this.inputContentClaimSection = inputContentClaimSection;
     return this;
   }
@@ -522,7 +527,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The container in which the output content claim lives.
    */
-  public ProvenanceEventDTOBuilder setOutputContentClaimContainer(final String outputContentClaimContainer) {
+  public ProvenanceEventDTOBuilder setOutputContentClaimContainer(
+      final String outputContentClaimContainer) {
     this.outputContentClaimContainer = outputContentClaimContainer;
     return this;
   }
@@ -537,7 +543,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The file size of the output content claim formatted.
    */
-  public ProvenanceEventDTOBuilder setOutputContentClaimFileSize(final String outputContentClaimFileSize) {
+  public ProvenanceEventDTOBuilder setOutputContentClaimFileSize(
+      final String outputContentClaimFileSize) {
     this.outputContentClaimFileSize = outputContentClaimFileSize;
     return this;
   }
@@ -552,7 +559,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The file size of the output content claim in bytes.
    */
-  public ProvenanceEventDTOBuilder setOutputContentClaimFileSizeBytes(final Long outputContentClaimFileSizeBytes) {
+  public ProvenanceEventDTOBuilder setOutputContentClaimFileSizeBytes(
+      final Long outputContentClaimFileSizeBytes) {
     this.outputContentClaimFileSizeBytes = outputContentClaimFileSizeBytes;
     return this;
   }
@@ -567,7 +575,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The identifier of the output content claim.
    */
-  public ProvenanceEventDTOBuilder setOutputContentClaimIdentifier(final String outputContentClaimIdentifier) {
+  public ProvenanceEventDTOBuilder setOutputContentClaimIdentifier(
+      final String outputContentClaimIdentifier) {
     this.outputContentClaimIdentifier = outputContentClaimIdentifier;
     return this;
   }
@@ -582,7 +591,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The offset into the output content claim where the flowfiles content begins.
    */
-  public ProvenanceEventDTOBuilder setOutputContentClaimOffset(final Long outputContentClaimOffset) {
+  public ProvenanceEventDTOBuilder setOutputContentClaimOffset(
+      final Long outputContentClaimOffset) {
     this.outputContentClaimOffset = outputContentClaimOffset;
     return this;
   }
@@ -597,7 +607,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The section in which the output content claim lives.
    */
-  public ProvenanceEventDTOBuilder setOutputContentClaimSection(final String outputContentClaimSection) {
+  public ProvenanceEventDTOBuilder setOutputContentClaimSection(
+      final String outputContentClaimSection) {
     this.outputContentClaimSection = outputContentClaimSection;
     return this;
   }
@@ -672,7 +683,8 @@ public final class ProvenanceEventDTOBuilder {
   /**
    * The identifier of the queue/connection from which the flowfile was pulled to genereate this event. May be null if the queue/connection is unknown or the flowfile was generated from this event.
    */
-  public ProvenanceEventDTOBuilder setSourceConnectionIdentifier(final String sourceConnectionIdentifier) {
+  public ProvenanceEventDTOBuilder setSourceConnectionIdentifier(
+      final String sourceConnectionIdentifier) {
     this.sourceConnectionIdentifier = sourceConnectionIdentifier;
     return this;
   }

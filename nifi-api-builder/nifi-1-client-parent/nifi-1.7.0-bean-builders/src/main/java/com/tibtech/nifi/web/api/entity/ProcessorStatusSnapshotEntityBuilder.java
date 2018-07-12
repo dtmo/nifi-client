@@ -40,7 +40,8 @@ public final class ProcessorStatusSnapshotEntityBuilder extends AbstractEntityBu
     return processorStatusSnapshot;
   }
 
-  public ProcessorStatusSnapshotEntityBuilder setProcessorStatusSnapshot(final ProcessorStatusSnapshotDTO processorStatusSnapshot) {
+  public ProcessorStatusSnapshotEntityBuilder setProcessorStatusSnapshot(
+      final ProcessorStatusSnapshotDTO processorStatusSnapshot) {
     this.processorStatusSnapshot = processorStatusSnapshot;
     return this;
   }
@@ -54,7 +55,8 @@ public final class ProcessorStatusSnapshotEntityBuilder extends AbstractEntityBu
     return processorStatusSnapshotEntity;
   }
 
-  public static ProcessorStatusSnapshotEntityBuilder of(final ProcessorStatusSnapshotEntity processorStatusSnapshotEntity) {
+  public static ProcessorStatusSnapshotEntityBuilder of(
+      final ProcessorStatusSnapshotEntity processorStatusSnapshotEntity) {
     final ProcessorStatusSnapshotEntityBuilder processorStatusSnapshotEntityBuilder = new ProcessorStatusSnapshotEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(processorStatusSnapshotEntityBuilder, processorStatusSnapshotEntity);
     processorStatusSnapshotEntityBuilder.setCanRead(processorStatusSnapshotEntity.getCanRead());

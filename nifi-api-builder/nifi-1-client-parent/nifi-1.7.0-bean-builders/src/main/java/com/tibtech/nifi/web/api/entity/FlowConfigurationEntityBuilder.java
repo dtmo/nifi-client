@@ -16,7 +16,8 @@ public final class FlowConfigurationEntityBuilder extends AbstractEntityBuilder<
   /**
    * The controller configuration.
    */
-  public FlowConfigurationEntityBuilder setFlowConfiguration(final FlowConfigurationDTO flowConfiguration) {
+  public FlowConfigurationEntityBuilder setFlowConfiguration(
+      final FlowConfigurationDTO flowConfiguration) {
     this.flowConfiguration = flowConfiguration;
     return this;
   }
@@ -28,7 +29,8 @@ public final class FlowConfigurationEntityBuilder extends AbstractEntityBuilder<
     return flowConfigurationEntity;
   }
 
-  public static FlowConfigurationEntityBuilder of(final FlowConfigurationEntity flowConfigurationEntity) {
+  public static FlowConfigurationEntityBuilder of(
+      final FlowConfigurationEntity flowConfigurationEntity) {
     final FlowConfigurationEntityBuilder flowConfigurationEntityBuilder = new FlowConfigurationEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(flowConfigurationEntityBuilder, flowConfigurationEntity);
     flowConfigurationEntityBuilder.setFlowConfiguration(flowConfigurationEntity.getFlowConfiguration());

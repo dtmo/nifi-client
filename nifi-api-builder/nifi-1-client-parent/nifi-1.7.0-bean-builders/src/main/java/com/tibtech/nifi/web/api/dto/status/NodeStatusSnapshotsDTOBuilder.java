@@ -70,7 +70,8 @@ public final class NodeStatusSnapshotsDTOBuilder {
   /**
    * A list of StatusSnapshotDTO objects that provide the actual metric values for the component for this node.
    */
-  public NodeStatusSnapshotsDTOBuilder setStatusSnapshots(final List<StatusSnapshotDTO> statusSnapshots) {
+  public NodeStatusSnapshotsDTOBuilder setStatusSnapshots(
+      final List<StatusSnapshotDTO> statusSnapshots) {
     this.statusSnapshots = statusSnapshots;
     return this;
   }
@@ -84,7 +85,8 @@ public final class NodeStatusSnapshotsDTOBuilder {
     return nodeStatusSnapshotsDTO;
   }
 
-  public static NodeStatusSnapshotsDTOBuilder of(final NodeStatusSnapshotsDTO nodeStatusSnapshotsDTO) {
+  public static NodeStatusSnapshotsDTOBuilder of(
+      final NodeStatusSnapshotsDTO nodeStatusSnapshotsDTO) {
     final NodeStatusSnapshotsDTOBuilder nodeStatusSnapshotsDTOBuilder = new NodeStatusSnapshotsDTOBuilder();
     nodeStatusSnapshotsDTOBuilder.setAddress(nodeStatusSnapshotsDTO.getAddress());
     nodeStatusSnapshotsDTOBuilder.setApiPort(nodeStatusSnapshotsDTO.getApiPort());

@@ -36,7 +36,8 @@ public final class ControllerBulletinsEntityBuilder extends AbstractEntityBuilde
   /**
    * Controller service bulletins to be reported to the user.
    */
-  public ControllerBulletinsEntityBuilder setControllerServiceBulletins(final List<BulletinEntity> controllerServiceBulletins) {
+  public ControllerBulletinsEntityBuilder setControllerServiceBulletins(
+      final List<BulletinEntity> controllerServiceBulletins) {
     this.controllerServiceBulletins = controllerServiceBulletins;
     return this;
   }
@@ -51,7 +52,8 @@ public final class ControllerBulletinsEntityBuilder extends AbstractEntityBuilde
   /**
    * Reporting task bulletins to be reported to the user.
    */
-  public ControllerBulletinsEntityBuilder setReportingTaskBulletins(final List<BulletinEntity> reportingTaskBulletins) {
+  public ControllerBulletinsEntityBuilder setReportingTaskBulletins(
+      final List<BulletinEntity> reportingTaskBulletins) {
     this.reportingTaskBulletins = reportingTaskBulletins;
     return this;
   }
@@ -65,7 +67,8 @@ public final class ControllerBulletinsEntityBuilder extends AbstractEntityBuilde
     return controllerBulletinsEntity;
   }
 
-  public static ControllerBulletinsEntityBuilder of(final ControllerBulletinsEntity controllerBulletinsEntity) {
+  public static ControllerBulletinsEntityBuilder of(
+      final ControllerBulletinsEntity controllerBulletinsEntity) {
     final ControllerBulletinsEntityBuilder controllerBulletinsEntityBuilder = new ControllerBulletinsEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(controllerBulletinsEntityBuilder, controllerBulletinsEntity);
     controllerBulletinsEntityBuilder.setBulletins(controllerBulletinsEntity.getBulletins());

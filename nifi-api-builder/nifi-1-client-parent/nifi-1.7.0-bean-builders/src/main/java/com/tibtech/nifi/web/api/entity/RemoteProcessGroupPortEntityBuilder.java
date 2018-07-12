@@ -10,7 +10,8 @@ public final class RemoteProcessGroupPortEntityBuilder extends AbstractComponent
     return remoteProcessGroupPort;
   }
 
-  public RemoteProcessGroupPortEntityBuilder setRemoteProcessGroupPort(final RemoteProcessGroupPortDTO remoteProcessGroupPort) {
+  public RemoteProcessGroupPortEntityBuilder setRemoteProcessGroupPort(
+      final RemoteProcessGroupPortDTO remoteProcessGroupPort) {
     this.remoteProcessGroupPort = remoteProcessGroupPort;
     return this;
   }
@@ -22,7 +23,8 @@ public final class RemoteProcessGroupPortEntityBuilder extends AbstractComponent
     return remoteProcessGroupPortEntity;
   }
 
-  public static RemoteProcessGroupPortEntityBuilder of(final RemoteProcessGroupPortEntity remoteProcessGroupPortEntity) {
+  public static RemoteProcessGroupPortEntityBuilder of(
+      final RemoteProcessGroupPortEntity remoteProcessGroupPortEntity) {
     final RemoteProcessGroupPortEntityBuilder remoteProcessGroupPortEntityBuilder = new RemoteProcessGroupPortEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(remoteProcessGroupPortEntityBuilder, remoteProcessGroupPortEntity);
     remoteProcessGroupPortEntityBuilder.setRemoteProcessGroupPort(remoteProcessGroupPortEntity.getRemoteProcessGroupPort());

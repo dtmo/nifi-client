@@ -23,7 +23,8 @@ public final class SystemDiagnosticsDTOBuilder {
   /**
    * A systems diagnostic snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public SystemDiagnosticsDTOBuilder setAggregateSnapshot(final SystemDiagnosticsSnapshotDTO aggregateSnapshot) {
+  public SystemDiagnosticsDTOBuilder setAggregateSnapshot(
+      final SystemDiagnosticsSnapshotDTO aggregateSnapshot) {
     this.aggregateSnapshot = aggregateSnapshot;
     return this;
   }
@@ -31,7 +32,8 @@ public final class SystemDiagnosticsDTOBuilder {
   /**
    * A systems diagnostic snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public SystemDiagnosticsDTOBuilder setAggregateSnapshot(final Consumer<SystemDiagnosticsSnapshotDTOBuilder> configurator) {
+  public SystemDiagnosticsDTOBuilder setAggregateSnapshot(
+      final Consumer<SystemDiagnosticsSnapshotDTOBuilder> configurator) {
     final SystemDiagnosticsSnapshotDTOBuilder builder = (aggregateSnapshot != null ? SystemDiagnosticsSnapshotDTOBuilder.of(aggregateSnapshot) : new SystemDiagnosticsSnapshotDTOBuilder());
     configurator.accept(builder);
     return setAggregateSnapshot(builder.build());
@@ -40,7 +42,8 @@ public final class SystemDiagnosticsDTOBuilder {
   /**
    * A systems diagnostic snapshot that represents the aggregate values of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public SystemDiagnosticsDTOBuilder setAggregateSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SystemDiagnosticsSnapshotDTOBuilder.class) final Closure<SystemDiagnosticsSnapshotDTOBuilder> closure) {
+  public SystemDiagnosticsDTOBuilder setAggregateSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SystemDiagnosticsSnapshotDTOBuilder.class) final Closure<SystemDiagnosticsSnapshotDTOBuilder> closure) {
     return setAggregateSnapshot(c -> {
       final Closure<SystemDiagnosticsSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -58,7 +61,8 @@ public final class SystemDiagnosticsDTOBuilder {
   /**
    * A systems diagnostics snapshot for each node in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this may be null.
    */
-  public SystemDiagnosticsDTOBuilder setNodeSnapshots(final List<NodeSystemDiagnosticsSnapshotDTO> nodeSnapshots) {
+  public SystemDiagnosticsDTOBuilder setNodeSnapshots(
+      final List<NodeSystemDiagnosticsSnapshotDTO> nodeSnapshots) {
     this.nodeSnapshots = nodeSnapshots;
     return this;
   }

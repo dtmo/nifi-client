@@ -22,7 +22,8 @@ public final class VariableRegistryEntityBuilder extends AbstractEntityBuilder<V
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public VariableRegistryEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public VariableRegistryEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -37,7 +38,8 @@ public final class VariableRegistryEntityBuilder extends AbstractEntityBuilder<V
   /**
    * The revision of the Process Group that the Variable Registry belongs to
    */
-  public VariableRegistryEntityBuilder setProcessGroupRevision(final RevisionDTO processGroupRevision) {
+  public VariableRegistryEntityBuilder setProcessGroupRevision(
+      final RevisionDTO processGroupRevision) {
     this.processGroupRevision = processGroupRevision;
     return this;
   }
@@ -52,7 +54,8 @@ public final class VariableRegistryEntityBuilder extends AbstractEntityBuilder<V
   /**
    * The Variable Registry.
    */
-  public VariableRegistryEntityBuilder setVariableRegistry(final VariableRegistryDTO variableRegistry) {
+  public VariableRegistryEntityBuilder setVariableRegistry(
+      final VariableRegistryDTO variableRegistry) {
     this.variableRegistry = variableRegistry;
     return this;
   }
@@ -66,7 +69,8 @@ public final class VariableRegistryEntityBuilder extends AbstractEntityBuilder<V
     return variableRegistryEntity;
   }
 
-  public static VariableRegistryEntityBuilder of(final VariableRegistryEntity variableRegistryEntity) {
+  public static VariableRegistryEntityBuilder of(
+      final VariableRegistryEntity variableRegistryEntity) {
     final VariableRegistryEntityBuilder variableRegistryEntityBuilder = new VariableRegistryEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(variableRegistryEntityBuilder, variableRegistryEntity);
     variableRegistryEntityBuilder.setDisconnectedNodeAcknowledged(variableRegistryEntity.isDisconnectedNodeAcknowledged());

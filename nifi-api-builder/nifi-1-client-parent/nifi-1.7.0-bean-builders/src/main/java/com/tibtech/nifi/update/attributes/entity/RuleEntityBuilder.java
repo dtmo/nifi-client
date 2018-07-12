@@ -30,7 +30,8 @@ public final class RuleEntityBuilder {
     return disconnectedNodeAcknowledged;
   }
 
-  public RuleEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public RuleEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }

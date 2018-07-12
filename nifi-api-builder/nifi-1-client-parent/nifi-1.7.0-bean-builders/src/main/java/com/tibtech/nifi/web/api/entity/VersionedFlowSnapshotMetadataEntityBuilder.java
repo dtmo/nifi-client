@@ -28,7 +28,8 @@ public final class VersionedFlowSnapshotMetadataEntityBuilder extends AbstractEn
     return versionedFlowSnapshotMetadataEntity;
   }
 
-  public static VersionedFlowSnapshotMetadataEntityBuilder of(final VersionedFlowSnapshotMetadataEntity versionedFlowSnapshotMetadataEntity) {
+  public static VersionedFlowSnapshotMetadataEntityBuilder of(
+      final VersionedFlowSnapshotMetadataEntity versionedFlowSnapshotMetadataEntity) {
     final VersionedFlowSnapshotMetadataEntityBuilder versionedFlowSnapshotMetadataEntityBuilder = new VersionedFlowSnapshotMetadataEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(versionedFlowSnapshotMetadataEntityBuilder, versionedFlowSnapshotMetadataEntity);
     versionedFlowSnapshotMetadataEntityBuilder.setRegistryId(versionedFlowSnapshotMetadataEntity.getRegistryId());

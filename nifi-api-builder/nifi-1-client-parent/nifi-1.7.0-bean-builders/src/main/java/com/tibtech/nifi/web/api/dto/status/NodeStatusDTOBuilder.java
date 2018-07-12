@@ -31,7 +31,8 @@ public final class NodeStatusDTOBuilder {
   /**
    * The controller status for each node.
    */
-  public NodeStatusDTOBuilder setControllerStatus(final Consumer<ProcessGroupStatusDTOBuilder> configurator) {
+  public NodeStatusDTOBuilder setControllerStatus(
+      final Consumer<ProcessGroupStatusDTOBuilder> configurator) {
     final ProcessGroupStatusDTOBuilder builder = (controllerStatus != null ? ProcessGroupStatusDTOBuilder.of(controllerStatus) : new ProcessGroupStatusDTOBuilder());
     configurator.accept(builder);
     return setControllerStatus(builder.build());
@@ -40,7 +41,8 @@ public final class NodeStatusDTOBuilder {
   /**
    * The controller status for each node.
    */
-  public NodeStatusDTOBuilder setControllerStatus(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupStatusDTOBuilder.class) final Closure<ProcessGroupStatusDTOBuilder> closure) {
+  public NodeStatusDTOBuilder setControllerStatus(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupStatusDTOBuilder.class) final Closure<ProcessGroupStatusDTOBuilder> closure) {
     return setControllerStatus(c -> {
       final Closure<ProcessGroupStatusDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -75,7 +77,8 @@ public final class NodeStatusDTOBuilder {
   /**
    * The node.
    */
-  public NodeStatusDTOBuilder setNode(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = NodeDTOBuilder.class) final Closure<NodeDTOBuilder> closure) {
+  public NodeStatusDTOBuilder setNode(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = NodeDTOBuilder.class) final Closure<NodeDTOBuilder> closure) {
     return setNode(c -> {
       final Closure<NodeDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

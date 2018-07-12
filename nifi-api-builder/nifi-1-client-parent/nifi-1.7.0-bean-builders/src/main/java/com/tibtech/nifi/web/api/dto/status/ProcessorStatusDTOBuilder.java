@@ -37,7 +37,8 @@ public final class ProcessorStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public ProcessorStatusDTOBuilder setAggregateSnapshot(final ProcessorStatusSnapshotDTO aggregateSnapshot) {
+  public ProcessorStatusDTOBuilder setAggregateSnapshot(
+      final ProcessorStatusSnapshotDTO aggregateSnapshot) {
     this.aggregateSnapshot = aggregateSnapshot;
     return this;
   }
@@ -45,7 +46,8 @@ public final class ProcessorStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public ProcessorStatusDTOBuilder setAggregateSnapshot(final Consumer<ProcessorStatusSnapshotDTOBuilder> configurator) {
+  public ProcessorStatusDTOBuilder setAggregateSnapshot(
+      final Consumer<ProcessorStatusSnapshotDTOBuilder> configurator) {
     final ProcessorStatusSnapshotDTOBuilder builder = (aggregateSnapshot != null ? ProcessorStatusSnapshotDTOBuilder.of(aggregateSnapshot) : new ProcessorStatusSnapshotDTOBuilder());
     configurator.accept(builder);
     return setAggregateSnapshot(builder.build());
@@ -54,7 +56,8 @@ public final class ProcessorStatusDTOBuilder {
   /**
    * A status snapshot that represents the aggregate stats of all nodes in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this represents the stats of the single instance.
    */
-  public ProcessorStatusDTOBuilder setAggregateSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorStatusSnapshotDTOBuilder.class) final Closure<ProcessorStatusSnapshotDTOBuilder> closure) {
+  public ProcessorStatusDTOBuilder setAggregateSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorStatusSnapshotDTOBuilder.class) final Closure<ProcessorStatusSnapshotDTOBuilder> closure) {
     return setAggregateSnapshot(c -> {
       final Closure<ProcessorStatusSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -117,7 +120,8 @@ public final class ProcessorStatusDTOBuilder {
   /**
    * A status snapshot for each node in the cluster. If the NiFi instance is a standalone instance, rather than a cluster, this may be null.
    */
-  public ProcessorStatusDTOBuilder setNodeSnapshots(final List<NodeProcessorStatusSnapshotDTO> nodeSnapshots) {
+  public ProcessorStatusDTOBuilder setNodeSnapshots(
+      final List<NodeProcessorStatusSnapshotDTO> nodeSnapshots) {
     this.nodeSnapshots = nodeSnapshots;
     return this;
   }

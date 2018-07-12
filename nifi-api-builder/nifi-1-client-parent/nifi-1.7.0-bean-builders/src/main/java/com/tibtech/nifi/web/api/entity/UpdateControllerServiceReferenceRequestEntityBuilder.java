@@ -25,7 +25,8 @@ public final class UpdateControllerServiceReferenceRequestEntityBuilder extends 
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public UpdateControllerServiceReferenceRequestEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public UpdateControllerServiceReferenceRequestEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -55,7 +56,8 @@ public final class UpdateControllerServiceReferenceRequestEntityBuilder extends 
   /**
    * The revisions for all referencing components.
    */
-  public UpdateControllerServiceReferenceRequestEntityBuilder setReferencingComponentRevisions(final Map<String, RevisionDTO> referencingComponentRevisions) {
+  public UpdateControllerServiceReferenceRequestEntityBuilder setReferencingComponentRevisions(
+      final Map<String, RevisionDTO> referencingComponentRevisions) {
     this.referencingComponentRevisions = referencingComponentRevisions;
     return this;
   }
@@ -85,7 +87,8 @@ public final class UpdateControllerServiceReferenceRequestEntityBuilder extends 
     return updateControllerServiceReferenceRequestEntity;
   }
 
-  public static UpdateControllerServiceReferenceRequestEntityBuilder of(final UpdateControllerServiceReferenceRequestEntity updateControllerServiceReferenceRequestEntity) {
+  public static UpdateControllerServiceReferenceRequestEntityBuilder of(
+      final UpdateControllerServiceReferenceRequestEntity updateControllerServiceReferenceRequestEntity) {
     final UpdateControllerServiceReferenceRequestEntityBuilder updateControllerServiceReferenceRequestEntityBuilder = new UpdateControllerServiceReferenceRequestEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(updateControllerServiceReferenceRequestEntityBuilder, updateControllerServiceReferenceRequestEntity);
     updateControllerServiceReferenceRequestEntityBuilder.setDisconnectedNodeAcknowledged(updateControllerServiceReferenceRequestEntity.isDisconnectedNodeAcknowledged());

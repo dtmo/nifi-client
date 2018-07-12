@@ -53,7 +53,8 @@ public final class LineageRequestDTOBuilder {
   /**
    * The type of lineage request. PARENTS will return the lineage for the flowfiles that are parents of the specified event. CHILDREN will return the lineage for the flowfiles that are children of the specified event. FLOWFILE will return the lineage for the specified flowfile.
    */
-  public LineageRequestDTOBuilder setLineageRequestType(final LineageRequestDTO.LineageRequestType lineageRequestType) {
+  public LineageRequestDTOBuilder setLineageRequestType(
+      final LineageRequestDTO.LineageRequestType lineageRequestType) {
     this.lineageRequestType = lineageRequestType;
     return this;
   }

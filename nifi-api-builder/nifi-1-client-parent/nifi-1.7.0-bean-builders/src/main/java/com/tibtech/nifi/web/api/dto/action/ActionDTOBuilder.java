@@ -58,7 +58,8 @@ public final class ActionDTOBuilder {
   /**
    * The details of the action.
    */
-  public ActionDTOBuilder setActionDetails(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ActionDetailsDTOBuilder.class) final Closure<ActionDetailsDTOBuilder> closure) {
+  public ActionDTOBuilder setActionDetails(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ActionDetailsDTOBuilder.class) final Closure<ActionDetailsDTOBuilder> closure) {
     return setActionDetails(c -> {
       final Closure<ActionDetailsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -84,7 +85,8 @@ public final class ActionDTOBuilder {
   /**
    * The details of the source component.
    */
-  public ActionDTOBuilder setComponentDetails(final Consumer<ComponentDetailsDTOBuilder> configurator) {
+  public ActionDTOBuilder setComponentDetails(
+      final Consumer<ComponentDetailsDTOBuilder> configurator) {
     final ComponentDetailsDTOBuilder builder = (componentDetails != null ? ComponentDetailsDTOBuilder.of(componentDetails) : new ComponentDetailsDTOBuilder());
     configurator.accept(builder);
     return setComponentDetails(builder.build());
@@ -93,7 +95,8 @@ public final class ActionDTOBuilder {
   /**
    * The details of the source component.
    */
-  public ActionDTOBuilder setComponentDetails(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ComponentDetailsDTOBuilder.class) final Closure<ComponentDetailsDTOBuilder> closure) {
+  public ActionDTOBuilder setComponentDetails(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ComponentDetailsDTOBuilder.class) final Closure<ComponentDetailsDTOBuilder> closure) {
     return setComponentDetails(c -> {
       final Closure<ComponentDetailsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

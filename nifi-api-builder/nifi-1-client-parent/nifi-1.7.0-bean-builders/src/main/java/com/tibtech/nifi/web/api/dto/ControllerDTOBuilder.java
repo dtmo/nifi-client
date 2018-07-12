@@ -232,7 +232,8 @@ public final class ControllerDTOBuilder {
   /**
    * The HTTP(S) Port on which this instance is listening for Remote Transfers of Flow Files. If this instance is not configured to receive Flow Files from remote instances, this will be null.
    */
-  public ControllerDTOBuilder setRemoteSiteHttpListeningPort(final Integer remoteSiteHttpListeningPort) {
+  public ControllerDTOBuilder setRemoteSiteHttpListeningPort(
+      final Integer remoteSiteHttpListeningPort) {
     this.remoteSiteHttpListeningPort = remoteSiteHttpListeningPort;
     return this;
   }

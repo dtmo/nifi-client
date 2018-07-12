@@ -11,7 +11,8 @@ public final class ClusterSearchResultsEntityBuilder {
     return nodeResults;
   }
 
-  public ClusterSearchResultsEntityBuilder setNodeResults(final List<NodeSearchResultDTO> nodeResults) {
+  public ClusterSearchResultsEntityBuilder setNodeResults(
+      final List<NodeSearchResultDTO> nodeResults) {
     this.nodeResults = nodeResults;
     return this;
   }
@@ -22,7 +23,8 @@ public final class ClusterSearchResultsEntityBuilder {
     return clusterSearchResultsEntity;
   }
 
-  public static ClusterSearchResultsEntityBuilder of(final ClusterSearchResultsEntity clusterSearchResultsEntity) {
+  public static ClusterSearchResultsEntityBuilder of(
+      final ClusterSearchResultsEntity clusterSearchResultsEntity) {
     final ClusterSearchResultsEntityBuilder clusterSearchResultsEntityBuilder = new ClusterSearchResultsEntityBuilder();
     clusterSearchResultsEntityBuilder.setNodeResults(clusterSearchResultsEntity.getNodeResults());
     return clusterSearchResultsEntityBuilder;

@@ -64,7 +64,8 @@ public final class ProcessGroupFlowDTOBuilder {
   /**
    * The flow structure starting at this Process Group.
    */
-  public ProcessGroupFlowDTOBuilder setFlow(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FlowDTOBuilder.class) final Closure<FlowDTOBuilder> closure) {
+  public ProcessGroupFlowDTOBuilder setFlow(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FlowDTOBuilder.class) final Closure<FlowDTOBuilder> closure) {
     return setFlow(c -> {
       final Closure<FlowDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

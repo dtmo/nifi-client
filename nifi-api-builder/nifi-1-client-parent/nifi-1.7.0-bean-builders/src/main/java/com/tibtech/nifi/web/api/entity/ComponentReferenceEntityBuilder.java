@@ -41,7 +41,8 @@ public final class ComponentReferenceEntityBuilder extends AbstractComponentEnti
     return componentReferenceEntity;
   }
 
-  public static ComponentReferenceEntityBuilder of(final ComponentReferenceEntity componentReferenceEntity) {
+  public static ComponentReferenceEntityBuilder of(
+      final ComponentReferenceEntity componentReferenceEntity) {
     final ComponentReferenceEntityBuilder componentReferenceEntityBuilder = new ComponentReferenceEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(componentReferenceEntityBuilder, componentReferenceEntity);
     componentReferenceEntityBuilder.setComponent(componentReferenceEntity.getComponent());

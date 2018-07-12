@@ -55,7 +55,8 @@ public final class FlowBreadcrumbDTOBuilder {
   /**
    * The process group version control information or null if not version controlled.
    */
-  public FlowBreadcrumbDTOBuilder setVersionControlInformation(final VersionControlInformationDTO versionControlInformation) {
+  public FlowBreadcrumbDTOBuilder setVersionControlInformation(
+      final VersionControlInformationDTO versionControlInformation) {
     this.versionControlInformation = versionControlInformation;
     return this;
   }
@@ -63,7 +64,8 @@ public final class FlowBreadcrumbDTOBuilder {
   /**
    * The process group version control information or null if not version controlled.
    */
-  public FlowBreadcrumbDTOBuilder setVersionControlInformation(final Consumer<VersionControlInformationDTOBuilder> configurator) {
+  public FlowBreadcrumbDTOBuilder setVersionControlInformation(
+      final Consumer<VersionControlInformationDTOBuilder> configurator) {
     final VersionControlInformationDTOBuilder builder = (versionControlInformation != null ? VersionControlInformationDTOBuilder.of(versionControlInformation) : new VersionControlInformationDTOBuilder());
     configurator.accept(builder);
     return setVersionControlInformation(builder.build());
@@ -72,7 +74,8 @@ public final class FlowBreadcrumbDTOBuilder {
   /**
    * The process group version control information or null if not version controlled.
    */
-  public FlowBreadcrumbDTOBuilder setVersionControlInformation(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = VersionControlInformationDTOBuilder.class) final Closure<VersionControlInformationDTOBuilder> closure) {
+  public FlowBreadcrumbDTOBuilder setVersionControlInformation(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = VersionControlInformationDTOBuilder.class) final Closure<VersionControlInformationDTOBuilder> closure) {
     return setVersionControlInformation(c -> {
       final Closure<VersionControlInformationDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

@@ -14,7 +14,8 @@ public final class ControllerServicesEntityBuilder extends AbstractEntityBuilder
     return controllerServices;
   }
 
-  public ControllerServicesEntityBuilder setControllerServices(final Set<ControllerServiceEntity> controllerServices) {
+  public ControllerServicesEntityBuilder setControllerServices(
+      final Set<ControllerServiceEntity> controllerServices) {
     this.controllerServices = controllerServices;
     return this;
   }
@@ -42,7 +43,8 @@ public final class ControllerServicesEntityBuilder extends AbstractEntityBuilder
     return controllerServicesEntity;
   }
 
-  public static ControllerServicesEntityBuilder of(final ControllerServicesEntity controllerServicesEntity) {
+  public static ControllerServicesEntityBuilder of(
+      final ControllerServicesEntity controllerServicesEntity) {
     final ControllerServicesEntityBuilder controllerServicesEntityBuilder = new ControllerServicesEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(controllerServicesEntityBuilder, controllerServicesEntity);
     controllerServicesEntityBuilder.setControllerServices(controllerServicesEntity.getControllerServices());

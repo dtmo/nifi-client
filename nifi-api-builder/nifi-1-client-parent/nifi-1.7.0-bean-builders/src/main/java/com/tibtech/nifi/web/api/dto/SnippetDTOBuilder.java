@@ -173,7 +173,8 @@ public final class SnippetDTOBuilder {
   /**
    * The ids of the remote process groups in this snippet. These ids will be populated within each response. They can be specified when creating a snippet. However, once a snippet has been created its contents cannot be modified (these ids are ignored during update requests).
    */
-  public SnippetDTOBuilder setRemoteProcessGroups(final Map<String, RevisionDTO> remoteProcessGroups) {
+  public SnippetDTOBuilder setRemoteProcessGroups(
+      final Map<String, RevisionDTO> remoteProcessGroups) {
     this.remoteProcessGroups = remoteProcessGroups;
     return this;
   }

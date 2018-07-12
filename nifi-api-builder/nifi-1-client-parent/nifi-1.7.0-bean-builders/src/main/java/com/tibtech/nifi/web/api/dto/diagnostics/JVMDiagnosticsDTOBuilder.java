@@ -28,7 +28,8 @@ public final class JVMDiagnosticsDTOBuilder {
   /**
    * Aggregate JVM diagnostic information about the entire cluster
    */
-  public JVMDiagnosticsDTOBuilder setAggregateSnapshot(final JVMDiagnosticsSnapshotDTO aggregateSnapshot) {
+  public JVMDiagnosticsDTOBuilder setAggregateSnapshot(
+      final JVMDiagnosticsSnapshotDTO aggregateSnapshot) {
     this.aggregateSnapshot = aggregateSnapshot;
     return this;
   }
@@ -36,7 +37,8 @@ public final class JVMDiagnosticsDTOBuilder {
   /**
    * Aggregate JVM diagnostic information about the entire cluster
    */
-  public JVMDiagnosticsDTOBuilder setAggregateSnapshot(final Consumer<JVMDiagnosticsSnapshotDTOBuilder> configurator) {
+  public JVMDiagnosticsDTOBuilder setAggregateSnapshot(
+      final Consumer<JVMDiagnosticsSnapshotDTOBuilder> configurator) {
     final JVMDiagnosticsSnapshotDTOBuilder builder = (aggregateSnapshot != null ? JVMDiagnosticsSnapshotDTOBuilder.of(aggregateSnapshot) : new JVMDiagnosticsSnapshotDTOBuilder());
     configurator.accept(builder);
     return setAggregateSnapshot(builder.build());
@@ -45,7 +47,8 @@ public final class JVMDiagnosticsDTOBuilder {
   /**
    * Aggregate JVM diagnostic information about the entire cluster
    */
-  public JVMDiagnosticsDTOBuilder setAggregateSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JVMDiagnosticsSnapshotDTOBuilder.class) final Closure<JVMDiagnosticsSnapshotDTOBuilder> closure) {
+  public JVMDiagnosticsDTOBuilder setAggregateSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = JVMDiagnosticsSnapshotDTOBuilder.class) final Closure<JVMDiagnosticsSnapshotDTOBuilder> closure) {
     return setAggregateSnapshot(c -> {
       final Closure<JVMDiagnosticsSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -93,7 +96,8 @@ public final class JVMDiagnosticsDTOBuilder {
   /**
    * Node-wise breakdown of JVM diagnostic information
    */
-  public JVMDiagnosticsDTOBuilder setNodeSnapshots(final List<NodeJVMDiagnosticsSnapshotDTO> nodeSnapshots) {
+  public JVMDiagnosticsDTOBuilder setNodeSnapshots(
+      final List<NodeJVMDiagnosticsSnapshotDTO> nodeSnapshots) {
     this.nodeSnapshots = nodeSnapshots;
     return this;
   }

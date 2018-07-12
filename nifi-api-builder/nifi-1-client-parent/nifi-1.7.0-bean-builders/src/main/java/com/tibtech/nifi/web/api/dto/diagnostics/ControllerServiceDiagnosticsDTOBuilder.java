@@ -22,7 +22,8 @@ public final class ControllerServiceDiagnosticsDTOBuilder {
   /**
    * Information about the Controller Service's Class Loader
    */
-  public ControllerServiceDiagnosticsDTOBuilder setClassLoaderDiagnostics(final ClassLoaderDiagnosticsDTO classLoaderDiagnostics) {
+  public ControllerServiceDiagnosticsDTOBuilder setClassLoaderDiagnostics(
+      final ClassLoaderDiagnosticsDTO classLoaderDiagnostics) {
     this.classLoaderDiagnostics = classLoaderDiagnostics;
     return this;
   }
@@ -30,7 +31,8 @@ public final class ControllerServiceDiagnosticsDTOBuilder {
   /**
    * Information about the Controller Service's Class Loader
    */
-  public ControllerServiceDiagnosticsDTOBuilder setClassLoaderDiagnostics(final Consumer<ClassLoaderDiagnosticsDTOBuilder> configurator) {
+  public ControllerServiceDiagnosticsDTOBuilder setClassLoaderDiagnostics(
+      final Consumer<ClassLoaderDiagnosticsDTOBuilder> configurator) {
     final ClassLoaderDiagnosticsDTOBuilder builder = (classLoaderDiagnostics != null ? ClassLoaderDiagnosticsDTOBuilder.of(classLoaderDiagnostics) : new ClassLoaderDiagnosticsDTOBuilder());
     configurator.accept(builder);
     return setClassLoaderDiagnostics(builder.build());
@@ -39,7 +41,8 @@ public final class ControllerServiceDiagnosticsDTOBuilder {
   /**
    * Information about the Controller Service's Class Loader
    */
-  public ControllerServiceDiagnosticsDTOBuilder setClassLoaderDiagnostics(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ClassLoaderDiagnosticsDTOBuilder.class) final Closure<ClassLoaderDiagnosticsDTOBuilder> closure) {
+  public ControllerServiceDiagnosticsDTOBuilder setClassLoaderDiagnostics(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ClassLoaderDiagnosticsDTOBuilder.class) final Closure<ClassLoaderDiagnosticsDTOBuilder> closure) {
     return setClassLoaderDiagnostics(c -> {
       final Closure<ClassLoaderDiagnosticsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -57,7 +60,8 @@ public final class ControllerServiceDiagnosticsDTOBuilder {
   /**
    * The Controller Service
    */
-  public ControllerServiceDiagnosticsDTOBuilder setControllerService(final ControllerServiceEntity controllerService) {
+  public ControllerServiceDiagnosticsDTOBuilder setControllerService(
+      final ControllerServiceEntity controllerService) {
     this.controllerService = controllerService;
     return this;
   }
@@ -69,7 +73,8 @@ public final class ControllerServiceDiagnosticsDTOBuilder {
     return controllerServiceDiagnosticsDTO;
   }
 
-  public static ControllerServiceDiagnosticsDTOBuilder of(final ControllerServiceDiagnosticsDTO controllerServiceDiagnosticsDTO) {
+  public static ControllerServiceDiagnosticsDTOBuilder of(
+      final ControllerServiceDiagnosticsDTO controllerServiceDiagnosticsDTO) {
     final ControllerServiceDiagnosticsDTOBuilder controllerServiceDiagnosticsDTOBuilder = new ControllerServiceDiagnosticsDTOBuilder();
     controllerServiceDiagnosticsDTOBuilder.setClassLoaderDiagnostics(controllerServiceDiagnosticsDTO.getClassLoaderDiagnostics());
     controllerServiceDiagnosticsDTOBuilder.setControllerService(controllerServiceDiagnosticsDTO.getControllerService());

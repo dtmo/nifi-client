@@ -10,7 +10,8 @@ public final class SystemDiagnosticsEntityBuilder extends AbstractEntityBuilder<
     return systemDiagnostics;
   }
 
-  public SystemDiagnosticsEntityBuilder setSystemDiagnostics(final SystemDiagnosticsDTO systemDiagnostics) {
+  public SystemDiagnosticsEntityBuilder setSystemDiagnostics(
+      final SystemDiagnosticsDTO systemDiagnostics) {
     this.systemDiagnostics = systemDiagnostics;
     return this;
   }
@@ -22,7 +23,8 @@ public final class SystemDiagnosticsEntityBuilder extends AbstractEntityBuilder<
     return systemDiagnosticsEntity;
   }
 
-  public static SystemDiagnosticsEntityBuilder of(final SystemDiagnosticsEntity systemDiagnosticsEntity) {
+  public static SystemDiagnosticsEntityBuilder of(
+      final SystemDiagnosticsEntity systemDiagnosticsEntity) {
     final SystemDiagnosticsEntityBuilder systemDiagnosticsEntityBuilder = new SystemDiagnosticsEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(systemDiagnosticsEntityBuilder, systemDiagnosticsEntity);
     systemDiagnosticsEntityBuilder.setSystemDiagnostics(systemDiagnosticsEntity.getSystemDiagnostics());

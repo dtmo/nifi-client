@@ -11,7 +11,8 @@ public final class RemoteProcessGroupsEntityBuilder extends AbstractEntityBuilde
     return remoteProcessGroups;
   }
 
-  public RemoteProcessGroupsEntityBuilder setRemoteProcessGroups(final Set<RemoteProcessGroupEntity> remoteProcessGroups) {
+  public RemoteProcessGroupsEntityBuilder setRemoteProcessGroups(
+      final Set<RemoteProcessGroupEntity> remoteProcessGroups) {
     this.remoteProcessGroups = remoteProcessGroups;
     return this;
   }
@@ -23,7 +24,8 @@ public final class RemoteProcessGroupsEntityBuilder extends AbstractEntityBuilde
     return remoteProcessGroupsEntity;
   }
 
-  public static RemoteProcessGroupsEntityBuilder of(final RemoteProcessGroupsEntity remoteProcessGroupsEntity) {
+  public static RemoteProcessGroupsEntityBuilder of(
+      final RemoteProcessGroupsEntity remoteProcessGroupsEntity) {
     final RemoteProcessGroupsEntityBuilder remoteProcessGroupsEntityBuilder = new RemoteProcessGroupsEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(remoteProcessGroupsEntityBuilder, remoteProcessGroupsEntity);
     remoteProcessGroupsEntityBuilder.setRemoteProcessGroups(remoteProcessGroupsEntity.getRemoteProcessGroups());

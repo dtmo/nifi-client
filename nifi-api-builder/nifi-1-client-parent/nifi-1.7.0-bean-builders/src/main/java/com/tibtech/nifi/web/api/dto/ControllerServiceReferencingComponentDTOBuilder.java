@@ -45,7 +45,8 @@ public final class ControllerServiceReferencingComponentDTOBuilder {
   /**
    * The number of active threads for the referencing component.
    */
-  public ControllerServiceReferencingComponentDTOBuilder setActiveThreadCount(final Integer activeThreadCount) {
+  public ControllerServiceReferencingComponentDTOBuilder setActiveThreadCount(
+      final Integer activeThreadCount) {
     this.activeThreadCount = activeThreadCount;
     return this;
   }
@@ -60,7 +61,8 @@ public final class ControllerServiceReferencingComponentDTOBuilder {
   /**
    * The descriptors for the component properties.
    */
-  public ControllerServiceReferencingComponentDTOBuilder setDescriptors(final Map<String, PropertyDescriptorDTO> descriptors) {
+  public ControllerServiceReferencingComponentDTOBuilder setDescriptors(
+      final Map<String, PropertyDescriptorDTO> descriptors) {
     this.descriptors = descriptors;
     return this;
   }
@@ -120,7 +122,8 @@ public final class ControllerServiceReferencingComponentDTOBuilder {
   /**
    * The properties for the component.
    */
-  public ControllerServiceReferencingComponentDTOBuilder setProperties(final Map<String, String> properties) {
+  public ControllerServiceReferencingComponentDTOBuilder setProperties(
+      final Map<String, String> properties) {
     this.properties = properties;
     return this;
   }
@@ -135,7 +138,8 @@ public final class ControllerServiceReferencingComponentDTOBuilder {
   /**
    * If the referencing component represents a controller service, this indicates whether it has already been represented in this hierarchy.
    */
-  public ControllerServiceReferencingComponentDTOBuilder setReferenceCycle(final Boolean referenceCycle) {
+  public ControllerServiceReferencingComponentDTOBuilder setReferenceCycle(
+      final Boolean referenceCycle) {
     this.referenceCycle = referenceCycle;
     return this;
   }
@@ -150,7 +154,8 @@ public final class ControllerServiceReferencingComponentDTOBuilder {
   /**
    * The type of reference this is.
    */
-  public ControllerServiceReferencingComponentDTOBuilder setReferenceType(final String referenceType) {
+  public ControllerServiceReferencingComponentDTOBuilder setReferenceType(
+      final String referenceType) {
     this.referenceType = referenceType;
     return this;
   }
@@ -165,7 +170,8 @@ public final class ControllerServiceReferencingComponentDTOBuilder {
   /**
    * If the referencing component represents a controller service, these are the components that reference it.
    */
-  public ControllerServiceReferencingComponentDTOBuilder setReferencingComponents(final Set<ControllerServiceReferencingComponentEntity> referencingComponents) {
+  public ControllerServiceReferencingComponentDTOBuilder setReferencingComponents(
+      final Set<ControllerServiceReferencingComponentEntity> referencingComponents) {
     this.referencingComponents = referencingComponents;
     return this;
   }
@@ -210,7 +216,8 @@ public final class ControllerServiceReferencingComponentDTOBuilder {
   /**
    * The validation errors for the component.
    */
-  public ControllerServiceReferencingComponentDTOBuilder setValidationErrors(final Collection<String> validationErrors) {
+  public ControllerServiceReferencingComponentDTOBuilder setValidationErrors(
+      final Collection<String> validationErrors) {
     this.validationErrors = validationErrors;
     return this;
   }
@@ -232,7 +239,8 @@ public final class ControllerServiceReferencingComponentDTOBuilder {
     return controllerServiceReferencingComponentDTO;
   }
 
-  public static ControllerServiceReferencingComponentDTOBuilder of(final ControllerServiceReferencingComponentDTO controllerServiceReferencingComponentDTO) {
+  public static ControllerServiceReferencingComponentDTOBuilder of(
+      final ControllerServiceReferencingComponentDTO controllerServiceReferencingComponentDTO) {
     final ControllerServiceReferencingComponentDTOBuilder controllerServiceReferencingComponentDTOBuilder = new ControllerServiceReferencingComponentDTOBuilder();
     controllerServiceReferencingComponentDTOBuilder.setActiveThreadCount(controllerServiceReferencingComponentDTO.getActiveThreadCount());
     controllerServiceReferencingComponentDTOBuilder.setDescriptors(controllerServiceReferencingComponentDTO.getDescriptors());

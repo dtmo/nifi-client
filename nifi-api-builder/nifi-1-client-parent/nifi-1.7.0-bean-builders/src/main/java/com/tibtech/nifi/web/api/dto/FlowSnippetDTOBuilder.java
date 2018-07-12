@@ -55,7 +55,8 @@ public final class FlowSnippetDTOBuilder {
   /**
    * The controller services in this flow snippet.
    */
-  public FlowSnippetDTOBuilder setControllerServices(final Set<ControllerServiceDTO> controllerServices) {
+  public FlowSnippetDTOBuilder setControllerServices(
+      final Set<ControllerServiceDTO> controllerServices) {
     this.controllerServices = controllerServices;
     return this;
   }
@@ -160,7 +161,8 @@ public final class FlowSnippetDTOBuilder {
   /**
    * The remote process groups in this flow snippet.
    */
-  public FlowSnippetDTOBuilder setRemoteProcessGroups(final Set<RemoteProcessGroupDTO> remoteProcessGroups) {
+  public FlowSnippetDTOBuilder setRemoteProcessGroups(
+      final Set<RemoteProcessGroupDTO> remoteProcessGroups) {
     this.remoteProcessGroups = remoteProcessGroups;
     return this;
   }

@@ -22,7 +22,8 @@ public final class VersionControlInformationEntityBuilder extends AbstractEntity
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public VersionControlInformationEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public VersionControlInformationEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -37,7 +38,8 @@ public final class VersionControlInformationEntityBuilder extends AbstractEntity
   /**
    * The Revision for the Process Group
    */
-  public VersionControlInformationEntityBuilder setProcessGroupRevision(final RevisionDTO processGroupRevision) {
+  public VersionControlInformationEntityBuilder setProcessGroupRevision(
+      final RevisionDTO processGroupRevision) {
     this.processGroupRevision = processGroupRevision;
     return this;
   }
@@ -52,7 +54,8 @@ public final class VersionControlInformationEntityBuilder extends AbstractEntity
   /**
    * The Version Control information
    */
-  public VersionControlInformationEntityBuilder setVersionControlInformation(final VersionControlInformationDTO versionControlInformation) {
+  public VersionControlInformationEntityBuilder setVersionControlInformation(
+      final VersionControlInformationDTO versionControlInformation) {
     this.versionControlInformation = versionControlInformation;
     return this;
   }
@@ -66,7 +69,8 @@ public final class VersionControlInformationEntityBuilder extends AbstractEntity
     return versionControlInformationEntity;
   }
 
-  public static VersionControlInformationEntityBuilder of(final VersionControlInformationEntity versionControlInformationEntity) {
+  public static VersionControlInformationEntityBuilder of(
+      final VersionControlInformationEntity versionControlInformationEntity) {
     final VersionControlInformationEntityBuilder versionControlInformationEntityBuilder = new VersionControlInformationEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(versionControlInformationEntityBuilder, versionControlInformationEntity);
     versionControlInformationEntityBuilder.setDisconnectedNodeAcknowledged(versionControlInformationEntity.isDisconnectedNodeAcknowledged());

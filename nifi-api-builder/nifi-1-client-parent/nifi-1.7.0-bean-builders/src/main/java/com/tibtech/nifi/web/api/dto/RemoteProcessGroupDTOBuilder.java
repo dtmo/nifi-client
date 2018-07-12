@@ -70,7 +70,8 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * The number of active remote input ports.
    */
-  public RemoteProcessGroupDTOBuilder setActiveRemoteInputPortCount(final Integer activeRemoteInputPortCount) {
+  public RemoteProcessGroupDTOBuilder setActiveRemoteInputPortCount(
+      final Integer activeRemoteInputPortCount) {
     this.activeRemoteInputPortCount = activeRemoteInputPortCount;
     return this;
   }
@@ -85,7 +86,8 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * The number of active remote output ports.
    */
-  public RemoteProcessGroupDTOBuilder setActiveRemoteOutputPortCount(final Integer activeRemoteOutputPortCount) {
+  public RemoteProcessGroupDTOBuilder setActiveRemoteOutputPortCount(
+      final Integer activeRemoteOutputPortCount) {
     this.activeRemoteOutputPortCount = activeRemoteOutputPortCount;
     return this;
   }
@@ -100,7 +102,8 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * Any remote authorization issues for the remote process group.
    */
-  public RemoteProcessGroupDTOBuilder setAuthorizationIssues(final Collection<String> authorizationIssues) {
+  public RemoteProcessGroupDTOBuilder setAuthorizationIssues(
+      final Collection<String> authorizationIssues) {
     this.authorizationIssues = authorizationIssues;
     return this;
   }
@@ -153,7 +156,8 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * The contents of the remote process group. Will contain available input/output ports.
    */
-  public RemoteProcessGroupDTOBuilder setContents(final Consumer<RemoteProcessGroupContentsDTOBuilder> configurator) {
+  public RemoteProcessGroupDTOBuilder setContents(
+      final Consumer<RemoteProcessGroupContentsDTOBuilder> configurator) {
     final RemoteProcessGroupContentsDTOBuilder builder = (contents != null ? RemoteProcessGroupContentsDTOBuilder.of(contents) : new RemoteProcessGroupContentsDTOBuilder());
     configurator.accept(builder);
     return setContents(builder.build());
@@ -162,7 +166,8 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * The contents of the remote process group. Will contain available input/output ports.
    */
-  public RemoteProcessGroupDTOBuilder setContents(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupContentsDTOBuilder.class) final Closure<RemoteProcessGroupContentsDTOBuilder> closure) {
+  public RemoteProcessGroupDTOBuilder setContents(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupContentsDTOBuilder.class) final Closure<RemoteProcessGroupContentsDTOBuilder> closure) {
     return setContents(c -> {
       final Closure<RemoteProcessGroupContentsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -195,7 +200,8 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * The number of inactive remote input ports.
    */
-  public RemoteProcessGroupDTOBuilder setInactiveRemoteInputPortCount(final Integer inactiveRemoteInputPortCount) {
+  public RemoteProcessGroupDTOBuilder setInactiveRemoteInputPortCount(
+      final Integer inactiveRemoteInputPortCount) {
     this.inactiveRemoteInputPortCount = inactiveRemoteInputPortCount;
     return this;
   }
@@ -210,7 +216,8 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * The number of inactive remote output ports.
    */
-  public RemoteProcessGroupDTOBuilder setInactiveRemoteOutputPortCount(final Integer inactiveRemoteOutputPortCount) {
+  public RemoteProcessGroupDTOBuilder setInactiveRemoteOutputPortCount(
+      final Integer inactiveRemoteOutputPortCount) {
     this.inactiveRemoteOutputPortCount = inactiveRemoteOutputPortCount;
     return this;
   }
@@ -384,7 +391,8 @@ public final class RemoteProcessGroupDTOBuilder extends AbstractComponentDTOBuil
   /**
    * The validation errors for the remote process group. These validation errors represent the problems with the remote process group that must be resolved before it can transmit.
    */
-  public RemoteProcessGroupDTOBuilder setValidationErrors(final Collection<String> validationErrors) {
+  public RemoteProcessGroupDTOBuilder setValidationErrors(
+      final Collection<String> validationErrors) {
     this.validationErrors = validationErrors;
     return this;
   }

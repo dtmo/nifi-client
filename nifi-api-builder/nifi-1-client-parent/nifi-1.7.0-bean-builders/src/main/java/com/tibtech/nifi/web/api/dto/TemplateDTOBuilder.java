@@ -127,7 +127,8 @@ public final class TemplateDTOBuilder {
   /**
    * The contents of the template.
    */
-  public TemplateDTOBuilder setSnippet(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FlowSnippetDTOBuilder.class) final Closure<FlowSnippetDTOBuilder> closure) {
+  public TemplateDTOBuilder setSnippet(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FlowSnippetDTOBuilder.class) final Closure<FlowSnippetDTOBuilder> closure) {
     return setSnippet(c -> {
       final Closure<FlowSnippetDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

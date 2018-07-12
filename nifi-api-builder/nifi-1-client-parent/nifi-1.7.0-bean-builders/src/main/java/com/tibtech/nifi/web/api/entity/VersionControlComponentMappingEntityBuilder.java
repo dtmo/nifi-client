@@ -23,7 +23,8 @@ public final class VersionControlComponentMappingEntityBuilder extends AbstractE
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public VersionControlComponentMappingEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public VersionControlComponentMappingEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -38,7 +39,8 @@ public final class VersionControlComponentMappingEntityBuilder extends AbstractE
   /**
    * The revision of the Process Group
    */
-  public VersionControlComponentMappingEntityBuilder setProcessGroupRevision(final RevisionDTO processGroupRevision) {
+  public VersionControlComponentMappingEntityBuilder setProcessGroupRevision(
+      final RevisionDTO processGroupRevision) {
     this.processGroupRevision = processGroupRevision;
     return this;
   }
@@ -53,7 +55,8 @@ public final class VersionControlComponentMappingEntityBuilder extends AbstractE
   /**
    * The mapping of Versioned Component Identifiers to instance ID's
    */
-  public VersionControlComponentMappingEntityBuilder setVersionControlComponentMapping(final Map<String, String> versionControlComponentMapping) {
+  public VersionControlComponentMappingEntityBuilder setVersionControlComponentMapping(
+      final Map<String, String> versionControlComponentMapping) {
     this.versionControlComponentMapping = versionControlComponentMapping;
     return this;
   }
@@ -67,7 +70,8 @@ public final class VersionControlComponentMappingEntityBuilder extends AbstractE
     return versionControlComponentMappingEntity;
   }
 
-  public static VersionControlComponentMappingEntityBuilder of(final VersionControlComponentMappingEntity versionControlComponentMappingEntity) {
+  public static VersionControlComponentMappingEntityBuilder of(
+      final VersionControlComponentMappingEntity versionControlComponentMappingEntity) {
     final VersionControlComponentMappingEntityBuilder versionControlComponentMappingEntityBuilder = new VersionControlComponentMappingEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(versionControlComponentMappingEntityBuilder, versionControlComponentMappingEntity);
     versionControlComponentMappingEntityBuilder.setDisconnectedNodeAcknowledged(versionControlComponentMappingEntity.isDisconnectedNodeAcknowledged());

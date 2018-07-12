@@ -19,7 +19,8 @@ public final class CreateActiveRequestEntityBuilder extends AbstractEntityBuilde
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public CreateActiveRequestEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public CreateActiveRequestEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -47,7 +48,8 @@ public final class CreateActiveRequestEntityBuilder extends AbstractEntityBuilde
     return createActiveRequestEntity;
   }
 
-  public static CreateActiveRequestEntityBuilder of(final CreateActiveRequestEntity createActiveRequestEntity) {
+  public static CreateActiveRequestEntityBuilder of(
+      final CreateActiveRequestEntity createActiveRequestEntity) {
     final CreateActiveRequestEntityBuilder createActiveRequestEntityBuilder = new CreateActiveRequestEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(createActiveRequestEntityBuilder, createActiveRequestEntity);
     createActiveRequestEntityBuilder.setDisconnectedNodeAcknowledged(createActiveRequestEntity.isDisconnectedNodeAcknowledged());

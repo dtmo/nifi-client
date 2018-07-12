@@ -18,7 +18,8 @@ public final class ControllerConfigurationDTOBuilder {
   /**
    * The maximum number of event driven threads the NiFi has available.
    */
-  public ControllerConfigurationDTOBuilder setMaxEventDrivenThreadCount(final Integer maxEventDrivenThreadCount) {
+  public ControllerConfigurationDTOBuilder setMaxEventDrivenThreadCount(
+      final Integer maxEventDrivenThreadCount) {
     this.maxEventDrivenThreadCount = maxEventDrivenThreadCount;
     return this;
   }
@@ -33,7 +34,8 @@ public final class ControllerConfigurationDTOBuilder {
   /**
    * The maximum number of timer driven threads the NiFi has available.
    */
-  public ControllerConfigurationDTOBuilder setMaxTimerDrivenThreadCount(final Integer maxTimerDrivenThreadCount) {
+  public ControllerConfigurationDTOBuilder setMaxTimerDrivenThreadCount(
+      final Integer maxTimerDrivenThreadCount) {
     this.maxTimerDrivenThreadCount = maxTimerDrivenThreadCount;
     return this;
   }
@@ -45,7 +47,8 @@ public final class ControllerConfigurationDTOBuilder {
     return controllerConfigurationDTO;
   }
 
-  public static ControllerConfigurationDTOBuilder of(final ControllerConfigurationDTO controllerConfigurationDTO) {
+  public static ControllerConfigurationDTOBuilder of(
+      final ControllerConfigurationDTO controllerConfigurationDTO) {
     final ControllerConfigurationDTOBuilder controllerConfigurationDTOBuilder = new ControllerConfigurationDTOBuilder();
     controllerConfigurationDTOBuilder.setMaxEventDrivenThreadCount(controllerConfigurationDTO.getMaxEventDrivenThreadCount());
     controllerConfigurationDTOBuilder.setMaxTimerDrivenThreadCount(controllerConfigurationDTO.getMaxTimerDrivenThreadCount());

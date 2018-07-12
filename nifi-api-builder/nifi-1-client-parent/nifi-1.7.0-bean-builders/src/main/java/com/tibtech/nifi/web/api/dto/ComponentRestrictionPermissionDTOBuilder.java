@@ -30,7 +30,8 @@ public final class ComponentRestrictionPermissionDTOBuilder {
   /**
    * The permissions for this component restriction. Note: the read permission are not used and will always be false.
    */
-  public ComponentRestrictionPermissionDTOBuilder setPermissions(final Consumer<PermissionsDTOBuilder> configurator) {
+  public ComponentRestrictionPermissionDTOBuilder setPermissions(
+      final Consumer<PermissionsDTOBuilder> configurator) {
     final PermissionsDTOBuilder builder = (permissions != null ? PermissionsDTOBuilder.of(permissions) : new PermissionsDTOBuilder());
     configurator.accept(builder);
     return setPermissions(builder.build());
@@ -39,7 +40,8 @@ public final class ComponentRestrictionPermissionDTOBuilder {
   /**
    * The permissions for this component restriction. Note: the read permission are not used and will always be false.
    */
-  public ComponentRestrictionPermissionDTOBuilder setPermissions(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PermissionsDTOBuilder.class) final Closure<PermissionsDTOBuilder> closure) {
+  public ComponentRestrictionPermissionDTOBuilder setPermissions(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PermissionsDTOBuilder.class) final Closure<PermissionsDTOBuilder> closure) {
     return setPermissions(c -> {
       final Closure<PermissionsDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -57,7 +59,8 @@ public final class ComponentRestrictionPermissionDTOBuilder {
   /**
    * The required permission necessary for this restriction.
    */
-  public ComponentRestrictionPermissionDTOBuilder setRequiredPermission(final RequiredPermissionDTO requiredPermission) {
+  public ComponentRestrictionPermissionDTOBuilder setRequiredPermission(
+      final RequiredPermissionDTO requiredPermission) {
     this.requiredPermission = requiredPermission;
     return this;
   }
@@ -65,7 +68,8 @@ public final class ComponentRestrictionPermissionDTOBuilder {
   /**
    * The required permission necessary for this restriction.
    */
-  public ComponentRestrictionPermissionDTOBuilder setRequiredPermission(final Consumer<RequiredPermissionDTOBuilder> configurator) {
+  public ComponentRestrictionPermissionDTOBuilder setRequiredPermission(
+      final Consumer<RequiredPermissionDTOBuilder> configurator) {
     final RequiredPermissionDTOBuilder builder = (requiredPermission != null ? RequiredPermissionDTOBuilder.of(requiredPermission) : new RequiredPermissionDTOBuilder());
     configurator.accept(builder);
     return setRequiredPermission(builder.build());
@@ -74,7 +78,8 @@ public final class ComponentRestrictionPermissionDTOBuilder {
   /**
    * The required permission necessary for this restriction.
    */
-  public ComponentRestrictionPermissionDTOBuilder setRequiredPermission(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RequiredPermissionDTOBuilder.class) final Closure<RequiredPermissionDTOBuilder> closure) {
+  public ComponentRestrictionPermissionDTOBuilder setRequiredPermission(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RequiredPermissionDTOBuilder.class) final Closure<RequiredPermissionDTOBuilder> closure) {
     return setRequiredPermission(c -> {
       final Closure<RequiredPermissionDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -89,7 +94,8 @@ public final class ComponentRestrictionPermissionDTOBuilder {
     return componentRestrictionPermissionDTO;
   }
 
-  public static ComponentRestrictionPermissionDTOBuilder of(final ComponentRestrictionPermissionDTO componentRestrictionPermissionDTO) {
+  public static ComponentRestrictionPermissionDTOBuilder of(
+      final ComponentRestrictionPermissionDTO componentRestrictionPermissionDTO) {
     final ComponentRestrictionPermissionDTOBuilder componentRestrictionPermissionDTOBuilder = new ComponentRestrictionPermissionDTOBuilder();
     componentRestrictionPermissionDTOBuilder.setPermissions(componentRestrictionPermissionDTO.getPermissions());
     componentRestrictionPermissionDTOBuilder.setRequiredPermission(componentRestrictionPermissionDTO.getRequiredPermission());

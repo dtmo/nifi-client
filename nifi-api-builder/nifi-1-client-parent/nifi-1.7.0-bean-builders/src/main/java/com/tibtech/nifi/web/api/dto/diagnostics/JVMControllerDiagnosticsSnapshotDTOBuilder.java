@@ -23,7 +23,8 @@ public final class JVMControllerDiagnosticsSnapshotDTOBuilder {
   /**
    * Whether or not this node is cluster coordinator
    */
-  public JVMControllerDiagnosticsSnapshotDTOBuilder setClusterCoordinator(final Boolean clusterCoordinator) {
+  public JVMControllerDiagnosticsSnapshotDTOBuilder setClusterCoordinator(
+      final Boolean clusterCoordinator) {
     this.clusterCoordinator = clusterCoordinator;
     return this;
   }
@@ -38,7 +39,8 @@ public final class JVMControllerDiagnosticsSnapshotDTOBuilder {
   /**
    * The maximum number of event-driven threads
    */
-  public JVMControllerDiagnosticsSnapshotDTOBuilder setMaxEventDrivenThreads(final Integer maxEventDrivenThreads) {
+  public JVMControllerDiagnosticsSnapshotDTOBuilder setMaxEventDrivenThreads(
+      final Integer maxEventDrivenThreads) {
     this.maxEventDrivenThreads = maxEventDrivenThreads;
     return this;
   }
@@ -53,7 +55,8 @@ public final class JVMControllerDiagnosticsSnapshotDTOBuilder {
   /**
    * The maximum number of timer-driven threads
    */
-  public JVMControllerDiagnosticsSnapshotDTOBuilder setMaxTimerDrivenThreads(final Integer maxTimerDrivenThreads) {
+  public JVMControllerDiagnosticsSnapshotDTOBuilder setMaxTimerDrivenThreads(
+      final Integer maxTimerDrivenThreads) {
     this.maxTimerDrivenThreads = maxTimerDrivenThreads;
     return this;
   }
@@ -82,7 +85,8 @@ public final class JVMControllerDiagnosticsSnapshotDTOBuilder {
     return jVMControllerDiagnosticsSnapshotDTO;
   }
 
-  public static JVMControllerDiagnosticsSnapshotDTOBuilder of(final JVMControllerDiagnosticsSnapshotDTO jVMControllerDiagnosticsSnapshotDTO) {
+  public static JVMControllerDiagnosticsSnapshotDTOBuilder of(
+      final JVMControllerDiagnosticsSnapshotDTO jVMControllerDiagnosticsSnapshotDTO) {
     final JVMControllerDiagnosticsSnapshotDTOBuilder jVMControllerDiagnosticsSnapshotDTOBuilder = new JVMControllerDiagnosticsSnapshotDTOBuilder();
     jVMControllerDiagnosticsSnapshotDTOBuilder.setClusterCoordinator(jVMControllerDiagnosticsSnapshotDTO.getClusterCoordinator());
     jVMControllerDiagnosticsSnapshotDTOBuilder.setMaxEventDrivenThreads(jVMControllerDiagnosticsSnapshotDTO.getMaxEventDrivenThreads());

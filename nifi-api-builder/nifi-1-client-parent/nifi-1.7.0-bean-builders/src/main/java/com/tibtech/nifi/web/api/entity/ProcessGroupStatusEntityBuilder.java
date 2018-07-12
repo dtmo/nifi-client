@@ -22,7 +22,8 @@ public final class ProcessGroupStatusEntityBuilder extends AbstractEntityBuilder
     return processGroupStatus;
   }
 
-  public ProcessGroupStatusEntityBuilder setProcessGroupStatus(final ProcessGroupStatusDTO processGroupStatus) {
+  public ProcessGroupStatusEntityBuilder setProcessGroupStatus(
+      final ProcessGroupStatusDTO processGroupStatus) {
     this.processGroupStatus = processGroupStatus;
     return this;
   }
@@ -35,7 +36,8 @@ public final class ProcessGroupStatusEntityBuilder extends AbstractEntityBuilder
     return processGroupStatusEntity;
   }
 
-  public static ProcessGroupStatusEntityBuilder of(final ProcessGroupStatusEntity processGroupStatusEntity) {
+  public static ProcessGroupStatusEntityBuilder of(
+      final ProcessGroupStatusEntity processGroupStatusEntity) {
     final ProcessGroupStatusEntityBuilder processGroupStatusEntityBuilder = new ProcessGroupStatusEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(processGroupStatusEntityBuilder, processGroupStatusEntity);
     processGroupStatusEntityBuilder.setCanRead(processGroupStatusEntity.getCanRead());

@@ -9,7 +9,8 @@ public final class AccessPolicySummaryDTOBuilder extends AbstractAccessPolicySum
     return accessPolicySummaryDTO;
   }
 
-  public static AccessPolicySummaryDTOBuilder of(final AccessPolicySummaryDTO accessPolicySummaryDTO) {
+  public static AccessPolicySummaryDTOBuilder of(
+      final AccessPolicySummaryDTO accessPolicySummaryDTO) {
     final AccessPolicySummaryDTOBuilder accessPolicySummaryDTOBuilder = new AccessPolicySummaryDTOBuilder();
     AbstractAccessPolicySummaryDTOBuilder.setBuilderValues(accessPolicySummaryDTOBuilder, accessPolicySummaryDTO);
     return accessPolicySummaryDTOBuilder;

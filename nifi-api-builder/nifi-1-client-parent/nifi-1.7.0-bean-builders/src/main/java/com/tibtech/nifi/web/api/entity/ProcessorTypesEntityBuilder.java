@@ -11,7 +11,8 @@ public final class ProcessorTypesEntityBuilder extends AbstractEntityBuilder<Pro
     return processorTypes;
   }
 
-  public ProcessorTypesEntityBuilder setProcessorTypes(final Set<DocumentedTypeDTO> processorTypes) {
+  public ProcessorTypesEntityBuilder setProcessorTypes(
+      final Set<DocumentedTypeDTO> processorTypes) {
     this.processorTypes = processorTypes;
     return this;
   }

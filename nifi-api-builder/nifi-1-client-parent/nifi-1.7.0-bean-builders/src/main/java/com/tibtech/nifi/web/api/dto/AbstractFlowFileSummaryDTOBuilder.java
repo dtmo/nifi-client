@@ -171,7 +171,8 @@ public abstract class AbstractFlowFileSummaryDTOBuilder<T extends AbstractFlowFi
     flowFileSummaryDTO.setUuid(uuid);
   }
 
-  protected static void setBuilderValues(final AbstractFlowFileSummaryDTOBuilder abstractFlowFileSummaryDTOBuilder,
+  protected static void setBuilderValues(
+      final AbstractFlowFileSummaryDTOBuilder abstractFlowFileSummaryDTOBuilder,
       final FlowFileSummaryDTO flowFileSummaryDTO) {
     abstractFlowFileSummaryDTOBuilder.setClusterNodeAddress(flowFileSummaryDTO.getClusterNodeAddress());
     abstractFlowFileSummaryDTOBuilder.setClusterNodeId(flowFileSummaryDTO.getClusterNodeId());

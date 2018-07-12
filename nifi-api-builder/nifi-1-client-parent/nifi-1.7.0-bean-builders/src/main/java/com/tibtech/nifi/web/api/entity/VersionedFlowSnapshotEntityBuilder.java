@@ -24,7 +24,8 @@ public final class VersionedFlowSnapshotEntityBuilder extends AbstractEntityBuil
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public VersionedFlowSnapshotEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public VersionedFlowSnapshotEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -39,7 +40,8 @@ public final class VersionedFlowSnapshotEntityBuilder extends AbstractEntityBuil
   /**
    * The Revision of the Process Group under Version Control
    */
-  public VersionedFlowSnapshotEntityBuilder setProcessGroupRevision(final RevisionDTO processGroupRevision) {
+  public VersionedFlowSnapshotEntityBuilder setProcessGroupRevision(
+      final RevisionDTO processGroupRevision) {
     this.processGroupRevision = processGroupRevision;
     return this;
   }
@@ -69,7 +71,8 @@ public final class VersionedFlowSnapshotEntityBuilder extends AbstractEntityBuil
   /**
    * If the Process Group to be updated has a child or descendant Process Group that is also under Version Control, this specifies whether or not the contents of that child/descendant Process Group should be updated.
    */
-  public VersionedFlowSnapshotEntityBuilder setUpdateDescendantVersionedFlows(final Boolean updateDescendantVersionedFlows) {
+  public VersionedFlowSnapshotEntityBuilder setUpdateDescendantVersionedFlows(
+      final Boolean updateDescendantVersionedFlows) {
     this.updateDescendantVersionedFlows = updateDescendantVersionedFlows;
     return this;
   }
@@ -84,7 +87,8 @@ public final class VersionedFlowSnapshotEntityBuilder extends AbstractEntityBuil
     return versionedFlowSnapshotEntity;
   }
 
-  public static VersionedFlowSnapshotEntityBuilder of(final VersionedFlowSnapshotEntity versionedFlowSnapshotEntity) {
+  public static VersionedFlowSnapshotEntityBuilder of(
+      final VersionedFlowSnapshotEntity versionedFlowSnapshotEntity) {
     final VersionedFlowSnapshotEntityBuilder versionedFlowSnapshotEntityBuilder = new VersionedFlowSnapshotEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(versionedFlowSnapshotEntityBuilder, versionedFlowSnapshotEntity);
     versionedFlowSnapshotEntityBuilder.setDisconnectedNodeAcknowledged(versionedFlowSnapshotEntity.isDisconnectedNodeAcknowledged());

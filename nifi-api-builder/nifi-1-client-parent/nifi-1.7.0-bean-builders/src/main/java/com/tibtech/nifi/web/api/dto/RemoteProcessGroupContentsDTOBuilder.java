@@ -19,7 +19,8 @@ public final class RemoteProcessGroupContentsDTOBuilder {
   /**
    * The input ports to which data can be sent.
    */
-  public RemoteProcessGroupContentsDTOBuilder setInputPorts(final Set<RemoteProcessGroupPortDTO> inputPorts) {
+  public RemoteProcessGroupContentsDTOBuilder setInputPorts(
+      final Set<RemoteProcessGroupPortDTO> inputPorts) {
     this.inputPorts = inputPorts;
     return this;
   }
@@ -34,7 +35,8 @@ public final class RemoteProcessGroupContentsDTOBuilder {
   /**
    * The output ports from which data can be retrieved.
    */
-  public RemoteProcessGroupContentsDTOBuilder setOutputPorts(final Set<RemoteProcessGroupPortDTO> outputPorts) {
+  public RemoteProcessGroupContentsDTOBuilder setOutputPorts(
+      final Set<RemoteProcessGroupPortDTO> outputPorts) {
     this.outputPorts = outputPorts;
     return this;
   }
@@ -46,7 +48,8 @@ public final class RemoteProcessGroupContentsDTOBuilder {
     return remoteProcessGroupContentsDTO;
   }
 
-  public static RemoteProcessGroupContentsDTOBuilder of(final RemoteProcessGroupContentsDTO remoteProcessGroupContentsDTO) {
+  public static RemoteProcessGroupContentsDTOBuilder of(
+      final RemoteProcessGroupContentsDTO remoteProcessGroupContentsDTO) {
     final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = new RemoteProcessGroupContentsDTOBuilder();
     remoteProcessGroupContentsDTOBuilder.setInputPorts(remoteProcessGroupContentsDTO.getInputPorts());
     remoteProcessGroupContentsDTOBuilder.setOutputPorts(remoteProcessGroupContentsDTO.getOutputPorts());

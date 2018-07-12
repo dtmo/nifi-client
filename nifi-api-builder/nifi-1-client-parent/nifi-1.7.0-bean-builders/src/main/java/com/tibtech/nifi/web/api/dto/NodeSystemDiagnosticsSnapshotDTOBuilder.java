@@ -72,7 +72,8 @@ public final class NodeSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The System Diagnostics snapshot from the node.
    */
-  public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(final SystemDiagnosticsSnapshotDTO snapshot) {
+  public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(
+      final SystemDiagnosticsSnapshotDTO snapshot) {
     this.snapshot = snapshot;
     return this;
   }
@@ -80,7 +81,8 @@ public final class NodeSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The System Diagnostics snapshot from the node.
    */
-  public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(final Consumer<SystemDiagnosticsSnapshotDTOBuilder> configurator) {
+  public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(
+      final Consumer<SystemDiagnosticsSnapshotDTOBuilder> configurator) {
     final SystemDiagnosticsSnapshotDTOBuilder builder = (snapshot != null ? SystemDiagnosticsSnapshotDTOBuilder.of(snapshot) : new SystemDiagnosticsSnapshotDTOBuilder());
     configurator.accept(builder);
     return setSnapshot(builder.build());
@@ -89,7 +91,8 @@ public final class NodeSystemDiagnosticsSnapshotDTOBuilder {
   /**
    * The System Diagnostics snapshot from the node.
    */
-  public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SystemDiagnosticsSnapshotDTOBuilder.class) final Closure<SystemDiagnosticsSnapshotDTOBuilder> closure) {
+  public NodeSystemDiagnosticsSnapshotDTOBuilder setSnapshot(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = SystemDiagnosticsSnapshotDTOBuilder.class) final Closure<SystemDiagnosticsSnapshotDTOBuilder> closure) {
     return setSnapshot(c -> {
       final Closure<SystemDiagnosticsSnapshotDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -106,7 +109,8 @@ public final class NodeSystemDiagnosticsSnapshotDTOBuilder {
     return nodeSystemDiagnosticsSnapshotDTO;
   }
 
-  public static NodeSystemDiagnosticsSnapshotDTOBuilder of(final NodeSystemDiagnosticsSnapshotDTO nodeSystemDiagnosticsSnapshotDTO) {
+  public static NodeSystemDiagnosticsSnapshotDTOBuilder of(
+      final NodeSystemDiagnosticsSnapshotDTO nodeSystemDiagnosticsSnapshotDTO) {
     final NodeSystemDiagnosticsSnapshotDTOBuilder nodeSystemDiagnosticsSnapshotDTOBuilder = new NodeSystemDiagnosticsSnapshotDTOBuilder();
     nodeSystemDiagnosticsSnapshotDTOBuilder.setAddress(nodeSystemDiagnosticsSnapshotDTO.getAddress());
     nodeSystemDiagnosticsSnapshotDTOBuilder.setApiPort(nodeSystemDiagnosticsSnapshotDTO.getApiPort());

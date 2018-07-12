@@ -46,7 +46,8 @@ public final class TransactionResultEntityBuilder extends AbstractEntityBuilder<
     return transactionResultEntity;
   }
 
-  public static TransactionResultEntityBuilder of(final TransactionResultEntity transactionResultEntity) {
+  public static TransactionResultEntityBuilder of(
+      final TransactionResultEntity transactionResultEntity) {
     final TransactionResultEntityBuilder transactionResultEntityBuilder = new TransactionResultEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(transactionResultEntityBuilder, transactionResultEntity);
     transactionResultEntityBuilder.setFlowFileSent(transactionResultEntity.getFlowFileSent());

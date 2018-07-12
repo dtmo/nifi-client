@@ -82,7 +82,8 @@ public final class GarbageCollectionDTOBuilder {
     return garbageCollectionDTO;
   }
 
-  public static GarbageCollectionDTOBuilder of(final SystemDiagnosticsSnapshotDTO.GarbageCollectionDTO garbageCollectionDTO) {
+  public static GarbageCollectionDTOBuilder of(
+      final SystemDiagnosticsSnapshotDTO.GarbageCollectionDTO garbageCollectionDTO) {
     final GarbageCollectionDTOBuilder garbageCollectionDTOBuilder = new GarbageCollectionDTOBuilder();
     garbageCollectionDTOBuilder.setCollectionCount(garbageCollectionDTO.getCollectionCount());
     garbageCollectionDTOBuilder.setCollectionMillis(garbageCollectionDTO.getCollectionMillis());

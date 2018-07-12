@@ -22,7 +22,8 @@ public final class AffectedComponentEntityBuilder extends AbstractComponentEntit
     return affectedComponentEntity;
   }
 
-  public static AffectedComponentEntityBuilder of(final AffectedComponentEntity affectedComponentEntity) {
+  public static AffectedComponentEntityBuilder of(
+      final AffectedComponentEntity affectedComponentEntity) {
     final AffectedComponentEntityBuilder affectedComponentEntityBuilder = new AffectedComponentEntityBuilder();
     AbstractComponentEntityBuilder.setBuilderValues(affectedComponentEntityBuilder, affectedComponentEntity);
     affectedComponentEntityBuilder.setComponent(affectedComponentEntity.getComponent());

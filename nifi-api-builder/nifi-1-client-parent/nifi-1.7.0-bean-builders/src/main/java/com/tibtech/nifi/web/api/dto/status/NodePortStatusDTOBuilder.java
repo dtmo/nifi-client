@@ -40,7 +40,8 @@ public final class NodePortStatusDTOBuilder {
   /**
    * The node.
    */
-  public NodePortStatusDTOBuilder setNode(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = NodeDTOBuilder.class) final Closure<NodeDTOBuilder> closure) {
+  public NodePortStatusDTOBuilder setNode(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = NodeDTOBuilder.class) final Closure<NodeDTOBuilder> closure) {
     return setNode(c -> {
       final Closure<NodeDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -75,7 +76,8 @@ public final class NodePortStatusDTOBuilder {
   /**
    * The port status from the node.
    */
-  public NodePortStatusDTOBuilder setPortStatus(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortStatusDTOBuilder.class) final Closure<PortStatusDTOBuilder> closure) {
+  public NodePortStatusDTOBuilder setPortStatus(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortStatusDTOBuilder.class) final Closure<PortStatusDTOBuilder> closure) {
     return setPortStatus(c -> {
       final Closure<PortStatusDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);

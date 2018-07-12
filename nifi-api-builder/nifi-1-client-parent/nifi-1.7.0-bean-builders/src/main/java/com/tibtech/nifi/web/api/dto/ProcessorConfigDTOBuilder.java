@@ -69,7 +69,8 @@ public final class ProcessorConfigDTOBuilder {
   /**
    * The names of all relationships that cause a flow file to be terminated if the relationship is not connected elsewhere. This property differs from the 'isAutoTerminate' property of the RelationshipDTO in that the RelationshipDTO is meant to depict the current configuration, whereas this property can be set in a DTO when updating a Processor in order to change which Relationships should be auto-terminated.
    */
-  public ProcessorConfigDTOBuilder setAutoTerminatedRelationships(final Set<String> autoTerminatedRelationships) {
+  public ProcessorConfigDTOBuilder setAutoTerminatedRelationships(
+      final Set<String> autoTerminatedRelationships) {
     this.autoTerminatedRelationships = autoTerminatedRelationships;
     return this;
   }
@@ -114,7 +115,8 @@ public final class ProcessorConfigDTOBuilder {
   /**
    * The number of tasks that should be concurrently schedule for the processor. If the processor doesn't allow parallol processing then any positive input will be ignored.
    */
-  public ProcessorConfigDTOBuilder setConcurrentlySchedulableTaskCount(final Integer concurrentlySchedulableTaskCount) {
+  public ProcessorConfigDTOBuilder setConcurrentlySchedulableTaskCount(
+      final Integer concurrentlySchedulableTaskCount) {
     this.concurrentlySchedulableTaskCount = concurrentlySchedulableTaskCount;
     return this;
   }
@@ -144,7 +146,8 @@ public final class ProcessorConfigDTOBuilder {
   /**
    * Maps default values for concurrent tasks for each applicable scheduling strategy.
    */
-  public ProcessorConfigDTOBuilder setDefaultConcurrentTasks(final Map<String, String> defaultConcurrentTasks) {
+  public ProcessorConfigDTOBuilder setDefaultConcurrentTasks(
+      final Map<String, String> defaultConcurrentTasks) {
     this.defaultConcurrentTasks = defaultConcurrentTasks;
     return this;
   }
@@ -159,7 +162,8 @@ public final class ProcessorConfigDTOBuilder {
   /**
    * Maps default values for scheduling period for each applicable scheduling strategy.
    */
-  public ProcessorConfigDTOBuilder setDefaultSchedulingPeriod(final Map<String, String> defaultSchedulingPeriod) {
+  public ProcessorConfigDTOBuilder setDefaultSchedulingPeriod(
+      final Map<String, String> defaultSchedulingPeriod) {
     this.defaultSchedulingPeriod = defaultSchedulingPeriod;
     return this;
   }
@@ -174,7 +178,8 @@ public final class ProcessorConfigDTOBuilder {
   /**
    * Descriptors for the processor's properties.
    */
-  public ProcessorConfigDTOBuilder setDescriptors(final Map<String, PropertyDescriptorDTO> descriptors) {
+  public ProcessorConfigDTOBuilder setDescriptors(
+      final Map<String, PropertyDescriptorDTO> descriptors) {
     this.descriptors = descriptors;
     return this;
   }

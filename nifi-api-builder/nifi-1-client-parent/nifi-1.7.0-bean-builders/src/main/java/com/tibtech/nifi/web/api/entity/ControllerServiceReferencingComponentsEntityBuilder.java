@@ -7,11 +7,13 @@ import org.apache.nifi.web.api.entity.ControllerServiceReferencingComponentsEnti
 public final class ControllerServiceReferencingComponentsEntityBuilder extends AbstractEntityBuilder<ControllerServiceReferencingComponentsEntityBuilder> {
   private Set<ControllerServiceReferencingComponentEntity> controllerServiceReferencingComponents;
 
-  public Set<ControllerServiceReferencingComponentEntity> getControllerServiceReferencingComponents() {
+  public Set<ControllerServiceReferencingComponentEntity> getControllerServiceReferencingComponents(
+      ) {
     return controllerServiceReferencingComponents;
   }
 
-  public ControllerServiceReferencingComponentsEntityBuilder setControllerServiceReferencingComponents(final Set<ControllerServiceReferencingComponentEntity> controllerServiceReferencingComponents) {
+  public ControllerServiceReferencingComponentsEntityBuilder setControllerServiceReferencingComponents(
+      final Set<ControllerServiceReferencingComponentEntity> controllerServiceReferencingComponents) {
     this.controllerServiceReferencingComponents = controllerServiceReferencingComponents;
     return this;
   }
@@ -23,7 +25,8 @@ public final class ControllerServiceReferencingComponentsEntityBuilder extends A
     return controllerServiceReferencingComponentsEntity;
   }
 
-  public static ControllerServiceReferencingComponentsEntityBuilder of(final ControllerServiceReferencingComponentsEntity controllerServiceReferencingComponentsEntity) {
+  public static ControllerServiceReferencingComponentsEntityBuilder of(
+      final ControllerServiceReferencingComponentsEntity controllerServiceReferencingComponentsEntity) {
     final ControllerServiceReferencingComponentsEntityBuilder controllerServiceReferencingComponentsEntityBuilder = new ControllerServiceReferencingComponentsEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(controllerServiceReferencingComponentsEntityBuilder, controllerServiceReferencingComponentsEntity);
     controllerServiceReferencingComponentsEntityBuilder.setControllerServiceReferencingComponents(controllerServiceReferencingComponentsEntity.getControllerServiceReferencingComponents());

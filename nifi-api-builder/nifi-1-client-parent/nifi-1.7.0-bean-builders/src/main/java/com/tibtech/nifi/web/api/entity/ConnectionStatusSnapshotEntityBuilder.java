@@ -25,7 +25,8 @@ public final class ConnectionStatusSnapshotEntityBuilder extends AbstractEntityB
     return connectionStatusSnapshot;
   }
 
-  public ConnectionStatusSnapshotEntityBuilder setConnectionStatusSnapshot(final ConnectionStatusSnapshotDTO connectionStatusSnapshot) {
+  public ConnectionStatusSnapshotEntityBuilder setConnectionStatusSnapshot(
+      final ConnectionStatusSnapshotDTO connectionStatusSnapshot) {
     this.connectionStatusSnapshot = connectionStatusSnapshot;
     return this;
   }
@@ -54,7 +55,8 @@ public final class ConnectionStatusSnapshotEntityBuilder extends AbstractEntityB
     return connectionStatusSnapshotEntity;
   }
 
-  public static ConnectionStatusSnapshotEntityBuilder of(final ConnectionStatusSnapshotEntity connectionStatusSnapshotEntity) {
+  public static ConnectionStatusSnapshotEntityBuilder of(
+      final ConnectionStatusSnapshotEntity connectionStatusSnapshotEntity) {
     final ConnectionStatusSnapshotEntityBuilder connectionStatusSnapshotEntityBuilder = new ConnectionStatusSnapshotEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(connectionStatusSnapshotEntityBuilder, connectionStatusSnapshotEntity);
     connectionStatusSnapshotEntityBuilder.setCanRead(connectionStatusSnapshotEntity.getCanRead());

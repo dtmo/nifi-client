@@ -22,7 +22,8 @@ public final class ControllerConfigurationEntityBuilder extends AbstractEntityBu
   /**
    * Acknowledges that this node is disconnected to allow for mutable requests to proceed.
    */
-  public ControllerConfigurationEntityBuilder setDisconnectedNodeAcknowledged(final Boolean disconnectedNodeAcknowledged) {
+  public ControllerConfigurationEntityBuilder setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
     this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
     return this;
   }
@@ -66,7 +67,8 @@ public final class ControllerConfigurationEntityBuilder extends AbstractEntityBu
     return controllerConfigurationEntity;
   }
 
-  public static ControllerConfigurationEntityBuilder of(final ControllerConfigurationEntity controllerConfigurationEntity) {
+  public static ControllerConfigurationEntityBuilder of(
+      final ControllerConfigurationEntity controllerConfigurationEntity) {
     final ControllerConfigurationEntityBuilder controllerConfigurationEntityBuilder = new ControllerConfigurationEntityBuilder();
     AbstractEntityBuilder.setBuilderValues(controllerConfigurationEntityBuilder, controllerConfigurationEntity);
     controllerConfigurationEntityBuilder.setDisconnectedNodeAcknowledged(controllerConfigurationEntity.isDisconnectedNodeAcknowledged());

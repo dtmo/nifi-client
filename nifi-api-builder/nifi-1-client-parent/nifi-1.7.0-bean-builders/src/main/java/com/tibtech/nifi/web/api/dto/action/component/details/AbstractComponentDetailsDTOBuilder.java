@@ -6,7 +6,8 @@ public abstract class AbstractComponentDetailsDTOBuilder<T extends AbstractCompo
   protected void setPropertyValues(final ComponentDetailsDTO componentDetailsDTO) {
   }
 
-  protected static void setBuilderValues(final AbstractComponentDetailsDTOBuilder abstractComponentDetailsDTOBuilder,
+  protected static void setBuilderValues(
+      final AbstractComponentDetailsDTOBuilder abstractComponentDetailsDTOBuilder,
       final ComponentDetailsDTO componentDetailsDTO) {
   }
 }

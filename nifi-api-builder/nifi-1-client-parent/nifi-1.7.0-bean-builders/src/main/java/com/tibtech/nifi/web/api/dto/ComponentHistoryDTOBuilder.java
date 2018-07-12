@@ -35,7 +35,8 @@ public final class ComponentHistoryDTOBuilder {
   /**
    * The history for the properties of the component.
    */
-  public ComponentHistoryDTOBuilder setPropertyHistory(final Map<String, PropertyHistoryDTO> propertyHistory) {
+  public ComponentHistoryDTOBuilder setPropertyHistory(
+      final Map<String, PropertyHistoryDTO> propertyHistory) {
     this.propertyHistory = propertyHistory;
     return this;
   }

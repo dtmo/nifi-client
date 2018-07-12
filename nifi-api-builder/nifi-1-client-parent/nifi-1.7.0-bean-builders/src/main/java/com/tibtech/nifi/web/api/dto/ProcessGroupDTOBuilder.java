@@ -104,7 +104,8 @@ public final class ProcessGroupDTOBuilder extends AbstractComponentDTOBuilder<Pr
   /**
    * The contents of this process group.
    */
-  public ProcessGroupDTOBuilder setContents(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FlowSnippetDTOBuilder.class) final Closure<FlowSnippetDTOBuilder> closure) {
+  public ProcessGroupDTOBuilder setContents(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FlowSnippetDTOBuilder.class) final Closure<FlowSnippetDTOBuilder> closure) {
     return setContents(c -> {
       final Closure<FlowSnippetDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
@@ -182,7 +183,8 @@ public final class ProcessGroupDTOBuilder extends AbstractComponentDTOBuilder<Pr
   /**
    * The number of locally modified and stale versioned process groups in the process group.
    */
-  public ProcessGroupDTOBuilder setLocallyModifiedAndStaleCount(final Integer locallyModifiedAndStaleCount) {
+  public ProcessGroupDTOBuilder setLocallyModifiedAndStaleCount(
+      final Integer locallyModifiedAndStaleCount) {
     this.locallyModifiedAndStaleCount = locallyModifiedAndStaleCount;
     return this;
   }
@@ -332,7 +334,8 @@ public final class ProcessGroupDTOBuilder extends AbstractComponentDTOBuilder<Pr
   /**
    * The Version Control information that indicates which Flow Registry, and where in the Flow Registry, this Process Group is tracking to; or null if this Process Group is not under version control
    */
-  public ProcessGroupDTOBuilder setVersionControlInformation(final VersionControlInformationDTO versionControlInformation) {
+  public ProcessGroupDTOBuilder setVersionControlInformation(
+      final VersionControlInformationDTO versionControlInformation) {
     this.versionControlInformation = versionControlInformation;
     return this;
   }
@@ -340,7 +343,8 @@ public final class ProcessGroupDTOBuilder extends AbstractComponentDTOBuilder<Pr
   /**
    * The Version Control information that indicates which Flow Registry, and where in the Flow Registry, this Process Group is tracking to; or null if this Process Group is not under version control
    */
-  public ProcessGroupDTOBuilder setVersionControlInformation(final Consumer<VersionControlInformationDTOBuilder> configurator) {
+  public ProcessGroupDTOBuilder setVersionControlInformation(
+      final Consumer<VersionControlInformationDTOBuilder> configurator) {
     final VersionControlInformationDTOBuilder builder = (versionControlInformation != null ? VersionControlInformationDTOBuilder.of(versionControlInformation) : new VersionControlInformationDTOBuilder());
     configurator.accept(builder);
     return setVersionControlInformation(builder.build());
@@ -349,7 +353,8 @@ public final class ProcessGroupDTOBuilder extends AbstractComponentDTOBuilder<Pr
   /**
    * The Version Control information that indicates which Flow Registry, and where in the Flow Registry, this Process Group is tracking to; or null if this Process Group is not under version control
    */
-  public ProcessGroupDTOBuilder setVersionControlInformation(@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = VersionControlInformationDTOBuilder.class) final Closure<VersionControlInformationDTOBuilder> closure) {
+  public ProcessGroupDTOBuilder setVersionControlInformation(
+      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = VersionControlInformationDTOBuilder.class) final Closure<VersionControlInformationDTOBuilder> closure) {
     return setVersionControlInformation(c -> {
       final Closure<VersionControlInformationDTOBuilder> code = closure.rehydrate(c, this, this);
       code.setResolveStrategy(Closure.DELEGATE_ONLY);
