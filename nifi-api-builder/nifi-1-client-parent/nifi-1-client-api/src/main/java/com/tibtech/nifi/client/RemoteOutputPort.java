@@ -35,10 +35,14 @@ public class RemoteOutputPort extends RemotePort<RemoteOutputPort>
 		configurator.accept(remoteProcessGroupPortDTOBuilder);
 
 		final RemoteProcessGroupPortDTO remoteProcessGroupPortDto = new UpdateRemoteProcessGroupOutputPortInvoker(
-				getTransport(), getVersion()).setId(getParentGroupId()).setPortId(getId())
-						.setRemoteProcessGroupPortEntity(new RemoteProcessGroupPortEntityBuilder()
-								.setRemoteProcessGroupPort(remoteProcessGroupPortDTOBuilder.build()).build())
-						.invoke().getRemoteProcessGroupPort();
+				getTransport(), getVersion())
+				.setId(getParentGroupId())
+				.setPortId(getId())
+				.setRemoteProcessGroupPortEntity(new RemoteProcessGroupPortEntityBuilder()
+						.setRemoteProcessGroupPort(remoteProcessGroupPortDTOBuilder.build())
+						.build())
+				.invoke()
+				.getRemoteProcessGroupPort();
 		setRemoteProcessGroupPortDto(remoteProcessGroupPortDto);
         
         // Updating the remote port causes the version of the remote process group to be updated.

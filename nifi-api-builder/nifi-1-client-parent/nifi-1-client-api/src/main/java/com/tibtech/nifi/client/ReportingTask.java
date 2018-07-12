@@ -1,10 +1,11 @@
 package com.tibtech.nifi.client;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.apache.nifi.web.api.dto.PositionDTO;
+import org.apache.nifi.web.api.dto.BundleDTO;
 import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
 import org.apache.nifi.web.api.dto.ReportingTaskDTO;
 import org.apache.nifi.web.api.entity.ReportingTaskEntity;
@@ -18,104 +19,192 @@ import com.tibtech.nifi.web.api.reportingtask.UpdateReportingTaskInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 
+/**
+ * Reporting Task represents a NiFi flow reporting task that runs in the
+ * background to provide statistical reports about what is happening in the NiFi
+ * instance.
+ */
 public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTaskEntity, ReportingTaskDTOBuilder>
 		implements Deletable, Refreshable<ReportingTask, ReportingTaskDTOBuilder>
 {
+	/**
+	 * Constructs a new instance of ReportingTask.
+	 * 
+	 * @param transport The transport with which to communicate with the NiFi
+	 *        server.
+	 * @param reportingTaskEntity The entity that describes the reporting task.
+	 */
 	public ReportingTask(final Transport transport, final ReportingTaskEntity reportingTaskEntity)
 	{
 		super(transport, reportingTaskEntity);
 	}
 
+	/**
+	 * Returns the DTO that describes the reporting task.
+	 * 
+	 * @return The DTO that describes the reporting task.
+	 */
 	protected ReportingTaskDTO getReportingTaskDTO()
 	{
 		return getComponentEntity().getComponent();
 	}
 
-	public String getId()
-	{
-		return getReportingTaskDTO().getId();
-	}
-
-	public String getParentGroupId()
-	{
-		return getReportingTaskDTO().getParentGroupId();
-	}
-
+	/**
+	 * Returns the user defined name of the reporting task.
+	 * 
+	 * @return The user defined name of the reporting task.
+	 */
 	public String getName()
 	{
 		return getReportingTaskDTO().getName();
 	}
 
-	public PositionDTO getPosition()
-	{
-		return getReportingTaskDTO().getPosition();
-	}
-
+	/**
+	 * Returns the user defined comments for the reporting task.
+	 * 
+	 * @return The user defined comments for the reporting task.
+	 */
 	public String getComments()
 	{
 		return getReportingTaskDTO().getComments();
 	}
 
+	/**
+	 * Returns the fully qualified type of the reporting task.
+	 * 
+	 * @return The fully qualified type of the reporting task.
+	 */
 	public String getType()
 	{
 		return getReportingTaskDTO().getType();
 	}
 
+	/**
+	 * Returns the frequency with which to schedule the reporting task. The format
+	 * of the value will depend on the value of the schedulingStrategy.
+	 * 
+	 * @return The frequency with which to schedule the reporting task.
+	 */
 	public String getSchedulingPeriod()
 	{
 		return getReportingTaskDTO().getSchedulingPeriod();
 	}
 
+	/**
+	 * Returns whether the reporting task persists state.
+	 * 
+	 * @return Whether the reporting task persists state.
+	 */
 	public Boolean getPersistsState()
 	{
 		return getReportingTaskDTO().getPersistsState();
 	}
 
+	/**
+	 * Returns whether the reporting task requires elevated privileges.
+	 * 
+	 * @return Whether the reporting task requires elevated privileges.
+	 */
 	public Boolean getRestricted()
 	{
 		return getReportingTaskDTO().getRestricted();
 	}
 
+	/**
+	 * Returns the state of the reporting task. Allowable values are: RUNNING,
+	 * STOPPED, DISABLED.
+	 * 
+	 * @return The state of the reporting task.
+	 */
 	public String getState()
 	{
 		return getReportingTaskDTO().getState();
 	}
 
+	/**
+	 * Returns the scheduling strategy that determines how the scheduling period
+	 * value should be interpreted.
+	 * 
+	 * @return The scheduling strategy that determines how the scheduling period
+	 *         value should be interpreted.
+	 */
 	public String getSchedulingStrategy()
 	{
 		return getReportingTaskDTO().getSchedulingStrategy();
 	}
 
+	/**
+	 * Returns the properties of the reporting task.
+	 * 
+	 * @return The properties of the reporting task.
+	 */
 	public Map<String, String> getProperties()
 	{
-		return getReportingTaskDTO().getProperties();
+		return Collections.unmodifiableMap(getReportingTaskDTO().getProperties());
 	}
 
+	/**
+	 * Returns the descriptors for the reporting tasks properties.
+	 * 
+	 * @return The descriptors for the reporting tasks properties.
+	 */
 	public Map<String, PropertyDescriptorDTO> getDescriptors()
 	{
-		return getReportingTaskDTO().getDescriptors();
+		return Collections.unmodifiableMap(getReportingTaskDTO().getDescriptors());
 	}
 
+	/**
+	 * Returns the URL for this reporting task custom configuration UI if
+	 * applicable. Null otherwise.
+	 * 
+	 * @return The URL for this reporting task custom configuration UI if
+	 *         applicable.
+	 */
 	public String getCustomUiUrl()
 	{
 		return getReportingTaskDTO().getCustomUiUrl();
 	}
 
+	/**
+	 * Returns the annotation data for the repoting task. This is how the custom UI
+	 * relays configuration to the reporting task.
+	 * 
+	 * @return The annotation data for the repoting task.
+	 */
 	public String getAnnotationData()
 	{
 		return getReportingTaskDTO().getAnnotationData();
 	}
 
+	/**
+	 * Returns the validation errors from the reporting task. These validation
+	 * errors represent the problems with the reporting task that must be resolved
+	 * before it can be scheduled to run.
+	 * 
+	 * @return The validation errors from the reporting task.
+	 */
 	public Collection<String> getValidationErrors()
 	{
 		return getReportingTaskDTO().getValidationErrors();
 	}
 
+	/**
+	 * Returns the default scheduling period for the different scheduling
+	 * strategies.
+	 * 
+	 * @return The default scheduling period for the different scheduling
+	 *         strategies.
+	 */
 	public Map<String, String> getDefaultSchedulingPeriod()
 	{
 		return getReportingTaskDTO().getDefaultSchedulingPeriod();
 	}
 
+	/**
+	 * Returns the number of active threads for the reporting task.
+	 * 
+	 * @return The number of active threads for the reporting task.
+	 */
 	public Integer getActiveThreadCount()
 	{
 		return getReportingTaskDTO().getActiveThreadCount();
@@ -124,7 +213,9 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 	@Override
 	public ReportingTask refresh() throws InvokerException
 	{
-		setComponentEntity(new GetReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+		setComponentEntity(new GetReportingTaskInvoker(getTransport(), getVersion())
+				.setId(getId())
+				.invoke());
 
 		return this;
 	}
@@ -136,9 +227,11 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 
 		configurator.accept(reportingTaskDTOBuilder);
 
-		setComponentEntity(new UpdateReportingTaskInvoker(getTransport(), getVersion()).setId(getId())
-				.setReportingTaskEntity(
-						new ReportingTaskEntityBuilder().setComponent(reportingTaskDTOBuilder.build()).build())
+		setComponentEntity(new UpdateReportingTaskInvoker(getTransport(), getVersion())
+				.setId(getId())
+				.setReportingTaskEntity(new ReportingTaskEntityBuilder()
+						.setComponent(reportingTaskDTOBuilder.build())
+						.build())
 				.invoke());
 
 		return this;

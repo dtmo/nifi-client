@@ -113,6 +113,11 @@ public class RemoteProcessGroup
 		return getRemoteProcessGroupDTO().getInactiveRemoteOutputPortCount();
 	}
 
+	public String getLocalNetworkInterface()
+	{
+		return getRemoteProcessGroupDTO().getLocalNetworkInterface();
+	}
+
 	public String getName()
 	{
 		return getRemoteProcessGroupDTO().getName();
@@ -148,14 +153,39 @@ public class RemoteProcessGroup
 		return getRemoteProcessGroupDTO().getTargetUri();
 	}
 
+	public String getTargetUris()
+	{
+		return getRemoteProcessGroupDTO().getTargetUris();
+	}
+
 	public String getTransportProtocol()
 	{
 		return getRemoteProcessGroupDTO().getTransportProtocol();
 	}
 
+	public Collection<String> getValidationErrors()
+	{
+		return getRemoteProcessGroupDTO().getValidationErrors();
+	}
+	
+	public String getVersionedComponentId()
+	{
+		return getRemoteProcessGroupDTO().getVersionedComponentId();
+	}
+
 	public String getYieldDuration()
 	{
 		return getRemoteProcessGroupDTO().getYieldDuration();
+	}
+
+	public Boolean isTransmitting()
+	{
+		return getRemoteProcessGroupDTO().isTransmitting();
+	}
+
+	public Boolean isTargetSecure()
+	{
+		return getRemoteProcessGroupDTO().isTargetSecure();
 	}
 
 	public RemoteProcessGroup enableTransmission() throws InvokerException
@@ -178,22 +208,21 @@ public class RemoteProcessGroup
 		final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = getContents().getInputPorts();
 		if (remoteInputPortDTOs != null)
 		{
-			remoteProcessGroupContentsDTOBuilder
-					.setInputPorts(
-							remoteInputPortDTOs
-									.stream().map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder
-											.of(remoteInputPortDTO).setTransmitting(transmitting).build())
-									.collect(Collectors.toSet()));
+			remoteProcessGroupContentsDTOBuilder.setInputPorts(remoteInputPortDTOs.stream()
+					.map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder.of(remoteInputPortDTO)
+							.setTransmitting(transmitting)
+							.build())
+					.collect(Collectors.toSet()));
 		}
 
 		final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = getContents().getOutputPorts();
 		if (remoteInputPortDTOs != null)
 		{
-			remoteProcessGroupContentsDTOBuilder
-					.setOutputPorts(remoteOutputPortDTOs
-							.stream().map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder
-									.of(remoteOutputPortDTO).setTransmitting(transmitting).build())
-							.collect(Collectors.toSet()));
+			remoteProcessGroupContentsDTOBuilder.setOutputPorts(remoteOutputPortDTOs.stream()
+					.map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder.of(remoteOutputPortDTO)
+							.setTransmitting(transmitting)
+							.build())
+					.collect(Collectors.toSet()));
 		}
 
 		return update(configurator -> configurator.setContents(remoteProcessGroupContentsDTOBuilder.build()));
@@ -209,13 +238,15 @@ public class RemoteProcessGroup
 
 	public Set<RemoteInputPort> getRemoteInputPorts()
 	{
-		return getContents().getInputPorts().stream().map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO))
+		return getContents().getInputPorts().stream()
+				.map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO))
 				.collect(Collectors.toSet());
 	}
 
 	public Set<RemoteOutputPort> getRemoteOutputPorts()
 	{
-		return getContents().getOutputPorts().stream().map(outputPortDTO -> new RemoteOutputPort(this, outputPortDTO))
+		return getContents().getOutputPorts().stream()
+				.map(outputPortDTO -> new RemoteOutputPort(this, outputPortDTO))
 				.collect(Collectors.toSet());
 	}
 
@@ -227,9 +258,11 @@ public class RemoteProcessGroup
 
 		configurator.accept(remoteProcessGroupDTOBuilder);
 
-		setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId())
+		setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getVersion())
+				.setId(getId())
 				.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
-						.setComponent(remoteProcessGroupDTOBuilder.build()).build())
+						.setComponent(remoteProcessGroupDTOBuilder.build())
+						.build())
 				.invoke());
 
 		return this;

@@ -99,8 +99,12 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
 
 		configurator.accept(labelDTOBuilder);
 
-		setComponentEntity(new UpdateLabelInvoker(getTransport(), getVersion()).setId(getId())
-				.setLabelEntity(new LabelEntityBuilder().setComponent(labelDTOBuilder.build()).build()).invoke());
+		setComponentEntity(new UpdateLabelInvoker(getTransport(), getVersion())
+				.setId(getId())
+				.setLabelEntity(new LabelEntityBuilder()
+						.setComponent(labelDTOBuilder.build())
+						.build())
+				.invoke());
 
 		return this;
 	}
@@ -108,7 +112,9 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
 	@Override
 	public Label refresh() throws InvokerException
 	{
-		setComponentEntity(new GetLabelInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+		setComponentEntity(new GetLabelInvoker(getTransport(), getVersion())
+				.setId(getId())
+				.invoke());
 
 		return this;
 	}

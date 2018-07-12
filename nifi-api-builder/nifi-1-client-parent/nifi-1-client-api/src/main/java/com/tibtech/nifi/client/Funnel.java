@@ -64,9 +64,12 @@ public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBu
 
 		configurator.accept(funnelDTOBuilder);
 
-		setComponentEntity(new UpdateFunnelInvoker(getTransport(), getVersion()).setId(getId())
-				.setFunnelEntity(
-						new FunnelEntityBuilder().setId(getId()).setComponent(funnelDTOBuilder.build()).build())
+		setComponentEntity(new UpdateFunnelInvoker(getTransport(), getVersion())
+				.setId(getId())
+				.setFunnelEntity(new FunnelEntityBuilder()
+						.setId(getId())
+						.setComponent(funnelDTOBuilder.build())
+						.build())
 				.invoke());
 		return this;
 	}

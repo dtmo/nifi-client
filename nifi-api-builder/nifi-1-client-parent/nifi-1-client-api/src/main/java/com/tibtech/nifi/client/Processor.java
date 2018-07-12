@@ -32,6 +32,7 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
 		return getComponentEntity().getComponent();
 	}
 
+	@Override
 	public String getParentGroupId()
 	{
 		return getProcessorDTO().getParentGroupId();
@@ -134,8 +135,11 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
 
 		configurator.accept(processorDTOBuilder);
 
-		setComponentEntity(new UpdateProcessorInvoker(getTransport(), getVersion()).setId(getId())
-				.setProcessorEntity(new ProcessorEntityBuilder().setComponent(processorDTOBuilder.build()).build())
+		setComponentEntity(new UpdateProcessorInvoker(getTransport(), getVersion())
+				.setId(getId())
+				.setProcessorEntity(new ProcessorEntityBuilder()
+						.setComponent(processorDTOBuilder.build())
+						.build())
 				.invoke());
 
 		return this;
