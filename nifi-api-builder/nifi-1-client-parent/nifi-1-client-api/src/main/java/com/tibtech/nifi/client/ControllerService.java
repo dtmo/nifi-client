@@ -87,12 +87,6 @@ public class ControllerService
 	public String getAnnotationData()
 	{
 		return getControllerServiceDTO().getAnnotationData();
-	}
-
-	public Set<ControllerServiceReferencingComponentEntity> getReferencingComponents()
-	{
-		return getControllerServiceDTO().getReferencingComponents();
-	}
 
 	public Collection<String> getValidationErrors()
 	{
@@ -154,4 +148,42 @@ public class ControllerService
 
 		update(c -> c.setState(controllerServiceState));
 	}
+    }
+
+    /**
+     * Returns references to all components referencing the controller service.
+     *
+     * @return references to all components referencing the controller service.
+     */
+    public ReferencingComponents getReferencingComponents() throws InvokerException
+    {
+        final Set<ControllerService> controllerServices = new HashSet<>();
+        final Set<Processor> processors = new HashSet<>();
+        final Set<ReportingTask> reportingTasks = new HashSet<>();
+
+        for (final ControllerServiceReferencingComponentEntity entity : getControllerServiceDTO().getReferencingComponents())
+        {
+            final ControllerServiceReferencingComponentDTO component = entity.getComponent();
+            final String referenceType = component.getReferenceType();
+            switch (referenceType)
+            {
+                case "ControllerService":
+                    controllerServices.add(Flow.getControllerService(getTransport(), component.getId()));
+                    break;
+
+                case "Processor":
+                    processors.add(Flow.getProcessor(getTransport(), component.getId()));
+                    break;
+
+                case "ReportingTask":
+                    reportingTasks.add(Flow.getReportingTask(getTransport(), component.getId()));
+                    break;
+
+                default:
+                    throw new IllegalStateException("Unrecognised referencing component type: " + referenceType);
+            }
+        }
+
+        return new ReferencingComponents(controllerServices, processors, reportingTasks);
+    }
 }

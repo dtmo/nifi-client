@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 
+import com.tibtech.nifi.web.api.controllerservice.GetControllerServiceInvoker;
 import org.apache.nifi.web.api.dto.DocumentedTypeDTO;
 
 import com.tibtech.nifi.web.api.controller.CreateControllerServiceInvoker;
@@ -21,6 +22,8 @@ import com.tibtech.nifi.web.api.flow.GetProcessorTypesInvoker;
 import com.tibtech.nifi.web.api.flow.GetReportingTaskTypesInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.UploadTemplateInvoker;
+import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
+import com.tibtech.nifi.web.api.reportingtask.GetReportingTaskInvoker;
 
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
@@ -243,4 +246,48 @@ public class Flow
 
 		return connect(client, baseUri);
 	}
+
+    /**
+     * Returns the controller service with a specific ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the controller service to return.
+     * @return The controller service with the specified ID.
+     * @throws InvokerException if there is a problem getting the controller service.
+     */
+    public static ControllerService getControllerService(final Transport transport, final String id) throws InvokerException
+    {
+        return new ControllerService(transport, new GetControllerServiceInvoker(transport, 0)
+                .setId(id)
+                .invoke());
+    }
+
+    /**
+     * Returns the processor with a specific ID.
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id The ID of the processor to return.
+     * @return The processor with the specified ID.
+     * @throws InvokerException if there is a problem getting the processor.
+     */
+    public static Processor getProcessor(final Transport transport, final String id) throws InvokerException
+    {
+        return new Processor(transport, new GetProcessorInvoker(transport, 0)
+                .setId(id)
+                .invoke());
+    }
+
+    /**
+     * Returns the reporting task with a specific ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the reporting task to return.
+     * @return The reporting task with the specified ID.
+     * @throws InvokerException if there is a problem getting the reporting task.
+     */
+    public static ReportingTask getReportingTask(final Transport transport, final String id) throws InvokerException
+    {
+        return new ReportingTask(transport, new GetReportingTaskInvoker(transport, 0)
+                .setId(id)
+                .invoke());
+    }
 }
