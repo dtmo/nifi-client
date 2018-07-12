@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response.StatusType;
 /**
  * InvokerException is thrown when an invoker receives an unsuccessful response.
  */
-public class InvokerException extends Exception
+public class InvokerException extends RuntimeException
 {
 	/**
 	 * Serialized version unique ID.
