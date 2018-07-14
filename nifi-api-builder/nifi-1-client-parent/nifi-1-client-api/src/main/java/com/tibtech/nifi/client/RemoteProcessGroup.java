@@ -1,18 +1,5 @@
 package com.tibtech.nifi.client;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.Set;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
-import org.apache.nifi.web.api.dto.RemoteProcessGroupContentsDTO;
-import org.apache.nifi.web.api.dto.RemoteProcessGroupDTO;
-import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
-import org.apache.nifi.web.api.dto.RevisionDTO;
-import org.apache.nifi.web.api.dto.status.RemoteProcessGroupStatusDTO;
-import org.apache.nifi.web.api.entity.RemoteProcessGroupEntity;
-
 import com.tibtech.nifi.web.api.dto.RemoteProcessGroupContentsDTOBuilder;
 import com.tibtech.nifi.web.api.dto.RemoteProcessGroupDTOBuilder;
 import com.tibtech.nifi.web.api.dto.RemoteProcessGroupPortDTOBuilder;
@@ -20,265 +7,400 @@ import com.tibtech.nifi.web.api.entity.RemoteProcessGroupEntityBuilder;
 import com.tibtech.nifi.web.api.remoteprocessgroup.GetRemoteProcessGroupInvoker;
 import com.tibtech.nifi.web.api.remoteprocessgroup.RemoveRemoteProcessGroupInvoker;
 import com.tibtech.nifi.web.api.remoteprocessgroup.UpdateRemoteProcessGroupInvoker;
-
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import org.apache.nifi.web.api.dto.RemoteProcessGroupDTO;
+import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
+import org.apache.nifi.web.api.dto.status.RemoteProcessGroupStatusDTO;
+import org.apache.nifi.web.api.entity.RemoteProcessGroupEntity;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
+/**
+ * RemoteProcessGroup represents a remote process group in a NiFi flow.
+ */
 public class RemoteProcessGroup
-		extends UpdatableComponent<RemoteProcessGroup, RemoteProcessGroupEntity, RemoteProcessGroupDTOBuilder>
-		implements Deletable, Refreshable<RemoteProcessGroup, RemoteProcessGroupDTOBuilder>
+        extends UpdatableComponent<RemoteProcessGroup, RemoteProcessGroupEntity, RemoteProcessGroupDTOBuilder>
+        implements Deletable, Refreshable<RemoteProcessGroup, RemoteProcessGroupDTOBuilder>
 {
-	public RemoteProcessGroup(final Transport transport, final RemoteProcessGroupEntity remoteProcessGroupEntity)
-	{
-		super(transport, remoteProcessGroupEntity);
-	}
+    /**
+     * Constructs a new instance of RemoteProcessGroup.
+     *
+     * @param transport                The transport with which to communicate with the NiFi server.
+     * @param remoteProcessGroupEntity The entity that represents the remote process group.
+     */
+    public RemoteProcessGroup(final Transport transport, final RemoteProcessGroupEntity remoteProcessGroupEntity)
+    {
+        super(transport, remoteProcessGroupEntity);
+    }
 
-	protected RemoteProcessGroupDTO getRemoteProcessGroupDTO()
-	{
-		return getComponentEntity().getComponent();
-	}
+    /**
+     * Returns the DTO that describes the remote process group.
+     *
+     * @return The DTO that describes the remote process group.
+     */
+    protected RemoteProcessGroupDTO getRemoteProcessGroupDTO()
+    {
+        return getComponentEntity().getComponent();
+    }
 
-	public RemoteProcessGroupDTO getComponent()
-	{
-		return getComponentEntity().getComponent();
-	}
+    /**
+     * Returns the number of Remote Input Ports currently available in the remote NiFi instance.
+     *
+     * @return The number of Remote Input Ports currently available in the remote NiFi instance.
+     */
+    public int getInputPortCount()
+    {
+        return getComponentEntity().getInputPortCount();
+    }
 
-	public Integer getInputPortCount()
-	{
-		return getComponentEntity().getInputPortCount();
-	}
+    /**
+     * Returns the number of Remote Output Ports currently available in the remote NiFi instance.
+     *
+     * @return The number of Remote Output Ports currently available in the remote NiFi instance.
+     */
+    public int getOutputPortCount()
+    {
+        return getComponentEntity().getOutputPortCount();
+    }
 
-	public Integer getOutputPortCount()
-	{
-		return getComponentEntity().getOutputPortCount();
-	}
+    /**
+     * Returns the remote process group status.
+     *
+     * @return The remote process group status.
+     */
+    public RemoteProcessGroupStatusDTO getStatus()
+    {
+        return getComponentEntity().getStatus();
+    }
 
-	public RevisionDTO getRevision()
-	{
-		return getComponentEntity().getRevision();
-	}
+    /**
+     * Returns the URI for linking to this component in this NiFi.
+     *
+     * @return The URI for linking to this component in this NiFi.
+     */
+    public String getUri()
+    {
+        return getComponentEntity().getUri();
+    }
 
-	public RemoteProcessGroupStatusDTO getStatus()
-	{
-		return getComponentEntity().getStatus();
-	}
+    /**
+     * Returns the number of active remote input ports.
+     *
+     * @return The number of active remote input ports.
+     */
+    public int getActiveRemoteInputPortCount()
+    {
+        return getRemoteProcessGroupDTO().getActiveRemoteInputPortCount();
+    }
 
-	public String getUri()
-	{
-		return getComponentEntity().getUri();
-	}
+    /**
+     * Returns the number of active remote output ports.
+     *
+     * @return The number of active remote output ports.
+     */
+    public int getActiveRemoteOutputPortCount()
+    {
+        return getRemoteProcessGroupDTO().getActiveRemoteOutputPortCount();
+    }
 
-	public Integer getActiveRemoteInputPortCount()
-	{
-		return getRemoteProcessGroupDTO().getActiveRemoteInputPortCount();
-	}
+    /**
+     * Returns any remote authorization issues for this remote process group.
+     *
+     * @return Any remote authorization issues for this remote process group.
+     */
+    public Collection<String> getAuthorizationIssues()
+    {
+        return Collections.unmodifiableCollection(getRemoteProcessGroupDTO().getAuthorizationIssues());
+    }
 
-	public Integer getActiveRemoteOutputPortCount()
-	{
-		return getRemoteProcessGroupDTO().getActiveRemoteOutputPortCount();
-	}
+    /**
+     * Returns the user comments for the process group.
+     *
+     * @return The user comments for the process group.
+     */
+    public String getComments()
+    {
+        return getRemoteProcessGroupDTO().getComments();
+    }
 
-	public Collection<String> getAuthorizationIssues()
-	{
-		return getRemoteProcessGroupDTO().getAuthorizationIssues();
-	}
+    /**
+     * Returns the time period used for the timeout when communicating with this remote process group.
+     *
+     * @return The time period used for the timeout when communicating with this remote process group.
+     */
+    public String getCommunicationsTimeout()
+    {
+        return getRemoteProcessGroupDTO().getCommunicationsTimeout();
+    }
 
-	public String getComments()
-	{
-		return getRemoteProcessGroupDTO().getComments();
-	}
+    /**
+     * Returns the time the flow for this remote group was last refreshed.
+     *
+     * @return The time the flow for this remote group was last refreshed.
+     */
+    public Date getFlowRefreshed()
+    {
+        return getRemoteProcessGroupDTO().getFlowRefreshed();
+    }
 
-	public String getCommunicationsTimeout()
-	{
-		return getRemoteProcessGroupDTO().getCommunicationsTimeout();
-	}
+    /**
+     * Returns the number of inactive remote input ports.
+     *
+     * @return The number of inactive remote input ports.
+     */
+    public int getInactiveRemoteInputPortCount()
+    {
+        return getRemoteProcessGroupDTO().getInactiveRemoteInputPortCount();
+    }
 
-	public RemoteProcessGroupContentsDTO getContents()
-	{
-		return getRemoteProcessGroupDTO().getContents();
-	}
+    /**
+     * Returns the number of inactive remote output ports.
+     *
+     * @return The number of inactive remote output ports.
+     */
+    public int getInactiveRemoteOutputPortCount()
+    {
+        return getRemoteProcessGroupDTO().getInactiveRemoteOutputPortCount();
+    }
 
-	public Date getFlowRefreshed()
-	{
-		return getRemoteProcessGroupDTO().getFlowRefreshed();
-	}
+    public String getLocalNetworkInterface()
+    {
+        return getRemoteProcessGroupDTO().getLocalNetworkInterface();
+    }
 
-	public Integer getInactiveRemoteInputPortCount()
-	{
-		return getRemoteProcessGroupDTO().getInactiveRemoteInputPortCount();
-	}
+    /**
+     * Returns the name of the remote process group.
+     *
+     * @return The name of the remote process group.
+     */
+    public String getName()
+    {
+        return getRemoteProcessGroupDTO().getName();
+    }
 
-	public Integer getInactiveRemoteOutputPortCount()
-	{
-		return getRemoteProcessGroupDTO().getInactiveRemoteOutputPortCount();
-	}
+    /**
+     * Returns the ID of process group containing the remote process group.
+     *
+     * @return The ID of process group containing the remote process group.
+     */
+    public String getParentGroupId()
+    {
+        return getRemoteProcessGroupDTO().getParentGroupId();
+    }
 
-	public String getLocalNetworkInterface()
-	{
-		return getRemoteProcessGroupDTO().getLocalNetworkInterface();
-	}
+    public String getProxyHost()
+    {
+        return getRemoteProcessGroupDTO().getProxyHost();
+    }
 
-	public String getName()
-	{
-		return getRemoteProcessGroupDTO().getName();
-	}
+    public String getProxyPassword()
+    {
+        return getRemoteProcessGroupDTO().getProxyPassword();
+    }
 
-	public String getParentGroupId()
-	{
-		return getRemoteProcessGroupDTO().getParentGroupId();
-	}
+    public Integer getProxyPort()
+    {
+        return getRemoteProcessGroupDTO().getProxyPort();
+    }
 
-	public String getProxyHost()
-	{
-		return getRemoteProcessGroupDTO().getProxyHost();
-	}
+    public String getProxyUser()
+    {
+        return getRemoteProcessGroupDTO().getProxyUser();
+    }
 
-	public String getProxyPassword()
-	{
-		return getRemoteProcessGroupDTO().getProxyPassword();
-	}
+    /**
+     * Returns the target URI of this remote process group. If target URI is not set, but URIs are set, then returns the
+     * first URI in the URIs. If neither target URI nor URIs are set, then returns null.
+     *
+     * @return the target URI of this remote process group.
+     */
+    public String getTargetUri()
+    {
+        return getRemoteProcessGroupDTO().getTargetUri();
+    }
 
-	public Integer getProxyPort()
-	{
-		return getRemoteProcessGroupDTO().getProxyPort();
-	}
+    /**
+     * Returns the target URIs of this remote process group. If target URIs was not set but target URI was set, then
+     * returns a collection containing the single URI. If neither target URIs nor URI were set, then returns null.
+     *
+     * @return the target URIs of this remote process group.
+     */
+    public String getTargetUris()
+    {
+        return getRemoteProcessGroupDTO().getTargetUris();
+    }
 
-	public String getProxyUser()
-	{
-		return getRemoteProcessGroupDTO().getProxyUser();
-	}
+    public String getTransportProtocol()
+    {
+        return getRemoteProcessGroupDTO().getTransportProtocol();
+    }
 
-	public String getTargetUri()
-	{
-		return getRemoteProcessGroupDTO().getTargetUri();
-	}
+    public Collection<String> getValidationErrors()
+    {
+        return getRemoteProcessGroupDTO().getValidationErrors();
+    }
 
-	public String getTargetUris()
-	{
-		return getRemoteProcessGroupDTO().getTargetUris();
-	}
+    public String getVersionedComponentId()
+    {
+        return getRemoteProcessGroupDTO().getVersionedComponentId();
+    }
 
-	public String getTransportProtocol()
-	{
-		return getRemoteProcessGroupDTO().getTransportProtocol();
-	}
+    /**
+     * Returns the amount of time that must elapse, when yielding, before this remote process group is scheduled again.
+     *
+     * @return The amount of time that must elapse, when yielding, before this remote process group is scheduled again.
+     */
+    public String getYieldDuration()
+    {
+        return getRemoteProcessGroupDTO().getYieldDuration();
+    }
 
-	public Collection<String> getValidationErrors()
-	{
-		return getRemoteProcessGroupDTO().getValidationErrors();
-	}
-	
-	public String getVersionedComponentId()
-	{
-		return getRemoteProcessGroupDTO().getVersionedComponentId();
-	}
+    /**
+     * Returns whether or not this remote process group is actively transmitting.
+     *
+     * @return Whether or not this remote process group is actively transmitting.
+     */
+    public boolean isTransmitting()
+    {
+        return getRemoteProcessGroupDTO().isTransmitting();
+    }
 
-	public String getYieldDuration()
-	{
-		return getRemoteProcessGroupDTO().getYieldDuration();
-	}
+    /**
+     * Returns whether or not the target is running securely.
+     *
+     * @return Whether or not the target is running securely.
+     */
+    public boolean isTargetSecure()
+    {
+        return getRemoteProcessGroupDTO().isTargetSecure();
+    }
 
-	public Boolean isTransmitting()
-	{
-		return getRemoteProcessGroupDTO().isTransmitting();
-	}
+    /**
+     * Enables transmission for the remote process group.
+     *
+     * @return This remote process group.
+     * @throws InvokerException if there is a problem enabling transmission.
+     */
+    public RemoteProcessGroup enableTransmission() throws InvokerException
+    {
+        return setTransmitting(true);
+    }
 
-	public Boolean isTargetSecure()
-	{
-		return getRemoteProcessGroupDTO().isTargetSecure();
-	}
+    /**
+     * Disables transmission for the remote process group.
+     *
+     * @return This remote process group.
+     * @throws InvokerException if there is a problem disabling transmission.
+     */
+    public RemoteProcessGroup disableTransmission() throws InvokerException
+    {
+        return setTransmitting(false);
+    }
 
-	public RemoteProcessGroup enableTransmission() throws InvokerException
-	{
-		return setTransmitting(true);
-	}
+    /**
+     * Sets whether or not the remote process group should be transmitting.
+     *
+     * @param transmitting The transmitting state to set.
+     * @return This remote process group.
+     * @throws InvokerException if there is a problem setting the transmitting state.
+     */
+    public RemoteProcessGroup setTransmitting(final boolean transmitting) throws InvokerException
+    {
+        refresh();
 
-	public RemoteProcessGroup disableTransmission() throws InvokerException
-	{
-		return setTransmitting(false);
-	}
+        final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = RemoteProcessGroupContentsDTOBuilder
+                .of(getContents());
 
-	public RemoteProcessGroup setTransmitting(final boolean transmitting) throws InvokerException
-	{
-		refresh();
+        final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = getContents().getInputPorts();
+        if (remoteInputPortDTOs != null)
+        {
+            remoteProcessGroupContentsDTOBuilder.setInputPorts(remoteInputPortDTOs.stream()
+                    .map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder.of(remoteInputPortDTO)
+                            .setTransmitting(transmitting)
+                            .build())
+                    .collect(Collectors.toSet()));
+        }
 
-		final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = RemoteProcessGroupContentsDTOBuilder
-				.of(getContents());
+        final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = getContents().getOutputPorts();
+        if (remoteInputPortDTOs != null)
+        {
+            remoteProcessGroupContentsDTOBuilder.setOutputPorts(remoteOutputPortDTOs.stream()
+                    .map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder.of(remoteOutputPortDTO)
+                            .setTransmitting(transmitting)
+                            .build())
+                    .collect(Collectors.toSet()));
+        }
 
-		final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = getContents().getInputPorts();
-		if (remoteInputPortDTOs != null)
-		{
-			remoteProcessGroupContentsDTOBuilder.setInputPorts(remoteInputPortDTOs.stream()
-					.map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder.of(remoteInputPortDTO)
-							.setTransmitting(transmitting)
-							.build())
-					.collect(Collectors.toSet()));
-		}
+        return update(configurator -> configurator.setContents(remoteProcessGroupContentsDTOBuilder.build()));
+    }
 
-		final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = getContents().getOutputPorts();
-		if (remoteInputPortDTOs != null)
-		{
-			remoteProcessGroupContentsDTOBuilder.setOutputPorts(remoteOutputPortDTOs.stream()
-					.map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder.of(remoteOutputPortDTO)
-							.setTransmitting(transmitting)
-							.build())
-					.collect(Collectors.toSet()));
-		}
+    @Override
+    public RemoteProcessGroup refresh() throws InvokerException
+    {
+        setComponentEntity(new GetRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke());
 
-		return update(configurator -> configurator.setContents(remoteProcessGroupContentsDTOBuilder.build()));
-	}
+        return this;
+    }
 
-	@Override
-	public RemoteProcessGroup refresh() throws InvokerException
-	{
-		setComponentEntity(new GetRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+    /**
+     * Returns the remote input ports.
+     *
+     * @return The remote input ports.
+     */
+    public Set<RemoteInputPort> getRemoteInputPorts()
+    {
+        return Collections.unmodifiableSet(getContents().getInputPorts().stream()
+                .map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO))
+                .collect(Collectors.toSet()));
+    }
 
-		return this;
-	}
+    /**
+     * Returns the remote output ports.
+     *
+     * @return The remote output ports.
+     */
+    public Set<RemoteOutputPort> getRemoteOutputPorts()
+    {
+        return Collections.unmodifiableSet(getContents().getOutputPorts().stream()
+                .map(outputPortDTO -> new RemoteOutputPort(this, outputPortDTO))
+                .collect(Collectors.toSet()));
+    }
 
-	public Set<RemoteInputPort> getRemoteInputPorts()
-	{
-		return getContents().getInputPorts().stream()
-				.map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO))
-				.collect(Collectors.toSet());
-	}
+    @Override
+    public RemoteProcessGroup update(final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
+    {
+        final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = RemoteProcessGroupDTOBuilder
+                .of(getRemoteProcessGroupDTO());
 
-	public Set<RemoteOutputPort> getRemoteOutputPorts()
-	{
-		return getContents().getOutputPorts().stream()
-				.map(outputPortDTO -> new RemoteOutputPort(this, outputPortDTO))
-				.collect(Collectors.toSet());
-	}
+        configurator.accept(remoteProcessGroupDTOBuilder);
 
-	@Override
-	public RemoteProcessGroup update(final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
-	{
-		final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = RemoteProcessGroupDTOBuilder
-				.of(getRemoteProcessGroupDTO());
+        setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getVersion())
+                .setId(getId())
+                .setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
+                        .setComponent(remoteProcessGroupDTOBuilder.build())
+                        .build())
+                .invoke());
 
-		configurator.accept(remoteProcessGroupDTOBuilder);
+        return this;
+    }
 
-		setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getVersion())
-				.setId(getId())
-				.setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
-						.setComponent(remoteProcessGroupDTOBuilder.build())
-						.build())
-				.invoke());
+    @Override
+    public RemoteProcessGroup update(
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupDTOBuilder.class) final Closure<RemoteProcessGroupDTOBuilder> closure)
+            throws InvokerException
+    {
+        return super.update(closure);
+    }
 
-		return this;
-	}
-
-	@Override
-	public RemoteProcessGroup update(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupDTOBuilder.class) final Closure<RemoteProcessGroupDTOBuilder> closure)
-			throws InvokerException
-	{
-		return super.update(closure);
-	}
-
-	@Override
-	public void delete() throws InvokerException
-	{
-		new RemoveRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
-	}
+    @Override
+    public void delete() throws InvokerException
+    {
+        new RemoveRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+    }
 }
