@@ -54,6 +54,11 @@ public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, Port
         return getComponentEntity().getPortType();
     }
 
+    /**
+     * Returns the status of the port.
+     *
+     * @return The status of the port.
+     */
     public PortStatusDTO getStatus()
     {
         return getComponentEntity().getStatus();

@@ -1,155 +1,234 @@
 package com.tibtech.nifi.client;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import org.apache.nifi.web.api.dto.ProcessorConfigDTO;
-import org.apache.nifi.web.api.dto.ProcessorDTO;
-import org.apache.nifi.web.api.dto.RelationshipDTO;
-import org.apache.nifi.web.api.entity.ProcessorEntity;
-
 import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
 import com.tibtech.nifi.web.api.processor.DeleteProcessorInvoker;
 import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
 import com.tibtech.nifi.web.api.processor.UpdateProcessorInvoker;
-
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import org.apache.nifi.web.api.dto.ProcessorConfigDTO;
+import org.apache.nifi.web.api.dto.ProcessorDTO;
+import org.apache.nifi.web.api.dto.RelationshipDTO;
+import org.apache.nifi.web.api.entity.ProcessorEntity;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
+/**
+ * Processor represents a NiFi processor which is the main component for performing work in a NiFi flow.
+ */
 public class Processor extends UpdatableComponent<Processor, ProcessorEntity, ProcessorDTOBuilder>
-		implements Connectable, Deletable, Refreshable<Processor, ProcessorDTOBuilder>
+        implements Connectable, Deletable, Refreshable<Processor, ProcessorDTOBuilder>
 {
-	public Processor(final Transport transport, final ProcessorEntity processorEntity)
-	{
-		super(transport, processorEntity);
-	}
+    /**
+     * Constructs a new instance of Processor.
+     *
+     * @param transport       The transport with which to communicate with the NiFi server.
+     * @param processorEntity The entity that represents the processor.
+     */
+    public Processor(final Transport transport, final ProcessorEntity processorEntity)
+    {
+        super(transport, processorEntity);
+    }
 
-	protected ProcessorDTO getProcessorDTO()
-	{
-		return getComponentEntity().getComponent();
-	}
+    /**
+     * Returns the DTO that describes the processor.
+     *
+     * @return The DTO that describes the processor.
+     */
+    protected ProcessorDTO getProcessorDTO()
+    {
+        return getComponentEntity().getComponent();
+    }
 
-	@Override
-	public String getParentGroupId()
-	{
-		return getProcessorDTO().getParentGroupId();
-	}
+    @Override
+    public String getParentGroupId()
+    {
+        return getProcessorDTO().getParentGroupId();
+    }
 
-	public String getName()
-	{
-		return getProcessorDTO().getName();
-	}
+    /**
+     * Returns the name of the processor.
+     *
+     * @return The name of the processor.
+     */
+    public String getName()
+    {
+        return getProcessorDTO().getName();
+    }
 
-	public String getType()
-	{
-		return getProcessorDTO().getType();
-	}
+    /**
+     * Returns the fully qualified type of the processor.
+     *
+     * @return The fully qualified type of the processor.
+     */
+    public String getType()
+    {
+        return getProcessorDTO().getType();
+    }
 
-	public String getState()
-	{
-		return getProcessorDTO().getState();
-	}
+    /**
+     * Returns the state of this processor. Possible states are 'RUNNING', 'STOPPED', and 'DISABLED'.
+     *
+     * @return The state of this processor.
+     */
+    public String getState()
+    {
+        return getProcessorDTO().getState();
+    }
 
-	public Map<String, String> getStyle()
-	{
-		return getProcessorDTO().getStyle();
-	}
+    /**
+     * Returns the styles for this processor. (Currently only supports color)
+     *
+     * @return The styles for this processor.
+     */
+    public Map<String, String> getStyle()
+    {
+        return Collections.unmodifiableMap(getProcessorDTO().getStyle());
+    }
 
-	public Boolean getSupportsParallelProcessing()
-	{
-		return getProcessorDTO().getSupportsParallelProcessing();
-	}
+    /**
+     * Returns whether this processor supports parallel processing.
+     *
+     * @return Whether this processor supports parallel processing.
+     */
+    public boolean getSupportsParallelProcessing()
+    {
+        return getProcessorDTO().getSupportsParallelProcessing();
+    }
 
-	public Boolean getPersistsState()
-	{
-		return getProcessorDTO().getPersistsState();
-	}
+    /**
+     * Returns whether this processor persists state.
+     *
+     * @return Whether this processor persists state.
+     */
+    public boolean getPersistsState()
+    {
+        return getProcessorDTO().getPersistsState();
+    }
 
-	public Boolean getRestricted()
-	{
-		return getProcessorDTO().getRestricted();
-	}
+    /**
+     * Returns whether this processor requires elevated privileges.
+     *
+     * @return Whether this processor requires elevated privileges.
+     */
+    public boolean getRestricted()
+    {
+        return getProcessorDTO().getRestricted();
+    }
 
-	public String getInputRequirement()
-	{
-		return getProcessorDTO().getInputRequirement();
-	}
+    /**
+     * Returns the input requirement of this processor.
+     *
+     * @return The input requirement of this processor.
+     */
+    public String getInputRequirement()
+    {
+        return getProcessorDTO().getInputRequirement();
+    }
 
-	public Boolean getSupportsEventDriven()
-	{
-		return getProcessorDTO().getSupportsEventDriven();
-	}
+    /**
+     * Returns whether this processor supports event driven scheduling.
+     *
+     * @return Whether this processor supports event driven scheduling.
+     */
+    public boolean getSupportsEventDriven()
+    {
+        return getProcessorDTO().getSupportsEventDriven();
+    }
 
-	public Boolean getSupportsBatching()
-	{
-		return getProcessorDTO().getSupportsBatching();
-	}
+    /**
+     * Returns whether this processor supports batching.
+     *
+     * @return Whether this processor supports batching.
+     */
+    public boolean getSupportsBatching()
+    {
+        return getProcessorDTO().getSupportsBatching();
+    }
 
-	public List<RelationshipDTO> getRelationships()
-	{
-		return getProcessorDTO().getRelationships();
-	}
+    /**
+     * Returns the available relationships that this processor currently supports.
+     *
+     * @return The available relationships that this processor currently supports.
+     */
+    public List<RelationshipDTO> getRelationships()
+    {
+        return Collections.unmodifiableList(getProcessorDTO().getRelationships());
+    }
 
-	public ProcessorConfigDTO getConfig()
-	{
-		return getProcessorDTO().getConfig();
-	}
+    public ProcessorConfigDTO getConfig()
+    {
+        return getProcessorDTO().getConfig();
+    }
 
-	public Collection<String> getValidationErrors()
-	{
-		return getProcessorDTO().getValidationErrors();
-	}
+    /**
+     * Returns the validation errors from this processor. These validation errors represent the problems with the
+     * processor that must be resolved before it can be started.
+     *
+     * @return The validation errors from this processor.
+     */
+    public Collection<String> getValidationErrors()
+    {
+        return getProcessorDTO().getValidationErrors();
+    }
 
-	public String getDescription()
-	{
-		return getProcessorDTO().getDescription();
-	}
+    /**
+     * Returns the description for this processor.
+     *
+     * @return The description for this processor.
+     */
+    public String getDescription()
+    {
+        return getProcessorDTO().getDescription();
+    }
 
-	@Override
-	public ConnectableType getConnectableType()
-	{
-		return ConnectableType.PROCESSOR;
-	}
+    @Override
+    public ConnectableType getConnectableType()
+    {
+        return ConnectableType.PROCESSOR;
+    }
 
-	@Override
-	public void delete() throws InvokerException
-	{
-		new DeleteProcessorInvoker(getTransport(), getVersion()).setId(getId()).invoke();
-	}
+    @Override
+    public void delete() throws InvokerException
+    {
+        new DeleteProcessorInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+    }
 
-	@Override
-	public Processor refresh() throws InvokerException
-	{
-		setComponentEntity(new GetProcessorInvoker(getTransport(), 0).setId(getId()).invoke());
+    @Override
+    public Processor refresh() throws InvokerException
+    {
+        setComponentEntity(new GetProcessorInvoker(getTransport(), 0).setId(getId()).invoke());
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	public Processor update(final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
-	{
-		final ProcessorDTOBuilder processorDTOBuilder = ProcessorDTOBuilder.of(getProcessorDTO());
+    @Override
+    public Processor update(final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
+    {
+        final ProcessorDTOBuilder processorDTOBuilder = ProcessorDTOBuilder.of(getProcessorDTO());
 
-		configurator.accept(processorDTOBuilder);
+        configurator.accept(processorDTOBuilder);
 
-		setComponentEntity(new UpdateProcessorInvoker(getTransport(), getVersion())
-				.setId(getId())
-				.setProcessorEntity(new ProcessorEntityBuilder()
-						.setComponent(processorDTOBuilder.build())
-						.build())
-				.invoke());
+        setComponentEntity(new UpdateProcessorInvoker(getTransport(), getVersion())
+                .setId(getId())
+                .setProcessorEntity(new ProcessorEntityBuilder()
+                        .setComponent(processorDTOBuilder.build())
+                        .build())
+                .invoke());
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	public Processor update(
-			@DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
-			throws InvokerException
-	{
-		return super.update(closure);
-	}
+    @Override
+    public Processor update(
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
+            throws InvokerException
+    {
+        return super.update(closure);
+    }
 }
