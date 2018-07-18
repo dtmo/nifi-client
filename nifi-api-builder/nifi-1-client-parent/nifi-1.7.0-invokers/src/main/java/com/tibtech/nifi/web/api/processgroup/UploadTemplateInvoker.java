@@ -3,13 +3,18 @@ package com.tibtech.nifi.web.api.processgroup;
 import com.tibtech.nifi.client.ComponentEntityInvoker;
 import com.tibtech.nifi.client.InvokerException;
 import com.tibtech.nifi.client.Transport;
+import java.io.IOException;
 import java.io.InputStream;
+import java.lang.Boolean;
+import java.lang.IllegalStateException;
 import java.lang.String;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.nifi.web.api.entity.TemplateEntity;
+import org.glassfish.jersey.media.multipart.FormDataMultiPart;
+import org.glassfish.jersey.media.multipart.file.StreamDataBodyPart;
 
 /**
  * Uploads a template
@@ -17,7 +22,9 @@ import org.apache.nifi.web.api.entity.TemplateEntity;
 public final class UploadTemplateInvoker extends ComponentEntityInvoker<TemplateEntity> {
   private String id;
 
-  private InputStream inputStream;
+  private Boolean disconnectedNodeAcknowledged;
+
+  private InputStream template;
 
   public UploadTemplateInvoker(final Transport transport, final long version) {
     super(transport, version);
@@ -36,12 +43,26 @@ public final class UploadTemplateInvoker extends ComponentEntityInvoker<Template
     return this;
   }
 
-  public final InputStream getInputStream() {
-    return inputStream;
+  /**
+   * Acknowledges that this node is disconnected to allow for mutable requests to proceed. */
+  public final Boolean getDisconnectedNodeAcknowledged() {
+    return disconnectedNodeAcknowledged;
   }
 
-  public final UploadTemplateInvoker setInputStream(final InputStream inputStream) {
-    this.inputStream = inputStream;
+  /**
+   * Acknowledges that this node is disconnected to allow for mutable requests to proceed. */
+  public final UploadTemplateInvoker setDisconnectedNodeAcknowledged(
+      final Boolean disconnectedNodeAcknowledged) {
+    this.disconnectedNodeAcknowledged = disconnectedNodeAcknowledged;
+    return this;
+  }
+
+  public final InputStream getTemplate() {
+    return template;
+  }
+
+  public final UploadTemplateInvoker setTemplate(final InputStream template) {
+    this.template = template;
     return this;
   }
 
@@ -53,14 +74,24 @@ public final class UploadTemplateInvoker extends ComponentEntityInvoker<Template
     target = target.path(id);
     target = target.path("templates");
     target = target.path("upload");
+    final FormDataMultiPart formDataMultiPart = new FormDataMultiPart();
+    formDataMultiPart.field("disconnectedNodeAcknowledged", String.valueOf(disconnectedNodeAcknowledged));
+    final StreamDataBodyPart streamDataBodyPart = new StreamDataBodyPart("template", template);
+    formDataMultiPart.bodyPart(streamDataBodyPart);
+    final Entity<FormDataMultiPart> entity = Entity.entity(formDataMultiPart, formDataMultiPart.getMediaType());
     final Invocation.Builder invocationBuilder = target.request("application/xml");
-    final Entity<InputStream> entity = Entity.entity(inputStream, "multipart/form-data");
     final Response response = invocationBuilder.method("POST", entity);
     try {
       return handleComponentEntityResponse(response, TemplateEntity.class);
     }
     finally {
       response.close();
+      try {
+        formDataMultiPart.close();
+      }
+      catch (final IOException e) {
+        throw new IllegalStateException("Could not close form data multipart", e);
+      }
     }
   }
 }
