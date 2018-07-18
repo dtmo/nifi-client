@@ -9,6 +9,8 @@ import com.tibtech.nifi.web.api.remoteprocessgroup.RemoveRemoteProcessGroupInvok
 import com.tibtech.nifi.web.api.remoteprocessgroup.UpdateRemoteProcessGroupInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import org.apache.nifi.web.api.dto.FlowSnippetDTO;
+import org.apache.nifi.web.api.dto.RemoteProcessGroupContentsDTO;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupDTO;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
 import org.apache.nifi.web.api.dto.status.RemoteProcessGroupStatusDTO;
@@ -314,10 +316,12 @@ public class RemoteProcessGroup
     {
         refresh();
 
-        final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = RemoteProcessGroupContentsDTOBuilder
-                .of(getContents());
+        final RemoteProcessGroupContentsDTO contents = getRemoteProcessGroupDTO().getContents();
 
-        final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = getContents().getInputPorts();
+        final RemoteProcessGroupContentsDTOBuilder remoteProcessGroupContentsDTOBuilder = RemoteProcessGroupContentsDTOBuilder
+                .of(contents);
+
+        final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = contents.getInputPorts();
         if (remoteInputPortDTOs != null)
         {
             remoteProcessGroupContentsDTOBuilder.setInputPorts(remoteInputPortDTOs.stream()
@@ -327,7 +331,7 @@ public class RemoteProcessGroup
                     .collect(Collectors.toSet()));
         }
 
-        final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = getContents().getOutputPorts();
+        final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = contents.getOutputPorts();
         if (remoteInputPortDTOs != null)
         {
             remoteProcessGroupContentsDTOBuilder.setOutputPorts(remoteOutputPortDTOs.stream()
@@ -355,7 +359,7 @@ public class RemoteProcessGroup
      */
     public Set<RemoteInputPort> getRemoteInputPorts()
     {
-        return Collections.unmodifiableSet(getContents().getInputPorts().stream()
+        return Collections.unmodifiableSet(getRemoteProcessGroupDTO().getContents().getInputPorts().stream()
                 .map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO))
                 .collect(Collectors.toSet()));
     }
@@ -367,7 +371,7 @@ public class RemoteProcessGroup
      */
     public Set<RemoteOutputPort> getRemoteOutputPorts()
     {
-        return Collections.unmodifiableSet(getContents().getOutputPorts().stream()
+        return Collections.unmodifiableSet(getRemoteProcessGroupDTO().getContents().getOutputPorts().stream()
                 .map(outputPortDTO -> new RemoteOutputPort(this, outputPortDTO))
                 .collect(Collectors.toSet()));
     }
