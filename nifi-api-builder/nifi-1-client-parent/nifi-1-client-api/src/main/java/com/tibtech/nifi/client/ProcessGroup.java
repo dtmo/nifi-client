@@ -720,4 +720,19 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
                 .invoke();
         final FlowDTO flowDTO = flowEntity.getFlow();
     }
+
+    /**
+     * Gets the process group with a specific ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the process group to get.
+     * @return The process group with the specified ID.
+     * @throws InvokerException if there is a problem getting the process group.
+     */
+    public static ProcessGroup get(final Transport transport, final String id) throws InvokerException
+    {
+        return new ProcessGroup(transport, new GetProcessGroupInvoker(transport, 0)
+                .setId(id)
+                .invoke());
+    }
 }

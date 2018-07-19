@@ -165,15 +165,15 @@ public class ControllerService
             switch (referenceType)
             {
                 case "ControllerService":
-                    controllerServices.add(Flow.getControllerService(getTransport(), component.getId()));
+                    controllerServices.add(ControllerService.get(getTransport(), component.getId()));
                     break;
 
                 case "Processor":
-                    processors.add(Flow.getProcessor(getTransport(), component.getId()));
+                    processors.add(Processor.get(getTransport(), component.getId()));
                     break;
 
                 case "ReportingTask":
-                    reportingTasks.add(Flow.getReportingTask(getTransport(), component.getId()));
+                    reportingTasks.add(ReportingTask.get(getTransport(), component.getId()));
                     break;
 
                 default:
@@ -269,4 +269,20 @@ public class ControllerService
 
         update(c -> c.setState(controllerServiceState));
     }
+
+    /**
+     * Returns the controller service with a specific ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the controller service to return.
+     * @return The controller service with the specified ID.
+     * @throws InvokerException if there is a problem getting the controller service.
+     */
+    public static ControllerService get(final Transport transport, final String id) throws InvokerException
+    {
+        return new ControllerService(transport, new GetControllerServiceInvoker(transport, 0)
+                .setId(id)
+                .invoke());
+    }
+
 }

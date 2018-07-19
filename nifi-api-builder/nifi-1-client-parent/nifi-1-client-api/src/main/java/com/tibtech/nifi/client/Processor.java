@@ -231,4 +231,19 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     {
         return super.update(closure);
     }
+
+    /**
+     * Returns the processor with a specific ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the processor to return.
+     * @return The processor with the specified ID.
+     * @throws InvokerException if there is a problem getting the processor.
+     */
+    public static Processor get(final Transport transport, final String id) throws InvokerException
+    {
+        return new Processor(transport, new GetProcessorInvoker(transport, 0)
+                .setId(id)
+                .invoke());
+    }
 }

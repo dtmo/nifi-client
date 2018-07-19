@@ -250,4 +250,19 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 	{
 		new RemoveReportingTaskInvoker(getTransport(), getVersion()).setId(getId()).invoke();
 	}
+
+	/**
+	 * Returns the reporting task with a specific ID.
+	 *
+	 * @param transport The transport with which to communicate with the NiFi server.
+	 * @param id        The ID of the reporting task to return.
+	 * @return The reporting task with the specified ID.
+	 * @throws InvokerException if there is a problem getting the reporting task.
+	 */
+	public static ReportingTask get(final Transport transport, final String id) throws InvokerException
+	{
+		return new ReportingTask(transport, new GetReportingTaskInvoker(transport, 0)
+				.setId(id)
+				.invoke());
+	}
 }

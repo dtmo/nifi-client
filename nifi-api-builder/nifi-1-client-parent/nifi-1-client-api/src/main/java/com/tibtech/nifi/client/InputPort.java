@@ -61,4 +61,19 @@ public class InputPort extends Port<InputPort>
     {
         new RemoveInputPortInvoker(getTransport(), getVersion()).setId(getId());
     }
+
+    /**
+     * Gets the input port with a specific ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the input port to get.
+     * @return The input port with the specified ID.
+     * @throws InvokerException if there is a problem getting the input port.
+     */
+    public static InputPort get(final Transport transport, final String id) throws InvokerException
+    {
+        return new InputPort(transport, new GetInputPortInvoker(transport, 0)
+                .setId(id)
+                .invoke());
+    }
 }

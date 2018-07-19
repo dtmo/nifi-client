@@ -62,4 +62,19 @@ public class OutputPort extends Port<OutputPort>
 
         return this;
     }
+
+    /**
+     * Gets the output port with a specific ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the output port to get.
+     * @return The output port with the specified ID.
+     * @throws InvokerException if there is a problem getting the output port.
+     */
+    public static OutputPort get(final Transport transport, final String id) throws InvokerException
+    {
+        return new OutputPort(transport, new GetOutputPortInvoker(transport, 0)
+                .setId(id)
+                .invoke());
+    }
 }

@@ -1,13 +1,5 @@
 package com.tibtech.nifi.client;
 
-import java.util.*;
-import java.util.function.Consumer;
-
-import org.apache.nifi.web.api.dto.ConnectableDTO;
-import org.apache.nifi.web.api.dto.ConnectionDTO;
-import org.apache.nifi.web.api.dto.PositionDTO;
-import org.apache.nifi.web.api.entity.ConnectionEntity;
-
 import com.tibtech.nifi.web.api.connection.DeleteConnectionInvoker;
 import com.tibtech.nifi.web.api.connection.GetConnectionInvoker;
 import com.tibtech.nifi.web.api.connection.UpdateConnectionInvoker;
@@ -15,9 +7,15 @@ import com.tibtech.nifi.web.api.dto.ConnectableDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ConnectionEntityBuilder;
 import com.tibtech.nifi.web.api.processgroup.CreateConnectionInvoker;
-
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import org.apache.nifi.web.api.dto.ConnectableDTO;
+import org.apache.nifi.web.api.dto.ConnectionDTO;
+import org.apache.nifi.web.api.dto.PositionDTO;
+import org.apache.nifi.web.api.entity.ConnectionEntity;
+
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Connection represents a connection between two components in a NiFi flow.
@@ -272,5 +270,20 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
                 .invoke());
 
         return this;
+    }
+
+    /**
+     * Gets the connection with the specified ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the connection to get.
+     * @return The connection with the specified ID.
+     * @throws InvokerException if there is a problem getting the connection.
+     */
+    public static Connection get(final Transport transport, final String id) throws InvokerException
+    {
+        return new Connection(transport, new GetConnectionInvoker(transport, 0)
+                .setId(id)
+                .invoke());
     }
 }

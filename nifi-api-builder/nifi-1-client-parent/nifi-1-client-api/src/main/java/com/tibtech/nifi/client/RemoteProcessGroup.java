@@ -9,7 +9,6 @@ import com.tibtech.nifi.web.api.remoteprocessgroup.RemoveRemoteProcessGroupInvok
 import com.tibtech.nifi.web.api.remoteprocessgroup.UpdateRemoteProcessGroupInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import org.apache.nifi.web.api.dto.FlowSnippetDTO;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupContentsDTO;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupDTO;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
@@ -406,5 +405,20 @@ public class RemoteProcessGroup
     public void delete() throws InvokerException
     {
         new RemoveRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+    }
+
+    /**
+     * Gets the remote process group with a specific ID.
+     *
+     * @param transport The transport with which to communicate with the NiFi server.
+     * @param id        The ID of the remote process group to get.
+     * @return The remote process group with the specified ID.
+     * @throws InvokerException if there is a problem getting the remote process group.
+     */
+    public static RemoteProcessGroup get(final Transport transport, final String id) throws InvokerException
+    {
+        return new RemoteProcessGroup(transport, new GetRemoteProcessGroupInvoker(transport, 0)
+                .setId(id)
+                .invoke());
     }
 }
