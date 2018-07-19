@@ -9,19 +9,19 @@ import org.apache.nifi.web.api.dto.PropertyDescriptorDTO
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import com.tibtech.nifi.client.ControllerService
-import com.tibtech.nifi.client.Flow
+import com.tibtech.nifi.client.Controller
 import com.tibtech.nifi.client.ProcessGroup
 import com.tibtech.nifi.client.Processor
 import com.tibtech.nifi.client.ReportingTask
 
-Flow flow = Flow.connect "http://localhost:8080/"
+Controller flow = Controller.connect "http://localhost:8080/"
 
 ProcessGroup root = flow.rootProcessGroup
 
 Path outputPath = Paths.get("../../nifi-1-client-parent/nifi-1.7.0-component-properties-builders/src/main/java/")
 def packageNameMapper = {String s -> s.replaceFirst("org\\.apache", "com.tibtech")}
 
-def writeComponentPropertiesBuilder(Flow flow, Closure packageNameMapper, Closure propertyDescriptorsProducer, Path outputPath, DocumentedTypeDTO docmentedTypeDTO) {
+def writeComponentPropertiesBuilder(Controller flow, Closure packageNameMapper, Closure propertyDescriptorsProducer, Path outputPath, DocumentedTypeDTO docmentedTypeDTO) {
 	String componentTypeName = docmentedTypeDTO.getType()
 	String packageName = packageNameMapper(componentTypeName.substring(0, componentTypeName.lastIndexOf(".")))
 	String classname = componentTypeName.substring(componentTypeName.lastIndexOf(".") + 1)

@@ -23,11 +23,11 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 /**
- * Flow represents the NiFi Flow Controller from which may be obtained
+ * Controller represents the NiFi Controller from which may be obtained
  * references to the root process group, controller services, reporting tasks,
  * etc.
  */
-public class Flow
+public class Controller
 {
     /**
      * The static ID that may be used to obtain a reference to the root process
@@ -37,7 +37,7 @@ public class Flow
 
     private final Transport transport;
 
-    private Flow(final Transport transport)
+    private Controller(final Transport transport)
     {
         this.transport = transport;
     }
@@ -206,36 +206,33 @@ public class Flow
     }
 
     /**
-     * Connects to an instance of a NiFi Flow Controller.
+     * Connects to an instance of a NiFi Controller.
      *
-     * @param client  The client with which to communicate with the NiFi Flow
-     *                Controller.
+     * @param client  The client with which to communicate with the NiFi Controller.
      * @param baseUri The base URI of the NiFi instance. This is the usual NiFi URL
      *                without the '/nifi' suffix.
-     * @return A new instance of Flow.
-     * @throws InvokerException if there is a problem connecting to the NiFi Flow
-     *                          Controller.
+     * @return A new instance of Controller.
+     * @throws InvokerException if there is a problem connecting to the NiFi Controllers.
      */
-    public static Flow connect(final Client client, final String baseUri) throws InvokerException
+    public static Controller connect(final Client client, final String baseUri) throws InvokerException
     {
         final Transport transport = new Transport(client, baseUri);
 
         new GenerateClientIdInvoker(transport, 0).invoke();
 
-        final Flow flow = new Flow(transport);
-        return flow;
+        final Controller controller = new Controller(transport);
+        return controller;
     }
 
     /**
-     * Connects to an instance of a NiFi Flow Controller.
+     * Connects to an instance of a NiFi Controller Controller.
      *
      * @param baseUri The base URI of the NiFi instance. This is the usual NiFi URL
      *                without the '/nifi' suffix.
-     * @return A new instance of Flow.
-     * @throws InvokerException if there is a problem connecting to the NiFi Flow
-     *                          Controller.
+     * @return A new instance of Controller.
+     * @throws InvokerException if there is a problem connecting to the NiFi Controller.
      */
-    public static Flow connect(final String baseUri) throws InvokerException
+    public static Controller connect(final String baseUri) throws InvokerException
     {
         final ClientBuilder clientBuilder = ClientBuilder.newBuilder();
         final Client client = clientBuilder.build();

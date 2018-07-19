@@ -13,7 +13,7 @@ package com.tibtech.nifi.client;
 //{
 //	public void test() throws InvokerException
 //	{
-//		final Flow flow = Flow.connect(ClientBuilder.newBuilder().build(), "https://localhost:8443/nifi-api");
+//		final Controller flow = Controller.connect(ClientBuilder.newBuilder().build(), "https://localhost:8443/nifi-api");
 //
 //		final ControllerService controllerService = flow.createControllerService(DBCPConnectionPool.COMPONENT_TYPE,
 //				c -> c.setType(""));
