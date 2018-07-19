@@ -701,9 +701,19 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
         new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
     }
 
+    /**
+     * Creates a snippet containing components from this process group.
+     *
+     * @param configurator A consumer that accepts an instance of
+     *                     {@link com.tibtech.nifi.client.Snippet.SnippetDTOBuilder} to which snippet components may be
+     *                     added.
+     * @return The new snippet.
+     * @throws InvokerException if there is a problem creating a snippet.
+     */
     public Snippet createSnippet(final Consumer<Snippet.SnippetDTOBuilder> configurator) throws InvokerException
     {
-        final Snippet.SnippetDTOBuilder snippetDtoBuilder = new Snippet.SnippetDTOBuilder();
+        final Snippet.SnippetDTOBuilder snippetDtoBuilder = new Snippet.SnippetDTOBuilder()
+                .setParentGroup(this);
 
         configurator.accept(snippetDtoBuilder);
 
@@ -714,6 +724,15 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
                 .invoke());
     }
 
+    /**
+     * Creates a snippet containing components from this process group.
+     *
+     * @param closure A closure that delegates to an instance of
+     *                {@link com.tibtech.nifi.client.Snippet.SnippetDTOBuilder} to which snippet components may be
+     *                added.
+     * @return The new snippet.
+     * @throws InvokerException if there is a problem creating a snippet.
+     */
     public Snippet createSnippet(
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Snippet.SnippetDTOBuilder.class) final Closure<Snippet.SnippetDTOBuilder> closure)
             throws InvokerException
