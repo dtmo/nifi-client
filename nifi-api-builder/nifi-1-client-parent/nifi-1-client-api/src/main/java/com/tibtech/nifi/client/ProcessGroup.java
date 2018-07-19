@@ -3,6 +3,7 @@ package com.tibtech.nifi.client;
 import com.tibtech.nifi.web.api.dto.*;
 import com.tibtech.nifi.web.api.entity.*;
 import com.tibtech.nifi.web.api.processgroup.*;
+import com.tibtech.nifi.web.api.snippet.CreateSnippetInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import org.apache.nifi.web.api.dto.PositionDTO;
@@ -698,6 +699,30 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     public void delete() throws InvokerException
     {
         new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+    }
+
+    public Snippet createSnippet(final Consumer<Snippet.SnippetDTOBuilder> configurator) throws InvokerException
+    {
+        final Snippet.SnippetDTOBuilder snippetDtoBuilder = new Snippet.SnippetDTOBuilder();
+
+        configurator.accept(snippetDtoBuilder);
+
+        return new Snippet(this, new CreateSnippetInvoker(getTransport(), 0)
+                .setSnippetEntity(new SnippetEntityBuilder()
+                        .setSnippet(snippetDtoBuilder.build())
+                        .build())
+                .invoke());
+    }
+
+    public Snippet createSnippet(
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Snippet.SnippetDTOBuilder.class) final Closure<Snippet.SnippetDTOBuilder> closure)
+            throws InvokerException
+    {
+        return createSnippet(configurator -> {
+            final Closure<Snippet.SnippetDTOBuilder> code = closure.rehydrate(configurator, this, this);
+            code.setResolveStrategy(Closure.DELEGATE_ONLY);
+            code.call();
+        });
     }
 
     /**
