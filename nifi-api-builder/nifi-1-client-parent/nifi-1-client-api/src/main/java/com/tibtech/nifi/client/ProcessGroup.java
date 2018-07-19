@@ -750,19 +750,19 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x        The x position at which to instantiate the template.
      * @param y        The y position at which to instantiate the template.
      * @param template The template to instantiate.
+     * @return A flow containing the instantiated components.
      * @throws InvokerException if there is a problem instantiating the template.
      */
-    public void instantiateTemplate(final double x, final double y, final Template template) throws InvokerException
+    public Flow instantiateTemplate(final double x, final double y, final Template template) throws InvokerException
     {
-        final FlowEntity flowEntity = new InstantiateTemplateInvoker(getTransport(), getVersion())
+        return new Flow(getTransport(), new InstantiateTemplateInvoker(getTransport(), getVersion())
                 .setId(getId())
                 .setInstantiateTemplateRequestEntity(new InstantiateTemplateRequestEntityBuilder()
                         .setOriginX(x)
                         .setOriginY(y)
                         .setTemplateId(template.getId())
                         .build())
-                .invoke();
-        final FlowDTO flowDTO = flowEntity.getFlow();
+                .invoke());
     }
 
     /**
