@@ -1,11 +1,11 @@
 package com.tibtech.nifi.apibuilder;
 
-import static com.tibtech.nifi.apibuilder.NameUtils.getNameComponents;
-import static org.junit.Assert.assertEquals;
+import org.junit.Test;
 
 import java.util.Arrays;
 
-import org.junit.Test;
+import static com.tibtech.nifi.apibuilder.NameUtils.getNameComponents;
+import static org.junit.Assert.assertEquals;
 
 public class NameUtilsTest
 {

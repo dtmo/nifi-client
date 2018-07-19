@@ -1,17 +1,16 @@
 package com.tibtech.nifi.client;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import org.apache.nifi.web.api.dto.LabelDTO;
-import org.apache.nifi.web.api.entity.LabelEntity;
-
 import com.tibtech.nifi.web.api.dto.LabelDTOBuilder;
 import com.tibtech.nifi.web.api.entity.LabelEntityBuilder;
 import com.tibtech.nifi.web.api.label.GetLabelInvoker;
 import com.tibtech.nifi.web.api.label.RemoveLabelInvoker;
 import com.tibtech.nifi.web.api.label.UpdateLabelInvoker;
+import org.apache.nifi.web.api.dto.LabelDTO;
+import org.apache.nifi.web.api.entity.LabelEntity;
+
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Label represents a NiFi label to provide documentation to a flow.

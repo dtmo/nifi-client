@@ -1,8 +1,8 @@
 package com.tibtech.nifi.client;
 
-import java.util.function.Consumer;
-
 import groovy.lang.Closure;
+
+import java.util.function.Consumer;
 
 /**
  * Updatable indicates that a NiFi component may be updated.

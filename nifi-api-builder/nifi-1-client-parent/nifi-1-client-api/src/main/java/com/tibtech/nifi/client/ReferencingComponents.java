@@ -1,7 +1,5 @@
 package com.tibtech.nifi.client;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 /**

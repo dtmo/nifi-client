@@ -1,18 +1,13 @@
 package com.tibtech.nifi.apibuilder;
 
+import com.squareup.javapoet.TypeName;
+
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import com.squareup.javapoet.TypeName;
+import java.util.*;
 
 public class ClassUtils
 {

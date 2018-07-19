@@ -1,8 +1,7 @@
 package com.tibtech.nifi.client;
 
-import org.apache.nifi.web.api.entity.ComponentEntity;
-
 import groovy.lang.Closure;
+import org.apache.nifi.web.api.entity.ComponentEntity;
 
 /**
  * UpdatableComponent may be extended by a component that can be

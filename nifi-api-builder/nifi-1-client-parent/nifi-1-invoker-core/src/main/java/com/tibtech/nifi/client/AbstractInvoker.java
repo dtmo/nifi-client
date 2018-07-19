@@ -1,11 +1,11 @@
 package com.tibtech.nifi.client;
 
+import org.apache.nifi.web.api.dto.RevisionDTO;
+
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
 import javax.ws.rs.core.Response.StatusType;
-
-import org.apache.nifi.web.api.dto.RevisionDTO;
 
 public abstract class AbstractInvoker<T>
 {

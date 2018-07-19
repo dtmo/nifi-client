@@ -1,23 +1,20 @@
 package com.tibtech.nifi.client;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Map;
-import java.util.function.Consumer;
-
-import org.apache.nifi.web.api.dto.BundleDTO;
-import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
-import org.apache.nifi.web.api.dto.ReportingTaskDTO;
-import org.apache.nifi.web.api.entity.ReportingTaskEntity;
-
 import com.tibtech.nifi.web.api.dto.ReportingTaskDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ReportingTaskEntityBuilder;
 import com.tibtech.nifi.web.api.reportingtask.GetReportingTaskInvoker;
 import com.tibtech.nifi.web.api.reportingtask.RemoveReportingTaskInvoker;
 import com.tibtech.nifi.web.api.reportingtask.UpdateReportingTaskInvoker;
-
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
+import org.apache.nifi.web.api.dto.ReportingTaskDTO;
+import org.apache.nifi.web.api.entity.ReportingTaskEntity;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Consumer;
 
 /**
  * Reporting Task represents a NiFi flow reporting task that runs in the

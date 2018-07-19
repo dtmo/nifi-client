@@ -5,7 +5,6 @@ import com.tibtech.nifi.web.api.entity.PortEntityBuilder;
 import com.tibtech.nifi.web.api.inputport.GetInputPortInvoker;
 import com.tibtech.nifi.web.api.inputport.RemoveInputPortInvoker;
 import com.tibtech.nifi.web.api.inputport.UpdateInputPortInvoker;
-import org.apache.nifi.web.api.dto.PortDTO;
 import org.apache.nifi.web.api.entity.PortEntity;
 
 import java.util.function.Consumer;

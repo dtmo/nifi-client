@@ -8,8 +8,6 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
-import org.apache.nifi.web.api.dto.flow.FlowDTO;
-import org.apache.nifi.web.api.entity.FlowEntity;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 
 import java.util.List;

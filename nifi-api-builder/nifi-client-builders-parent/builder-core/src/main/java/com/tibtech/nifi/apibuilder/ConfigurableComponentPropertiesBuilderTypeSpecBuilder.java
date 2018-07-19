@@ -1,24 +1,16 @@
 package com.tibtech.nifi.apibuilder;
 
+import com.squareup.javapoet.*;
+import com.squareup.javapoet.TypeSpec.Builder;
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
+import javax.lang.model.element.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-
-import javax.lang.model.element.Modifier;
-
-import com.squareup.javapoet.AnnotationSpec;
-import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.FieldSpec;
-import com.squareup.javapoet.MethodSpec;
-import com.squareup.javapoet.ParameterSpec;
-import com.squareup.javapoet.ParameterizedTypeName;
-import com.squareup.javapoet.TypeSpec;
-import com.squareup.javapoet.TypeSpec.Builder;
-
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
 
 public class ConfigurableComponentPropertiesBuilderTypeSpecBuilder
 {

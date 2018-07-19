@@ -1,14 +1,13 @@
 package com.tibtech.nifi.client;
 
-import java.util.List;
-
-import javax.ws.rs.core.Response;
-
 import org.apache.nifi.web.api.dto.PermissionsDTO;
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.RevisionDTO;
 import org.apache.nifi.web.api.entity.BulletinEntity;
 import org.apache.nifi.web.api.entity.ComponentEntity;
+
+import javax.ws.rs.core.Response;
+import java.util.List;
 
 public abstract class ComponentEntityInvoker<T extends ComponentEntity> extends AbstractInvoker<T>
 {

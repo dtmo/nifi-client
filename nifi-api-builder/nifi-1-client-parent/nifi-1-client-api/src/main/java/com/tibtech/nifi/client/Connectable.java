@@ -1,15 +1,13 @@
 package com.tibtech.nifi.client;
 
-import java.util.Collection;
-import java.util.function.Consumer;
-
-import org.apache.nifi.web.api.dto.ConnectableDTO;
-
 import com.tibtech.nifi.web.api.dto.ConnectableDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
-
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import org.apache.nifi.web.api.dto.ConnectableDTO;
+
+import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * Connectable represents a component that can be connected to another
