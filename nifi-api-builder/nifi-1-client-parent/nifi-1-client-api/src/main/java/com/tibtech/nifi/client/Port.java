@@ -33,7 +33,7 @@ public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, Port
      *
      * @return The DTO that describes the port.
      */
-    protected PortDTO getPortDTO()
+    public PortDTO getPortDTO()
     {
         return getComponentEntity().getComponent();
     }

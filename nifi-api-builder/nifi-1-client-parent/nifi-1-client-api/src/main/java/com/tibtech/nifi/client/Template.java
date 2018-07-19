@@ -2,6 +2,7 @@ package com.tibtech.nifi.client;
 
 import com.tibtech.nifi.web.api.template.ExportTemplateInvoker;
 import com.tibtech.nifi.web.api.template.RemoveTemplateInvoker;
+import org.apache.nifi.web.api.dto.TemplateDTO;
 import org.apache.nifi.web.api.entity.TemplateEntity;
 
 /**
@@ -20,6 +21,16 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
     public Template(final Transport transport, final TemplateEntity componentEntity)
     {
         super(transport, componentEntity);
+    }
+
+    /**
+     * Returns the DTO that describes the template.
+     *
+     * @return The DTO that describes the template.
+     */
+    public TemplateDTO getTemplateDTO()
+    {
+        return getComponentEntity().getTemplate();
     }
 
     /**

@@ -7,6 +7,7 @@ import com.tibtech.nifi.web.api.funnel.RemoveFunnelInvoker;
 import com.tibtech.nifi.web.api.funnel.UpdateFunnelInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
+import org.apache.nifi.web.api.dto.FunnelDTO;
 import org.apache.nifi.web.api.entity.FunnelEntity;
 
 import java.util.function.Consumer;
@@ -28,6 +29,16 @@ public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBu
     public Funnel(final Transport transport, final FunnelEntity funnelEntity)
     {
         super(transport, funnelEntity);
+    }
+
+    /**
+     * Returns the FunnelDTO that describes the funnel.
+     *
+     * @return The FunnelDTO that describes the funnel.
+     */
+    public FunnelDTO getFunnelDTO()
+    {
+        return getComponentEntity().getComponent();
     }
 
     @Override

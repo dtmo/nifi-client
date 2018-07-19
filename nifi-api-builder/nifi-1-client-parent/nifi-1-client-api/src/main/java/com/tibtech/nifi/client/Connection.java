@@ -73,7 +73,12 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
         super(transport, connectionEntity);
     }
 
-    private ConnectionDTO getConnectionDTO()
+    /**
+     * Returns the DTO that describes the connection.
+     *
+     * @return The DTO that describes the connection.
+     */
+    public ConnectionDTO getConnectionDTO()
     {
         return getComponentEntity().getComponent();
     }
@@ -117,7 +122,7 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
      *
      * @return The positions of the bend points on this connection.
      */
-    public List<PositionDTO> getBends()
+    public List<PositionDTO> getBendPositionDTOs()
     {
         return Collections.unmodifiableList(getConnectionDTO().getBends());
     }
@@ -127,7 +132,7 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
      *
      * @return The destination of this connection.
      */
-    public ConnectableDTO getDestination()
+    public ConnectableDTO getDestinationConnectableDTO()
     {
         return getConnectionDTO().getDestination();
     }
@@ -199,7 +204,7 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
      *
      * @return The source of this connection.
      */
-    public ConnectableDTO getSource()
+    public ConnectableDTO getSourceConnectableDTO()
     {
         return getConnectionDTO().getSource();
     }

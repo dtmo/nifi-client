@@ -66,7 +66,7 @@ public class Controller
      * @return The new controller service.
      * @throws InvokerException if there is a problem creating the controller
      *                          service.
-     * @see #getControllerServiceTypes()
+     * @see #getControllerServiceTypeDTOs()
      */
     public ControllerService createControllerService(final String type,
                                                      final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
@@ -93,7 +93,7 @@ public class Controller
      * @return The new controller service.
      * @throws InvokerException if there is a problem creating the controller
      *                          service.
-     * @see #getControllerServiceTypes()
+     * @see #getControllerServiceTypeDTOs()
      */
     public ControllerService createControllerService(final String type,
                                                      @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
@@ -126,7 +126,7 @@ public class Controller
      * @throws InvokerException if there is a problem getting the set of available
      *                          controller service types.
      */
-    public Set<DocumentedTypeDTO> getControllerServiceTypes() throws InvokerException
+    public Set<DocumentedTypeDTO> getControllerServiceTypeDTOs() throws InvokerException
     {
         return new GetControllerServiceTypesInvoker(transport, 0).invoke().getControllerServiceTypes();
     }
@@ -138,7 +138,7 @@ public class Controller
      * @throws InvokerException if there is a problem getting the set of available
      *                          processor types.
      */
-    public Set<DocumentedTypeDTO> getProcessorTypes() throws InvokerException
+    public Set<DocumentedTypeDTO> getProcessorTypeDTOs() throws InvokerException
     {
         return new GetProcessorTypesInvoker(transport, 0).invoke().getProcessorTypes();
     }
@@ -150,7 +150,7 @@ public class Controller
      * @throws InvokerException if there is a problem getting the set of available
      *                          reporting task types.
      */
-    public Set<DocumentedTypeDTO> getReportingTaskTypes() throws InvokerException
+    public Set<DocumentedTypeDTO> getReportingTaskTypeDTOs() throws InvokerException
     {
         return new GetReportingTaskTypesInvoker(transport, 0).invoke().getReportingTaskTypes();
     }

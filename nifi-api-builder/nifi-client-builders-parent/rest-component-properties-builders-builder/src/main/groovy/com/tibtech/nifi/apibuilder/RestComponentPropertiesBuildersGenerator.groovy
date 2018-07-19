@@ -40,7 +40,7 @@ def writeComponentPropertiesBuilder(Controller flow, Closure packageNameMapper, 
 }
 
 println "Controller service types:"
-for (DocumentedTypeDTO controllerServiceType : flow.controllerServiceTypes) {
+for (DocumentedTypeDTO controllerServiceType : flow.controllerServiceTypeDTOs) {
 	println "\t" + controllerServiceType.type
 	def propertyDescriptorsProducer = {
 		ControllerService controllerService = flow.createControllerService controllerServiceType.getType(), {}
@@ -53,7 +53,7 @@ for (DocumentedTypeDTO controllerServiceType : flow.controllerServiceTypes) {
 }
 
 println "\nProcessor types: "
-for (DocumentedTypeDTO processorType : flow.processorTypes) {
+for (DocumentedTypeDTO processorType : flow.processorTypeDTOs) {
 	println "\t" + processorType.getType()
 	def propertyDescriptorsProducer = {
 		Processor processor = root.createProcessor 0, 0, processorType.type, {}
@@ -66,7 +66,7 @@ for (DocumentedTypeDTO processorType : flow.processorTypes) {
 }
 
 println "\nReporting Task types: "
-for (DocumentedTypeDTO reportingTaskType : flow.reportingTaskTypes) {
+for (DocumentedTypeDTO reportingTaskType : flow.reportingTaskTypeDTOs) {
 	println "\t" + reportingTaskType.type
 	def propertyDescriptorsProducer = {
 		ReportingTask reportingTask = flow.createReportingTask reportingTaskType.type, {}

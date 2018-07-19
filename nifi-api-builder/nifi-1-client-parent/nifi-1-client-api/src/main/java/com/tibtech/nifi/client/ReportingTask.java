@@ -44,7 +44,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 	 * 
 	 * @return The DTO that describes the reporting task.
 	 */
-	protected ReportingTaskDTO getReportingTaskDTO()
+	public ReportingTaskDTO getReportingTaskDTO()
 	{
 		return getComponentEntity().getComponent();
 	}

@@ -45,7 +45,7 @@ public class RemoteProcessGroup
      *
      * @return The DTO that describes the remote process group.
      */
-    protected RemoteProcessGroupDTO getRemoteProcessGroupDTO()
+    public RemoteProcessGroupDTO getRemoteProcessGroupDTO()
     {
         return getComponentEntity().getComponent();
     }

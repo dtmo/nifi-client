@@ -40,7 +40,7 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
      *
      * @return The DTO that describes the processor.
      */
-    protected ProcessorDTO getProcessorDTO()
+    public ProcessorDTO getProcessorDTO()
     {
         return getComponentEntity().getComponent();
     }

@@ -51,7 +51,7 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
      *
      * @return The emtity revision details.
      */
-    public RevisionDTO getRevision()
+    public RevisionDTO getRevisionDTO()
     {
         return componentEntity.getRevision();
     }
@@ -90,7 +90,7 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
      *
      * @return The permissions for this component.
      */
-    public PermissionsDTO getPermissions()
+    public PermissionsDTO getPermissionsDTO()
     {
         return componentEntity.getPermissions();
     }
@@ -100,7 +100,7 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
      *
      * @return The bulletins for this component.
      */
-    public List<BulletinEntity> getBulletins()
+    public List<BulletinEntity> getBulletinEntities()
     {
         return componentEntity.getBulletins();
     }
@@ -112,7 +112,7 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
      * @return The position of this component in the UI if applicable, null
      * otherwise.
      */
-    public PositionDTO getPosition()
+    public PositionDTO getPositionDTO()
     {
         return componentEntity.getPosition();
     }

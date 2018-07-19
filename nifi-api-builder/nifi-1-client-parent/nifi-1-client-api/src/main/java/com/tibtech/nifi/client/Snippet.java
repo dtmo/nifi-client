@@ -582,21 +582,21 @@ public class Snippet
             final Map<String, RevisionDTO> processGroups = new HashMap<>();
             for (final ProcessGroup processGroup : this.processGroups)
             {
-                processGroups.put(processGroup.getId(), processGroup.getRevision());
+                processGroups.put(processGroup.getId(), processGroup.getRevisionDTO());
             }
             snippetDTO.setProcessGroups(processGroups);
 
             final Map<String, RevisionDTO> remoteProcessGroups = new HashMap<>();
             for (final RemoteProcessGroup remoteProcessGroup : this.remoteProcessGroups)
             {
-                remoteProcessGroups.put(remoteProcessGroup.getId(), remoteProcessGroup.getRevision());
+                remoteProcessGroups.put(remoteProcessGroup.getId(), remoteProcessGroup.getRevisionDTO());
             }
             snippetDTO.setRemoteProcessGroups(remoteProcessGroups);
 
             final Map<String, RevisionDTO> processors = new HashMap<>();
             for (final Processor processor : this.processors)
             {
-                remoteProcessGroups.put(processor.getId(), processor.getRevision());
+                remoteProcessGroups.put(processor.getId(), processor.getRevisionDTO());
             }
             snippetDTO.setProcessors(processors);
 
@@ -604,7 +604,7 @@ public class Snippet
             final Map<String, RevisionDTO> inputPorts = new HashMap<>();
             for (final InputPort inputPort : this.inputPorts)
             {
-                remoteProcessGroups.put(inputPort.getId(), inputPort.getRevision());
+                remoteProcessGroups.put(inputPort.getId(), inputPort.getRevisionDTO());
             }
             snippetDTO.setInputPorts(inputPorts);
 
@@ -612,7 +612,7 @@ public class Snippet
             final Map<String, RevisionDTO> outputPorts = new HashMap<>();
             for (final OutputPort outputPort : this.outputPorts)
             {
-                remoteProcessGroups.put(outputPort.getId(), outputPort.getRevision());
+                remoteProcessGroups.put(outputPort.getId(), outputPort.getRevisionDTO());
             }
             snippetDTO.setOutputPorts(outputPorts);
 
@@ -620,7 +620,7 @@ public class Snippet
             final Map<String, RevisionDTO> connections = new HashMap<>();
             for (final Connection connection : this.connections)
             {
-                remoteProcessGroups.put(connection.getId(), connection.getRevision());
+                remoteProcessGroups.put(connection.getId(), connection.getRevisionDTO());
             }
             snippetDTO.setConnections(connections);
 
@@ -628,7 +628,7 @@ public class Snippet
             final Map<String, RevisionDTO> labels = new HashMap<>();
             for (final Label label : this.labels)
             {
-                remoteProcessGroups.put(label.getId(), label.getRevision());
+                remoteProcessGroups.put(label.getId(), label.getRevisionDTO());
             }
             snippetDTO.setLabels(labels);
 
@@ -636,7 +636,7 @@ public class Snippet
             final Map<String, RevisionDTO> funnels = new HashMap<>();
             for (final Funnel funnel : this.funnels)
             {
-                remoteProcessGroups.put(funnel.getId(), funnel.getRevision());
+                remoteProcessGroups.put(funnel.getId(), funnel.getRevisionDTO());
             }
             snippetDTO.setFunnels(funnels);
 

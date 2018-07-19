@@ -35,7 +35,7 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
 	 * 
 	 * @return The LabelDTO that describes the label.
 	 */
-	protected LabelDTO getLabelDTO()
+	public LabelDTO getLabelDTO()
 	{
 		return getComponentEntity().getComponent();
 	}

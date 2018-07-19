@@ -42,7 +42,7 @@ public class ControllerService
      *
      * @return The DTO that describes the controller service.
      */
-    protected ControllerServiceDTO getControllerServiceDTO()
+    public ControllerServiceDTO getControllerServiceDTO()
     {
         return getComponentEntity().getComponent();
     }

@@ -65,7 +65,7 @@ public abstract class RemotePort<T extends RemotePort<T>>
      *
      * @return The DTO that describes the remote process group port.
      */
-    protected RemoteProcessGroupPortDTO getRemoteProcessGroupPortDto()
+    public RemoteProcessGroupPortDTO getRemoteProcessGroupPortDTO()
     {
         return remoteProcessGroupPortDto;
     }
@@ -87,7 +87,7 @@ public abstract class RemotePort<T extends RemotePort<T>>
      */
     public String getComments()
     {
-        return getRemoteProcessGroupPortDto().getComments();
+        return getRemoteProcessGroupPortDTO().getComments();
     }
 
     /**
@@ -97,7 +97,7 @@ public abstract class RemotePort<T extends RemotePort<T>>
      */
     public int getConcurrentlySchedulableTaskCount()
     {
-        return getRemoteProcessGroupPortDto().getConcurrentlySchedulableTaskCount();
+        return getRemoteProcessGroupPortDTO().getConcurrentlySchedulableTaskCount();
     }
 
     /**
@@ -107,7 +107,7 @@ public abstract class RemotePort<T extends RemotePort<T>>
      */
     public boolean getExists()
     {
-        return getRemoteProcessGroupPortDto().getExists();
+        return getRemoteProcessGroupPortDTO().getExists();
     }
 
     @Override
@@ -123,7 +123,7 @@ public abstract class RemotePort<T extends RemotePort<T>>
      */
     public String getName()
     {
-        return getRemoteProcessGroupPortDto().getName();
+        return getRemoteProcessGroupPortDTO().getName();
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class RemotePort<T extends RemotePort<T>>
      */
     public boolean getUseCompression()
     {
-        return getRemoteProcessGroupPortDto().getUseCompression();
+        return getRemoteProcessGroupPortDTO().getUseCompression();
     }
 
     /**

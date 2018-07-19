@@ -41,7 +41,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      *
      * @return The DTO that describes the process group.
      */
-    protected ProcessGroupDTO getProcessGroupDTO()
+    public ProcessGroupDTO getProcessGroupDTO()
     {
         return getComponentEntity().getComponent();
     }
