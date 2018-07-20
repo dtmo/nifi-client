@@ -6,10 +6,7 @@ import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ReportingTaskDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ReportingTaskEntityBuilder;
-import com.tibtech.nifi.web.api.flow.GenerateClientIdInvoker;
-import com.tibtech.nifi.web.api.flow.GetControllerServiceTypesInvoker;
-import com.tibtech.nifi.web.api.flow.GetProcessorTypesInvoker;
-import com.tibtech.nifi.web.api.flow.GetReportingTaskTypesInvoker;
+import com.tibtech.nifi.web.api.flow.*;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
 import com.tibtech.nifi.web.api.processgroup.UploadTemplateInvoker;
 import groovy.lang.Closure;
@@ -21,6 +18,7 @@ import javax.ws.rs.client.ClientBuilder;
 import java.io.InputStream;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Controller represents the NiFi Controller from which may be obtained
@@ -53,6 +51,20 @@ public class Controller
     {
         return new ProcessGroup(transport,
                 new GetProcessGroupInvoker(transport, 0).setId(ROOT_PROCESS_GROUP_ID).invoke());
+    }
+
+    /**
+     * Gets the set of all controller services.
+     * @return The set of all controller services.
+     * @throws InvokerException if there is a problem getting all controller services.
+     */
+    public Set<ControllerService> getControllerServices() throws InvokerException
+    {
+        return new GetControllerServicesFromControllerInvoker(transport, 0)
+                .invoke()
+                .getControllerServices().stream()
+                .map(controllerServiceEntity -> new ControllerService(transport, controllerServiceEntity))
+                .collect(Collectors.toSet());
     }
 
     /**
