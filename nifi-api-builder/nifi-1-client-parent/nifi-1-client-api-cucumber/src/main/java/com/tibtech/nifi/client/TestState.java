@@ -9,6 +9,8 @@ public class TestState
 
     private Set<ControllerService> createdControllerServices = new HashSet<>();
     private Set<ControllerService> gotControllerServices = new HashSet<>();
+    private Set<ReportingTask> createdReportingTasks = new HashSet<>();
+    private Set<ReportingTask> gotReportingTasks = new HashSet<>();
 
     public void setController(final Controller controller)
     {
@@ -45,5 +47,25 @@ public class TestState
     public Set<ControllerService> getGotControllerServices()
     {
         return gotControllerServices;
+    }
+
+    public void addCreatedReportingTask(final ReportingTask reportingTask)
+    {
+        this.createdReportingTasks.add(reportingTask);
+    }
+
+    public Set<ReportingTask> getCreatedReportingTasks()
+    {
+        return createdReportingTasks;
+    }
+
+    public void addGotReportingTask(final ReportingTask reportingTask)
+    {
+        this.gotReportingTasks.add(reportingTask);
+    }
+
+    public Set<ReportingTask> getGotReportingTasks()
+    {
+        return gotReportingTasks;
     }
 }

@@ -55,6 +55,7 @@ public class Controller
 
     /**
      * Gets the set of all controller services.
+     *
      * @return The set of all controller services.
      * @throws InvokerException if there is a problem getting all controller services.
      */
@@ -165,6 +166,19 @@ public class Controller
     public Set<DocumentedTypeDTO> getReportingTaskTypeDTOs() throws InvokerException
     {
         return new GetReportingTaskTypesInvoker(transport, 0).invoke().getReportingTaskTypes();
+    }
+
+    /**
+     * Gets the set of all reporting tasks.
+     *
+     * @return The set of all reporting tasks.
+     * @throws InvokerException if there is a problem getting the reporting tasks.
+     */
+    public Set<ReportingTask> getReportingTasks() throws InvokerException
+    {
+        return new GetReportingTasksInvoker(transport, 0).invoke().getReportingTasks().stream()
+                .map(reportingTaskEntity -> new ReportingTask(transport, reportingTaskEntity))
+                .collect(Collectors.toSet());
     }
 
     /**

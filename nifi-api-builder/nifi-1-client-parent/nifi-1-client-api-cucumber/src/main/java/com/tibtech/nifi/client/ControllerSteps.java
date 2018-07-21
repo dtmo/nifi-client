@@ -1,5 +1,6 @@
 package com.tibtech.nifi.client;
 
+import com.tibtech.nifi.controller.MonitorMemory;
 import com.tibtech.nifi.distributed.cache.server.map.DistributedMapCacheServer;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -22,18 +23,19 @@ public class ControllerSteps
         this.testState = testState;
     }
 
+    @Before
+    public void before() throws Exception
+    {
+        final Controller controller = Controller.connect("http://localhost:8080");
+        testState.setController(controller);
+    }
+
     @After
     public void after() throws Exception
     {
         final Controller controller = testState.getController();
         controller.getControllerServices().forEach(controllerService -> controllerService.delete());
-    }
-
-    @Given("^NiFi is available$")
-    public void nifi_is_available() throws Exception
-    {
-        final Controller controller = Controller.connect("http://localhost:8080");
-        testState.setController(controller);
+        controller.getReportingTasks().forEach(reportingTask -> reportingTask.delete());
     }
 
     @Given("^there are Controller Services$")
@@ -45,6 +47,15 @@ public class ControllerSteps
         testState.addCreatedControllerService(controllerService);
     }
 
+    @Given("^there are Reporting Tasks$")
+    public void there_are_reporting_tasks() throws Exception
+    {
+        final Controller controller = testState.getController();
+        final ReportingTask reportingTask = controller.createReportingTask(MonitorMemory.COMPONENT_TYPE, reportingTaskDTOBuilder -> {
+        });
+        testState.addCreatedReportingTask(reportingTask);
+    }
+
     @Given("^there are no Controller Services$")
     public void there_are_no_controller_services() throws Exception
     {
@@ -52,13 +63,28 @@ public class ControllerSteps
         controller.getControllerServices().forEach(controllerService -> controllerService.delete());
     }
 
-    @When("^create Controller Service$")
-    public void create_controller_service() throws Exception
+    @Given("^there are no Reporting Tasks$")
+    public void there_are_no_reporting_tasks() throws Exception
+    {
+        final Controller controller = testState.getController();
+        controller.getReportingTasks().forEach(reportingTask -> reportingTask.delete());
+    }
+
+    @When("^create a Controller Service$")
+    public void create_a_controller_service() throws Exception
     {
         final Controller controller = testState.getController();
         final ControllerService controllerService = controller.createControllerService(DistributedMapCacheServer.COMPONENT_TYPE, controllerServiceDTOBuilder -> {
         });
         testState.addCreatedControllerService(controllerService);
+    }
+
+    @When("^create a Reporting Task$")
+    public void create_a_reporting_task() throws Exception
+    {
+        final Controller controller = testState.getController();
+        final ReportingTask reportingTask = controller.createReportingTask(MonitorMemory.COMPONENT_TYPE, reportingTaskDTOBuilder -> {});
+        testState.addCreatedReportingTask(reportingTask);
     }
 
     @When("^get all Controller Services$")
@@ -67,6 +93,14 @@ public class ControllerSteps
         final Controller controller = testState.getController();
         controller.getControllerServices().stream()
                 .forEach(controllerService -> testState.addGotControllerService(controllerService));
+    }
+
+    @When("^get all Reporting Tasks$")
+    public void get_all_reporting_tasks() throws Exception
+    {
+        final Controller controller = testState.getController();
+        controller.getReportingTasks().stream()
+                .forEach(reportingTask -> testState.addGotReportingTask(reportingTask));
     }
 
     @Then("^all Controller Services are returned$")
@@ -82,9 +116,28 @@ public class ControllerSteps
         assertEquals(createdIds, gotIds);
     }
 
+    @Then("^all Reporting Tasks are returned$")
+    public void all_reporting_tasks_are_returned() throws Exception
+    {
+        final Set<String> createdIds = testState.getCreatedReportingTasks().stream()
+                .map(reportingTask -> reportingTask.getId())
+                .collect(Collectors.toSet());
+        final Set<String> gotIds = testState.getGotReportingTasks().stream()
+                .map(reportingTask -> reportingTask.getId())
+                .collect(Collectors.toSet());
+
+        assertEquals(createdIds, gotIds);
+    }
+
     @Then("^a Controller Service exists")
     public void a_controller_service_exists() throws Exception
     {
         assertFalse(testState.getCreatedControllerServices().isEmpty());
+    }
+
+    @Then("^a Reporting Task exists")
+    public void a_reporting_task_exists() throws Exception
+    {
+        assertFalse(testState.getCreatedReportingTasks().isEmpty());
     }
 }
