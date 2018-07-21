@@ -42,7 +42,7 @@ public class RemoteInputPort extends RemotePort<RemoteInputPort>
         configurator.accept(remoteProcessGroupPortDTOBuilder);
 
         final RemoteProcessGroupPortDTO remoteProcessGroupPortDto = new UpdateRemoteProcessGroupInputPortInvoker(
-                getTransport(), getVersion())
+                getTransport(), getRevisionDTO().getVersion())
                 .setId(getParentGroupId())
                 .setPortId(getId())
                 .setRemoteProcessGroupPortEntity(new RemoteProcessGroupPortEntityBuilder()

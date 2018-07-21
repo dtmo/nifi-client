@@ -41,12 +41,16 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
      */
     public String export() throws InvokerException
     {
-        return new ExportTemplateInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+        return new ExportTemplateInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke();
     }
 
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveTemplateInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+        new RemoveTemplateInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke();
     }
 }

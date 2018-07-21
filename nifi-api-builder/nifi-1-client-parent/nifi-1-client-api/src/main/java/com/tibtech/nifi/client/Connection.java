@@ -222,13 +222,17 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
     @Override
     public void delete() throws InvokerException
     {
-        new DeleteConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+        new DeleteConnectionInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke();
     }
 
     @Override
     public Connection refresh() throws InvokerException
     {
-        setComponentEntity(new GetConnectionInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+        setComponentEntity(new GetConnectionInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke());
 
         return this;
     }
@@ -241,7 +245,7 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
 
         configurator.accept(connectionDTOBuilder);
 
-        setComponentEntity(new UpdateConnectionInvoker(getTransport(), getVersion())
+        setComponentEntity(new UpdateConnectionInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setConnectionEntity(new ConnectionEntityBuilder()
                         .setComponent(connectionDTOBuilder.build())
@@ -267,7 +271,8 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
      */
     public Connection reconnectTo(final Connectable destination) throws InvokerException
     {
-        setComponentEntity(new UpdateConnectionInvoker(getTransport(), getVersion()).setId(getId())
+        setComponentEntity(new UpdateConnectionInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
                 .setConnectionEntity(new ConnectionEntityBuilder()
                         .setComponent(ConnectionDTOBuilder.of(getConnectionDTO())
                                 .setDestination(destination.asConnectableDTO())

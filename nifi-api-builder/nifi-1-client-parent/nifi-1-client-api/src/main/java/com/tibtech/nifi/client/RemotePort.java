@@ -1,7 +1,9 @@
 package com.tibtech.nifi.client;
 
 import com.tibtech.nifi.web.api.dto.RemoteProcessGroupPortDTOBuilder;
+import org.apache.nifi.web.Revision;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
+import org.apache.nifi.web.api.dto.RevisionDTO;
 
 /**
  * RemotePort represents a port that has been exposed by a remote NiFi instance.
@@ -39,9 +41,9 @@ public abstract class RemotePort<T extends RemotePort<T>>
     }
 
     @Override
-    public long getVersion()
+    public RevisionDTO getRevisionDTO()
     {
-        return remoteProcessGroup.getVersion();
+        return remoteProcessGroup.getRevisionDTO();
     }
 
     @Override

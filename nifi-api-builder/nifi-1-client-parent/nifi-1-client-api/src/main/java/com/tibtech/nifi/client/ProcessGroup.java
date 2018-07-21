@@ -9,6 +9,7 @@ import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
+import org.apache.nifi.web.api.dto.RevisionDTO;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 
 import java.util.*;
@@ -167,7 +168,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<Connection> getConnections() throws InvokerException
     {
-        return new GetConnectionsInvoker(getTransport(), getVersion())
+        return new GetConnectionsInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .invoke()
                 .getConnections().stream()
@@ -230,7 +231,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<Funnel> getFunnels() throws InvokerException
     {
-        return new GetFunnelsInvoker(getTransport(), getVersion())
+        return new GetFunnelsInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .invoke()
                 .getFunnels().stream()
@@ -295,7 +296,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<InputPort> getInputPorts() throws InvokerException
     {
-        return new GetInputPortsInvoker(getTransport(), getVersion())
+        return new GetInputPortsInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .invoke()
                 .getInputPorts().stream()
@@ -358,7 +359,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<OutputPort> getOutputPorts() throws InvokerException
     {
-        return new GetOutputPortsInvoker(getTransport(), getVersion())
+        return new GetOutputPortsInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .invoke()
                 .getOutputPorts().stream()
@@ -423,7 +424,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<Processor> getProcessors() throws InvokerException
     {
-        return new GetProcessorsInvoker(getTransport(), getVersion())
+        return new GetProcessorsInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .invoke()
                 .getProcessors().stream()
@@ -490,7 +491,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<ProcessGroup> getProcessGroups() throws InvokerException
     {
-        return new GetProcessGroupsInvoker(getTransport(), getVersion())
+        return new GetProcessGroupsInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .invoke()
                 .getProcessGroups().stream()
@@ -594,7 +595,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<RemoteProcessGroup> getRemoteProcessGroups() throws InvokerException
     {
-        return new GetRemoteProcessGroupsInvoker(getTransport(), getVersion())
+        return new GetRemoteProcessGroupsInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .invoke()
                 .getRemoteProcessGroups().stream()
@@ -657,7 +658,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<Label> getLabels() throws InvokerException
     {
-        return new GetLabelsInvoker(getTransport(), getVersion())
+        return new GetLabelsInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .invoke()
                 .getLabels().stream()
@@ -681,7 +682,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 
         configurator.accept(processGroupDTOBuilder);
 
-        setComponentEntity(new UpdateProcessGroupInvoker(getTransport(), getVersion())
+        setComponentEntity(new UpdateProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setProcessGroupEntity(new ProcessGroupEntityBuilder()
                         .setComponent(processGroupDTOBuilder.build())
@@ -702,7 +703,9 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+        new RemoveProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke();
     }
 
     /**
@@ -759,7 +762,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Flow instantiateTemplate(final double x, final double y, final Template template) throws InvokerException
     {
-        return new Flow(getTransport(), new InstantiateTemplateInvoker(getTransport(), getVersion())
+        return new Flow(getTransport(), new InstantiateTemplateInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setInstantiateTemplateRequestEntity(new InstantiateTemplateRequestEntityBuilder()
                         .setOriginX(x)

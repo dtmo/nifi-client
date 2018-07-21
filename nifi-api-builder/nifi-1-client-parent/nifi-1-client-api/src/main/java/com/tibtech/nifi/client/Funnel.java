@@ -56,13 +56,17 @@ public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBu
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveFunnelInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+        new RemoveFunnelInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke();
     }
 
     @Override
     public Funnel refresh() throws InvokerException
     {
-        setComponentEntity(new GetFunnelInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+        setComponentEntity(new GetFunnelInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke());
         return this;
     }
 
@@ -74,7 +78,7 @@ public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBu
 
         configurator.accept(funnelDTOBuilder);
 
-        setComponentEntity(new UpdateFunnelInvoker(getTransport(), getVersion())
+        setComponentEntity(new UpdateFunnelInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setFunnelEntity(new FunnelEntityBuilder()
                         .setId(getId())

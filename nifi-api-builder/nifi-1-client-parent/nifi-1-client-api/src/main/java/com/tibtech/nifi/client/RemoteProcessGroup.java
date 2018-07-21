@@ -346,7 +346,9 @@ public class RemoteProcessGroup
     @Override
     public RemoteProcessGroup refresh() throws InvokerException
     {
-        setComponentEntity(new GetRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+        setComponentEntity(new GetRemoteProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke());
 
         return this;
     }
@@ -383,7 +385,7 @@ public class RemoteProcessGroup
 
         configurator.accept(remoteProcessGroupDTOBuilder);
 
-        setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getVersion())
+        setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
                         .setComponent(remoteProcessGroupDTOBuilder.build())
@@ -404,7 +406,9 @@ public class RemoteProcessGroup
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveRemoteProcessGroupInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+        new RemoveRemoteProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke();
     }
 
     /**

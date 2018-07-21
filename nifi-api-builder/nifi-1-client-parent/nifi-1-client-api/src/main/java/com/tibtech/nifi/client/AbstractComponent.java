@@ -51,15 +51,10 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
      *
      * @return The emtity revision details.
      */
+    @Override
     public RevisionDTO getRevisionDTO()
     {
         return componentEntity.getRevision();
-    }
-
-    @Override
-    public long getVersion()
-    {
-        return componentEntity.getRevision().getVersion();
     }
 
     /**

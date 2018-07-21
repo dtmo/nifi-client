@@ -220,7 +220,9 @@ public class ControllerService
     @Override
     public ControllerService refresh() throws InvokerException
     {
-        setComponentEntity(new GetControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+        setComponentEntity(new GetControllerServiceInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke());
 
         return this;
     }
@@ -233,7 +235,7 @@ public class ControllerService
 
         configurator.accept(controllerServiceDTOBuilder);
 
-        setComponentEntity(new UpdateControllerServiceInvoker(getTransport(), getVersion())
+        setComponentEntity(new UpdateControllerServiceInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setControllerServiceEntity(new ControllerServiceEntityBuilder()
                         .setId(getId())
@@ -255,7 +257,9 @@ public class ControllerService
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveControllerServiceInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+        new RemoveControllerServiceInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke();
     }
 
     /**

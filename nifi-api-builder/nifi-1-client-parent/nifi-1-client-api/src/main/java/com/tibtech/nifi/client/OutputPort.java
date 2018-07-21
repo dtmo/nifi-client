@@ -35,13 +35,16 @@ public class OutputPort extends Port<OutputPort>
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveOutputPortInvoker(getTransport(), getVersion()).setId(getId());
+        new RemoveOutputPortInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId());
     }
 
     @Override
     public OutputPort refresh() throws InvokerException
     {
-        setComponentEntity(new GetOutputPortInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+        setComponentEntity(new GetOutputPortInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke());
 
         return this;
     }
@@ -54,7 +57,7 @@ public class OutputPort extends Port<OutputPort>
 
         configurator.accept(portDTOBuilder);
 
-        setComponentEntity(new UpdateOutputPortInvoker(getTransport(), getVersion())
+        setComponentEntity(new UpdateOutputPortInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setPortEntity(new PortEntityBuilder()
                         .setComponent(portDTOBuilder.build())

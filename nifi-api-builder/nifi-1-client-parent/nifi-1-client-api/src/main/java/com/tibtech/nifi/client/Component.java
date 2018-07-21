@@ -1,5 +1,7 @@
 package com.tibtech.nifi.client;
 
+import org.apache.nifi.web.api.dto.RevisionDTO;
+
 /**
  * Component represents an item in a NiFi Controller.
  */
@@ -20,9 +22,9 @@ public interface Component
 	String getId();
 
 	/**
-	 * Returns the component version.
+	 * Returns the component revision DTO.
 	 * 
-	 * @return The component version.
+	 * @return The component revision DTO.
 	 */
-	long getVersion();
+	RevisionDTO getRevisionDTO();
 }

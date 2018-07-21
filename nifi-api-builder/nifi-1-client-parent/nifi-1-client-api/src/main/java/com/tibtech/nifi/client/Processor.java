@@ -200,7 +200,9 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     @Override
     public void delete() throws InvokerException
     {
-        new DeleteProcessorInvoker(getTransport(), getVersion()).setId(getId()).invoke();
+        new DeleteProcessorInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke();
     }
 
     @Override
@@ -219,7 +221,7 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
 
         configurator.accept(processorDTOBuilder);
 
-        setComponentEntity(new UpdateProcessorInvoker(getTransport(), getVersion())
+        setComponentEntity(new UpdateProcessorInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setProcessorEntity(new ProcessorEntityBuilder()
                         .setComponent(processorDTOBuilder.build())

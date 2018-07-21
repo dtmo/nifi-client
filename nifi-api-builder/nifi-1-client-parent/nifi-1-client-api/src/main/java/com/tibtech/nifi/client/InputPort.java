@@ -34,7 +34,9 @@ public class InputPort extends Port<InputPort>
     @Override
     public InputPort refresh() throws InvokerException
     {
-        setComponentEntity(new GetInputPortInvoker(getTransport(), getVersion()).setId(getId()).invoke());
+        setComponentEntity(new GetInputPortInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId())
+                .invoke());
 
         return this;
     }
@@ -47,7 +49,7 @@ public class InputPort extends Port<InputPort>
 
         configurator.accept(portDTOBuilder);
 
-        setComponentEntity(new UpdateInputPortInvoker(getTransport(), getVersion())
+        setComponentEntity(new UpdateInputPortInvoker(getTransport(), getRevisionDTO().getVersion())
                 .setId(getId())
                 .setPortEntity(new PortEntityBuilder()
                         .setComponent(portDTOBuilder.build())
@@ -60,7 +62,8 @@ public class InputPort extends Port<InputPort>
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveInputPortInvoker(getTransport(), getVersion()).setId(getId());
+        new RemoveInputPortInvoker(getTransport(), getRevisionDTO().getVersion())
+                .setId(getId());
     }
 
     /**
