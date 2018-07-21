@@ -7,7 +7,6 @@ import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import org.apache.nifi.controller.service.ControllerServiceState;
 import org.apache.nifi.web.api.dto.ControllerServiceDTO;
 import org.apache.nifi.web.api.dto.ControllerServiceReferencingComponentDTO;
 import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
@@ -26,6 +25,29 @@ public class ControllerService
         extends UpdatableComponent<ControllerService, ControllerServiceEntity, ControllerServiceDTOBuilder>
         implements Deletable, Refreshable<ControllerService, ControllerServiceDTOBuilder>
 {
+    /**
+     * Controller Service is disabled and cannot be used.
+     */
+    public static final String STATE_DISABLED = "DISABLED";
+
+    /**
+     * Controller Service has been disabled but has not yet finished its
+     * lifecycle methods.
+     */
+    public static final String STATE_DISABLING = "DISABLING";
+
+    /**
+     * Controller Service has been enabled but has not yet finished its
+     * lifecycle methods.
+     */
+    public static final String STATE_ENABLING = "ENABLING";
+
+    /**
+     * Controller Service has been enabled and has finished its lifecycle
+     * methods. The Controller Service is ready to be used.
+     */
+    public static final String STATE_ENABLED = "ENABLED";
+
     /**
      * Constructs a new instance of ControllerService.
      *
@@ -206,8 +228,8 @@ public class ControllerService
     @Override
     public ControllerService update(final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
     {
-        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = ControllerServiceDTOBuilder
-                .of(getControllerServiceDTO());
+        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder()
+                .setId(getId());
 
         configurator.accept(controllerServiceDTOBuilder);
 
@@ -241,9 +263,9 @@ public class ControllerService
      *
      * @throws InvokerException if the controller service could not be enabled.
      */
-    public void enable() throws InvokerException
+    public ControllerService enable() throws InvokerException
     {
-        setEnabled(true);
+        return setEnabled(true);
     }
 
     /**
@@ -251,9 +273,9 @@ public class ControllerService
      *
      * @throws InvokerException if the controller service could not be disabled.
      */
-    public void disable() throws InvokerException
+    public ControllerService disable() throws InvokerException
     {
-        setEnabled(false);
+        return setEnabled(false);
     }
 
     /**
@@ -262,12 +284,11 @@ public class ControllerService
      * @param enabled The enabled state to set.
      * @throws InvokerException if the enabled state of the controller service could not be changed.
      */
-    public void setEnabled(final boolean enabled) throws InvokerException
+    public ControllerService setEnabled(final boolean enabled) throws InvokerException
     {
-        final String controllerServiceState = enabled ? ControllerServiceState.ENABLED.name()
-                : ControllerServiceState.DISABLED.name();
+        final String controllerServiceState = enabled ? STATE_ENABLED : STATE_DISABLED;
 
-        update(c -> c.setState(controllerServiceState));
+        return update(c -> c.setState(controllerServiceState));
     }
 
     /**

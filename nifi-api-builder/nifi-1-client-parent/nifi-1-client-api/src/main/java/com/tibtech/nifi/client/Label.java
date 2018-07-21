@@ -94,7 +94,6 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
 	@Override
 	public Label update(final Consumer<LabelDTOBuilder> configurator) throws InvokerException
 	{
-		final LabelDTOBuilder labelDTOBuilder = LabelDTOBuilder.of(getLabelDTO());
 
 		configurator.accept(labelDTOBuilder);
 
@@ -138,4 +137,6 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
 				.setId(id)
 				.invoke());
 	}
+        final LabelDTOBuilder labelDTOBuilder = new LabelDTOBuilder()
+                .setId(getId());
 }

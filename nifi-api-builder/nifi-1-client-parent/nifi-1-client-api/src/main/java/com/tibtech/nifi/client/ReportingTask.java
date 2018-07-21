@@ -220,7 +220,6 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 	@Override
 	public ReportingTask update(final Consumer<ReportingTaskDTOBuilder> configurator) throws InvokerException
 	{
-		final ReportingTaskDTOBuilder reportingTaskDTOBuilder = ReportingTaskDTOBuilder.of(getReportingTaskDTO());
 
 		configurator.accept(reportingTaskDTOBuilder);
 
@@ -261,5 +260,10 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 		return new ReportingTask(transport, new GetReportingTaskInvoker(transport, 0)
 				.setId(id)
 				.invoke());
-	}
+    public static final String STATE_RUNNING = "RUNNING";
+    public static final String STATE_STOPPED = "STOPPED";
+    public static final String STATE_DISABLED = "DISABLED";
+
+        final ReportingTaskDTOBuilder reportingTaskDTOBuilder = new ReportingTaskDTOBuilder()
+                .setId(getId());
 }

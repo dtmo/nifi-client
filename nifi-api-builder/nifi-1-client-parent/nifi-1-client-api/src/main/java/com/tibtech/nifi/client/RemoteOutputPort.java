@@ -36,8 +36,9 @@ public class RemoteOutputPort extends RemotePort<RemoteOutputPort>
     public RemoteOutputPort update(final Consumer<RemoteProcessGroupPortDTOBuilder> configurator)
             throws InvokerException
     {
-        final RemoteProcessGroupPortDTOBuilder remoteProcessGroupPortDTOBuilder = RemoteProcessGroupPortDTOBuilder
-                .of(getRemoteProcessGroupPortDTO()).setGroupId(getParentGroupId());
+        final RemoteProcessGroupPortDTOBuilder remoteProcessGroupPortDTOBuilder = new RemoteProcessGroupPortDTOBuilder()
+                .setId(getId())
+                .setGroupId(getParentGroupId());
 
         configurator.accept(remoteProcessGroupPortDTOBuilder);
 

@@ -2,6 +2,7 @@ package com.tibtech.nifi.client;
 
 import com.tibtech.nifi.web.api.dto.*;
 import com.tibtech.nifi.web.api.entity.*;
+import com.tibtech.nifi.web.api.flow.ScheduleComponentsInvoker;
 import com.tibtech.nifi.web.api.processgroup.*;
 import com.tibtech.nifi.web.api.snippet.CreateSnippetInvoker;
 import groovy.lang.Closure;
@@ -10,8 +11,7 @@ import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -22,6 +22,11 @@ import java.util.stream.Collectors;
 public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupEntity, ProcessGroupDTOBuilder>
         implements Deletable, Refreshable<ProcessGroup, ProcessGroupDTOBuilder>
 {
+    public static final String STATE_RUNNING = "RUNNING";
+    public static final String STATE_STOPPED = "STOPPED";
+    public static final String STATE_ENABLED = "ENABLED";
+    public static final String STATE_DISABLED = "DISABLED";
+
     /**
      * Constructs a new instance of ProcessGroup.
      *
@@ -671,7 +676,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     @Override
     public ProcessGroup update(final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
     {
-        final ProcessGroupDTOBuilder processGroupDTOBuilder = ProcessGroupDTOBuilder.of(getProcessGroupDTO());
+        final ProcessGroupDTOBuilder processGroupDTOBuilder = new ProcessGroupDTOBuilder()
+                .setId(getId());
 
         configurator.accept(processGroupDTOBuilder);
 
@@ -761,6 +767,75 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
                         .setTemplateId(template.getId())
                         .build())
                 .invoke());
+    }
+
+    /**
+     * Starts all components within the process group.
+     *
+     * @throws InvokerException if the components could not be started.
+     */
+    public ProcessGroup startComponents() throws InvokerException
+    {
+        return startComponents(Collections.<Component>emptySet());
+    }
+
+    /**
+     * Starts components within the process group.
+     *
+     * @param components The components to start.
+     * @throws InvokerException if the components could not be started.
+     */
+    public ProcessGroup startComponents(final Collection<Component> components) throws InvokerException
+    {
+        return setComponentRunStates(true, components);
+    }
+
+    /**
+     * Stops all components within the process group.
+     *
+     * @throws InvokerException if the components could not be stopped.
+     */
+    public ProcessGroup stopComponents() throws InvokerException
+    {
+        return stopComponents(Collections.<Component>emptySet());
+    }
+
+    /**
+     * Stops components within the process group.
+     *
+     * @param components The components to stop.
+     * @throws InvokerException if the components could not be stopped.
+     */
+    public ProcessGroup stopComponents(final Collection<Component> components) throws InvokerException
+    {
+        return setComponentRunStates(false, components);
+    }
+
+    /**
+     * Schedules components within the process group to be run or stopped.
+     *
+     * @param running Whether the components should be running or not.
+     * @throws InvokerException if the run state of the components could not be changed.
+     */
+    public ProcessGroup setComponentRunStates(final boolean running, final Collection<Component> components) throws InvokerException
+    {
+        final Map<String, RevisionDTO> revisionIdsMap = new HashMap<>();
+        components.forEach(component -> {
+            revisionIdsMap.put(component.getId(), component.getRevisionDTO());
+        });
+
+        final String runState = running ? STATE_RUNNING : STATE_STOPPED;
+
+        new ScheduleComponentsInvoker(getTransport(), 0)
+                .setId(getId())
+                .setScheduleComponentsEntity(new ScheduleComponentsEntityBuilder()
+                        .setId(getId())
+                        .setState(runState)
+                        .setComponents(revisionIdsMap)
+                        .build())
+                .invoke();
+
+        return this.refresh();
     }
 
     /**

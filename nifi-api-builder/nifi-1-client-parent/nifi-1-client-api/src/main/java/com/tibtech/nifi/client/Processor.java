@@ -24,6 +24,10 @@ import java.util.function.Consumer;
 public class Processor extends UpdatableComponent<Processor, ProcessorEntity, ProcessorDTOBuilder>
         implements Connectable, Deletable, Refreshable<Processor, ProcessorDTOBuilder>
 {
+    public static final String STATE_RUNNING = "RUNNING";
+    public static final String STATE_STOPPED = "STOPPED";
+    public static final String STATE_DISABLED = "DISABLED";
+
     /**
      * Constructs a new instance of Processor.
      *
@@ -210,7 +214,8 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     @Override
     public Processor update(final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
     {
-        final ProcessorDTOBuilder processorDTOBuilder = ProcessorDTOBuilder.of(getProcessorDTO());
+        final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder()
+                .setId(getId());
 
         configurator.accept(processorDTOBuilder);
 
@@ -230,6 +235,39 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
             throws InvokerException
     {
         return super.update(closure);
+    }
+
+    /**
+     * Starts the processor.
+     *
+     * @throws InvokerException if the processor could not be started.
+     */
+    public Processor start() throws InvokerException
+    {
+        return setRunning(true);
+    }
+
+    /**
+     * Stops the processor.
+     *
+     * @throws InvokerException if the processor could not be stopped.
+     */
+    public Processor stop() throws InvokerException
+    {
+        return setRunning(false);
+    }
+
+    /**
+     * Sets the state of the processor.
+     *
+     * @param running The state to set.
+     * @throws InvokerException if the state of the processor could not be changed.
+     */
+    public Processor setRunning(final boolean running) throws InvokerException
+    {
+        final String processorState = running ? STATE_RUNNING : STATE_STOPPED;
+
+        return update(c -> c.setState(processorState));
     }
 
     /**

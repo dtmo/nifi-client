@@ -42,7 +42,8 @@ public class InputPort extends Port<InputPort>
     @Override
     public InputPort update(final Consumer<PortDTOBuilder> configurator) throws InvokerException
     {
-        final PortDTOBuilder portDTOBuilder = PortDTOBuilder.of(getPortDTO());
+        final PortDTOBuilder portDTOBuilder = new PortDTOBuilder()
+                .setId(getId());
 
         configurator.accept(portDTOBuilder);
 

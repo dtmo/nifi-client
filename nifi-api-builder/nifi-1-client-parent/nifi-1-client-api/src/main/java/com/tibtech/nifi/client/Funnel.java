@@ -69,7 +69,8 @@ public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBu
     @Override
     public Funnel update(final Consumer<FunnelDTOBuilder> configurator) throws InvokerException
     {
-        final FunnelDTOBuilder funnelDTOBuilder = FunnelDTOBuilder.of(getComponentEntity().getComponent());
+        final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder()
+                .setId(getId());
 
         configurator.accept(funnelDTOBuilder);
 

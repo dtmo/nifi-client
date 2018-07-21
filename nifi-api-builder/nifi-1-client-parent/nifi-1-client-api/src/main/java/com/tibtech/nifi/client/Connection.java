@@ -236,7 +236,8 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
     @Override
     public Connection update(final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
     {
-        final ConnectionDTOBuilder connectionDTOBuilder = ConnectionDTOBuilder.of(getConnectionDTO());
+        final ConnectionDTOBuilder connectionDTOBuilder = new ConnectionDTOBuilder()
+                .setId(getId());
 
         configurator.accept(connectionDTOBuilder);
 

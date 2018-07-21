@@ -17,6 +17,10 @@ import java.util.Set;
 public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, PortEntity, PortDTOBuilder>
         implements Connectable, Deletable, Refreshable<T, PortDTOBuilder>
 {
+    public static final String STATE_RUNNING = "RUNNING";
+    public static final String STATE_STOPPED = "STOPPED";
+    public static final String STATE_DISABLED = "DISABLED";
+
     /**
      * Constructs a new instance of Port.
      *
@@ -153,5 +157,38 @@ public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, Port
     public Collection<String> getValidationErrors()
     {
         return Collections.unmodifiableCollection(getPortDTO().getValidationErrors());
+    }
+
+    /**
+     * Starts the port.
+     *
+     * @throws InvokerException if the port could not be started.
+     */
+    public T start() throws InvokerException
+    {
+        return setRunning(true);
+    }
+
+    /**
+     * Stops the port.
+     *
+     * @throws InvokerException if the processor could not be stopped.
+     */
+    public T stop() throws InvokerException
+    {
+        return setRunning(false);
+    }
+
+    /**
+     * Sets the state of the port.
+     *
+     * @param running The state to set.
+     * @throws InvokerException if the state of the port could not be changed.
+     */
+    public T setRunning(final boolean running) throws InvokerException
+    {
+        final String portState = running ? STATE_RUNNING : STATE_STOPPED;
+
+        return update(c -> c.setState(portState));
     }
 }

@@ -378,8 +378,8 @@ public class RemoteProcessGroup
     @Override
     public RemoteProcessGroup update(final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
     {
-        final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = RemoteProcessGroupDTOBuilder
-                .of(getRemoteProcessGroupDTO());
+        final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = new RemoteProcessGroupDTOBuilder()
+                .setId(getId());
 
         configurator.accept(remoteProcessGroupDTOBuilder);
 
