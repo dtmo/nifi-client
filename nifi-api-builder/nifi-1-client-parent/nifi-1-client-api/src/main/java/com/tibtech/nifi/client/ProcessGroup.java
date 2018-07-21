@@ -2,6 +2,7 @@ package com.tibtech.nifi.client;
 
 import com.tibtech.nifi.web.api.dto.*;
 import com.tibtech.nifi.web.api.entity.*;
+import com.tibtech.nifi.web.api.flow.GetControllerServicesFromGroupInvoker;
 import com.tibtech.nifi.web.api.flow.ScheduleComponentsInvoker;
 import com.tibtech.nifi.web.api.processgroup.*;
 import com.tibtech.nifi.web.api.snippet.CreateSnippetInvoker;
@@ -698,6 +699,79 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
             throws InvokerException
     {
         return super.update(closure);
+    }
+
+    /**
+     * Gets the set of process group controller services.
+     *
+     * @param includeAncestorGroups Whether or not to include parent/ancestory process groups.
+     * @param includeDescendantGroups Whether or not to include descendant process groups.
+     * @return The process group controller services.
+     * @throws InvokerException if there is a problem getting all controller services.
+     */
+    public Set<ControllerService> getControllerServices(final boolean includeAncestorGroups, final boolean includeDescendantGroups) throws InvokerException
+    {
+        return new GetControllerServicesFromGroupInvoker(getTransport(), 0)
+                .setId(getId())
+                .setIncludeAncestorGroups(includeAncestorGroups)
+                .setIncludeDescendantGroups(includeDescendantGroups)
+                .invoke()
+                .getControllerServices().stream()
+                .map(controllerServiceEntity -> new ControllerService(getTransport(), controllerServiceEntity))
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Creates a new Process Group scoped Controller Service.
+     *
+     * @param type         The fully qualified class name of the controller service to
+     *                     create.
+     * @param configurator A consumer that accepts an instance of
+     *                     {@link ControllerServiceDTOBuilder} on which controller service
+     *                     settings may be set.
+     * @return The new controller service.
+     * @throws InvokerException if there is a problem creating the controller
+     *                          service.
+     * @see Controller#getControllerServiceTypeDTOs()
+     */
+    public ControllerService createControllerService(final String type,
+                                                                  final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
+    {
+        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder()
+                .setType(type);
+
+        configurator.accept(controllerServiceDTOBuilder);
+
+        return new ControllerService(getTransport(), new CreateControllerServiceInvoker(getTransport(), 0)
+                .setId(getId())
+                .setControllerServiceEntity(new ControllerServiceEntityBuilder()
+                        .setComponent(controllerServiceDTOBuilder.build())
+                        .build())
+                .invoke());
+    }
+
+    /**
+     * Creates a new Process Group scoped Controller Service.
+     *
+     * @param type    The fully qualified class name of the type of controller service
+     *                to create.
+     * @param closure A closure that delegates to an instance of
+     *                {@link ControllerServiceDTOBuilder} on which controller service
+     *                settings may be set.
+     * @return The new controller service.
+     * @throws InvokerException if there is a problem creating the controller
+     *                          service.
+     * @see Controller#getControllerServiceTypeDTOs()
+     */
+    public ControllerService createControllerService(final String type,
+                                                                  @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
+            throws InvokerException
+    {
+        return createControllerService(type, configurator -> {
+            final Closure<ControllerServiceDTOBuilder> code = closure.rehydrate(configurator, this, this);
+            code.setResolveStrategy(Closure.DELEGATE_ONLY);
+            code.call();
+        });
     }
 
     @Override

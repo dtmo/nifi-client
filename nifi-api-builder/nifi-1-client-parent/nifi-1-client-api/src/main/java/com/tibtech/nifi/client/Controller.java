@@ -54,7 +54,7 @@ public class Controller
     }
 
     /**
-     * Gets the set of all controller services.
+     * Gets the set of all Reporting Task scope Controller Services.
      *
      * @return The set of all controller services.
      * @throws InvokerException if there is a problem getting all controller services.
@@ -69,7 +69,7 @@ public class Controller
     }
 
     /**
-     * Creates a new controller service.
+     * Creates a new Reporting Task scoped Controller Service.
      *
      * @param type         The fully qualified class name of the controller service to
      *                     create.
@@ -84,7 +84,8 @@ public class Controller
     public ControllerService createControllerService(final String type,
                                                      final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
     {
-        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder().setType(type);
+        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder()
+                .setType(type);
 
         configurator.accept(controllerServiceDTOBuilder);
 
@@ -96,7 +97,7 @@ public class Controller
     }
 
     /**
-     * Creates a new controller service.
+     * Creates a new Reporting Task scoped Controller Service.
      *
      * @param type    The fully qualified class name of the type of controller service
      *                to create.
