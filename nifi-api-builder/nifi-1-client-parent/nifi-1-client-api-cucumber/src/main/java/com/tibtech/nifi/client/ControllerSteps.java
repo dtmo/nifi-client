@@ -2,8 +2,6 @@ package com.tibtech.nifi.client;
 
 import com.tibtech.nifi.controller.MonitorMemory;
 import com.tibtech.nifi.distributed.cache.server.map.DistributedMapCacheServer;
-import cucumber.api.java.After;
-import cucumber.api.java.Before;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -21,21 +19,6 @@ public class ControllerSteps
     public ControllerSteps(final TestState testState)
     {
         this.testState = testState;
-    }
-
-    @Before
-    public void before() throws Exception
-    {
-        final Controller controller = Controller.connect("http://localhost:8080");
-        testState.setController(controller);
-    }
-
-    @After
-    public void after() throws Exception
-    {
-        final Controller controller = testState.getController();
-        controller.getControllerServices().forEach(controllerService -> controllerService.delete());
-        controller.getReportingTasks().forEach(reportingTask -> reportingTask.delete());
     }
 
     @Given("^there are Controller Services$")
