@@ -596,7 +596,7 @@ public class Snippet
             final Map<String, RevisionDTO> processors = new HashMap<>();
             for (final Processor processor : this.processors)
             {
-                remoteProcessGroups.put(processor.getId(), processor.getRevisionDTO());
+                processors.put(processor.getId(), processor.getRevisionDTO());
             }
             snippetDTO.setProcessors(processors);
 
@@ -604,7 +604,7 @@ public class Snippet
             final Map<String, RevisionDTO> inputPorts = new HashMap<>();
             for (final InputPort inputPort : this.inputPorts)
             {
-                remoteProcessGroups.put(inputPort.getId(), inputPort.getRevisionDTO());
+                inputPorts.put(inputPort.getId(), inputPort.getRevisionDTO());
             }
             snippetDTO.setInputPorts(inputPorts);
 
@@ -612,7 +612,7 @@ public class Snippet
             final Map<String, RevisionDTO> outputPorts = new HashMap<>();
             for (final OutputPort outputPort : this.outputPorts)
             {
-                remoteProcessGroups.put(outputPort.getId(), outputPort.getRevisionDTO());
+                outputPorts.put(outputPort.getId(), outputPort.getRevisionDTO());
             }
             snippetDTO.setOutputPorts(outputPorts);
 
@@ -620,7 +620,7 @@ public class Snippet
             final Map<String, RevisionDTO> connections = new HashMap<>();
             for (final Connection connection : this.connections)
             {
-                remoteProcessGroups.put(connection.getId(), connection.getRevisionDTO());
+                connections.put(connection.getId(), connection.getRevisionDTO());
             }
             snippetDTO.setConnections(connections);
 
@@ -628,7 +628,7 @@ public class Snippet
             final Map<String, RevisionDTO> labels = new HashMap<>();
             for (final Label label : this.labels)
             {
-                remoteProcessGroups.put(label.getId(), label.getRevisionDTO());
+                labels.put(label.getId(), label.getRevisionDTO());
             }
             snippetDTO.setLabels(labels);
 
@@ -636,7 +636,7 @@ public class Snippet
             final Map<String, RevisionDTO> funnels = new HashMap<>();
             for (final Funnel funnel : this.funnels)
             {
-                remoteProcessGroups.put(funnel.getId(), funnel.getRevisionDTO());
+                funnels.put(funnel.getId(), funnel.getRevisionDTO());
             }
             snippetDTO.setFunnels(funnels);
 

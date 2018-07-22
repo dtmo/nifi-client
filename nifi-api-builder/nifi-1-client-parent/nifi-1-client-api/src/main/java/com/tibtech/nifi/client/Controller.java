@@ -8,14 +8,13 @@ import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ReportingTaskEntityBuilder;
 import com.tibtech.nifi.web.api.flow.*;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
-import com.tibtech.nifi.web.api.processgroup.UploadTemplateInvoker;
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import org.apache.nifi.web.api.dto.DocumentedTypeDTO;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import java.io.InputStream;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -121,15 +120,18 @@ public class Controller
     }
 
     /**
-     * Uploads a snippet of flow XML as a template.
+     * Gets the set of all templates.
      *
-     * @param template The template XML to upload.
-     * @return The Template representing the uploaded XML.
-     * @throws InvokerException if there was a problem uploading the template.
+     * @return The set of all templates.
+     * @throws InvokerException if there is a problem getting all templates.
      */
-    public Template uploadTemplate(final InputStream template) throws InvokerException
+    public Set<Template> getTemplates() throws InvokerException
     {
-        return new Template(transport, new UploadTemplateInvoker(transport, 0).setTemplate(template).invoke());
+        return new GetTemplatesInvoker(transport, 0)
+                .invoke()
+                .getTemplates().stream()
+                .map(templateEntity -> new Template(transport, templateEntity))
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -235,14 +237,16 @@ public class Controller
     /**
      * Connects to an instance of a NiFi Controller.
      *
-     * @param client  The client with which to communicate with the NiFi Controller.
-     * @param baseUri The base URI of the NiFi instance. This is the usual NiFi URL
-     *                without the '/nifi' suffix.
+     * @param clientBuilder The client builder with which to create a client to communicate with the NiFi Controller.
+     * @param baseUri       The base URI of the NiFi instance. This is the usual NiFi URL
+     *                      without the '/nifi' suffix.
      * @return A new instance of Controller.
      * @throws InvokerException if there is a problem connecting to the NiFi Controllers.
      */
-    public static Controller connect(final Client client, final String baseUri) throws InvokerException
+    public static Controller connect(final ClientBuilder clientBuilder, final String baseUri) throws InvokerException
     {
+        clientBuilder.register(MultiPartFeature.class);
+        final Client client = clientBuilder.build();
         final Transport transport = new Transport(client, baseUri);
 
         new GenerateClientIdInvoker(transport, 0).invoke();
@@ -262,8 +266,7 @@ public class Controller
     public static Controller connect(final String baseUri) throws InvokerException
     {
         final ClientBuilder clientBuilder = ClientBuilder.newBuilder();
-        final Client client = clientBuilder.build();
 
-        return connect(client, baseUri);
+        return connect(clientBuilder, baseUri);
     }
 }

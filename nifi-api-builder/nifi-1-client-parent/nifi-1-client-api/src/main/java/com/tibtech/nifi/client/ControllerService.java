@@ -69,6 +69,12 @@ public class ControllerService
         return getComponentEntity().getComponent();
     }
 
+    @Override
+    public String getId()
+    {
+        return getControllerServiceDTO().getId();
+    }
+
     /**
      * Returns the controller service name.
      *

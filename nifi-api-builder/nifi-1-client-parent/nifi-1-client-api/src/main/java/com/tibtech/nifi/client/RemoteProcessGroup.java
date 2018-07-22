@@ -50,6 +50,12 @@ public class RemoteProcessGroup
         return getComponentEntity().getComponent();
     }
 
+    @Override
+    public String getId()
+    {
+        return getRemoteProcessGroupDTO().getId();
+    }
+
     /**
      * Returns the number of Remote Input Ports currently available in the remote NiFi instance.
      *

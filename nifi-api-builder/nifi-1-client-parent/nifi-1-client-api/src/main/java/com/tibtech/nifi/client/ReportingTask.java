@@ -50,6 +50,12 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
         return getComponentEntity().getComponent();
     }
 
+    @Override
+    public String getId()
+    {
+        return getReportingTaskDTO().getId();
+    }
+
     /**
      * Returns the user defined name of the reporting task.
      *

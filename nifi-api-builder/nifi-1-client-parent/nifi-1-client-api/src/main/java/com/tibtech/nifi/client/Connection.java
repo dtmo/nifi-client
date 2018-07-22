@@ -83,6 +83,12 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
         return getComponentEntity().getComponent();
     }
 
+    @Override
+    public String getId()
+    {
+        return getConnectionDTO().getId();
+    }
+
     /**
      * Returns the relationships that the source of the connection currently supports.
      *

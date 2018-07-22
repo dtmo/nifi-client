@@ -39,5 +39,6 @@ public class BeforeAndAfter
         // Now the connections can be deleted
 
         // Now everything else can be deleted.
+        controller.getTemplates().forEach(template -> template.delete());
     }
 }

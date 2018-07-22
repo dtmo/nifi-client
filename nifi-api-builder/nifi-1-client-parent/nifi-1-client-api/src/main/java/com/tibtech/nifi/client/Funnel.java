@@ -42,6 +42,12 @@ public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBu
     }
 
     @Override
+    public String getId()
+    {
+        return getFunnelDTO().getId();
+    }
+
+    @Override
     public String getParentGroupId()
     {
         return getComponentEntity().getComponent().getParentGroupId();

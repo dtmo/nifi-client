@@ -42,6 +42,12 @@ public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, Port
         return getComponentEntity().getComponent();
     }
 
+    @Override
+    public String getId()
+    {
+        return getPortDTO().getId();
+    }
+
     /**
      * Returns the ID of the parent process group.
      *

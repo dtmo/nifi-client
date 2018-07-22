@@ -7,6 +7,7 @@ import org.apache.nifi.web.api.entity.BulletinEntity;
 import org.apache.nifi.web.api.entity.ComponentEntity;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * AbstractComponent implements {@link Component} to hold a shared reference to
@@ -38,12 +39,6 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
     public Transport getTransport()
     {
         return transport;
-    }
-
-    @Override
-    public String getId()
-    {
-        return componentEntity.getId();
     }
 
     /**
@@ -110,5 +105,28 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
     public PositionDTO getPositionDTO()
     {
         return componentEntity.getPosition();
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        final AbstractComponent that = (AbstractComponent) o;
+
+        return Objects.equals(getId(), that.getId());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(getId());
     }
 }

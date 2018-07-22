@@ -13,6 +13,7 @@ import org.apache.nifi.web.api.dto.ProcessGroupDTO;
 import org.apache.nifi.web.api.dto.RevisionDTO;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 
+import java.io.InputStream;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -49,6 +50,12 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     public ProcessGroupDTO getProcessGroupDTO()
     {
         return getComponentEntity().getComponent();
+    }
+
+    @Override
+    public String getId()
+    {
+        return getProcessGroupDTO().getId();
     }
 
     /**
@@ -704,7 +711,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     /**
      * Gets the set of process group controller services.
      *
-     * @param includeAncestorGroups Whether or not to include parent/ancestory process groups.
+     * @param includeAncestorGroups   Whether or not to include parent/ancestory process groups.
      * @param includeDescendantGroups Whether or not to include descendant process groups.
      * @return The process group controller services.
      * @throws InvokerException if there is a problem getting all controller services.
@@ -735,7 +742,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @see Controller#getControllerServiceTypeDTOs()
      */
     public ControllerService createControllerService(final String type,
-                                                                  final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
+                                                     final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
     {
         final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder()
                 .setType(type);
@@ -764,7 +771,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @see Controller#getControllerServiceTypeDTOs()
      */
     public ControllerService createControllerService(final String type,
-                                                                  @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
+                                                     @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
             throws InvokerException
     {
         return createControllerService(type, configurator -> {
@@ -823,6 +830,21 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
             code.setResolveStrategy(Closure.DELEGATE_ONLY);
             code.call();
         });
+    }
+
+    /**
+     * Uploads a snippet of flow XML as a template.
+     *
+     * @param template The template XML to upload.
+     * @return The Template representing the uploaded XML.
+     * @throws InvokerException if there was a problem uploading the template.
+     */
+    public Template uploadTemplate(final InputStream template) throws InvokerException
+    {
+        return new Template(getTransport(), new UploadTemplateInvoker(getTransport(), 0)
+                .setId(getId())
+                .setTemplate(template)
+                .invoke());
     }
 
     /**

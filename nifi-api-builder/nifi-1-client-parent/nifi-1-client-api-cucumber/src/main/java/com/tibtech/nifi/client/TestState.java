@@ -12,6 +12,14 @@ public class TestState
     private Set<ReportingTask> createdReportingTasks = new HashSet<>();
     private Set<ReportingTask> gotReportingTasks = new HashSet<>();
 
+    private Snippet createdSnippet = null;
+
+    private Template createdTemplate = null;
+
+    private String exportedTemplate = null;
+
+    private Flow instantiatedComponents = null;
+
     public void setController(final Controller controller)
     {
         if (this.controller == null)
@@ -67,5 +75,45 @@ public class TestState
     public Set<ReportingTask> getGotReportingTasks()
     {
         return gotReportingTasks;
+    }
+
+    public void setCreatedSnippet(final Snippet snippet)
+    {
+        this.createdSnippet = snippet;
+    }
+
+    public Snippet getCreatedSnippet()
+    {
+        return createdSnippet;
+    }
+
+    public Template getCreatedTemplate()
+    {
+        return createdTemplate;
+    }
+
+    public void setCreatedTemplate(final Template createdTemplate)
+    {
+        this.createdTemplate = createdTemplate;
+    }
+
+    public String getExportedTemplate()
+    {
+        return exportedTemplate;
+    }
+
+    public void setExportedTemplate(String exportedTemplate)
+    {
+        this.exportedTemplate = exportedTemplate;
+    }
+
+    public Flow getInstantiatedComponents()
+    {
+        return instantiatedComponents;
+    }
+
+    public void setInstantiatedComponents(final Flow instantiatedComponents)
+    {
+        this.instantiatedComponents = instantiatedComponents;
     }
 }

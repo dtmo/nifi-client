@@ -50,6 +50,12 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     }
 
     @Override
+    public String getId()
+    {
+        return getProcessorDTO().getId();
+    }
+
+    @Override
     public String getParentGroupId()
     {
         return getProcessorDTO().getParentGroupId();

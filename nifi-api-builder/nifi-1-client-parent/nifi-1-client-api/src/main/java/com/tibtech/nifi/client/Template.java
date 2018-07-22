@@ -5,6 +5,8 @@ import com.tibtech.nifi.web.api.template.RemoveTemplateInvoker;
 import org.apache.nifi.web.api.dto.TemplateDTO;
 import org.apache.nifi.web.api.entity.TemplateEntity;
 
+import java.util.Date;
+
 /**
  * Template represents an snippet of flow components that may be instantiated
  * within a NiFi flow.
@@ -33,6 +35,44 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
         return getComponentEntity().getTemplate();
     }
 
+    @Override
+    public String getId()
+    {
+        return getTemplateDTO().getId();
+    }
+
+    public String getUri()
+    {
+        return getTemplateDTO().getUri();
+    }
+
+    public ProcessGroup getProcessGroup()
+    {
+        return ProcessGroup.get(getTransport(), getTemplateDTO().getGroupId());
+    }
+
+    public String getName()
+    {
+        return getTemplateDTO().getName();
+    }
+
+    public String getDescription()
+    {
+        return getTemplateDTO().getDescription();
+    }
+
+    public Date getTimestamp()
+    {
+        return getTemplateDTO().getTimestamp();
+    }
+
+    public String getEncodingVersion()
+    {
+        return getTemplateDTO().getEncodingVersion();
+    }
+
+//    public FlowSnippetDTO snippet;
+
     /**
      * Exports the template as an XML string.
      *
@@ -41,7 +81,7 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
      */
     public String export() throws InvokerException
     {
-        return new ExportTemplateInvoker(getTransport(), getRevisionDTO().getVersion())
+        return new ExportTemplateInvoker(getTransport(), 0)
                 .setId(getId())
                 .invoke();
     }
@@ -49,7 +89,7 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveTemplateInvoker(getTransport(), getRevisionDTO().getVersion())
+        new RemoveTemplateInvoker(getTransport(), 0)
                 .setId(getId())
                 .invoke();
     }

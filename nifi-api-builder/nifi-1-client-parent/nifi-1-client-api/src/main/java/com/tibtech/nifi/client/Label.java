@@ -39,6 +39,12 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
         return getComponentEntity().getComponent();
     }
 
+    @Override
+    public String getId()
+    {
+        return getLabelDTO().getId();
+    }
+
     /**
      * Returns the width of the label in pixels when at a 1:1 scale.
      *
