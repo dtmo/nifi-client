@@ -33,8 +33,10 @@ public class ReportingTaskSteps
     public void a_reporting_task_has_been_created() throws Exception
     {
         final Controller controller = testState.getController();
-        final ReportingTask reportingTask = controller.createReportingTask(MonitorMemory.COMPONENT_TYPE, reportingTaskDTOBuilder -> {
-        });
+        final ReportingTask reportingTask = controller.createReportingTask(MonitorMemory.COMPONENT_TYPE, reportingTaskDTOBuilder ->
+                reportingTaskDTOBuilder.setProperties(MonitorMemory.build(monitorMemory -> monitorMemory
+                        .setMemoryPool("Code Cache")
+                        .setReportingInterval("1 minute"))));
         testState.addCreatedReportingTask(reportingTask);
     }
 
@@ -50,6 +52,18 @@ public class ReportingTaskSteps
     {
         final Controller controller = testState.getController();
         controller.getReportingTasks().forEach(reportingTask -> reportingTask.delete());
+    }
+
+    @Given("^the Reporting Task has not been started$")
+    public void the_reporting_task_has_not_been_started() throws Exception
+    {
+        testState.getCreatedReportingTasks().forEach(reportingTask -> reportingTask.stop());
+    }
+
+    @Given("^the Reporting Task has been started$")
+    public void the_reporting_task_has_been_started() throws Exception
+    {
+        testState.getCreatedReportingTasks().forEach(reportingTask -> reportingTask.start());
     }
 
     @When("^create a Reporting Task Controller Service$")
@@ -98,6 +112,20 @@ public class ReportingTaskSteps
     {
         testState.getCreatedReportingTasks().stream()
                 .forEach(reportingTask -> reportingTask.update(reportingTaskDTOBuilder -> reportingTaskDTOBuilder.setSchedulingStrategy(ReportingTask.SCHEDULING_STRATEGY_CRON_DRIVEN)));
+    }
+
+    @When("^start the Reporting Task$")
+    public void start_the_reporting_task() throws Exception
+    {
+        testState.getCreatedReportingTasks().stream()
+                .forEach(reportingTask -> reportingTask.start());
+    }
+
+    @When("^stop the Reporting Task$")
+    public void stop_the_reporting_task() throws Exception
+    {
+        testState.getCreatedReportingTasks().stream()
+                .forEach(reportingTask -> reportingTask.stop());
     }
 
     @Then("^all Reporting Task Controller Services are returned$")
@@ -152,5 +180,19 @@ public class ReportingTaskSteps
         assertTrue(gotReportingTasks.stream()
                 .filter(reportingTask -> testState.getCreatedReportingTasks().contains(reportingTask))
                 .allMatch(reportingTask -> reportingTask.getSchedulingStrategy().equals(ReportingTask.SCHEDULING_STRATEGY_CRON_DRIVEN)));
+    }
+
+    @Then("^the Reporting Task is started$")
+    public void the_reporting_task_is_started() throws Exception
+    {
+        assertTrue(testState.getCreatedReportingTasks().stream()
+                .allMatch(reportingTask -> reportingTask.refresh().getState().equals(ReportingTask.STATE_RUNNING)));
+    }
+
+    @Then("^the Reporting Task is stopped")
+    public void the_reporting_task_is_stopped() throws Exception
+    {
+        assertTrue(testState.getCreatedReportingTasks().stream()
+                .allMatch(reportingTask -> reportingTask.refresh().getState().equals(ReportingTask.STATE_STOPPED)));
     }
 }

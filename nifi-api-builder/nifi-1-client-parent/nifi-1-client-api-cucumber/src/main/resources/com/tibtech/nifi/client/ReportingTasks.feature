@@ -20,6 +20,18 @@ Feature: Reporting Tasks
     When delete the Reporting Task
     Then no Reporting Task exists
 
+  Scenario: Start a Reporting Task
+    Given a Reporting Task has been created
+    And the Reporting Task has not been started
+    When start the Reporting Task
+    Then the Reporting Task is started
+
+  Scenario: Stop a Reporting Task
+    Given a Reporting Task has been created
+    And the Reporting Task has been started
+    When stop the Reporting Task
+    Then the Reporting Task is stopped
+
   Scenario: Create a Reporting Task Controller Service
     Given there are no Reporting Task Controller Services
     When create a Reporting Task Controller Service
