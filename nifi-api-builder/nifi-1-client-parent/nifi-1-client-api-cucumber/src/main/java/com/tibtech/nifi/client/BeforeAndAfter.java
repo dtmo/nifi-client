@@ -32,13 +32,23 @@ public class BeforeAndAfter
         rootProcessGroup.getInputPorts().forEach(inputPort -> inputPort.stop());
         rootProcessGroup.getOutputPorts().forEach(outputPort -> outputPort.stop());
         rootProcessGroup.getProcessGroups().forEach(processGroup -> processGroup.stopComponents());
+        rootProcessGroup.getRemoteProcessGroups().forEach(remoteProcessGroup -> remoteProcessGroup.disableTransmission());
         rootProcessGroup.getControllerServices(true, true).forEach(controllerService -> controllerService.disable());
 
         // Next, clear the connections.
 
         // Now the connections can be deleted
+        rootProcessGroup.getConnections().forEach(connection -> connection.delete());
 
         // Now everything else can be deleted.
         controller.getTemplates().forEach(template -> template.delete());
+        rootProcessGroup.getProcessors().forEach(processor -> processor.delete());
+        rootProcessGroup.getInputPorts().forEach(inputPort -> inputPort.delete());
+        rootProcessGroup.getOutputPorts().forEach(outputPort -> outputPort.delete());
+        rootProcessGroup.getProcessGroups().forEach(processGroup -> processGroup.delete());
+        rootProcessGroup.getControllerServices(true, true).forEach(controllerService -> controllerService.delete());
+        rootProcessGroup.getFunnels().forEach(funnel -> funnel.delete());
+        rootProcessGroup.getLabels().forEach(label -> label.delete());
+        rootProcessGroup.getRemoteProcessGroups().forEach(remoteProcessGroup -> remoteProcessGroup.delete());
     }
 }
