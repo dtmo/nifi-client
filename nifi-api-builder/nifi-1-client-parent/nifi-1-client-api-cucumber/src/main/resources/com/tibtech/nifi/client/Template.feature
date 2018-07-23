@@ -1,4 +1,4 @@
-Feature: Create and Instantiate Templates
+Feature: Templates
   Scenario: A template can be created
     Given a Snippet has been created
     When create a Template

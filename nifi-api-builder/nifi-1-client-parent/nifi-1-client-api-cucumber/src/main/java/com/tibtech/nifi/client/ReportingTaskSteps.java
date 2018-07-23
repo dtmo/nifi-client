@@ -11,18 +11,19 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-public class ControllerSteps
+public class ReportingTaskSteps
 {
     private final TestState testState;
 
-    public ControllerSteps(final TestState testState)
+    public ReportingTaskSteps(final TestState testState)
     {
         this.testState = testState;
     }
 
-    @Given("^there are Controller Services$")
-    public void there_are_controller_services() throws Exception
+    @Given("^there are Reporting Task Controller Services$")
+    public void there_are_reporting_task_controller_services() throws Exception
     {
         final Controller controller = testState.getController();
         final ControllerService controllerService = controller.createControllerService(DistributedMapCacheServer.COMPONENT_TYPE, controllerServiceDTOBuilder -> {
@@ -30,8 +31,8 @@ public class ControllerSteps
         testState.addCreatedControllerService(controllerService);
     }
 
-    @Given("^there are Reporting Tasks$")
-    public void there_are_reporting_tasks() throws Exception
+    @Given("^a Reporting Task has been created$")
+    public void a_reporting_task_has_been_created() throws Exception
     {
         final Controller controller = testState.getController();
         final ReportingTask reportingTask = controller.createReportingTask(MonitorMemory.COMPONENT_TYPE, reportingTaskDTOBuilder -> {
@@ -39,22 +40,22 @@ public class ControllerSteps
         testState.addCreatedReportingTask(reportingTask);
     }
 
-    @Given("^there are no Controller Services$")
-    public void there_are_no_controller_services() throws Exception
+    @Given("^there are no Reporting Task Controller Services$")
+    public void there_are_no_reporting_task_controller_services() throws Exception
     {
         final Controller controller = testState.getController();
         controller.getControllerServices().forEach(controllerService -> controllerService.delete());
     }
 
-    @Given("^there are no Reporting Tasks$")
-    public void there_are_no_reporting_tasks() throws Exception
+    @Given("^a Reporting Task has not been created$")
+    public void a_reporting_task_has_not_been_created() throws Exception
     {
         final Controller controller = testState.getController();
         controller.getReportingTasks().forEach(reportingTask -> reportingTask.delete());
     }
 
-    @When("^create a Controller Service$")
-    public void create_a_controller_service() throws Exception
+    @When("^create a Reporting Task Controller Service$")
+    public void create_a_reporting_task_controller_service() throws Exception
     {
         final Controller controller = testState.getController();
         final ControllerService controllerService = controller.createControllerService(DistributedMapCacheServer.COMPONENT_TYPE, controllerServiceDTOBuilder -> {
@@ -70,8 +71,8 @@ public class ControllerSteps
         testState.addCreatedReportingTask(reportingTask);
     }
 
-    @When("^get all Controller Services$")
-    public void all_controller_services_are_requested() throws Exception
+    @When("^get all Reporting Task Controller Services$")
+    public void all_reporting_task_controller_services_are_requested() throws Exception
     {
         final Controller controller = testState.getController();
         controller.getControllerServices().stream()
@@ -86,8 +87,15 @@ public class ControllerSteps
                 .forEach(reportingTask -> testState.addGotReportingTask(reportingTask));
     }
 
-    @Then("^all Controller Services are returned$")
-    public void all_controller_services_are_returned() throws Exception
+    @When("^delete the Reporting Task$")
+    public void delete_the_reporting_task() throws Exception
+    {
+        testState.getCreatedReportingTasks().stream()
+                .forEach(reportingTask -> reportingTask.delete());
+    }
+
+    @Then("^all Reporting Task Controller Services are returned$")
+    public void all_reporting_task_controller_services_are_returned() throws Exception
     {
         final Set<String> createdIds = testState.getCreatedControllerServices().stream()
                 .map(controllerService -> controllerService.getId())
@@ -112,8 +120,8 @@ public class ControllerSteps
         assertEquals(createdIds, gotIds);
     }
 
-    @Then("^a Controller Service exists")
-    public void a_controller_service_exists() throws Exception
+    @Then("^a Reporting Task Controller Service exists")
+    public void a_reporting_task_controller_service_exists() throws Exception
     {
         assertFalse(testState.getCreatedControllerServices().isEmpty());
     }
@@ -121,6 +129,12 @@ public class ControllerSteps
     @Then("^a Reporting Task exists")
     public void a_reporting_task_exists() throws Exception
     {
-        assertFalse(testState.getCreatedReportingTasks().isEmpty());
+        assertFalse(testState.getController().getReportingTasks().isEmpty());
+    }
+
+    @Then("^no Reporting Task exists")
+    public void no_reporting_task_exists() throws Exception
+    {
+        assertTrue(testState.getController().getReportingTasks().isEmpty());
     }
 }
