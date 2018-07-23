@@ -10,6 +10,11 @@ Feature: Reporting Tasks
     When get all Reporting Tasks
     Then all Reporting Tasks are returned
 
+  Scenario: Update a Reporting Task
+    Given a Reporting Task has been created
+    When the Reporting Task is updated
+    Then the Reporting Task reports the updated state
+
   Scenario: Delete a Reporting Task
     Given a Reporting Task has been created
     When delete the Reporting Task

@@ -29,6 +29,60 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
     public static final String STATE_DISABLED = "DISABLED";
 
     /**
+     * Components should be scheduled to run whenever a relevant Event occurs.
+     * Examples of "relevant Events" are:
+     *
+     * <ul>
+     * <li>A FlowFile is added to one of the Component's incoming
+     * Connections</li>
+     * <li>A FlowFile is removed from one of the Component's outgoing
+     * Connections</li>
+     * <li>The Component is scheduled to run (started)</li>
+     * </ul>
+     *
+     * <p>
+     * When using this mode, the user will be unable to configure the scheduling
+     * period. Instead, the framework will manage this.
+     * </p>
+     *
+     * <p>
+     * When using this mode, the maximum number of concurrent tasks can be set
+     * to 0, indicating no maximum.
+     * </p>
+     *
+     * <p>
+     * Not all Components support Event-Driven mode.
+     * </p>
+     */
+    public static final String SCHEDULING_STRATEGY_EVENT_DRIVEN = "EVENT_DRIVEN";
+
+    /**
+     * Components should be scheduled to run on a periodic interval that is
+     * user-defined with a user-defined number of concurrent tasks. All
+     * Components support Timer-Driven mode.
+     */
+    public static final String SCHEDULING_STRATEGY_TIMER_DRIVEN = "TIMER_DRIVEN";
+
+    /**
+     * NOTE: This option has been deprecated with the addition of the
+     * execution-node combo box.  It still exists for backward compatibility
+     * with existing flows that still have this value for schedulingStrategy.
+     * *
+     * Indicates that the component will be scheduled via timer only on the
+     * Primary Node. If the instance is not part of a cluster and this
+     * Scheduling Strategy is used, the component will be scheduled in the same
+     * manner as if {@link TIMER_DRIVEN} were used.
+     */
+    @Deprecated
+    public static final String SCHEDULING_STRATEGY_PRIMARY_NODE_ONLY = "PRIMARY_NODE_ONLY";
+
+    /**
+     * Indicates that the component will be scheduled to run according to a
+     * Cron-style expression
+     */
+    public static final String SCHEDULING_STRATEGY_CRON_DRIVEN = "CRON_DRIVEN";
+
+    /**
      * Constructs a new instance of ReportingTask.
      *
      * @param transport           The transport with which to communicate with the NiFi

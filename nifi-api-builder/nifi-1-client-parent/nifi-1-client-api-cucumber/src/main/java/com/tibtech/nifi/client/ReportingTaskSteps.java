@@ -9,9 +9,7 @@ import cucumber.api.java.en.When;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class ReportingTaskSteps
 {
@@ -67,7 +65,8 @@ public class ReportingTaskSteps
     public void create_a_reporting_task() throws Exception
     {
         final Controller controller = testState.getController();
-        final ReportingTask reportingTask = controller.createReportingTask(MonitorMemory.COMPONENT_TYPE, reportingTaskDTOBuilder -> {});
+        final ReportingTask reportingTask = controller.createReportingTask(MonitorMemory.COMPONENT_TYPE, reportingTaskDTOBuilder -> {
+        });
         testState.addCreatedReportingTask(reportingTask);
     }
 
@@ -92,6 +91,13 @@ public class ReportingTaskSteps
     {
         testState.getCreatedReportingTasks().stream()
                 .forEach(reportingTask -> reportingTask.delete());
+    }
+
+    @When("^the Reporting Task is updated$")
+    public void the_reporting_task_is_updated() throws Exception
+    {
+        testState.getCreatedReportingTasks().stream()
+                .forEach(reportingTask -> reportingTask.update(reportingTaskDTOBuilder -> reportingTaskDTOBuilder.setSchedulingStrategy(ReportingTask.SCHEDULING_STRATEGY_CRON_DRIVEN)));
     }
 
     @Then("^all Reporting Task Controller Services are returned$")
@@ -136,5 +142,15 @@ public class ReportingTaskSteps
     public void no_reporting_task_exists() throws Exception
     {
         assertTrue(testState.getController().getReportingTasks().isEmpty());
+    }
+
+    @Then("^the Reporting Task reports the updated state$")
+    public void the_reporting_task_reports_the_updated_state() throws Exception
+    {
+        final Set<ReportingTask> gotReportingTasks = testState.getController().getReportingTasks();
+        assertFalse(gotReportingTasks.isEmpty());
+        assertTrue(gotReportingTasks.stream()
+                .filter(reportingTask -> testState.getCreatedReportingTasks().contains(reportingTask))
+                .allMatch(reportingTask -> reportingTask.getSchedulingStrategy().equals(ReportingTask.SCHEDULING_STRATEGY_CRON_DRIVEN)));
     }
 }
