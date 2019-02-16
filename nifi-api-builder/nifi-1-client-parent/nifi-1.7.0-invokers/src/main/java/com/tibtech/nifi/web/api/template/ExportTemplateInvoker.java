@@ -14,8 +14,8 @@ import javax.ws.rs.core.Response;
 public final class ExportTemplateInvoker extends AbstractInvoker<String> {
   private String id;
 
-  public ExportTemplateInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public ExportTemplateInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

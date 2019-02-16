@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.ConnectionsEntity;
 public final class GetConnectionsInvoker extends AbstractInvoker<ConnectionsEntity> {
   private String id;
 
-  public GetConnectionsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetConnectionsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

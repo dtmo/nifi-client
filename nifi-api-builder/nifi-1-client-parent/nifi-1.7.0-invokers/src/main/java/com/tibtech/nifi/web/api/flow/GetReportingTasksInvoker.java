@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ReportingTasksEntity;
  * Gets all reporting tasks
  */
 public final class GetReportingTasksInvoker extends AbstractInvoker<ReportingTasksEntity> {
-  public GetReportingTasksInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetReportingTasksInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ReportingTasksEntity invoke() throws InvokerException {

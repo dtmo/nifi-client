@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
  * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class KnoxCallbackInvoker extends AbstractInvoker<Void> {
-  public KnoxCallbackInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public KnoxCallbackInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final Void invoke() throws InvokerException {

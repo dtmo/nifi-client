@@ -5,10 +5,10 @@ package com.tibtech.nifi.client;
  */
 public interface Deletable extends Component
 {
-	/**
-	 * Deletes the component from the flow.
-	 * 
-	 * @throws InvokerException if there was a problem deleting the component.
-	 */
-	void delete() throws InvokerException;
+    /**
+     * Deletes the component from the flow.
+     * 
+     * @throws InvokerException if there was a problem deleting the component.
+     */
+    void delete() throws InvokerException;
 }

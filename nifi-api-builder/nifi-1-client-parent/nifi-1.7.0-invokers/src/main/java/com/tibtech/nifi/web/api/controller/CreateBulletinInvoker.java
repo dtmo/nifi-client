@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.BulletinEntity;
 public final class CreateBulletinInvoker extends AbstractInvoker<BulletinEntity> {
   private BulletinEntity bulletinEntity;
 
-  public CreateBulletinInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateBulletinInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

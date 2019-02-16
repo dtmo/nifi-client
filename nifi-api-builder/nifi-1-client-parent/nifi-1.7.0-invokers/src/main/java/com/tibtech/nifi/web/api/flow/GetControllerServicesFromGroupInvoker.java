@@ -19,8 +19,8 @@ public final class GetControllerServicesFromGroupInvoker extends AbstractInvoker
 
   private boolean includeDescendantGroups;
 
-  public GetControllerServicesFromGroupInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetControllerServicesFromGroupInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

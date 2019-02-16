@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.ControllerConfigurationEntity;
 public final class UpdateControllerConfigInvoker extends AbstractInvoker<ControllerConfigurationEntity> {
   private ControllerConfigurationEntity controllerConfigurationEntity;
 
-  public UpdateControllerConfigInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateControllerConfigInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

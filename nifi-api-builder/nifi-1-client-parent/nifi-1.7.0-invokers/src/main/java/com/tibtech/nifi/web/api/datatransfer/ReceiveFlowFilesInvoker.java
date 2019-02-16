@@ -20,8 +20,8 @@ public final class ReceiveFlowFilesInvoker extends AbstractInvoker<String> {
 
   private InputStream inputStream;
 
-  public ReceiveFlowFilesInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public ReceiveFlowFilesInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

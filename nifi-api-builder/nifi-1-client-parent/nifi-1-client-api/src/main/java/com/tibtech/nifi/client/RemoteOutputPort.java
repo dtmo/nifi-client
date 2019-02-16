@@ -17,11 +17,13 @@ public class RemoteOutputPort extends RemotePort<RemoteOutputPort>
     /**
      * Constructs a new instance of RemoteOutputPort.
      *
-     * @param remoteProcessGroup        The remote process group to which the remote output port belongs.
-     * @param remoteProcessGroupPortDto The DTO that describes the remote output port.
+     * @param remoteProcessGroup        The remote process group to which the remote
+     *                                  output port belongs.
+     * @param remoteProcessGroupPortDto The DTO that describes the remote output
+     *                                  port.
      */
     public RemoteOutputPort(final RemoteProcessGroup remoteProcessGroup,
-                            final RemoteProcessGroupPortDTO remoteProcessGroupPortDto)
+            final RemoteProcessGroupPortDTO remoteProcessGroupPortDto)
     {
         super(remoteProcessGroup, remoteProcessGroupPortDto);
     }
@@ -37,23 +39,21 @@ public class RemoteOutputPort extends RemotePort<RemoteOutputPort>
             throws InvokerException
     {
         final RemoteProcessGroupPortDTOBuilder remoteProcessGroupPortDTOBuilder = new RemoteProcessGroupPortDTOBuilder()
-                .setId(getId())
-                .setGroupId(getParentGroupId());
+                .setId(getId()).setGroupId(getParentGroupId());
 
         configurator.accept(remoteProcessGroupPortDTOBuilder);
 
         final RemoteProcessGroupPortDTO remoteProcessGroupPortDto = new UpdateRemoteProcessGroupOutputPortInvoker(
-                getTransport(), getRevisionDTO().getVersion())
-                .setId(getParentGroupId())
-                .setPortId(getId())
-                .setRemoteProcessGroupPortEntity(new RemoteProcessGroupPortEntityBuilder()
-                        .setRemoteProcessGroupPort(remoteProcessGroupPortDTOBuilder.build())
-                        .build())
-                .invoke()
-                .getRemoteProcessGroupPort();
+                getController().getTransport())
+                        .setId(getParentGroupId()).setPortId(getId())
+                        .setRemoteProcessGroupPortEntity(new RemoteProcessGroupPortEntityBuilder()
+                                .setRemoteProcessGroupPort(remoteProcessGroupPortDTOBuilder.build())
+                                .setRevision(getRevisionDTO()).build())
+                        .invoke().getRemoteProcessGroupPort();
         setRemoteProcessGroupPortDto(remoteProcessGroupPortDto);
 
-        // Updating the remote port causes the version of the remote process group to be updated.
+        // Updating the remote port causes the version of the remote process group to be
+        // updated.
         // We need to refresh the remote process group to keep it up to date.
 
         getRemoteProcessGroup().refresh();
@@ -66,8 +66,7 @@ public class RemoteOutputPort extends RemotePort<RemoteOutputPort>
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupPortDTOBuilder.class) final Closure<RemoteProcessGroupPortDTOBuilder> closure)
             throws InvokerException
     {
-        return update(configurator ->
-        {
+        return update(configurator -> {
             final Closure<RemoteProcessGroupPortDTOBuilder> code = closure.rehydrate(configurator, this, this);
             code.setResolveStrategy(Closure.DELEGATE_ONLY);
             code.call();

@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.VersionControlInformationEntity;
 public final class GetVersionInformationInvoker extends AbstractInvoker<VersionControlInformationEntity> {
   private String id;
 
-  public GetVersionInformationInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetVersionInformationInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

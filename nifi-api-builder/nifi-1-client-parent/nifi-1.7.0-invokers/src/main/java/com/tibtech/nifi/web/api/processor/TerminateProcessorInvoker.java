@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.ProcessorEntity;
 public final class TerminateProcessorInvoker extends ComponentEntityInvoker<ProcessorEntity> {
   private String id;
 
-  public TerminateProcessorInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public TerminateProcessorInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

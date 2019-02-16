@@ -18,8 +18,8 @@ public final class GetVariableRegistryInvoker extends AbstractInvoker<VariableRe
 
   private boolean includeAncestorGroups;
 
-  public GetVariableRegistryInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetVariableRegistryInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

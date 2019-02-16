@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerServicesEntity;
  * Gets all controller services
  */
 public final class GetControllerServicesFromControllerInvoker extends AbstractInvoker<ControllerServicesEntity> {
-  public GetControllerServicesFromControllerInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetControllerServicesFromControllerInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ControllerServicesEntity invoke() throws InvokerException {

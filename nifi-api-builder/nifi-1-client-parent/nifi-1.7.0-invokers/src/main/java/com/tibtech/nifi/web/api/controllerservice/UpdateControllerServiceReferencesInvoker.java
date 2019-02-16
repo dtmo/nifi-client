@@ -19,8 +19,8 @@ public final class UpdateControllerServiceReferencesInvoker extends AbstractInvo
 
   private UpdateControllerServiceReferenceRequestEntity updateControllerServiceReferenceRequestEntity;
 
-  public UpdateControllerServiceReferencesInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateControllerServiceReferencesInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -23,8 +23,8 @@ public final class GetProcessGroupStatusInvoker extends AbstractInvoker<ProcessG
 
   private String clusterNodeId;
 
-  public GetProcessGroupStatusInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetProcessGroupStatusInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

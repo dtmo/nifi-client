@@ -18,8 +18,8 @@ public final class ActivateControllerServicesInvoker extends AbstractInvoker<Act
 
   private ActivateControllerServicesEntity activateControllerServicesEntity;
 
-  public ActivateControllerServicesInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public ActivateControllerServicesInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerBulletinsEntity;
  * Retrieves Controller level bulletins
  */
 public final class GetBulletinsInvoker extends AbstractInvoker<ControllerBulletinsEntity> {
-  public GetBulletinsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetBulletinsInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ControllerBulletinsEntity invoke() throws InvokerException {

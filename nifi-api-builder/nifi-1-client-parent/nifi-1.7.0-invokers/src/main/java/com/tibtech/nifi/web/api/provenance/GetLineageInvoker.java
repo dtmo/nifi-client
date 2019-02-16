@@ -17,8 +17,8 @@ public final class GetLineageInvoker extends AbstractInvoker<LineageEntity> {
 
   private String clusterNodeId;
 
-  public GetLineageInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetLineageInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

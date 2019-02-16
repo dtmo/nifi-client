@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.ConnectionEntity;
 public final class GetConnectionInvoker extends ComponentEntityInvoker<ConnectionEntity> {
   private String id;
 
-  public GetConnectionInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetConnectionInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

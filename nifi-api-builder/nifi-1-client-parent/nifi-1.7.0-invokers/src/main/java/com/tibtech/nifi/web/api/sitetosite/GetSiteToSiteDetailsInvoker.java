@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerEntity;
  * Returns the details about this NiFi necessary to communicate via site to site
  */
 public final class GetSiteToSiteDetailsInvoker extends AbstractInvoker<ControllerEntity> {
-  public GetSiteToSiteDetailsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetSiteToSiteDetailsInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ControllerEntity invoke() throws InvokerException {

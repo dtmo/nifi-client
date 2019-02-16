@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.UserGroupEntity;
 public final class CreateUserGroupInvoker extends ComponentEntityInvoker<UserGroupEntity> {
   private UserGroupEntity userGroupEntity;
 
-  public CreateUserGroupInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateUserGroupInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -39,7 +39,6 @@ public final class CreateUserGroupInvoker extends ComponentEntityInvoker<UserGro
     target = target.path("nifi-apitenants");
     target = target.path("user-groups");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    userGroupEntity.setRevision(createRevisionDto());
     final Entity<UserGroupEntity> entity = Entity.entity(userGroupEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

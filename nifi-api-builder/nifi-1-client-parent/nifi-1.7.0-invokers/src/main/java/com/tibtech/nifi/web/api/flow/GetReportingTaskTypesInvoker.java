@@ -20,8 +20,8 @@ public final class GetReportingTaskTypesInvoker extends AbstractInvoker<Reportin
 
   private String type;
 
-  public GetReportingTaskTypesInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetReportingTaskTypesInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

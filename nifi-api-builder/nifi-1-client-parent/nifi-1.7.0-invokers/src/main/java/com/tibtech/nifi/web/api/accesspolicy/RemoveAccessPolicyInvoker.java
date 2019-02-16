@@ -4,6 +4,7 @@ import com.tibtech.nifi.client.ComponentEntityInvoker;
 import com.tibtech.nifi.client.InvokerException;
 import com.tibtech.nifi.client.Transport;
 import java.lang.Boolean;
+import java.lang.Long;
 import java.lang.String;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -16,10 +17,12 @@ import org.apache.nifi.web.api.entity.AccessPolicyEntity;
 public final class RemoveAccessPolicyInvoker extends ComponentEntityInvoker<AccessPolicyEntity> {
   private String id;
 
+  private Long version;
+
   private Boolean disconnectedNodeAcknowledged;
 
-  public RemoveAccessPolicyInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public RemoveAccessPolicyInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -32,6 +35,19 @@ public final class RemoveAccessPolicyInvoker extends ComponentEntityInvoker<Acce
    * The access policy id. */
   public final RemoveAccessPolicyInvoker setId(final String id) {
     this.id = id;
+    return this;
+  }
+
+  /**
+   * The revision is used to verify the client is working with the latest version of the flow. */
+  public final Long getVersion() {
+    return version;
+  }
+
+  /**
+   * The revision is used to verify the client is working with the latest version of the flow. */
+  public final RemoveAccessPolicyInvoker setVersion(final Long version) {
+    this.version = version;
     return this;
   }
 
@@ -55,7 +71,7 @@ public final class RemoveAccessPolicyInvoker extends ComponentEntityInvoker<Acce
     target = target.path("nifi-api");
     target = target.path("policies");
     target = target.path(id);
-    target = target.queryParam("version", getVersion());
+    target = target.queryParam("version", version);
     target = target.queryParam("clientId", getClientId());
     target = target.queryParam("disconnectedNodeAcknowledged", disconnectedNodeAcknowledged);
     final Invocation.Builder invocationBuilder = target.request("application/json");

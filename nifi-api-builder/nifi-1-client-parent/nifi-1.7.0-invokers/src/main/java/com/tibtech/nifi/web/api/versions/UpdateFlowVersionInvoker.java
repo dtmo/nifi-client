@@ -20,8 +20,8 @@ public final class UpdateFlowVersionInvoker extends AbstractInvoker<VersionContr
 
   private VersionedFlowSnapshotEntity versionedFlowSnapshotEntity;
 
-  public UpdateFlowVersionInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateFlowVersionInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

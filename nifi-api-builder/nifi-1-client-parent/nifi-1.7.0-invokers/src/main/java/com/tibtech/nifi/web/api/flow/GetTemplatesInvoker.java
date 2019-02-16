@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.TemplatesEntity;
  * Gets all templates
  */
 public final class GetTemplatesInvoker extends AbstractInvoker<TemplatesEntity> {
-  public GetTemplatesInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetTemplatesInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final TemplatesEntity invoke() throws InvokerException {

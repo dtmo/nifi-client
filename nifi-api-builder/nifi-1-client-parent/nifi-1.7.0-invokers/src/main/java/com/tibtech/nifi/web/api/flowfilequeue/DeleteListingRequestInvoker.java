@@ -17,8 +17,8 @@ public final class DeleteListingRequestInvoker extends AbstractInvoker<ListingRe
 
   private String listingRequestId;
 
-  public DeleteListingRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public DeleteListingRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

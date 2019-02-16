@@ -8,11 +8,11 @@ import org.apache.nifi.web.api.dto.RevisionDTO;
 public interface Component
 {
     /**
-     * Returns the transport used to communicate with the NiFi Controller.
+     * Returns the controller to which the component belongs.
      *
-     * @return The transport used to communicate with the NiFi Controller.
+     * @return The controller to which the component belongs.
      */
-    Transport getTransport();
+    Controller getController();
 
     /**
      * Returns the component ID.

@@ -18,8 +18,8 @@ public final class UpdateAccessPolicyInvoker extends ComponentEntityInvoker<Acce
 
   private AccessPolicyEntity accessPolicyEntity;
 
-  public UpdateAccessPolicyInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateAccessPolicyInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -56,7 +56,6 @@ public final class UpdateAccessPolicyInvoker extends ComponentEntityInvoker<Acce
     target = target.path("policies");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    accessPolicyEntity.setRevision(createRevisionDto());
     final Entity<AccessPolicyEntity> entity = Entity.entity(accessPolicyEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

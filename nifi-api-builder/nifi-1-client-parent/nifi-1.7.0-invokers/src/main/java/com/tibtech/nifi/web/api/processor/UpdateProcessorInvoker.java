@@ -18,8 +18,8 @@ public final class UpdateProcessorInvoker extends ComponentEntityInvoker<Process
 
   private ProcessorEntity processorEntity;
 
-  public UpdateProcessorInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateProcessorInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -55,7 +55,6 @@ public final class UpdateProcessorInvoker extends ComponentEntityInvoker<Process
     target = target.path("processors");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    processorEntity.setRevision(createRevisionDto());
     final Entity<ProcessorEntity> entity = Entity.entity(processorEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

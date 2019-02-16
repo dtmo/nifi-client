@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.ClusterSearchResultsEntity;
 public final class SearchClusterInvoker extends AbstractInvoker<ClusterSearchResultsEntity> {
   private String q;
 
-  public SearchClusterInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public SearchClusterInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

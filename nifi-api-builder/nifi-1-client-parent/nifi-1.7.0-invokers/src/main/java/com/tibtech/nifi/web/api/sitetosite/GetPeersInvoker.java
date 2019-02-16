@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.PeersEntity;
  * Returns the available Peers and its status of this NiFi
  */
 public final class GetPeersInvoker extends AbstractInvoker<PeersEntity> {
-  public GetPeersInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetPeersInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final PeersEntity invoke() throws InvokerException {

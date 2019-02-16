@@ -18,8 +18,8 @@ public final class GetAccessPolicyForResourceInvoker extends ComponentEntityInvo
 
   private String resource;
 
-  public GetAccessPolicyForResourceInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetAccessPolicyForResourceInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

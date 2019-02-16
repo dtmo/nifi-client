@@ -32,8 +32,8 @@ public final class QueryHistoryInvoker extends AbstractInvoker<HistoryEntity> {
 
   private String sourceId;
 
-  public QueryHistoryInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public QueryHistoryInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

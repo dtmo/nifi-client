@@ -1,76 +1,90 @@
 package com.tibtech.nifi.client;
 
+import java.time.Duration;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Consumer;
+
+import org.apache.nifi.web.api.dto.ConnectableDTO;
+import org.apache.nifi.web.api.dto.ConnectionDTO;
+import org.apache.nifi.web.api.dto.DropRequestDTO;
+import org.apache.nifi.web.api.dto.PositionDTO;
+import org.apache.nifi.web.api.entity.ConnectionEntity;
+import org.apache.nifi.web.api.entity.DropRequestEntity;
+
 import com.tibtech.nifi.web.api.connection.DeleteConnectionInvoker;
 import com.tibtech.nifi.web.api.connection.GetConnectionInvoker;
 import com.tibtech.nifi.web.api.connection.UpdateConnectionInvoker;
 import com.tibtech.nifi.web.api.dto.ConnectableDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ConnectionDTOBuilder;
+import com.tibtech.nifi.web.api.dto.RevisionDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ConnectionEntityBuilder;
+import com.tibtech.nifi.web.api.flowfilequeue.CreateDropRequestInvoker;
 import com.tibtech.nifi.web.api.processgroup.CreateConnectionInvoker;
+
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
-import org.apache.nifi.web.api.dto.ConnectableDTO;
-import org.apache.nifi.web.api.dto.ConnectionDTO;
-import org.apache.nifi.web.api.dto.PositionDTO;
-import org.apache.nifi.web.api.entity.ConnectionEntity;
-
-import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Connection represents a connection between two components in a NiFi flow.
  */
-public class Connection extends UpdatableComponent<Connection, ConnectionEntity, ConnectionDTOBuilder>
-        implements Deletable, Refreshable<Connection, ConnectionDTOBuilder>
+public class Connection extends AbstractComponent<ConnectionEntity>
+        implements Refreshable<Connection>, Updatable<Connection, ConnectionDTOBuilder>, Deletable
 {
     /**
      * Creates a new instance of Connection.
      *
-     * @param transport             The transport with which to communicate with the NiFi server.
-     * @param source                The source component from which flow files will be collected.
-     * @param destination           The destination component to which flow files will be delivered.
-     * @param selectedRelationships The source component relationships for which flow files will travel on the connection.
-     * @param configurator          A {@link Consumer} that accepts an instance of {@link ConnectionDTOBuilder} on which connection configuration may be set.
+     * @param transport             The transport with which to communicate with the
+     *                              NiFi server.
+     * @param source                The source component from which flow files will
+     *                              be collected.
+     * @param destination           The destination component to which flow files
+     *                              will be delivered.
+     * @param selectedRelationships The source component relationships for which
+     *                              flow files will travel on the connection.
+     * @param configurator          A {@link Consumer} that accepts an instance of
+     *                              {@link ConnectionDTOBuilder} on which connection
+     *                              configuration may be set.
      * @return A new connection.
      * @throws InvokerException if there is a problem creating the connection.
      */
-    public static Connection createConnection(final Transport transport, final Connectable source,
-                                              final Connectable destination, final Collection<String> selectedRelationships,
-                                              final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
+    public static Connection createConnection(final Controller controller, final Connectable source,
+            final Connectable destination, final Collection<String> selectedRelationships,
+            final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
     {
         final ConnectionDTOBuilder connectionDTOBuilder = new ConnectionDTOBuilder()
-                .setSource(new ConnectableDTOBuilder()
-                        .setId(source.getId())
-                        .setGroupId(source.getParentGroupId())
-                        .setType(source.getConnectableType().name())
-                        .build())
-                .setDestination(new ConnectableDTOBuilder()
-                        .setId(destination.getId())
-                        .setGroupId(destination.getParentGroupId())
-                        .setType(destination.getConnectableType().name())
+                .setSource(new ConnectableDTOBuilder().setId(source.getId()).setGroupId(source.getParentGroupId())
+                        .setType(source.getConnectableType().name()).build())
+                .setDestination(new ConnectableDTOBuilder().setId(destination.getId())
+                        .setGroupId(destination.getParentGroupId()).setType(destination.getConnectableType().name())
                         .build())
                 .setSelectedRelationships(new HashSet<>(selectedRelationships));
 
         configurator.accept(connectionDTOBuilder);
 
-        final ConnectionEntity connectionEntity = new CreateConnectionInvoker(transport, 0)
+        final Transport transport = controller.getTransport();
+        final ConnectionEntity connectionEntity = new CreateConnectionInvoker(transport)
                 .setId(source.getParentGroupId())
                 .setConnectionEntity(new ConnectionEntityBuilder()
-                        .setComponent(connectionDTOBuilder.build())
-                        .build())
+                        .setRevision(
+                                new RevisionDTOBuilder().setClientId(transport.getClientId()).setVersion(0L).build())
+                        .setComponent(connectionDTOBuilder.build()).build())
                 .invoke();
-        return new Connection(transport, connectionEntity);
+        return new Connection(controller, connectionEntity);
     }
 
     /**
      * Constructs a new instance of Connection.
      *
-     * @param transport        The transport with which to communicate with the NiFi server.
+     * @param controller       The controller to which the connection belongs.
      * @param connectionEntity The entity that represents the connection.
      */
-    public Connection(final Transport transport, final ConnectionEntity connectionEntity)
+    public Connection(final Controller controller, final ConnectionEntity connectionEntity)
     {
-        super(transport, connectionEntity);
+        super(controller, connectionEntity);
     }
 
     /**
@@ -90,9 +104,11 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
     }
 
     /**
-     * Returns the relationships that the source of the connection currently supports.
+     * Returns the relationships that the source of the connection currently
+     * supports.
      *
-     * @return The relationships that the source of the connection currently supports.
+     * @return The relationships that the source of the connection currently
+     *         supports.
      */
     public Set<String> getAvailableRelationships()
     {
@@ -100,11 +116,13 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
     }
 
     /**
-     * Returns the object data size threshold for determining when back pressure is applied. Updating this value is a
-     * passive change in the sense that it won't impact whether existing files over the limit are affected but it does
-     * help feeder processors to stop pushing too much into this work queue.
+     * Returns the object data size threshold for determining when back pressure is
+     * applied. Updating this value is a passive change in the sense that it won't
+     * impact whether existing files over the limit are affected but it does help
+     * feeder processors to stop pushing too much into this work queue.
      *
-     * @return The object data size threshold for determining when back pressure is applied.
+     * @return The object data size threshold for determining when back pressure is
+     *         applied.
      */
     public String getBackPressureDataSizeThreshold()
     {
@@ -112,11 +130,13 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
     }
 
     /**
-     * Returns the object count threshold for determining when back pressure is applied. Updating this value is a
-     * passive change in the sense that it won't impact whether existing files over the limit are affected but it does
-     * help feeder processors to stop pushing too much into this work queue.
+     * Returns the object count threshold for determining when back pressure is
+     * applied. Updating this value is a passive change in the sense that it won't
+     * impact whether existing files over the limit are affected but it does help
+     * feeder processors to stop pushing too much into this work queue.
      *
-     * @return The object count threshold for determining when back pressure is applied.
+     * @return The object count threshold for determining when back pressure is
+     *         applied.
      */
     public long getBackPressureObjectThreshold()
     {
@@ -144,11 +164,13 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
     }
 
     /**
-     * Returns the amount of time a flow file may be in the flow before it will be automatically aged out of the flow.
-     * Once a flow file reaches this age it will be terminated from the flow the next time a processor attempts to start
-     * work on it.
+     * Returns the amount of time a flow file may be in the flow before it will be
+     * automatically aged out of the flow. Once a flow file reaches this age it will
+     * be terminated from the flow the next time a processor attempts to start work
+     * on it.
      *
-     * @return The amount of time a flow file may be in the flow before it will be automatically aged out of the flow.
+     * @return The amount of time a flow file may be in the flow before it will be
+     *         automatically aged out of the flow.
      */
     public String getFlowFileExpiration()
     {
@@ -156,9 +178,11 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
     }
 
     /**
-     * Returns the index of control point that the connection label should be placed over.
+     * Returns the index of control point that the connection label should be placed
+     * over.
      *
-     * @return The index of control point that the connection label should be placed over.
+     * @return The index of control point that the connection label should be placed
+     *         over.
      */
     public int getLabelIndex()
     {
@@ -228,34 +252,27 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
     @Override
     public void delete() throws InvokerException
     {
-        new DeleteConnectionInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke();
+        new DeleteConnectionInvoker(getController().getTransport()).setId(getId())
+                .setVersion(getRevisionDTO().getVersion()).invoke();
     }
 
     @Override
     public Connection refresh() throws InvokerException
     {
-        setComponentEntity(new GetConnectionInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke());
-
+        setComponentEntity(new GetConnectionInvoker(getController().getTransport()).setId(getId()).invoke());
         return this;
     }
 
     @Override
     public Connection update(final Consumer<ConnectionDTOBuilder> configurator) throws InvokerException
     {
-        final ConnectionDTOBuilder connectionDTOBuilder = new ConnectionDTOBuilder()
-                .setId(getId());
+        final ConnectionDTOBuilder connectionDTOBuilder = new ConnectionDTOBuilder().setId(getId());
 
         configurator.accept(connectionDTOBuilder);
 
-        setComponentEntity(new UpdateConnectionInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setConnectionEntity(new ConnectionEntityBuilder()
-                        .setComponent(connectionDTOBuilder.build())
-                        .build())
+        setComponentEntity(new UpdateConnectionInvoker(getController().getTransport()).setId(getId())
+                .setConnectionEntity(new ConnectionEntityBuilder().setRevision(getRevisionDTO())
+                        .setComponent(connectionDTOBuilder.build()).build())
                 .invoke());
         return this;
     }
@@ -265,7 +282,7 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ConnectionDTOBuilder.class) final Closure<ConnectionDTOBuilder> closure)
             throws InvokerException
     {
-        return super.update(closure);
+        return Updatable.super.update(closure);
     }
 
     /**
@@ -273,34 +290,32 @@ public class Connection extends UpdatableComponent<Connection, ConnectionEntity,
      *
      * @param destination The new destination for the connection.
      * @return The updated connection.
-     * @throws InvokerException if there is a problem updating the connection destination.
+     * @throws InvokerException if there is a problem updating the connection
+     *                          destination.
      */
     public Connection reconnectTo(final Connectable destination) throws InvokerException
     {
-        setComponentEntity(new UpdateConnectionInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setConnectionEntity(new ConnectionEntityBuilder()
-                        .setComponent(ConnectionDTOBuilder.of(getConnectionDTO())
-                                .setDestination(destination.asConnectableDTO())
-                                .build())
-                        .build())
-                .invoke());
+        setComponentEntity(
+                new UpdateConnectionInvoker(getController().getTransport()).setId(getId())
+                        .setConnectionEntity(
+                                new ConnectionEntityBuilder().setRevision(getRevisionDTO())
+                                        .setComponent(ConnectionDTOBuilder.of(getConnectionDTO())
+                                                .setDestination(destination.asConnectableDTO()).build())
+                                        .build())
+                        .invoke());
 
         return this;
     }
 
-    /**
-     * Gets the connection with the specified ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the connection to get.
-     * @return The connection with the specified ID.
-     * @throws InvokerException if there is a problem getting the connection.
-     */
-    public static Connection get(final Transport transport, final String id) throws InvokerException
+    public DropRequest createDropRequest()
     {
-        return new Connection(transport, new GetConnectionInvoker(transport, 0)
-                .setId(id)
-                .invoke());
+        final DropRequestEntity dropRequestEntity = new CreateDropRequestInvoker(getController().getTransport())
+                .setId(getId()).invoke();
+        return new DropRequest(this, dropRequestEntity);
+    }
+
+    public DropRequestDTO dropContents(final Duration pollingInterval, final Duration pollingDuration)
+    {
+        return createDropRequest().pollUntilFinished(pollingInterval, pollingDuration).getDropRequestDto();
     }
 }

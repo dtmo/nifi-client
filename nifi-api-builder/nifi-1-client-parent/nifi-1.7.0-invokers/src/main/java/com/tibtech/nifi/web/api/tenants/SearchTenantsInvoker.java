@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.TenantsEntity;
 public final class SearchTenantsInvoker extends AbstractInvoker<TenantsEntity> {
   private String q;
 
-  public SearchTenantsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public SearchTenantsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

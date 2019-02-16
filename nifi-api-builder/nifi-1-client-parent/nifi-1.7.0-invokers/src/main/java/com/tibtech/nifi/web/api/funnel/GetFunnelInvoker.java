@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.FunnelEntity;
 public final class GetFunnelInvoker extends ComponentEntityInvoker<FunnelEntity> {
   private String id;
 
-  public GetFunnelInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetFunnelInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

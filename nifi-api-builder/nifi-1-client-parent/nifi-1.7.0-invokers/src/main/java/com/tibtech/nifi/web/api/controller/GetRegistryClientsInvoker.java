@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.RegistryClientsEntity;
  * Gets the listing of available registry clients
  */
 public final class GetRegistryClientsInvoker extends AbstractInvoker<RegistryClientsEntity> {
-  public GetRegistryClientsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetRegistryClientsInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final RegistryClientsEntity invoke() throws InvokerException {

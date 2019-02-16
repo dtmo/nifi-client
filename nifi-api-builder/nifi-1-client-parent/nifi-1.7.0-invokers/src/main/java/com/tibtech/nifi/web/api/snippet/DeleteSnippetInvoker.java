@@ -18,8 +18,8 @@ public final class DeleteSnippetInvoker extends AbstractInvoker<SnippetEntity> {
 
   private Boolean disconnectedNodeAcknowledged;
 
-  public DeleteSnippetInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public DeleteSnippetInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

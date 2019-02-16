@@ -18,8 +18,8 @@ public final class RemoveTemplateInvoker extends ComponentEntityInvoker<Template
 
   private Boolean disconnectedNodeAcknowledged;
 
-  public RemoveTemplateInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public RemoveTemplateInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

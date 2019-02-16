@@ -18,8 +18,8 @@ public final class UpdateControllerServiceInvoker extends ComponentEntityInvoker
 
   private ControllerServiceEntity controllerServiceEntity;
 
-  public UpdateControllerServiceInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateControllerServiceInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -56,7 +56,6 @@ public final class UpdateControllerServiceInvoker extends ComponentEntityInvoker
     target = target.path("controller-services");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    controllerServiceEntity.setRevision(createRevisionDto());
     final Entity<ControllerServiceEntity> entity = Entity.entity(controllerServiceEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

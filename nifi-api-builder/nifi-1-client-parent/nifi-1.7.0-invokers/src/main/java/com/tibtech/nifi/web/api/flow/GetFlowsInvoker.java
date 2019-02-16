@@ -17,8 +17,8 @@ public final class GetFlowsInvoker extends AbstractInvoker<VersionedFlowsEntity>
 
   private String bucketId;
 
-  public GetFlowsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetFlowsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

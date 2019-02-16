@@ -19,8 +19,8 @@ public final class UpdateUserGroupInvoker extends ComponentEntityInvoker<UserGro
 
   private UserGroupEntity userGroupEntity;
 
-  public UpdateUserGroupInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateUserGroupInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -56,7 +56,6 @@ public final class UpdateUserGroupInvoker extends ComponentEntityInvoker<UserGro
     target = target.path("user-groups");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    userGroupEntity.setRevision(createRevisionDto());
     final Entity<UserGroupEntity> entity = Entity.entity(userGroupEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

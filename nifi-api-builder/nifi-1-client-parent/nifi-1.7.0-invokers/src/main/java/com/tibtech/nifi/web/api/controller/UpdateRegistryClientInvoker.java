@@ -18,8 +18,8 @@ public final class UpdateRegistryClientInvoker extends ComponentEntityInvoker<Re
 
   private RegistryClientEntity registryClientEntity;
 
-  public UpdateRegistryClientInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateRegistryClientInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -57,7 +57,6 @@ public final class UpdateRegistryClientInvoker extends ComponentEntityInvoker<Re
     target = target.path("registry-clients");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    registryClientEntity.setRevision(createRevisionDto());
     final Entity<RegistryClientEntity> entity = Entity.entity(registryClientEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

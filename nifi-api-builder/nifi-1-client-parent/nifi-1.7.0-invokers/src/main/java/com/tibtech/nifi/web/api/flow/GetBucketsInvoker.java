@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.BucketsEntity;
 public final class GetBucketsInvoker extends AbstractInvoker<BucketsEntity> {
   private String id;
 
-  public GetBucketsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetBucketsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -21,8 +21,8 @@ public final class DeleteVariableRegistryUpdateRequestInvoker extends AbstractIn
 
   private Boolean disconnectedNodeAcknowledged;
 
-  public DeleteVariableRegistryUpdateRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public DeleteVariableRegistryUpdateRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

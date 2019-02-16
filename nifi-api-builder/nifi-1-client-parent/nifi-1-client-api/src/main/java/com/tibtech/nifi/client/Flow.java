@@ -11,18 +11,18 @@ import java.util.stream.Collectors;
  */
 public class Flow
 {
-    private Transport transport;
+    private Controller controller;
     private FlowEntity flowEntity;
 
     /**
      * Constructs a new instance of Flow.
      *
-     * @param transport  The transport with which to communicate with the NiFi server.
+     * @param controller The controller to which the flow belongs.
      * @param flowEntity The flow entity that represents the flow.
      */
-    public Flow(final Transport transport, final FlowEntity flowEntity)
+    public Flow(final Controller controller, final FlowEntity flowEntity)
     {
-        this.transport = transport;
+        this.controller = controller;
         this.flowEntity = flowEntity;
     }
 
@@ -43,8 +43,7 @@ public class Flow
      */
     public Set<Connection> getConnections()
     {
-        return getFlowDTO().getConnections().stream()
-                .map(entity -> new Connection(transport, entity))
+        return getFlowDTO().getConnections().stream().map(entity -> new Connection(controller, entity))
                 .collect(Collectors.toSet());
     }
 
@@ -55,8 +54,7 @@ public class Flow
      */
     public Set<Funnel> getFunnels()
     {
-        return getFlowDTO().getFunnels().stream()
-                .map(entity -> new Funnel(transport, entity))
+        return getFlowDTO().getFunnels().stream().map(entity -> new Funnel(controller, entity))
                 .collect(Collectors.toSet());
     }
 
@@ -67,8 +65,7 @@ public class Flow
      */
     public Set<InputPort> getInputPorts()
     {
-        return getFlowDTO().getInputPorts().stream()
-                .map(entity -> new InputPort(transport, entity))
+        return getFlowDTO().getInputPorts().stream().map(entity -> new InputPort(controller, entity))
                 .collect(Collectors.toSet());
     }
 
@@ -79,8 +76,7 @@ public class Flow
      */
     public Set<Label> getLabels()
     {
-        return getFlowDTO().getLabels().stream()
-                .map(entity -> new Label(transport, entity))
+        return getFlowDTO().getLabels().stream().map(entity -> new Label(controller, entity))
                 .collect(Collectors.toSet());
     }
 
@@ -91,8 +87,7 @@ public class Flow
      */
     public Set<OutputPort> getOutputPorts()
     {
-        return getFlowDTO().getOutputPorts().stream()
-                .map(entity -> new OutputPort(transport, entity))
+        return getFlowDTO().getOutputPorts().stream().map(entity -> new OutputPort(controller, entity))
                 .collect(Collectors.toSet());
     }
 
@@ -103,8 +98,7 @@ public class Flow
      */
     public Set<ProcessGroup> getProcessGroups()
     {
-        return getFlowDTO().getProcessGroups().stream()
-                .map(entity -> new ProcessGroup(transport, entity))
+        return getFlowDTO().getProcessGroups().stream().map(entity -> new ProcessGroup(controller, entity))
                 .collect(Collectors.toSet());
     }
 
@@ -115,8 +109,7 @@ public class Flow
      */
     public Set<Processor> getProcessors()
     {
-        return getFlowDTO().getProcessors().stream()
-                .map(entity -> new Processor(transport, entity))
+        return getFlowDTO().getProcessors().stream().map(entity -> new Processor(controller, entity))
                 .collect(Collectors.toSet());
     }
 
@@ -127,8 +120,7 @@ public class Flow
      */
     public Set<RemoteProcessGroup> getRemoteProcessGroups()
     {
-        return getFlowDTO().getRemoteProcessGroups().stream()
-                .map(entity -> new RemoteProcessGroup(transport, entity))
+        return getFlowDTO().getRemoteProcessGroups().stream().map(entity -> new RemoteProcessGroup(controller, entity))
                 .collect(Collectors.toSet());
     }
 }

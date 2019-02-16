@@ -18,8 +18,8 @@ public final class GetVariableRegistryUpdateRequestInvoker extends AbstractInvok
 
   private String updateId;
 
-  public GetVariableRegistryUpdateRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetVariableRegistryUpdateRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

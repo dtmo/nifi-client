@@ -21,8 +21,8 @@ public final class UpdateRemoteProcessGroupOutputPortInvoker extends ComponentEn
 
   private RemoteProcessGroupPortEntity remoteProcessGroupPortEntity;
 
-  public UpdateRemoteProcessGroupOutputPortInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateRemoteProcessGroupOutputPortInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -74,7 +74,6 @@ public final class UpdateRemoteProcessGroupOutputPortInvoker extends ComponentEn
     target = target.path("output-ports");
     target = target.path(portId);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    remoteProcessGroupPortEntity.setRevision(createRevisionDto());
     final Entity<RemoteProcessGroupPortEntity> entity = Entity.entity(remoteProcessGroupPortEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

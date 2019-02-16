@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.UserEntity;
 public final class CreateUserInvoker extends ComponentEntityInvoker<UserEntity> {
   private UserEntity userEntity;
 
-  public CreateUserInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateUserInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -39,7 +39,6 @@ public final class CreateUserInvoker extends ComponentEntityInvoker<UserEntity> 
     target = target.path("nifi-apitenants");
     target = target.path("users");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    userEntity.setRevision(createRevisionDto());
     final Entity<UserEntity> entity = Entity.entity(userEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

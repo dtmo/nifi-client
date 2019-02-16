@@ -6,13 +6,13 @@ package com.tibtech.nifi.client;
  * 
  * @param <T> The type of component.
  */
-public interface Refreshable<T extends Refreshable<T, B>, B>
+public interface Refreshable<T extends Refreshable<T>>
 {
-	/**
-	 * Refreshes the state of the component.
-	 * 
-	 * @return The component with its internal state updated.
-	 * @throws InvokerException if there is a problem refreshing the component.
-	 */
-	T refresh() throws InvokerException;
+    /**
+     * Refreshes the state of the component.
+     * 
+     * @return The component with its internal state updated.
+     * @throws InvokerException if there is a problem refreshing the component.
+     */
+    T refresh() throws InvokerException;
 }

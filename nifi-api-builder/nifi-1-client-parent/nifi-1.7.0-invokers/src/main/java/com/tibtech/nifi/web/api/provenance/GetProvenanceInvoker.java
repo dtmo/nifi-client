@@ -22,8 +22,8 @@ public final class GetProvenanceInvoker extends AbstractInvoker<ProvenanceEntity
 
   private Boolean incrementalResults;
 
-  public GetProvenanceInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetProvenanceInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

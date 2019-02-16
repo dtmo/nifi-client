@@ -18,8 +18,8 @@ public final class UpdateReportingTaskInvoker extends ComponentEntityInvoker<Rep
 
   private ReportingTaskEntity reportingTaskEntity;
 
-  public UpdateReportingTaskInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateReportingTaskInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -56,7 +56,6 @@ public final class UpdateReportingTaskInvoker extends ComponentEntityInvoker<Rep
     target = target.path("reporting-tasks");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    reportingTaskEntity.setRevision(createRevisionDto());
     final Entity<ReportingTaskEntity> entity = Entity.entity(reportingTaskEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

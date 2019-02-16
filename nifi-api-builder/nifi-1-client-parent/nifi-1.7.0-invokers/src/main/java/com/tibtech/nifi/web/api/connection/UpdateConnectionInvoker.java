@@ -18,8 +18,8 @@ public final class UpdateConnectionInvoker extends ComponentEntityInvoker<Connec
 
   private ConnectionEntity connectionEntity;
 
-  public UpdateConnectionInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateConnectionInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -56,7 +56,6 @@ public final class UpdateConnectionInvoker extends ComponentEntityInvoker<Connec
     target = target.path("connections");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    connectionEntity.setRevision(createRevisionDto());
     final Entity<ConnectionEntity> entity = Entity.entity(connectionEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

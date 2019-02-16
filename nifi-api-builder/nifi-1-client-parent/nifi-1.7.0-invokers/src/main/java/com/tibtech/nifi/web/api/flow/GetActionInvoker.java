@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.ActionEntity;
 public final class GetActionInvoker extends AbstractInvoker<ActionEntity> {
   private Integer id;
 
-  public GetActionInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetActionInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

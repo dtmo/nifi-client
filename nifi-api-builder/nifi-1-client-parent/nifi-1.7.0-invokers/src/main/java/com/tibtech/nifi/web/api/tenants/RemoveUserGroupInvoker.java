@@ -4,6 +4,7 @@ import com.tibtech.nifi.client.ComponentEntityInvoker;
 import com.tibtech.nifi.client.InvokerException;
 import com.tibtech.nifi.client.Transport;
 import java.lang.Boolean;
+import java.lang.Long;
 import java.lang.String;
 import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
@@ -17,10 +18,12 @@ import org.apache.nifi.web.api.entity.UserGroupEntity;
 public final class RemoveUserGroupInvoker extends ComponentEntityInvoker<UserGroupEntity> {
   private String id;
 
+  private Long version;
+
   private Boolean disconnectedNodeAcknowledged;
 
-  public RemoveUserGroupInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public RemoveUserGroupInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -33,6 +36,19 @@ public final class RemoveUserGroupInvoker extends ComponentEntityInvoker<UserGro
    * The user group id. */
   public final RemoveUserGroupInvoker setId(final String id) {
     this.id = id;
+    return this;
+  }
+
+  /**
+   * The revision is used to verify the client is working with the latest version of the flow. */
+  public final Long getVersion() {
+    return version;
+  }
+
+  /**
+   * The revision is used to verify the client is working with the latest version of the flow. */
+  public final RemoveUserGroupInvoker setVersion(final Long version) {
+    this.version = version;
     return this;
   }
 
@@ -56,7 +72,7 @@ public final class RemoveUserGroupInvoker extends ComponentEntityInvoker<UserGro
     target = target.path("nifi-apitenants");
     target = target.path("user-groups");
     target = target.path(id);
-    target = target.queryParam("version", getVersion());
+    target = target.queryParam("version", version);
     target = target.queryParam("clientId", getClientId());
     target = target.queryParam("disconnectedNodeAcknowledged", disconnectedNodeAcknowledged);
     final Invocation.Builder invocationBuilder = target.request("application/json");

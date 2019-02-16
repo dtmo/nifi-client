@@ -28,8 +28,8 @@ public final class GetControllerServiceTypesInvoker extends AbstractInvoker<Cont
 
   private String typeFilter;
 
-  public GetControllerServiceTypesInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetControllerServiceTypesInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

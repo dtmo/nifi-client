@@ -19,8 +19,8 @@ public final class DeleteVersionControlRequestInvoker extends AbstractInvoker<Vo
 
   private Boolean disconnectedNodeAcknowledged;
 
-  public DeleteVersionControlRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public DeleteVersionControlRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

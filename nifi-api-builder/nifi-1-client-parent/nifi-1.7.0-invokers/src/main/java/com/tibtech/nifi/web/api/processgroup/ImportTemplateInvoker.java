@@ -18,8 +18,8 @@ public final class ImportTemplateInvoker extends ComponentEntityInvoker<Template
 
   private TemplateEntity templateEntity;
 
-  public ImportTemplateInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public ImportTemplateInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -53,7 +53,6 @@ public final class ImportTemplateInvoker extends ComponentEntityInvoker<Template
     target = target.path("templates");
     target = target.path("import");
     final Invocation.Builder invocationBuilder = target.request("application/xml");
-    templateEntity.setRevision(createRevisionDto());
     final Entity<TemplateEntity> entity = Entity.entity(templateEntity, "application/xml");
     final Response response = invocationBuilder.method("POST", entity);
     try {

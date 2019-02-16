@@ -20,8 +20,8 @@ public final class SaveToFlowRegistryInvoker extends AbstractInvoker<VersionCont
 
   private StartVersionControlRequestEntity startVersionControlRequestEntity;
 
-  public SaveToFlowRegistryInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public SaveToFlowRegistryInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

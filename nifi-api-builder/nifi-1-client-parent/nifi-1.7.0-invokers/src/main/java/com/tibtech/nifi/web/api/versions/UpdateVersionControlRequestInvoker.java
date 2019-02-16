@@ -20,8 +20,8 @@ public final class UpdateVersionControlRequestInvoker extends AbstractInvoker<Ve
 
   private VersionControlComponentMappingEntity versionControlComponentMappingEntity;
 
-  public UpdateVersionControlRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateVersionControlRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

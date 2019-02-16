@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.PortEntity;
 public final class GetOutputPortInvoker extends ComponentEntityInvoker<PortEntity> {
   private String id;
 
-  public GetOutputPortInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetOutputPortInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

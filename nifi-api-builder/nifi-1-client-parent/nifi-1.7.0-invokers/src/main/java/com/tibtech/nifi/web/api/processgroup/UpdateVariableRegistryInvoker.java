@@ -19,8 +19,8 @@ public final class UpdateVariableRegistryInvoker extends AbstractInvoker<Variabl
 
   private VariableRegistryEntity variableRegistryEntity;
 
-  public UpdateVariableRegistryInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateVariableRegistryInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

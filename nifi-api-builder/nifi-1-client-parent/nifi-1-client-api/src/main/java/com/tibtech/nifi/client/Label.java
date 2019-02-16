@@ -1,32 +1,36 @@
 package com.tibtech.nifi.client;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.function.Consumer;
+
+import org.apache.nifi.web.api.dto.LabelDTO;
+import org.apache.nifi.web.api.entity.LabelEntity;
+
 import com.tibtech.nifi.web.api.dto.LabelDTOBuilder;
 import com.tibtech.nifi.web.api.entity.LabelEntityBuilder;
 import com.tibtech.nifi.web.api.label.GetLabelInvoker;
 import com.tibtech.nifi.web.api.label.RemoveLabelInvoker;
 import com.tibtech.nifi.web.api.label.UpdateLabelInvoker;
-import org.apache.nifi.web.api.dto.LabelDTO;
-import org.apache.nifi.web.api.entity.LabelEntity;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.function.Consumer;
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
 
 /**
  * Label represents a NiFi label to provide documentation to a flow.
  */
-public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilder>
-        implements Deletable, Refreshable<Label, LabelDTOBuilder>
+public class Label extends AbstractComponent<LabelEntity>
+        implements Deletable, Refreshable<Label>, Updatable<Label, LabelDTOBuilder>
 {
     /**
      * Constructs a new instance of Label.
      *
-     * @param transport   The transport with to communicate with the NiFi server.
+     * @param controller  The controller to which the label belongs.
      * @param labelEntity The label entity.
      */
-    public Label(final Transport transport, final LabelEntity labelEntity)
+    public Label(final Controller controller, final LabelEntity labelEntity)
     {
-        super(transport, labelEntity);
+        super(controller, labelEntity);
     }
 
     /**
@@ -90,7 +94,7 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
      * etc).
      *
      * @return The styles for this label (font-size : 12px, background-color : #eee,
-     * etc).
+     *         etc).
      */
     public Map<String, String> getStyles()
     {
@@ -100,27 +104,28 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
     @Override
     public Label update(final Consumer<LabelDTOBuilder> configurator) throws InvokerException
     {
-        final LabelDTOBuilder labelDTOBuilder = new LabelDTOBuilder()
-                .setId(getId());
+        final LabelDTOBuilder labelDTOBuilder = new LabelDTOBuilder().setId(getId());
 
         configurator.accept(labelDTOBuilder);
 
-        setComponentEntity(new UpdateLabelInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setLabelEntity(new LabelEntityBuilder()
-                        .setComponent(labelDTOBuilder.build())
-                        .build())
+        setComponentEntity(new UpdateLabelInvoker(getController().getTransport()).setId(getId()).setLabelEntity(
+                new LabelEntityBuilder().setComponent(labelDTOBuilder.build()).setRevision(getRevisionDTO()).build())
                 .invoke());
 
         return this;
     }
 
     @Override
+    public Label update(
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = LabelDTOBuilder.class) final Closure<LabelDTOBuilder> closure)
+    {
+        return Updatable.super.update(closure);
+    }
+
+    @Override
     public Label refresh() throws InvokerException
     {
-        setComponentEntity(new GetLabelInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke());
+        setComponentEntity(new GetLabelInvoker(getController().getTransport()).setId(getId()).invoke());
 
         return this;
     }
@@ -128,23 +133,7 @@ public class Label extends UpdatableComponent<Label, LabelEntity, LabelDTOBuilde
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveLabelInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
+        new RemoveLabelInvoker(getController().getTransport()).setId(getId()).setVersion(getRevisionDTO().getVersion())
                 .invoke();
-    }
-
-    /**
-     * Gets the label with a specific ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the label to get.
-     * @return The label with the specified ID.
-     * @throws InvokerException if there is a problem getting the label.
-     */
-    public static Label get(final Transport transport, final String id) throws InvokerException
-    {
-        return new Label(transport, new GetLabelInvoker(transport, 0)
-                .setId(id)
-                .invoke());
     }
 }

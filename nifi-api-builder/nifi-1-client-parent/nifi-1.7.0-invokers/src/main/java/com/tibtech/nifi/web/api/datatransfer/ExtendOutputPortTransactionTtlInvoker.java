@@ -21,8 +21,8 @@ public final class ExtendOutputPortTransactionTtlInvoker extends AbstractInvoker
 
   private InputStream inputStream;
 
-  public ExtendOutputPortTransactionTtlInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public ExtendOutputPortTransactionTtlInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final String getPortId() {

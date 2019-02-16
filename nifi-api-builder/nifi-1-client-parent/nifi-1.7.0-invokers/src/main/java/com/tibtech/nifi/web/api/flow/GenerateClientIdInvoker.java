@@ -12,8 +12,8 @@ import javax.ws.rs.core.Response;
  * Generates a client id.
  */
 public final class GenerateClientIdInvoker extends AbstractInvoker<String> {
-  public GenerateClientIdInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GenerateClientIdInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final String invoke() throws InvokerException {

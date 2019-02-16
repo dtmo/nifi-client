@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.ProcessorEntity;
 public final class GetProcessorDiagnosticsInvoker extends ComponentEntityInvoker<ProcessorEntity> {
   private String id;
 
-  public GetProcessorDiagnosticsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetProcessorDiagnosticsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

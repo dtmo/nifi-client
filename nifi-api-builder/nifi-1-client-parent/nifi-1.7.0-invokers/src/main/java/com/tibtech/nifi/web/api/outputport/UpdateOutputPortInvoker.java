@@ -18,8 +18,8 @@ public final class UpdateOutputPortInvoker extends ComponentEntityInvoker<PortEn
 
   private PortEntity portEntity;
 
-  public UpdateOutputPortInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateOutputPortInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -55,7 +55,6 @@ public final class UpdateOutputPortInvoker extends ComponentEntityInvoker<PortEn
     target = target.path("output-ports");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    portEntity.setRevision(createRevisionDto());
     final Entity<PortEntity> entity = Entity.entity(portEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

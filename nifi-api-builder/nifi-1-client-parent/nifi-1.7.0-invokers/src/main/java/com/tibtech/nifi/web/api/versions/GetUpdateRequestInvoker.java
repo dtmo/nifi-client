@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.VersionedFlowUpdateRequestEntity;
 public final class GetUpdateRequestInvoker extends AbstractInvoker<VersionedFlowUpdateRequestEntity> {
   private String id;
 
-  public GetUpdateRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetUpdateRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

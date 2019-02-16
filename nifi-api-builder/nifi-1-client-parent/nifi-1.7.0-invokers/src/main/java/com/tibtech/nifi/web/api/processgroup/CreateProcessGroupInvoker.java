@@ -18,8 +18,8 @@ public final class CreateProcessGroupInvoker extends ComponentEntityInvoker<Proc
 
   private ProcessGroupEntity processGroupEntity;
 
-  public CreateProcessGroupInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateProcessGroupInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -57,7 +57,6 @@ public final class CreateProcessGroupInvoker extends ComponentEntityInvoker<Proc
     target = target.path(id);
     target = target.path("process-groups");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    processGroupEntity.setRevision(createRevisionDto());
     final Entity<ProcessGroupEntity> entity = Entity.entity(processGroupEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

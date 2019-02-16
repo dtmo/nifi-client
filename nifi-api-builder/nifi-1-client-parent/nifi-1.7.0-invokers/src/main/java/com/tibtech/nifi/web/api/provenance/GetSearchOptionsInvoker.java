@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ProvenanceOptionsEntity;
  * Gets the searchable attributes for provenance events
  */
 public final class GetSearchOptionsInvoker extends AbstractInvoker<ProvenanceOptionsEntity> {
-  public GetSearchOptionsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetSearchOptionsInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ProvenanceOptionsEntity invoke() throws InvokerException {

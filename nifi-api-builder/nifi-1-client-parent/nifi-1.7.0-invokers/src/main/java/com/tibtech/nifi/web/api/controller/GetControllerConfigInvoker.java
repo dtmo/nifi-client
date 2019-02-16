@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerConfigurationEntity;
  * Retrieves the configuration for this NiFi Controller
  */
 public final class GetControllerConfigInvoker extends AbstractInvoker<ControllerConfigurationEntity> {
-  public GetControllerConfigInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetControllerConfigInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ControllerConfigurationEntity invoke() throws InvokerException {

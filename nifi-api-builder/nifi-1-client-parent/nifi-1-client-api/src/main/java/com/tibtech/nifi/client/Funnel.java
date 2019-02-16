@@ -16,19 +16,18 @@ import java.util.function.Consumer;
  * Funnel represents a NiFi funnel used to combine the data from several
  * connections into a single connection.
  */
-public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBuilder>
-        implements Connectable, Deletable, Refreshable<Funnel, FunnelDTOBuilder>
+public class Funnel extends AbstractComponent<FunnelEntity>
+        implements Connectable, Deletable, Refreshable<Funnel>, Updatable<Funnel, FunnelDTOBuilder>
 {
     /**
      * Constructs a new instance of Funnel.
      *
-     * @param transport    The transport with which to communicate with the NiFi
-     *                     server.
+     * @param controller   The controller to which the funnel belongs.
      * @param funnelEntity The funnel entity.
      */
-    public Funnel(final Transport transport, final FunnelEntity funnelEntity)
+    public Funnel(final Controller controller, final FunnelEntity funnelEntity)
     {
-        super(transport, funnelEntity);
+        super(controller, funnelEntity);
     }
 
     /**
@@ -62,35 +61,29 @@ public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBu
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveFunnelInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
+        new RemoveFunnelInvoker(getController().getTransport()).setId(getId()).setVersion(getRevisionDTO().getVersion())
                 .invoke();
     }
 
     @Override
     public Funnel refresh() throws InvokerException
     {
-        setComponentEntity(new GetFunnelInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke());
+        setComponentEntity(new GetFunnelInvoker(getController().getTransport()).setId(getId()).invoke());
         return this;
     }
 
     @Override
     public Funnel update(final Consumer<FunnelDTOBuilder> configurator) throws InvokerException
     {
-        final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder()
-                .setId(getId());
+        final FunnelDTOBuilder funnelDTOBuilder = new FunnelDTOBuilder().setId(getId());
 
         configurator.accept(funnelDTOBuilder);
 
-        setComponentEntity(new UpdateFunnelInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setFunnelEntity(new FunnelEntityBuilder()
-                        .setId(getId())
-                        .setComponent(funnelDTOBuilder.build())
-                        .build())
-                .invoke());
+        setComponentEntity(
+                new UpdateFunnelInvoker(getController().getTransport())
+                        .setId(getId()).setFunnelEntity(new FunnelEntityBuilder().setId(getId())
+                                .setComponent(funnelDTOBuilder.build()).setRevision(getRevisionDTO()).build())
+                        .invoke());
         return this;
     }
 
@@ -99,21 +92,6 @@ public class Funnel extends UpdatableComponent<Funnel, FunnelEntity, FunnelDTOBu
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FunnelDTOBuilder.class) final Closure<FunnelDTOBuilder> closure)
             throws InvokerException
     {
-        return super.update(closure);
-    }
-
-    /**
-     * Gets the funnel with a specific ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the funnel to get.
-     * @return The funnel with the specified ID.
-     * @throws InvokerException if there is a problem getting the funnel.
-     */
-    public static Funnel get(final Transport transport, final String id) throws InvokerException
-    {
-        return new Funnel(transport, new GetFunnelInvoker(transport, 0)
-                .setId(id)
-                .invoke());
+        return Updatable.super.update(closure);
     }
 }

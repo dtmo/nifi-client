@@ -19,8 +19,8 @@ public final class DownloadFlowFileContentInvoker extends AbstractInvoker<Stream
 
   private String clusterNodeId;
 
-  public DownloadFlowFileContentInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public DownloadFlowFileContentInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

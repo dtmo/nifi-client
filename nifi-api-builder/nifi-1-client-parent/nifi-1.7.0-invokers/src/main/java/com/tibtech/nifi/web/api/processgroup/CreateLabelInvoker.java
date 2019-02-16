@@ -18,8 +18,8 @@ public final class CreateLabelInvoker extends ComponentEntityInvoker<LabelEntity
 
   private LabelEntity labelEntity;
 
-  public CreateLabelInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateLabelInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -56,7 +56,6 @@ public final class CreateLabelInvoker extends ComponentEntityInvoker<LabelEntity
     target = target.path(id);
     target = target.path("labels");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    labelEntity.setRevision(createRevisionDto());
     final Entity<LabelEntity> entity = Entity.entity(labelEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

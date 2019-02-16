@@ -24,8 +24,8 @@ public final class CommitInputPortTransactionInvoker extends AbstractInvoker<Tra
 
   private InputStream inputStream;
 
-  public CommitInputPortTransactionInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CommitInputPortTransactionInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -1,9 +1,9 @@
 package com.tibtech.nifi.client;
 
-import com.tibtech.nifi.web.api.dto.RemoteProcessGroupPortDTOBuilder;
-import org.apache.nifi.web.Revision;
 import org.apache.nifi.web.api.dto.RemoteProcessGroupPortDTO;
 import org.apache.nifi.web.api.dto.RevisionDTO;
+
+import com.tibtech.nifi.web.api.dto.RemoteProcessGroupPortDTOBuilder;
 
 /**
  * RemotePort represents a port that has been exposed by a remote NiFi instance.
@@ -13,9 +13,12 @@ import org.apache.nifi.web.api.dto.RevisionDTO;
 public abstract class RemotePort<T extends RemotePort<T>>
         implements Connectable, Updatable<T, RemoteProcessGroupPortDTOBuilder>
 {
-    // RemotePort does not extend AbstractComponent as it is a component from a remote NiFi instance.
-    // The DTOs are available from an instance of RemoteProcessGroup, but we have no entity with which to construct it.
-    // Also, it does not follow the same rules for updates, etc. as it is outside of the control of the local NiFi
+    // RemotePort does not extend AbstractComponent as it is a component from a
+    // remote NiFi instance.
+    // The DTOs are available from an instance of RemoteProcessGroup, but we have no
+    // entity with which to construct it.
+    // Also, it does not follow the same rules for updates, etc. as it is outside of
+    // the control of the local NiFi
     // instance.
     private final RemoteProcessGroup remoteProcessGroup;
 
@@ -24,20 +27,22 @@ public abstract class RemotePort<T extends RemotePort<T>>
     /**
      * Constructs a new instance of RemotePort.
      *
-     * @param remoteProcessGroup        The remote process group to which this remote port belongs.
-     * @param remoteProcessGroupPortDto The DTO that describes the remote process group.
+     * @param remoteProcessGroup        The remote process group to which this
+     *                                  remote port belongs.
+     * @param remoteProcessGroupPortDto The DTO that describes the remote process
+     *                                  group.
      */
     public RemotePort(final RemoteProcessGroup remoteProcessGroup,
-                      final RemoteProcessGroupPortDTO remoteProcessGroupPortDto)
+            final RemoteProcessGroupPortDTO remoteProcessGroupPortDto)
     {
         this.remoteProcessGroup = remoteProcessGroup;
         this.remoteProcessGroupPortDto = remoteProcessGroupPortDto;
     }
 
     @Override
-    public Transport getTransport()
+    public Controller getController()
     {
-        return remoteProcessGroup.getTransport();
+        return remoteProcessGroup.getController();
     }
 
     @Override
@@ -93,9 +98,11 @@ public abstract class RemotePort<T extends RemotePort<T>>
     }
 
     /**
-     * Returns the number tasks that may transmit flow files to the target port concurrently.
+     * Returns the number tasks that may transmit flow files to the target port
+     * concurrently.
      *
-     * @return The number tasks that may transmit flow files to the target port concurrently.
+     * @return The number tasks that may transmit flow files to the target port
+     *         concurrently.
      */
     public int getConcurrentlySchedulableTaskCount()
     {
@@ -129,9 +136,11 @@ public abstract class RemotePort<T extends RemotePort<T>>
     }
 
     /**
-     * Returns whether or not flow file are compressed when sent to this target port.
+     * Returns whether or not flow file are compressed when sent to this target
+     * port.
      *
-     * @return Whether or not flow file are compressed when sent to this target port.
+     * @return Whether or not flow file are compressed when sent to this target
+     *         port.
      */
     public boolean getUseCompression()
     {
@@ -141,9 +150,11 @@ public abstract class RemotePort<T extends RemotePort<T>>
     /**
      * Sets whether or not the remote port is transmitting.
      *
-     * @param transmitting {@code true} if the port should be transmitting and {@code false} if not.
+     * @param transmitting {@code true} if the port should be transmitting and
+     *                     {@code false} if not.
      * @return This remote port.
-     * @throws InvokerException if there is a problem setting whether or not the port is transmitting.
+     * @throws InvokerException if there is a problem setting whether or not the
+     *                          port is transmitting.
      */
     public T setTransmitting(final boolean transmitting) throws InvokerException
     {

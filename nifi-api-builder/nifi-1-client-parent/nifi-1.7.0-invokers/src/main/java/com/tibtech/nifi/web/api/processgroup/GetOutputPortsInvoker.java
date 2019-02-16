@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.OutputPortsEntity;
 public final class GetOutputPortsInvoker extends AbstractInvoker<OutputPortsEntity> {
   private String id;
 
-  public GetOutputPortsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetOutputPortsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

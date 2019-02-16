@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.BannerEntity;
  * Retrieves the banners for this NiFi
  */
 public final class GetBannersInvoker extends AbstractInvoker<BannerEntity> {
-  public GetBannersInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetBannersInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final BannerEntity invoke() throws InvokerException {

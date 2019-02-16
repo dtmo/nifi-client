@@ -25,19 +25,20 @@ import java.util.stream.Collectors;
 /**
  * RemoteProcessGroup represents a remote process group in a NiFi flow.
  */
-public class RemoteProcessGroup
-        extends UpdatableComponent<RemoteProcessGroup, RemoteProcessGroupEntity, RemoteProcessGroupDTOBuilder>
-        implements Deletable, Refreshable<RemoteProcessGroup, RemoteProcessGroupDTOBuilder>
+public class RemoteProcessGroup extends AbstractComponent<RemoteProcessGroupEntity> implements Deletable,
+        Refreshable<RemoteProcessGroup>, Updatable<RemoteProcessGroup, RemoteProcessGroupDTOBuilder>
 {
     /**
      * Constructs a new instance of RemoteProcessGroup.
      *
-     * @param transport                The transport with which to communicate with the NiFi server.
-     * @param remoteProcessGroupEntity The entity that represents the remote process group.
+     * @param controller               The controller to which the remote process
+     *                                 group belongs.
+     * @param remoteProcessGroupEntity The entity that represents the remote process
+     *                                 group.
      */
-    public RemoteProcessGroup(final Transport transport, final RemoteProcessGroupEntity remoteProcessGroupEntity)
+    public RemoteProcessGroup(final Controller controller, final RemoteProcessGroupEntity remoteProcessGroupEntity)
     {
-        super(transport, remoteProcessGroupEntity);
+        super(controller, remoteProcessGroupEntity);
     }
 
     /**
@@ -57,9 +58,11 @@ public class RemoteProcessGroup
     }
 
     /**
-     * Returns the number of Remote Input Ports currently available in the remote NiFi instance.
+     * Returns the number of Remote Input Ports currently available in the remote
+     * NiFi instance.
      *
-     * @return The number of Remote Input Ports currently available in the remote NiFi instance.
+     * @return The number of Remote Input Ports currently available in the remote
+     *         NiFi instance.
      */
     public int getInputPortCount()
     {
@@ -67,9 +70,11 @@ public class RemoteProcessGroup
     }
 
     /**
-     * Returns the number of Remote Output Ports currently available in the remote NiFi instance.
+     * Returns the number of Remote Output Ports currently available in the remote
+     * NiFi instance.
      *
-     * @return The number of Remote Output Ports currently available in the remote NiFi instance.
+     * @return The number of Remote Output Ports currently available in the remote
+     *         NiFi instance.
      */
     public int getOutputPortCount()
     {
@@ -137,9 +142,11 @@ public class RemoteProcessGroup
     }
 
     /**
-     * Returns the time period used for the timeout when communicating with this remote process group.
+     * Returns the time period used for the timeout when communicating with this
+     * remote process group.
      *
-     * @return The time period used for the timeout when communicating with this remote process group.
+     * @return The time period used for the timeout when communicating with this
+     *         remote process group.
      */
     public String getCommunicationsTimeout()
     {
@@ -222,8 +229,9 @@ public class RemoteProcessGroup
     }
 
     /**
-     * Returns the target URI of this remote process group. If target URI is not set, but URIs are set, then returns the
-     * first URI in the URIs. If neither target URI nor URIs are set, then returns null.
+     * Returns the target URI of this remote process group. If target URI is not
+     * set, but URIs are set, then returns the first URI in the URIs. If neither
+     * target URI nor URIs are set, then returns null.
      *
      * @return the target URI of this remote process group.
      */
@@ -233,8 +241,9 @@ public class RemoteProcessGroup
     }
 
     /**
-     * Returns the target URIs of this remote process group. If target URIs was not set but target URI was set, then
-     * returns a collection containing the single URI. If neither target URIs nor URI were set, then returns null.
+     * Returns the target URIs of this remote process group. If target URIs was not
+     * set but target URI was set, then returns a collection containing the single
+     * URI. If neither target URIs nor URI were set, then returns null.
      *
      * @return the target URIs of this remote process group.
      */
@@ -259,9 +268,11 @@ public class RemoteProcessGroup
     }
 
     /**
-     * Returns the amount of time that must elapse, when yielding, before this remote process group is scheduled again.
+     * Returns the amount of time that must elapse, when yielding, before this
+     * remote process group is scheduled again.
      *
-     * @return The amount of time that must elapse, when yielding, before this remote process group is scheduled again.
+     * @return The amount of time that must elapse, when yielding, before this
+     *         remote process group is scheduled again.
      */
     public String getYieldDuration()
     {
@@ -315,7 +326,8 @@ public class RemoteProcessGroup
      *
      * @param transmitting The transmitting state to set.
      * @return This remote process group.
-     * @throws InvokerException if there is a problem setting the transmitting state.
+     * @throws InvokerException if there is a problem setting the transmitting
+     *                          state.
      */
     public RemoteProcessGroup setTransmitting(final boolean transmitting) throws InvokerException
     {
@@ -329,21 +341,22 @@ public class RemoteProcessGroup
         final Set<RemoteProcessGroupPortDTO> remoteInputPortDTOs = contents.getInputPorts();
         if (remoteInputPortDTOs != null)
         {
-            remoteProcessGroupContentsDTOBuilder.setInputPorts(remoteInputPortDTOs.stream()
-                    .map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder.of(remoteInputPortDTO)
-                            .setTransmitting(transmitting)
-                            .build())
-                    .collect(Collectors.toSet()));
+            remoteProcessGroupContentsDTOBuilder
+                    .setInputPorts(
+                            remoteInputPortDTOs
+                                    .stream().map(remoteInputPortDTO -> RemoteProcessGroupPortDTOBuilder
+                                            .of(remoteInputPortDTO).setTransmitting(transmitting).build())
+                                    .collect(Collectors.toSet()));
         }
 
         final Set<RemoteProcessGroupPortDTO> remoteOutputPortDTOs = contents.getOutputPorts();
         if (remoteInputPortDTOs != null)
         {
-            remoteProcessGroupContentsDTOBuilder.setOutputPorts(remoteOutputPortDTOs.stream()
-                    .map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder.of(remoteOutputPortDTO)
-                            .setTransmitting(transmitting)
-                            .build())
-                    .collect(Collectors.toSet()));
+            remoteProcessGroupContentsDTOBuilder
+                    .setOutputPorts(remoteOutputPortDTOs
+                            .stream().map(remoteOutputPortDTO -> RemoteProcessGroupPortDTOBuilder
+                                    .of(remoteOutputPortDTO).setTransmitting(transmitting).build())
+                            .collect(Collectors.toSet()));
         }
 
         return update(configurator -> configurator.setContents(remoteProcessGroupContentsDTOBuilder.build()));
@@ -352,9 +365,7 @@ public class RemoteProcessGroup
     @Override
     public RemoteProcessGroup refresh() throws InvokerException
     {
-        setComponentEntity(new GetRemoteProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke());
+        setComponentEntity(new GetRemoteProcessGroupInvoker(getController().getTransport()).setId(getId()).invoke());
 
         return this;
     }
@@ -367,8 +378,7 @@ public class RemoteProcessGroup
     public Set<RemoteInputPort> getRemoteInputPorts()
     {
         return Collections.unmodifiableSet(getRemoteProcessGroupDTO().getContents().getInputPorts().stream()
-                .map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO))
-                .collect(Collectors.toSet()));
+                .map(inputPortDTO -> new RemoteInputPort(this, inputPortDTO)).collect(Collectors.toSet()));
     }
 
     /**
@@ -379,8 +389,7 @@ public class RemoteProcessGroup
     public Set<RemoteOutputPort> getRemoteOutputPorts()
     {
         return Collections.unmodifiableSet(getRemoteProcessGroupDTO().getContents().getOutputPorts().stream()
-                .map(outputPortDTO -> new RemoteOutputPort(this, outputPortDTO))
-                .collect(Collectors.toSet()));
+                .map(outputPortDTO -> new RemoteOutputPort(this, outputPortDTO)).collect(Collectors.toSet()));
     }
 
     @Override
@@ -391,11 +400,9 @@ public class RemoteProcessGroup
 
         configurator.accept(remoteProcessGroupDTOBuilder);
 
-        setComponentEntity(new UpdateRemoteProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
+        setComponentEntity(new UpdateRemoteProcessGroupInvoker(getController().getTransport()).setId(getId())
                 .setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
-                        .setComponent(remoteProcessGroupDTOBuilder.build())
-                        .build())
+                        .setComponent(remoteProcessGroupDTOBuilder.build()).setRevision(getRevisionDTO()).build())
                 .invoke());
 
         return this;
@@ -406,29 +413,13 @@ public class RemoteProcessGroup
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = RemoteProcessGroupDTOBuilder.class) final Closure<RemoteProcessGroupDTOBuilder> closure)
             throws InvokerException
     {
-        return super.update(closure);
+        return Updatable.super.update(closure);
     }
 
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveRemoteProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke();
-    }
-
-    /**
-     * Gets the remote process group with a specific ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the remote process group to get.
-     * @return The remote process group with the specified ID.
-     * @throws InvokerException if there is a problem getting the remote process group.
-     */
-    public static RemoteProcessGroup get(final Transport transport, final String id) throws InvokerException
-    {
-        return new RemoteProcessGroup(transport, new GetRemoteProcessGroupInvoker(transport, 0)
-                .setId(id)
-                .invoke());
+        new RemoveRemoteProcessGroupInvoker(getController().getTransport()).setId(getId())
+                .setVersion(getRevisionDTO().getVersion()).invoke();
     }
 }

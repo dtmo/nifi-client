@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.FlowConfigurationEntity;
  * Retrieves the configuration for this NiFi flow
  */
 public final class GetFlowConfigInvoker extends AbstractInvoker<FlowConfigurationEntity> {
-  public GetFlowConfigInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetFlowConfigInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final FlowConfigurationEntity invoke() throws InvokerException {

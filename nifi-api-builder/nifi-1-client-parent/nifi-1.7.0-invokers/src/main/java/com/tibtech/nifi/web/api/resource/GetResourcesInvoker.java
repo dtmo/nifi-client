@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ResourcesEntity;
  * Gets the available resources that support access/authorization policies
  */
 public final class GetResourcesInvoker extends AbstractInvoker<ResourcesEntity> {
-  public GetResourcesInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetResourcesInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ResourcesEntity invoke() throws InvokerException {

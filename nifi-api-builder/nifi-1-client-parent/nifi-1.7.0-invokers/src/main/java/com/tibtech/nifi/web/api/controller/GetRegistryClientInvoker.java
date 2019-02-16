@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.RegistryClientEntity;
 public final class GetRegistryClientInvoker extends ComponentEntityInvoker<RegistryClientEntity> {
   private String id;
 
-  public GetRegistryClientInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetRegistryClientInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

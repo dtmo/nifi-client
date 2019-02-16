@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.LabelEntity;
 public final class GetLabelInvoker extends ComponentEntityInvoker<LabelEntity> {
   private String id;
 
-  public GetLabelInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetLabelInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -9,7 +9,6 @@ import org.apache.nifi.web.api.entity.SnippetEntity;
 import java.util.*;
 import java.util.stream.Collectors;
 
-
 /**
  * Snippet represents a collection of components from a process group.
  */
@@ -79,8 +78,7 @@ public class Snippet
     public Set<Connection> getConnections()
     {
         return getSnippetDTO().getConnections().keySet().stream()
-                .map(id -> Connection.get(processGroup.getTransport(), id))
-                .collect(Collectors.toSet());
+                .map(id -> processGroup.getController().getConnection(id)).collect(Collectors.toSet());
     }
 
     /**
@@ -90,8 +88,7 @@ public class Snippet
      */
     public Set<Funnel> getFunnels()
     {
-        return getSnippetDTO().getFunnels().keySet().stream()
-                .map(id -> Funnel.get(processGroup.getTransport(), id))
+        return getSnippetDTO().getFunnels().keySet().stream().map(id -> processGroup.getController().getFunnel(id))
                 .collect(Collectors.toSet());
     }
 
@@ -103,8 +100,7 @@ public class Snippet
     public Set<InputPort> getInputPorts()
     {
         return getSnippetDTO().getInputPorts().keySet().stream()
-                .map(id -> InputPort.get(processGroup.getTransport(), id))
-                .collect(Collectors.toSet());
+                .map(id -> processGroup.getController().getInputPort(id)).collect(Collectors.toSet());
     }
 
     /**
@@ -114,8 +110,7 @@ public class Snippet
      */
     public Set<Label> getLabels()
     {
-        return getSnippetDTO().getLabels().keySet().stream()
-                .map(id -> Label.get(processGroup.getTransport(), id))
+        return getSnippetDTO().getLabels().keySet().stream().map(id -> processGroup.getController().getLabel(id))
                 .collect(Collectors.toSet());
     }
 
@@ -127,8 +122,7 @@ public class Snippet
     public Set<OutputPort> getOutputPorts()
     {
         return getSnippetDTO().getOutputPorts().keySet().stream()
-                .map(id -> OutputPort.get(processGroup.getTransport(), id))
-                .collect(Collectors.toSet());
+                .map(id -> processGroup.getController().getOutputPort(id)).collect(Collectors.toSet());
     }
 
     /**
@@ -139,8 +133,7 @@ public class Snippet
     public Set<ProcessGroup> getProcessGroups()
     {
         return getSnippetDTO().getProcessGroups().keySet().stream()
-                .map(id -> ProcessGroup.get(processGroup.getTransport(), id))
-                .collect(Collectors.toSet());
+                .map(id -> processGroup.getController().getProcessGroup(id)).collect(Collectors.toSet());
     }
 
     /**
@@ -151,8 +144,7 @@ public class Snippet
     public Set<Processor> getProcessors()
     {
         return getSnippetDTO().getProcessors().keySet().stream()
-                .map(id -> Processor.get(processGroup.getTransport(), id))
-                .collect(Collectors.toSet());
+                .map(id -> processGroup.getController().getProcessor(id)).collect(Collectors.toSet());
     }
 
     /**
@@ -163,8 +155,7 @@ public class Snippet
     public Set<RemoteProcessGroup> getRemoteProcessGroups()
     {
         return getSnippetDTO().getRemoteProcessGroups().keySet().stream()
-                .map(id -> RemoteProcessGroup.get(processGroup.getTransport(), id))
-                .collect(Collectors.toSet());
+                .map(id -> processGroup.getController().getRemoteProcessGroup(id)).collect(Collectors.toSet());
     }
 
     /**
@@ -177,14 +168,11 @@ public class Snippet
      */
     public Template createTemplate(final String name, final String description) throws InvokerException
     {
-        return new Template(processGroup.getTransport(), new CreateTemplateInvoker(processGroup.getTransport(), 0)
-                .setId(processGroup.getId())
-                .setCreateTemplateRequestEntity(new CreateTemplateRequestEntityBuilder()
-                        .setName(name)
-                        .setSnippetId(getId())
-                        .setDescription(description)
-                        .build())
-                .invoke());
+        return new Template(processGroup.getController(),
+                new CreateTemplateInvoker(processGroup.getController().getTransport()).setId(processGroup.getId())
+                        .setCreateTemplateRequestEntity(new CreateTemplateRequestEntityBuilder().setName(name)
+                                .setSnippetId(getId()).setDescription(description).build())
+                        .invoke());
     }
 
     /**
@@ -200,8 +188,8 @@ public class Snippet
     }
 
     /**
-     * SnippetDTOBuilder provides a convenient API with which to construct instances of {@link SnippetDTO} from
-     * instances of client API components.
+     * SnippetDTOBuilder provides a convenient API with which to construct instances
+     * of {@link SnippetDTO} from instances of client API components.
      */
     public static class SnippetDTOBuilder
     {
@@ -600,14 +588,12 @@ public class Snippet
             }
             snippetDTO.setProcessors(processors);
 
-
             final Map<String, RevisionDTO> inputPorts = new HashMap<>();
             for (final InputPort inputPort : this.inputPorts)
             {
                 inputPorts.put(inputPort.getId(), inputPort.getRevisionDTO());
             }
             snippetDTO.setInputPorts(inputPorts);
-
 
             final Map<String, RevisionDTO> outputPorts = new HashMap<>();
             for (final OutputPort outputPort : this.outputPorts)
@@ -616,7 +602,6 @@ public class Snippet
             }
             snippetDTO.setOutputPorts(outputPorts);
 
-
             final Map<String, RevisionDTO> connections = new HashMap<>();
             for (final Connection connection : this.connections)
             {
@@ -624,14 +609,12 @@ public class Snippet
             }
             snippetDTO.setConnections(connections);
 
-
             final Map<String, RevisionDTO> labels = new HashMap<>();
             for (final Label label : this.labels)
             {
                 labels.put(label.getId(), label.getRevisionDTO());
             }
             snippetDTO.setLabels(labels);
-
 
             final Map<String, RevisionDTO> funnels = new HashMap<>();
             for (final Funnel funnel : this.funnels)

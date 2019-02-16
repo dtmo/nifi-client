@@ -11,12 +11,9 @@ public abstract class AbstractInvoker<T>
 {
 	private final Transport transport;
 
-	private final long version;
-
-	public AbstractInvoker(final Transport transport, final long version)
+	public AbstractInvoker(final Transport transport)
 	{
 		this.transport = transport;
-		this.version = version;
 	}
 
 	public WebTarget getBaseWebTarget()
@@ -32,19 +29,6 @@ public abstract class AbstractInvoker<T>
 	protected void registerClientId(String clientId)
 	{
 		transport.registerClientId(clientId);
-	}
-
-	public Long getVersion()
-	{
-		return version;
-	}
-
-	protected RevisionDTO createRevisionDto()
-	{
-		final RevisionDTO revision = new RevisionDTO();
-		revision.setClientId(getClientId());
-		revision.setVersion(getVersion());
-		return revision;
 	}
 
 	public abstract T invoke() throws InvokerException;

@@ -17,13 +17,13 @@ import java.util.*;
 import java.util.function.Consumer;
 
 /**
- * Controller service represents a NiFi flow controller service which is an extension point that, after being added and
- * configured by a DFM in the User Interface, will start up when NiFi starts up and provide information for use by other
- * components (such as processors or other controller services).
+ * Controller service represents a NiFi flow controller service which is an
+ * extension point that, after being added and configured by a DFM in the User
+ * Interface, will start up when NiFi starts up and provide information for use
+ * by other components (such as processors or other controller services).
  */
-public class ControllerService
-        extends UpdatableComponent<ControllerService, ControllerServiceEntity, ControllerServiceDTOBuilder>
-        implements Deletable, Refreshable<ControllerService, ControllerServiceDTOBuilder>
+public class ControllerService extends AbstractComponent<ControllerServiceEntity>
+        implements Refreshable<ControllerService>, Updatable<ControllerService, ControllerServiceDTOBuilder>, Deletable
 {
     /**
      * Controller Service is disabled and cannot be used.
@@ -31,32 +31,34 @@ public class ControllerService
     public static final String STATE_DISABLED = "DISABLED";
 
     /**
-     * Controller Service has been disabled but has not yet finished its
-     * lifecycle methods.
+     * Controller Service has been disabled but has not yet finished its lifecycle
+     * methods.
      */
     public static final String STATE_DISABLING = "DISABLING";
 
     /**
-     * Controller Service has been enabled but has not yet finished its
-     * lifecycle methods.
+     * Controller Service has been enabled but has not yet finished its lifecycle
+     * methods.
      */
     public static final String STATE_ENABLING = "ENABLING";
 
     /**
-     * Controller Service has been enabled and has finished its lifecycle
-     * methods. The Controller Service is ready to be used.
+     * Controller Service has been enabled and has finished its lifecycle methods.
+     * The Controller Service is ready to be used.
      */
     public static final String STATE_ENABLED = "ENABLED";
 
     /**
      * Constructs a new instance of ControllerService.
      *
-     * @param transport               The transport with which to communicate with the NiFi server.
-     * @param controllerServiceEntity The entity that represents the controller service.
+     * @param controller              The controller to which the controller service
+     *                                belongs.
+     * @param controllerServiceEntity The entity that represents the controller
+     *                                service.
      */
-    public ControllerService(final Transport transport, final ControllerServiceEntity controllerServiceEntity)
+    public ControllerService(final Controller controller, final ControllerServiceEntity controllerServiceEntity)
     {
-        super(transport, controllerServiceEntity);
+        super(controller, controllerServiceEntity);
     }
 
     /**
@@ -126,7 +128,8 @@ public class ControllerService
     }
 
     /**
-     * Returns the state of this controller service. Possible values are ENABLED, ENABLING, DISABLED, DISABLING.
+     * Returns the state of this controller service. Possible values are ENABLED,
+     * ENABLING, DISABLED, DISABLING.
      *
      * @return The state of this controller service.
      */
@@ -156,9 +159,11 @@ public class ControllerService
     }
 
     /**
-     * Returns the URL for this controller services custom configuration UI if applicable. Null otherwise.
+     * Returns the URL for this controller services custom configuration UI if
+     * applicable. Null otherwise.
      *
-     * @return The URL for this controller services custom configuration UI if applicable.
+     * @return The URL for this controller services custom configuration UI if
+     *         applicable.
      */
     public String getCustomUiUrl()
     {
@@ -186,22 +191,23 @@ public class ControllerService
         final Set<Processor> processors = new HashSet<>();
         final Set<ReportingTask> reportingTasks = new HashSet<>();
 
-        for (final ControllerServiceReferencingComponentEntity entity : getControllerServiceDTO().getReferencingComponents())
+        for (final ControllerServiceReferencingComponentEntity entity : getControllerServiceDTO()
+                .getReferencingComponents())
         {
             final ControllerServiceReferencingComponentDTO component = entity.getComponent();
             final String referenceType = component.getReferenceType();
             switch (referenceType)
             {
                 case "ControllerService":
-                    controllerServices.add(ControllerService.get(getTransport(), component.getId()));
+                    controllerServices.add(getController().getControllerService(component.getId()));
                     break;
 
                 case "Processor":
-                    processors.add(Processor.get(getTransport(), component.getId()));
+                    processors.add(getController().getProcessor(component.getId()));
                     break;
 
                 case "ReportingTask":
-                    reportingTasks.add(ReportingTask.get(getTransport(), component.getId()));
+                    reportingTasks.add(getController().getReportingTask(component.getId()));
                     break;
 
                 default:
@@ -213,8 +219,9 @@ public class ControllerService
     }
 
     /**
-     * Returns the validation errors from this controller service. These validation errors represent the problems with
-     * the controller service that must be resolved before it can be enabled.
+     * Returns the validation errors from this controller service. These validation
+     * errors represent the problems with the controller service that must be
+     * resolved before it can be enabled.
      *
      * @return The validation errors from this controller service.
      */
@@ -226,9 +233,7 @@ public class ControllerService
     @Override
     public ControllerService refresh() throws InvokerException
     {
-        setComponentEntity(new GetControllerServiceInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke());
+        setComponentEntity(new GetControllerServiceInvoker(getController().getTransport()).setId(getId()).invoke());
 
         return this;
     }
@@ -241,12 +246,9 @@ public class ControllerService
 
         configurator.accept(controllerServiceDTOBuilder);
 
-        setComponentEntity(new UpdateControllerServiceInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setControllerServiceEntity(new ControllerServiceEntityBuilder()
-                        .setId(getId())
-                        .setComponent(controllerServiceDTOBuilder.build())
-                        .build())
+        setComponentEntity(new UpdateControllerServiceInvoker(getController().getTransport()).setId(getId())
+                .setControllerServiceEntity(new ControllerServiceEntityBuilder().setId(getId())
+                        .setComponent(controllerServiceDTOBuilder.build()).setRevision(getRevisionDTO()).build())
                 .invoke());
 
         return this;
@@ -257,15 +259,14 @@ public class ControllerService
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
             throws InvokerException
     {
-        return super.update(closure);
+        return Updatable.super.update(closure);
     }
 
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveControllerServiceInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke();
+        new RemoveControllerServiceInvoker(getController().getTransport()).setId(getId())
+                .setVersion(getRevisionDTO().getVersion()).invoke();
     }
 
     /**
@@ -292,7 +293,8 @@ public class ControllerService
      * Sets the enabled state of the controller service.
      *
      * @param enabled The enabled state to set.
-     * @throws InvokerException if the enabled state of the controller service could not be changed.
+     * @throws InvokerException if the enabled state of the controller service could
+     *                          not be changed.
      */
     public ControllerService setEnabled(final boolean enabled) throws InvokerException
     {
@@ -300,20 +302,4 @@ public class ControllerService
 
         return update(c -> c.setState(controllerServiceState));
     }
-
-    /**
-     * Returns the controller service with a specific ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the controller service to return.
-     * @return The controller service with the specified ID.
-     * @throws InvokerException if there is a problem getting the controller service.
-     */
-    public static ControllerService get(final Transport transport, final String id) throws InvokerException
-    {
-        return new ControllerService(transport, new GetControllerServiceInvoker(transport, 0)
-                .setId(id)
-                .invoke());
-    }
-
 }

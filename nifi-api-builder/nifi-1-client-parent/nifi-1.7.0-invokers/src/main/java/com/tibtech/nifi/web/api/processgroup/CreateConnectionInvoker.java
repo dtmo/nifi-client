@@ -18,8 +18,8 @@ public final class CreateConnectionInvoker extends ComponentEntityInvoker<Connec
 
   private ConnectionEntity connectionEntity;
 
-  public CreateConnectionInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateConnectionInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -57,7 +57,6 @@ public final class CreateConnectionInvoker extends ComponentEntityInvoker<Connec
     target = target.path(id);
     target = target.path("connections");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    connectionEntity.setRevision(createRevisionDto());
     final Entity<ConnectionEntity> entity = Entity.entity(connectionEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

@@ -19,8 +19,8 @@ public final class UpdateUserInvoker extends ComponentEntityInvoker<UserEntity> 
 
   private UserEntity userEntity;
 
-  public UpdateUserInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateUserInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -56,7 +56,6 @@ public final class UpdateUserInvoker extends ComponentEntityInvoker<UserEntity> 
     target = target.path("users");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    userEntity.setRevision(createRevisionDto());
     final Entity<UserEntity> entity = Entity.entity(userEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

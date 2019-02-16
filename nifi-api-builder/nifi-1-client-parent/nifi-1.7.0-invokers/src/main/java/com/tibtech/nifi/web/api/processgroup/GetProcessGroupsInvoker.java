@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.ProcessGroupsEntity;
 public final class GetProcessGroupsInvoker extends AbstractInvoker<ProcessGroupsEntity> {
   private String id;
 
-  public GetProcessGroupsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetProcessGroupsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

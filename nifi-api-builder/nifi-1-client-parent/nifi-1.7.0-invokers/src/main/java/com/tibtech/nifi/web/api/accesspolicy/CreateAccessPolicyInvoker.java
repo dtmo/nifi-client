@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.AccessPolicyEntity;
 public final class CreateAccessPolicyInvoker extends ComponentEntityInvoker<AccessPolicyEntity> {
   private AccessPolicyEntity accessPolicyEntity;
 
-  public CreateAccessPolicyInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateAccessPolicyInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -39,7 +39,6 @@ public final class CreateAccessPolicyInvoker extends ComponentEntityInvoker<Acce
     target = target.path("nifi-api");
     target = target.path("policies");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    accessPolicyEntity.setRevision(createRevisionDto());
     final Entity<AccessPolicyEntity> entity = Entity.entity(accessPolicyEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

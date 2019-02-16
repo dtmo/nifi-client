@@ -18,8 +18,8 @@ public final class GetInputContentInvoker extends AbstractInvoker<StreamingOutpu
 
   private String clusterNodeId;
 
-  public GetInputContentInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetInputContentInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

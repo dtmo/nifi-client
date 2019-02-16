@@ -19,10 +19,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 /**
- * Processor represents a NiFi processor which is the main component for performing work in a NiFi flow.
+ * Processor represents a NiFi processor which is the main component for
+ * performing work in a NiFi flow.
  */
-public class Processor extends UpdatableComponent<Processor, ProcessorEntity, ProcessorDTOBuilder>
-        implements Connectable, Deletable, Refreshable<Processor, ProcessorDTOBuilder>
+public class Processor extends AbstractComponent<ProcessorEntity>
+        implements Connectable, Deletable, Refreshable<Processor>, Updatable<Processor, ProcessorDTOBuilder>
 {
     public static final String STATE_RUNNING = "RUNNING";
     public static final String STATE_STOPPED = "STOPPED";
@@ -31,12 +32,12 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     /**
      * Constructs a new instance of Processor.
      *
-     * @param transport       The transport with which to communicate with the NiFi server.
+     * @param controller      The controller to which the processor belongs.
      * @param processorEntity The entity that represents the processor.
      */
-    public Processor(final Transport transport, final ProcessorEntity processorEntity)
+    public Processor(final Controller controller, final ProcessorEntity processorEntity)
     {
-        super(transport, processorEntity);
+        super(controller, processorEntity);
     }
 
     /**
@@ -82,7 +83,8 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     }
 
     /**
-     * Returns the state of this processor. Possible states are 'RUNNING', 'STOPPED', and 'DISABLED'.
+     * Returns the state of this processor. Possible states are 'RUNNING',
+     * 'STOPPED', and 'DISABLED'.
      *
      * @return The state of this processor.
      */
@@ -177,8 +179,9 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     }
 
     /**
-     * Returns the validation errors from this processor. These validation errors represent the problems with the
-     * processor that must be resolved before it can be started.
+     * Returns the validation errors from this processor. These validation errors
+     * represent the problems with the processor that must be resolved before it can
+     * be started.
      *
      * @return The validation errors from this processor.
      */
@@ -206,15 +209,14 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     @Override
     public void delete() throws InvokerException
     {
-        new DeleteProcessorInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke();
+        new DeleteProcessorInvoker(getController().getTransport()).setId(getId())
+                .setVersion(getRevisionDTO().getVersion()).invoke();
     }
 
     @Override
     public Processor refresh() throws InvokerException
     {
-        setComponentEntity(new GetProcessorInvoker(getTransport(), 0).setId(getId()).invoke());
+        setComponentEntity(new GetProcessorInvoker(getController().getTransport()).setId(getId()).invoke());
 
         return this;
     }
@@ -222,17 +224,15 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
     @Override
     public Processor update(final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
     {
-        final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder()
-                .setId(getId());
+        final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder().setId(getId());
 
         configurator.accept(processorDTOBuilder);
 
-        setComponentEntity(new UpdateProcessorInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setProcessorEntity(new ProcessorEntityBuilder()
-                        .setComponent(processorDTOBuilder.build())
-                        .build())
-                .invoke());
+        setComponentEntity(
+                new UpdateProcessorInvoker(getController().getTransport())
+                        .setId(getId()).setProcessorEntity(new ProcessorEntityBuilder()
+                                .setComponent(processorDTOBuilder.build()).setRevision(getRevisionDTO()).build())
+                        .invoke());
 
         return this;
     }
@@ -242,7 +242,7 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
             throws InvokerException
     {
-        return super.update(closure);
+        return Updatable.super.update(closure);
     }
 
     /**
@@ -276,20 +276,5 @@ public class Processor extends UpdatableComponent<Processor, ProcessorEntity, Pr
         final String processorState = running ? STATE_RUNNING : STATE_STOPPED;
 
         return update(c -> c.setState(processorState));
-    }
-
-    /**
-     * Returns the processor with a specific ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the processor to return.
-     * @return The processor with the specified ID.
-     * @throws InvokerException if there is a problem getting the processor.
-     */
-    public static Processor get(final Transport transport, final String id) throws InvokerException
-    {
-        return new Processor(transport, new GetProcessorInvoker(transport, 0)
-                .setId(id)
-                .invoke());
     }
 }

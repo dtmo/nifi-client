@@ -1,28 +1,33 @@
 package com.tibtech.nifi.client;
 
+import java.util.function.Consumer;
+
+import org.apache.nifi.web.api.entity.PortEntity;
+
 import com.tibtech.nifi.web.api.dto.PortDTOBuilder;
 import com.tibtech.nifi.web.api.entity.PortEntityBuilder;
 import com.tibtech.nifi.web.api.inputport.GetInputPortInvoker;
 import com.tibtech.nifi.web.api.inputport.RemoveInputPortInvoker;
 import com.tibtech.nifi.web.api.inputport.UpdateInputPortInvoker;
-import org.apache.nifi.web.api.entity.PortEntity;
 
-import java.util.function.Consumer;
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
 
 /**
- * InputPort represents a NiFi flow input port which provides a mechanism for transferring data into a Process Group.
+ * InputPort represents a NiFi flow input port which provides a mechanism for
+ * transferring data into a Process Group.
  */
 public class InputPort extends Port<InputPort>
 {
     /**
      * Constructs a new instance of InputPort.
      *
-     * @param transport  The transport with which to communicate with the NiFi server.
+     * @param controller The controller to which the input port belongs.
      * @param portEntity The entity that represents the input port.
      */
-    public InputPort(final Transport transport, final PortEntity portEntity)
+    public InputPort(final Controller controller, final PortEntity portEntity)
     {
-        super(transport, portEntity);
+        super(controller, portEntity);
     }
 
     @Override
@@ -34,9 +39,7 @@ public class InputPort extends Port<InputPort>
     @Override
     public InputPort refresh() throws InvokerException
     {
-        setComponentEntity(new GetInputPortInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke());
+        setComponentEntity(new GetInputPortInvoker(getController().getTransport()).setId(getId()).invoke());
 
         return this;
     }
@@ -44,40 +47,29 @@ public class InputPort extends Port<InputPort>
     @Override
     public InputPort update(final Consumer<PortDTOBuilder> configurator) throws InvokerException
     {
-        final PortDTOBuilder portDTOBuilder = new PortDTOBuilder()
-                .setId(getId());
+        final PortDTOBuilder portDTOBuilder = new PortDTOBuilder().setId(getId());
 
         configurator.accept(portDTOBuilder);
 
-        setComponentEntity(new UpdateInputPortInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setPortEntity(new PortEntityBuilder()
-                        .setComponent(portDTOBuilder.build())
-                        .build())
+        setComponentEntity(new UpdateInputPortInvoker(getController().getTransport()).setId(getId()).setPortEntity(
+                new PortEntityBuilder().setComponent(portDTOBuilder.build()).setRevision(getRevisionDTO()).build())
                 .invoke());
 
         return this;
     }
 
     @Override
-    public void delete() throws InvokerException
+    public InputPort update(
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = InputPort.class) final Closure<PortDTOBuilder> closure)
+            throws InvokerException
     {
-        new RemoveInputPortInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId());
+        return super.update(closure);
     }
 
-    /**
-     * Gets the input port with a specific ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the input port to get.
-     * @return The input port with the specified ID.
-     * @throws InvokerException if there is a problem getting the input port.
-     */
-    public static InputPort get(final Transport transport, final String id) throws InvokerException
+    @Override
+    public void delete() throws InvokerException
     {
-        return new InputPort(transport, new GetInputPortInvoker(transport, 0)
-                .setId(id)
-                .invoke());
+        new RemoveInputPortInvoker(getController().getTransport()).setId(getId())
+                .setVersion(getRevisionDTO().getVersion()).invoke();
     }
 }

@@ -17,8 +17,8 @@ import org.apache.nifi.web.api.entity.CreateActiveRequestEntity;
 public final class CreateVersionControlRequestInvoker extends AbstractInvoker<String> {
   private CreateActiveRequestEntity createActiveRequestEntity;
 
-  public CreateVersionControlRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateVersionControlRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

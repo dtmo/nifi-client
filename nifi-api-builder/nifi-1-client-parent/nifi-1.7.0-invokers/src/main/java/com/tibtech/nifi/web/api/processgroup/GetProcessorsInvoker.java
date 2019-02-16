@@ -17,8 +17,8 @@ public final class GetProcessorsInvoker extends AbstractInvoker<ProcessorsEntity
 
   private boolean includeDescendantGroups;
 
-  public GetProcessorsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetProcessorsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

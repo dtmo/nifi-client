@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.AccessConfigurationEntity;
  * Retrieves the access configuration for this NiFi
  */
 public final class GetLoginConfigInvoker extends AbstractInvoker<AccessConfigurationEntity> {
-  public GetLoginConfigInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetLoginConfigInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final AccessConfigurationEntity invoke() throws InvokerException {

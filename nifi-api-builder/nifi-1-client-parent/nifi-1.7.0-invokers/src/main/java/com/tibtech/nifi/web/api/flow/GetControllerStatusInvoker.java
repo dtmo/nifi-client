@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ControllerStatusEntity;
  * Gets the current status of this NiFi
  */
 public final class GetControllerStatusInvoker extends AbstractInvoker<ControllerStatusEntity> {
-  public GetControllerStatusInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetControllerStatusInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ControllerStatusEntity invoke() throws InvokerException {

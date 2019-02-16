@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.ComponentHistoryEntity;
 public final class GetComponentHistoryInvoker extends AbstractInvoker<ComponentHistoryEntity> {
   private String componentId;
 
-  public GetComponentHistoryInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetComponentHistoryInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

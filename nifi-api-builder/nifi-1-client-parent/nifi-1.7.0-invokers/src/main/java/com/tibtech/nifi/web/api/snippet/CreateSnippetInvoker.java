@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.SnippetEntity;
 public final class CreateSnippetInvoker extends AbstractInvoker<SnippetEntity> {
   private SnippetEntity snippetEntity;
 
-  public CreateSnippetInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateSnippetInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

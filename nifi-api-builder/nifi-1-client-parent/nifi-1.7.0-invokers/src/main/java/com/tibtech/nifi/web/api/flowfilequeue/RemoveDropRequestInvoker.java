@@ -17,8 +17,8 @@ public final class RemoveDropRequestInvoker extends AbstractInvoker<DropRequestE
 
   private String dropRequestId;
 
-  public RemoveDropRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public RemoveDropRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -20,8 +20,8 @@ public final class GetOutputPortStatusInvoker extends AbstractInvoker<PortStatus
 
   private String clusterNodeId;
 
-  public GetOutputPortStatusInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetOutputPortStatusInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -16,8 +16,8 @@ import org.apache.nifi.web.api.entity.SubmitReplayRequestEntity;
 public final class SubmitReplayInvoker extends AbstractInvoker<ProvenanceEventEntity> {
   private SubmitReplayRequestEntity submitReplayRequestEntity;
 
-  public SubmitReplayInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public SubmitReplayInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -18,8 +18,8 @@ public final class CreateRemoteProcessGroupInvoker extends ComponentEntityInvoke
 
   private RemoteProcessGroupEntity remoteProcessGroupEntity;
 
-  public CreateRemoteProcessGroupInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateRemoteProcessGroupInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -57,7 +57,6 @@ public final class CreateRemoteProcessGroupInvoker extends ComponentEntityInvoke
     target = target.path(id);
     target = target.path("remote-process-groups");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    remoteProcessGroupEntity.setRevision(createRevisionDto());
     final Entity<RemoteProcessGroupEntity> entity = Entity.entity(remoteProcessGroupEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

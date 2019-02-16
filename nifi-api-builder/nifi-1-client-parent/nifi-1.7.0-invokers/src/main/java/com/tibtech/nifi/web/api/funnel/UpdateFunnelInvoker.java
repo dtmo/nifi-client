@@ -18,8 +18,8 @@ public final class UpdateFunnelInvoker extends ComponentEntityInvoker<FunnelEnti
 
   private FunnelEntity funnelEntity;
 
-  public UpdateFunnelInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public UpdateFunnelInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -55,7 +55,6 @@ public final class UpdateFunnelInvoker extends ComponentEntityInvoker<FunnelEnti
     target = target.path("funnels");
     target = target.path(id);
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    funnelEntity.setRevision(createRevisionDto());
     final Entity<FunnelEntity> entity = Entity.entity(funnelEntity, "application/json");
     final Response response = invocationBuilder.method("PUT", entity);
     try {

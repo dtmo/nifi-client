@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.RegistryClientEntity;
 public final class CreateRegistryClientInvoker extends ComponentEntityInvoker<RegistryClientEntity> {
   private RegistryClientEntity registryClientEntity;
 
-  public CreateRegistryClientInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateRegistryClientInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -40,7 +40,6 @@ public final class CreateRegistryClientInvoker extends ComponentEntityInvoker<Re
     target = target.path("controller");
     target = target.path("registry-clients");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    registryClientEntity.setRevision(createRevisionDto());
     final Entity<RegistryClientEntity> entity = Entity.entity(registryClientEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

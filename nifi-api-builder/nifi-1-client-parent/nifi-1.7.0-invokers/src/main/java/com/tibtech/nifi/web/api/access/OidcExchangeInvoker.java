@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
  * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class OidcExchangeInvoker extends AbstractInvoker<String> {
-  public OidcExchangeInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public OidcExchangeInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final String invoke() throws InvokerException {

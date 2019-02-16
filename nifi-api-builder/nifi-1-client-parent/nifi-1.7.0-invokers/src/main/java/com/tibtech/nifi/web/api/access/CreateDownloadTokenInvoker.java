@@ -13,8 +13,8 @@ import javax.ws.rs.core.Response;
  * <p>The token returned is a base64 encoded string. It is valid for a single request up to five minutes from being issued. It is used as a query parameter name 'access_token'.</p>
  */
 public final class CreateDownloadTokenInvoker extends AbstractInvoker<String> {
-  public CreateDownloadTokenInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateDownloadTokenInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final String invoke() throws InvokerException {

@@ -20,8 +20,8 @@ public final class SubmitUpdateVariableRegistryRequestInvoker extends AbstractIn
 
   private VariableRegistryEntity variableRegistryEntity;
 
-  public SubmitUpdateVariableRegistryRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public SubmitUpdateVariableRegistryRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

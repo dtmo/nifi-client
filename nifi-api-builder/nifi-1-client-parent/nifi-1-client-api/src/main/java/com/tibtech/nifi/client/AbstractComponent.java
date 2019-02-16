@@ -17,28 +17,27 @@ import java.util.Objects;
  */
 public abstract class AbstractComponent<E extends ComponentEntity> implements Component
 {
-    private final Transport transport;
+    private final Controller controller;
 
     private E componentEntity;
 
     /**
      * Constructs a new instance of AbstractComponent.
      *
-     * @param transport       The transport with which to communicate with the NiFi
-     *                        server.
+     * @param controller      The controller to which the component belongs.
      * @param componentEntity The component entity which describes the component and
      *                        records its version.
      */
-    protected AbstractComponent(final Transport transport, final E componentEntity)
+    protected AbstractComponent(final Controller controller, final E componentEntity)
     {
-        this.transport = transport;
+        this.controller = controller;
         this.componentEntity = componentEntity;
     }
 
     @Override
-    public Transport getTransport()
+    public Controller getController()
     {
-        return transport;
+        return controller;
     }
 
     /**
@@ -57,7 +56,7 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
      * version.
      *
      * @return The component entity which describes the component and records its
-     * version.
+     *         version.
      */
     protected E getComponentEntity()
     {
@@ -100,7 +99,7 @@ public abstract class AbstractComponent<E extends ComponentEntity> implements Co
      * otherwise.
      *
      * @return The position of this component in the UI if applicable, null
-     * otherwise.
+     *         otherwise.
      */
     public PositionDTO getPositionDTO()
     {

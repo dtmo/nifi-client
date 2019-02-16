@@ -18,8 +18,8 @@ public final class CreateInputPortInvoker extends ComponentEntityInvoker<PortEnt
 
   private PortEntity portEntity;
 
-  public CreateInputPortInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public CreateInputPortInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**
@@ -56,7 +56,6 @@ public final class CreateInputPortInvoker extends ComponentEntityInvoker<PortEnt
     target = target.path(id);
     target = target.path("input-ports");
     final Invocation.Builder invocationBuilder = target.request("application/json");
-    portEntity.setRevision(createRevisionDto());
     final Entity<PortEntity> entity = Entity.entity(portEntity, "application/json");
     final Response response = invocationBuilder.method("POST", entity);
     try {

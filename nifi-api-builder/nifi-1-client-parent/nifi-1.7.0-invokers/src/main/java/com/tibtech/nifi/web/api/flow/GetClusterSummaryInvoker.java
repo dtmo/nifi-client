@@ -12,8 +12,8 @@ import org.apache.nifi.web.api.entity.ClusteSummaryEntity;
  * The cluster summary for this NiFi
  */
 public final class GetClusterSummaryInvoker extends AbstractInvoker<ClusteSummaryEntity> {
-  public GetClusterSummaryInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetClusterSummaryInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final ClusteSummaryEntity invoke() throws InvokerException {

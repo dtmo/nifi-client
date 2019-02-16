@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.ComponentStateEntity;
 public final class ClearStateInvoker extends AbstractInvoker<ComponentStateEntity> {
   private String id;
 
-  public ClearStateInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public ClearStateInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

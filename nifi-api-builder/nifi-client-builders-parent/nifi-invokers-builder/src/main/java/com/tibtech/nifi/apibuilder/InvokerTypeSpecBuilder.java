@@ -242,16 +242,11 @@ public class InvokerTypeSpecBuilder
 
 		for (final BuilderProperty invokerProperty : queryParameters)
 		{
-			// clientId and version are special parameters that get set by the
+			// clientId is a special parameter that gets set by the
 			// invoker framework.
 			if (invokerProperty.getName().equalsIgnoreCase("clientId"))
 			{
 				invokeMethodBuilder.addStatement("target = target.queryParam($S, getClientId())",
-						invokerProperty.getName());
-			}
-			else if (invokerProperty.getName().equalsIgnoreCase("version"))
-			{
-				invokeMethodBuilder.addStatement("target = target.queryParam($S, getVersion())",
 						invokerProperty.getName());
 			}
 			else
@@ -274,11 +269,6 @@ public class InvokerTypeSpecBuilder
 				if (formParamName.equalsIgnoreCase("clientId"))
 				{
 					invokeMethodBuilder.addStatement("form.param($S, getClientId())", invokerProperty.getName());
-				}
-				else if (formParamName.equalsIgnoreCase("version"))
-				{
-					invokeMethodBuilder.addStatement("form.param($S, String.valueOf(getVersion()))",
-							invokerProperty.getName());
 				}
 				else
 				{
@@ -321,11 +311,6 @@ public class InvokerTypeSpecBuilder
 						invokeMethodBuilder.addStatement("formDataMultiPart.field($S, getClientId())",
 								formDataParameter.getName());
 					}
-					else if (propertyName.equalsIgnoreCase("version"))
-					{
-						invokeMethodBuilder.addStatement("formDataMultiPart.field($S, getVersion())",
-								formDataParameter.getName());
-					}
 					else
 					{
 						invokeMethodBuilder.addStatement("formDataMultiPart.field($S, String.valueOf($L))", formDataParameter.getName(),
@@ -355,11 +340,6 @@ public class InvokerTypeSpecBuilder
 
 			if (requestEntity != null)
 			{
-				if (ComponentEntity.class.isAssignableFrom(requestEntity.getPropertyClass()))
-				{
-					invokeMethodBuilder.addStatement("$L.setRevision(createRevisionDto())", requestEntity.getName());
-				}
-
 				final MediaType mediaType = consumesMediaTypes.isEmpty() ? MediaType.TEXT_PLAIN_TYPE
 						: consumesMediaTypes.get(0);
 
@@ -423,7 +403,7 @@ public class InvokerTypeSpecBuilder
 		// Add a constructor
 		typeSpecBuilder.addMethod(MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC)
 				.addParameter(Transport.class, "transport", Modifier.FINAL)
-				.addParameter(long.class, "version", Modifier.FINAL).addStatement("super(transport, version)").build());
+				.addStatement("super(transport)").build());
 
 		for (final BuilderProperty invokerProperty : pathParameters)
 		{
@@ -433,10 +413,8 @@ public class InvokerTypeSpecBuilder
 
 		for (final BuilderProperty invokerProperty : queryParameters)
 		{
-			// clientId and version are special properties that get set by the
-			// invoker framework.
-			if ((invokerProperty.getName().equalsIgnoreCase("version") == false)
-					&& (invokerProperty.getName().equalsIgnoreCase("clientId") == false))
+			// clientId is a special property that gets set by the invoker framework.
+			if (invokerProperty.getName().equalsIgnoreCase("clientId") == false)
 			{
 				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 						invokerProperty.getComment());
@@ -445,10 +423,8 @@ public class InvokerTypeSpecBuilder
 
 		for (final BuilderProperty invokerProperty : formParameters)
 		{
-			// clientId and version are special properties that get set by the
-			// invoker framework.
-			if ((invokerProperty.getName().equalsIgnoreCase("version") == false)
-					&& (invokerProperty.getName().equalsIgnoreCase("clientId") == false))
+			// clientId is a special property that gets set by the invoker framework.
+			if (invokerProperty.getName().equalsIgnoreCase("clientId") == false)
 			{
 				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 						invokerProperty.getComment());
@@ -457,10 +433,8 @@ public class InvokerTypeSpecBuilder
 
 		for (final BuilderProperty invokerProperty : formDataParameters)
 		{
-			// clientId and version are special properties that get set by the
-			// invoker framework.
-			if ((invokerProperty.getName().equalsIgnoreCase("version") == false)
-					&& (invokerProperty.getName().equalsIgnoreCase("clientId") == false))
+			// clientId is a special property that gets set by the invoker framework.
+			if (invokerProperty.getName().equalsIgnoreCase("clientId") == false)
 			{
 				addProperty(typeSpecBuilder, invokerProperty.getName(), invokerProperty.getTypeName(),
 						invokerProperty.getComment());

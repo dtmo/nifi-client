@@ -13,8 +13,8 @@ import org.apache.nifi.web.api.entity.AccessStatusEntity;
  * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetAccessStatusInvoker extends AbstractInvoker<AccessStatusEntity> {
-  public GetAccessStatusInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetAccessStatusInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final AccessStatusEntity invoke() throws InvokerException {

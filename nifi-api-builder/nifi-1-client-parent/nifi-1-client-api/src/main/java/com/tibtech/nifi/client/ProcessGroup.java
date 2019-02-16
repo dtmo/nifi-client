@@ -1,29 +1,74 @@
 package com.tibtech.nifi.client;
 
-import com.tibtech.nifi.web.api.dto.*;
-import com.tibtech.nifi.web.api.entity.*;
-import com.tibtech.nifi.web.api.flow.GetControllerServicesFromGroupInvoker;
-import com.tibtech.nifi.web.api.flow.ScheduleComponentsInvoker;
-import com.tibtech.nifi.web.api.processgroup.*;
-import com.tibtech.nifi.web.api.snippet.CreateSnippetInvoker;
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
+import java.io.InputStream;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+
 import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
 import org.apache.nifi.web.api.dto.RevisionDTO;
+import org.apache.nifi.web.api.dto.status.ProcessGroupStatusDTO;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 
-import java.io.InputStream;
-import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
+import com.tibtech.nifi.web.api.dto.FunnelDTOBuilder;
+import com.tibtech.nifi.web.api.dto.LabelDTOBuilder;
+import com.tibtech.nifi.web.api.dto.PortDTOBuilder;
+import com.tibtech.nifi.web.api.dto.ProcessGroupDTOBuilder;
+import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
+import com.tibtech.nifi.web.api.dto.RemoteProcessGroupDTOBuilder;
+import com.tibtech.nifi.web.api.dto.RevisionDTOBuilder;
+import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
+import com.tibtech.nifi.web.api.entity.FunnelEntityBuilder;
+import com.tibtech.nifi.web.api.entity.InstantiateTemplateRequestEntityBuilder;
+import com.tibtech.nifi.web.api.entity.LabelEntityBuilder;
+import com.tibtech.nifi.web.api.entity.PortEntityBuilder;
+import com.tibtech.nifi.web.api.entity.ProcessGroupEntityBuilder;
+import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
+import com.tibtech.nifi.web.api.entity.RemoteProcessGroupEntityBuilder;
+import com.tibtech.nifi.web.api.entity.ScheduleComponentsEntityBuilder;
+import com.tibtech.nifi.web.api.entity.SnippetEntityBuilder;
+import com.tibtech.nifi.web.api.flow.GetControllerServicesFromGroupInvoker;
+import com.tibtech.nifi.web.api.flow.GetProcessGroupStatusInvoker;
+import com.tibtech.nifi.web.api.flow.ScheduleComponentsInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateControllerServiceInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateFunnelInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateInputPortInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateLabelInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateOutputPortInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateProcessorInvoker;
+import com.tibtech.nifi.web.api.processgroup.CreateRemoteProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetConnectionsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetFunnelsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetInputPortsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetLabelsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetOutputPortsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetProcessGroupsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetProcessorsInvoker;
+import com.tibtech.nifi.web.api.processgroup.GetRemoteProcessGroupsInvoker;
+import com.tibtech.nifi.web.api.processgroup.InstantiateTemplateInvoker;
+import com.tibtech.nifi.web.api.processgroup.RemoveProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.UpdateProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processgroup.UploadTemplateInvoker;
+import com.tibtech.nifi.web.api.snippet.CreateSnippetInvoker;
+
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
 
 /**
  * ProcessGroup represents a NiFi flow process group which groups related flow
  * components together.
  */
-public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupEntity, ProcessGroupDTOBuilder>
-        implements Deletable, Refreshable<ProcessGroup, ProcessGroupDTOBuilder>
+public class ProcessGroup extends AbstractComponent<ProcessGroupEntity>
+        implements Deletable, Refreshable<ProcessGroup>, Updatable<ProcessGroup, ProcessGroupDTOBuilder>
 {
     public static final String STATE_RUNNING = "RUNNING";
     public static final String STATE_STOPPED = "STOPPED";
@@ -33,13 +78,12 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     /**
      * Constructs a new instance of ProcessGroup.
      *
-     * @param transport          The transport with which to communicate with the NiFi
-     *                           server.
+     * @param controller         The controller to which the process group belongs.
      * @param processGroupEntity The entity that describes the process group.
      */
-    public ProcessGroup(final Transport transport, final ProcessGroupEntity processGroupEntity)
+    public ProcessGroup(final Controller controller, final ProcessGroupEntity processGroupEntity)
     {
-        super(transport, processGroupEntity);
+        super(controller, processGroupEntity);
     }
 
     /**
@@ -176,11 +220,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<Connection> getConnections() throws InvokerException
     {
-        return new GetConnectionsInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke()
-                .getConnections().stream()
-                .map(connectionEntity -> new Connection(getTransport(), connectionEntity))
+        return new GetConnectionsInvoker(getController().getTransport()).setId(getId()).invoke().getConnections()
+                .stream().map(connectionEntity -> new Connection(getController(), connectionEntity))
                 .collect(Collectors.toSet());
     }
 
@@ -190,7 +231,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x            The x position for the funnel.
      * @param y            The y position for the funnel.
      * @param configurator A {@link Consumer} that accepts a
-     *                     {@link FunnelDTOBuilder} on which the funnel configuration may be set.
+     *                     {@link FunnelDTOBuilder} on which the funnel
+     *                     configuration may be set.
      * @return The new funnel.
      * @throws InvokerException if there is a problem creating the funnel.
      */
@@ -202,10 +244,10 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 
         configurator.accept(funnelDTOBuilder);
 
-        return new Funnel(getTransport(), new CreateFunnelInvoker(getTransport(), 0)
-                .setId(getId())
+        return new Funnel(getController(), new CreateFunnelInvoker(getController().getTransport()).setId(getId())
                 .setFunnelEntity(new FunnelEntityBuilder()
-                        .setComponent(funnelDTOBuilder.build())
+                        .setComponent(funnelDTOBuilder.build()).setRevision(new RevisionDTOBuilder()
+                                .setClientId(getController().getTransport().getClientId()).setVersion(0L).build())
                         .build())
                 .invoke());
     }
@@ -221,7 +263,7 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @throws InvokerException if there is a problem creating the funnel.
      */
     public Funnel createFunnel(final double x, final double y,
-                               @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FunnelDTOBuilder.class) final Closure<FunnelDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = FunnelDTOBuilder.class) final Closure<FunnelDTOBuilder> closure)
             throws InvokerException
     {
         return createFunnel(x, y, configurator -> {
@@ -239,12 +281,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<Funnel> getFunnels() throws InvokerException
     {
-        return new GetFunnelsInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke()
-                .getFunnels().stream()
-                .map(funnelEntity -> new Funnel(getTransport(), funnelEntity))
-                .collect(Collectors.toSet());
+        return new GetFunnelsInvoker(getController().getTransport()).setId(getId()).invoke().getFunnels().stream()
+                .map(funnelEntity -> new Funnel(getController(), funnelEntity)).collect(Collectors.toSet());
     }
 
     /**
@@ -253,8 +291,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x            The x position for the input port.
      * @param y            The y position for the input port.
      * @param configurator A {@link Consumer} that accepts an instance of
-     *                     {@link PortDTOBuilder} on which the input port configuration may be
-     *                     set.
+     *                     {@link PortDTOBuilder} on which the input port
+     *                     configuration may be set.
      * @return A new input port.
      * @throws InvokerException if there is a problem creating an input port.
      */
@@ -266,10 +304,10 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 
         configurator.accept(portDTOBuilder);
 
-        return new InputPort(getTransport(), new CreateInputPortInvoker(getTransport(), 0)
-                .setId(getId())
+        return new InputPort(getController(), new CreateInputPortInvoker(getController().getTransport()).setId(getId())
                 .setPortEntity(new PortEntityBuilder()
-                        .setComponent(portDTOBuilder.build())
+                        .setComponent(portDTOBuilder.build()).setRevision(new RevisionDTOBuilder()
+                                .setClientId(getController().getTransport().getClientId()).setVersion(0L).build())
                         .build())
                 .invoke());
     }
@@ -280,13 +318,13 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x       The x position for the input port.
      * @param y       The y position for the input port.
      * @param closure A {@link Closure} that delegates to an instance of
-     *                {@link PortDTOBuilder} on which the input port configuration may be
-     *                set.
+     *                {@link PortDTOBuilder} on which the input port configuration
+     *                may be set.
      * @return A new input port.
      * @throws InvokerException if there is a problem creating an input port.
      */
     public InputPort createInputPort(final double x, final double y,
-                                     @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortDTOBuilder.class) final Closure<PortDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortDTOBuilder.class) final Closure<PortDTOBuilder> closure)
             throws InvokerException
     {
         return createInputPort(x, y, configurator -> {
@@ -304,12 +342,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<InputPort> getInputPorts() throws InvokerException
     {
-        return new GetInputPortsInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke()
-                .getInputPorts().stream()
-                .map(inputPortEntity -> new InputPort(getTransport(), inputPortEntity))
-                .collect(Collectors.toSet());
+        return new GetInputPortsInvoker(getController().getTransport()).setId(getId()).invoke().getInputPorts().stream()
+                .map(inputPortEntity -> new InputPort(getController(), inputPortEntity)).collect(Collectors.toSet());
     }
 
     /**
@@ -317,7 +351,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      *
      * @param x            The x position of the output port.
      * @param y            The y position of the output port.
-     * @param configurator A consumer that accepts an instance of {@link PortDTOBuilder} on which the output port
+     * @param configurator A consumer that accepts an instance of
+     *                     {@link PortDTOBuilder} on which the output port
      *                     configuration may be set.
      * @return The new {@link OutputPort}.
      * @throws InvokerException if there is a problem creating the output port.
@@ -330,10 +365,11 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 
         configurator.accept(portDTOBuilder);
 
-        return new OutputPort(getTransport(), new CreateOutputPortInvoker(getTransport(), 0)
+        return new OutputPort(getController(), new CreateOutputPortInvoker(getController().getTransport())
                 .setId(getId())
                 .setPortEntity(new PortEntityBuilder()
-                        .setComponent(portDTOBuilder.build())
+                        .setComponent(portDTOBuilder.build()).setRevision(new RevisionDTOBuilder()
+                                .setClientId(getController().getTransport().getClientId()).setVersion(0L).build())
                         .build())
                 .invoke());
     }
@@ -343,13 +379,13 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      *
      * @param x       The x position of the output port.
      * @param y       The y position of the output port.
-     * @param closure A closure delegating to an instance of {@link PortDTOBuilder} on which the output port
-     *                configuration may be set.
+     * @param closure A closure delegating to an instance of {@link PortDTOBuilder}
+     *                on which the output port configuration may be set.
      * @return The new {@link OutputPort}.
      * @throws InvokerException if there is a problem creating the output port.
      */
     public OutputPort createOutputPort(final double x, final double y,
-                                       @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortDTOBuilder.class) final Closure<PortDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = PortDTOBuilder.class) final Closure<PortDTOBuilder> closure)
             throws InvokerException
     {
         return createOutputPort(x, y, configurator -> {
@@ -367,11 +403,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<OutputPort> getOutputPorts() throws InvokerException
     {
-        return new GetOutputPortsInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke()
-                .getOutputPorts().stream()
-                .map(outputPortEntity -> new OutputPort(getTransport(), outputPortEntity))
+        return new GetOutputPortsInvoker(getController().getTransport()).setId(getId()).invoke().getOutputPorts()
+                .stream().map(outputPortEntity -> new OutputPort(getController(), outputPortEntity))
                 .collect(Collectors.toSet());
     }
 
@@ -381,23 +414,23 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x            The x position at which to create the processor.
      * @param y            The y position at which to create the processor.
      * @param type         The fully qualified type name of the processor to create.
-     * @param configurator A consumer that accepts a {@link ProcessorDTOBuilder} on which the processor configuration
-     *                     may be set.
+     * @param configurator A consumer that accepts a {@link ProcessorDTOBuilder} on
+     *                     which the processor configuration may be set.
      * @return The new processor.
      * @throws InvokerException if there is a problem creating the processor.
      */
     public Processor createProcessor(final double x, final double y, final String type,
-                                     final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
+            final Consumer<ProcessorDTOBuilder> configurator) throws InvokerException
     {
         final ProcessorDTOBuilder processorDTOBuilder = new ProcessorDTOBuilder().setParentGroupId(getId())
                 .setPosition(new PositionDTO(x, y)).setType(type);
 
         configurator.accept(processorDTOBuilder);
 
-        return new Processor(getTransport(), new CreateProcessorInvoker(getTransport(), 0)
-                .setId(getId())
+        return new Processor(getController(), new CreateProcessorInvoker(getController().getTransport()).setId(getId())
                 .setProcessorEntity(new ProcessorEntityBuilder()
-                        .setComponent(processorDTOBuilder.build())
+                        .setComponent(processorDTOBuilder.build()).setRevision(new RevisionDTOBuilder()
+                                .setClientId(getController().getTransport().getClientId()).setVersion(0L).build())
                         .build())
                 .invoke());
     }
@@ -408,13 +441,14 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x       The x position at which to create the processor.
      * @param y       The y position at which to create the processor.
      * @param type    The fully qualified type name of the processor to create.
-     * @param closure A closure that delegates to an instance of {@link ProcessorDTOBuilder} on which the processor
+     * @param closure A closure that delegates to an instance of
+     *                {@link ProcessorDTOBuilder} on which the processor
      *                configuration may be set.
      * @return The new processor.
      * @throws InvokerException if there is a problem creating the processor.
      */
     public Processor createProcessor(final double x, final double y, final String type,
-                                     @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessorDTOBuilder.class) final Closure<ProcessorDTOBuilder> closure)
             throws InvokerException
     {
         return createProcessor(x, y, type, configurator -> {
@@ -432,12 +466,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<Processor> getProcessors() throws InvokerException
     {
-        return new GetProcessorsInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke()
-                .getProcessors().stream()
-                .map(processorEntity -> new Processor(getTransport(), processorEntity))
-                .collect(Collectors.toSet());
+        return new GetProcessorsInvoker(getController().getTransport()).setId(getId()).invoke().getProcessors().stream()
+                .map(processorEntity -> new Processor(getController(), processorEntity)).collect(Collectors.toSet());
     }
 
     /**
@@ -446,25 +476,24 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x            The x position for the new process group.
      * @param y            The y position for the new process group.
      * @param name         The name of the new process group.
-     * @param configurator A consumer that accepts a {@link ProcessGroupDTOBuilder} on which the new process group
-     *                     configuration may be set.
+     * @param configurator A consumer that accepts a {@link ProcessGroupDTOBuilder}
+     *                     on which the new process group configuration may be set.
      * @return The new process group.
      * @throws InvokerException if there is a problem creating the process group.
      */
     public ProcessGroup createProcessGroup(final double x, final double y, final String name,
-                                           final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
+            final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
     {
         final ProcessGroupDTOBuilder processGroupDTOBuilder = new ProcessGroupDTOBuilder()
-                .setParentGroupId(getParentGroupId())
-                .setPosition(new PositionDTO(x, y))
-                .setName(name);
+                .setParentGroupId(getParentGroupId()).setPosition(new PositionDTO(x, y)).setName(name);
 
         configurator.accept(processGroupDTOBuilder);
 
-        return new ProcessGroup(getTransport(), new CreateProcessGroupInvoker(getTransport(), 0)
+        return new ProcessGroup(getController(), new CreateProcessGroupInvoker(getController().getTransport())
                 .setId(getParentGroupId())
                 .setProcessGroupEntity(new ProcessGroupEntityBuilder()
-                        .setComponent(processGroupDTOBuilder.build())
+                        .setComponent(processGroupDTOBuilder.build()).setRevision(new RevisionDTOBuilder()
+                                .setClientId(getController().getTransport().getClientId()).setVersion(0L).build())
                         .build())
                 .invoke());
     }
@@ -475,13 +504,14 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x       The x position for the new process group.
      * @param y       The y position for the new process group.
      * @param name    The name of the new process group.
-     * @param closure A closure that delegates to an instance of {@link ProcessGroupDTOBuilder} on which the new process group
+     * @param closure A closure that delegates to an instance of
+     *                {@link ProcessGroupDTOBuilder} on which the new process group
      *                configuration may be set.
      * @return The new process group.
      * @throws InvokerException if there is a problem creating the process group.
      */
     public ProcessGroup createProcessGroup(final double x, final double y, final String name,
-                                           @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupDTOBuilder.class) final Closure<ProcessGroupDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupDTOBuilder.class) final Closure<ProcessGroupDTOBuilder> closure)
             throws InvokerException
     {
         return createProcessGroup(x, y, name, configurator -> {
@@ -495,15 +525,13 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * Returns the set of process groups contained by this process group.
      *
      * @return The set of process groups contained by this process group.
-     * @throws InvokerException if there is a problem getting the set of process groups.
+     * @throws InvokerException if there is a problem getting the set of process
+     *                          groups.
      */
     public Set<ProcessGroup> getProcessGroups() throws InvokerException
     {
-        return new GetProcessGroupsInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke()
-                .getProcessGroups().stream()
-                .map(processGroupEntity -> new ProcessGroup(getTransport(), processGroupEntity))
+        return new GetProcessGroupsInvoker(getController().getTransport()).setId(getId()).invoke().getProcessGroups()
+                .stream().map(processGroupEntity -> new ProcessGroup(getController(), processGroupEntity))
                 .collect(Collectors.toSet());
     }
 
@@ -513,27 +541,30 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x            The x position for the new remote process group.
      * @param y            The y position for the new remote process group.
      * @param targetUri    The target URI for the new remote process group.
-     * @param configurator A consumer that accepts a {@link RemoteProcessGroupDTOBuilder} on which the remote process
-     *                     group configuration may be set.
+     * @param configurator A consumer that accepts a
+     *                     {@link RemoteProcessGroupDTOBuilder} on which the remote
+     *                     process group configuration may be set.
      * @return The new remote process group.
-     * @throws InvokerException if there is a problem creating the remote process group.
+     * @throws InvokerException if there is a problem creating the remote process
+     *                          group.
      */
     public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final String targetUri,
-                                                       final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
+            final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
     {
         final RemoteProcessGroupDTOBuilder remoteProcessGroupDTOBuilder = new RemoteProcessGroupDTOBuilder()
-                .setParentGroupId(getParentGroupId())
-                .setPosition(new PositionDTO(x, y))
-                .setTargetUris(targetUri);
+                .setParentGroupId(getParentGroupId()).setPosition(new PositionDTO(x, y)).setTargetUris(targetUri);
 
         configurator.accept(remoteProcessGroupDTOBuilder);
 
-        return new RemoteProcessGroup(getTransport(), new CreateRemoteProcessGroupInvoker(getTransport(), 0)
-                .setId(getId())
-                .setRemoteProcessGroupEntity(new RemoteProcessGroupEntityBuilder()
-                        .setComponent(remoteProcessGroupDTOBuilder.build())
-                        .build())
-                .invoke());
+        return new RemoteProcessGroup(getController(),
+                new CreateRemoteProcessGroupInvoker(getController().getTransport()).setId(getId())
+                        .setRemoteProcessGroupEntity(
+                                new RemoteProcessGroupEntityBuilder().setComponent(remoteProcessGroupDTOBuilder.build())
+                                        .setRevision(new RevisionDTOBuilder()
+                                                .setClientId(getController().getTransport().getClientId())
+                                                .setVersion(0L).build())
+                                        .build())
+                        .invoke());
     }
 
     /**
@@ -542,13 +573,15 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x         The x position for the new remote process group.
      * @param y         The y position for the new remote process group.
      * @param targetUri The target URI for the new remote process group.
-     * @param closure   A closure that delegates to an instance of {@link RemoteProcessGroupDTOBuilder} on which the
-     *                  remote process group configuration may be set.
+     * @param closure   A closure that delegates to an instance of
+     *                  {@link RemoteProcessGroupDTOBuilder} on which the remote
+     *                  process group configuration may be set.
      * @return The new remote process group.
-     * @throws InvokerException if there is a problem creating the remote process group.
+     * @throws InvokerException if there is a problem creating the remote process
+     *                          group.
      */
     public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final String targetUri,
-                                                       final Closure<RemoteProcessGroup> closure) throws InvokerException
+            final Closure<RemoteProcessGroup> closure) throws InvokerException
     {
         return createRemoteProcessGroup(x, y, targetUri, configurator -> {
             final Closure<RemoteProcessGroup> code = closure.rehydrate(closure, this, this);
@@ -563,13 +596,15 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x            The x position for the new remote process group.
      * @param y            The y position for the new remote process group.
      * @param targetUris   A list of target URIs for the new remote process group.
-     * @param configurator A consumer that accepts a {@link RemoteProcessGroupDTOBuilder} on which the remote process
-     *                     group configuration may be set.
+     * @param configurator A consumer that accepts a
+     *                     {@link RemoteProcessGroupDTOBuilder} on which the remote
+     *                     process group configuration may be set.
      * @return The new remote process group.
-     * @throws InvokerException if there is a problem creating the remote process group.
+     * @throws InvokerException if there is a problem creating the remote process
+     *                          group.
      */
     public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final List<String> targetUris,
-                                                       final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
+            final Consumer<RemoteProcessGroupDTOBuilder> configurator) throws InvokerException
     {
         return createRemoteProcessGroup(x, y, targetUris.stream().collect(Collectors.joining(",")), configurator);
     }
@@ -580,13 +615,15 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * @param x          The x position for the new remote process group.
      * @param y          The y position for the new remote process group.
      * @param targetUris A list of target URIs for the new remote process group.
-     * @param closure    A closure that delegates to an instance of {@link RemoteProcessGroupDTOBuilder} on which the
-     *                   remote process group configuration may be set.
+     * @param closure    A closure that delegates to an instance of
+     *                   {@link RemoteProcessGroupDTOBuilder} on which the remote
+     *                   process group configuration may be set.
      * @return The new remote process group.
-     * @throws InvokerException if there is a problem creating the remote process group.
+     * @throws InvokerException if there is a problem creating the remote process
+     *                          group.
      */
     public RemoteProcessGroup createRemoteProcessGroup(final double x, final double y, final List<String> targetUris,
-                                                       final Closure<RemoteProcessGroup> closure) throws InvokerException
+            final Closure<RemoteProcessGroup> closure) throws InvokerException
     {
         return createRemoteProcessGroup(x, y, targetUris, configurator -> {
             final Closure<RemoteProcessGroup> code = closure.rehydrate(closure, this, this);
@@ -599,15 +636,14 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * Returns the set of remote process groups contained by this process group.
      *
      * @return The set of remote process groups contained by this process group.
-     * @throws InvokerException if there is a problem getting the remote process groups.
+     * @throws InvokerException if there is a problem getting the remote process
+     *                          groups.
      */
     public Set<RemoteProcessGroup> getRemoteProcessGroups() throws InvokerException
     {
-        return new GetRemoteProcessGroupsInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke()
+        return new GetRemoteProcessGroupsInvoker(getController().getTransport()).setId(getId()).invoke()
                 .getRemoteProcessGroups().stream()
-                .map(remoteProcessGroupEntity -> new RemoteProcessGroup(getTransport(), remoteProcessGroupEntity))
+                .map(remoteProcessGroupEntity -> new RemoteProcessGroup(getController(), remoteProcessGroupEntity))
                 .collect(Collectors.toSet());
     }
 
@@ -616,8 +652,9 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      *
      * @param x            The x position for the new label.
      * @param y            The y position for the new label.
-     * @param configurator A consumer that accepts an instance of {@link LabelDTOBuilder} on which the label
-     *                     configuration may be set.
+     * @param configurator A consumer that accepts an instance of
+     *                     {@link LabelDTOBuilder} on which the label configuration
+     *                     may be set.
      * @return The new label.
      * @throws InvokerException if there is a problem creating a new label.
      */
@@ -629,10 +666,10 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 
         configurator.accept(labelDTOBuilder);
 
-        return new Label(getTransport(), new CreateLabelInvoker(getTransport(), 0)
-                .setId(getId())
+        return new Label(getController(), new CreateLabelInvoker(getController().getTransport()).setId(getId())
                 .setLabelEntity(new LabelEntityBuilder()
-                        .setComponent(labelDTOBuilder.build())
+                        .setComponent(labelDTOBuilder.build()).setRevision(new RevisionDTOBuilder()
+                                .setClientId(getController().getTransport().getClientId()).setVersion(0L).build())
                         .build())
                 .invoke());
     }
@@ -642,13 +679,14 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      *
      * @param x       The x position for the new label.
      * @param y       The y position for the new label.
-     * @param closure A closure that delegates to an instance of {@link LabelDTOBuilder} on which the label
-     *                configuration may be set.
+     * @param closure A closure that delegates to an instance of
+     *                {@link LabelDTOBuilder} on which the label configuration may
+     *                be set.
      * @return The new label.
      * @throws InvokerException if there is a problem creating a new label.
      */
     public Label createLabel(final double x, final double y,
-                             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Label.class) final Closure<LabelDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = Label.class) final Closure<LabelDTOBuilder> closure)
             throws InvokerException
     {
         return createLabel(x, y, configurator -> {
@@ -666,18 +704,14 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Set<Label> getLabels() throws InvokerException
     {
-        return new GetLabelsInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke()
-                .getLabels().stream()
-                .map(labelEntity -> new Label(getTransport(), labelEntity))
-                .collect(Collectors.toSet());
+        return new GetLabelsInvoker(getController().getTransport()).setId(getId()).invoke().getLabels().stream()
+                .map(labelEntity -> new Label(getController(), labelEntity)).collect(Collectors.toSet());
     }
 
     @Override
     public ProcessGroup refresh() throws InvokerException
     {
-        setComponentEntity(new GetProcessGroupInvoker(getTransport(), 0).setId(getId()).invoke());
+        setComponentEntity(new GetProcessGroupInvoker(getController().getTransport()).setId(getId()).invoke());
 
         return this;
     }
@@ -685,15 +719,14 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     @Override
     public ProcessGroup update(final Consumer<ProcessGroupDTOBuilder> configurator) throws InvokerException
     {
-        final ProcessGroupDTOBuilder processGroupDTOBuilder = new ProcessGroupDTOBuilder()
-                .setId(getId());
+        final ProcessGroupDTOBuilder processGroupDTOBuilder = new ProcessGroupDTOBuilder().setId(getId());
 
         configurator.accept(processGroupDTOBuilder);
 
-        setComponentEntity(new UpdateProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
+        setComponentEntity(new UpdateProcessGroupInvoker(getController().getTransport()).setId(getId())
                 .setProcessGroupEntity(new ProcessGroupEntityBuilder()
-                        .setComponent(processGroupDTOBuilder.build())
+                        .setComponent(processGroupDTOBuilder.build()).setRevision(new RevisionDTOBuilder()
+                                .setClientId(getController().getTransport().getClientId()).setVersion(0L).build())
                         .build())
                 .invoke());
 
@@ -705,54 +738,55 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ProcessGroupDTOBuilder.class) final Closure<ProcessGroupDTOBuilder> closure)
             throws InvokerException
     {
-        return super.update(closure);
+        return Updatable.super.update(closure);
     }
 
     /**
      * Gets the set of process group controller services.
      *
-     * @param includeAncestorGroups   Whether or not to include parent/ancestory process groups.
-     * @param includeDescendantGroups Whether or not to include descendant process groups.
+     * @param includeAncestorGroups   Whether or not to include parent/ancestory
+     *                                process groups.
+     * @param includeDescendantGroups Whether or not to include descendant process
+     *                                groups.
      * @return The process group controller services.
-     * @throws InvokerException if there is a problem getting all controller services.
+     * @throws InvokerException if there is a problem getting all controller
+     *                          services.
      */
-    public Set<ControllerService> getControllerServices(final boolean includeAncestorGroups, final boolean includeDescendantGroups) throws InvokerException
+    public Set<ControllerService> getControllerServices(final boolean includeAncestorGroups,
+            final boolean includeDescendantGroups) throws InvokerException
     {
-        return new GetControllerServicesFromGroupInvoker(getTransport(), 0)
-                .setId(getId())
-                .setIncludeAncestorGroups(includeAncestorGroups)
-                .setIncludeDescendantGroups(includeDescendantGroups)
-                .invoke()
-                .getControllerServices().stream()
-                .map(controllerServiceEntity -> new ControllerService(getTransport(), controllerServiceEntity))
+        return new GetControllerServicesFromGroupInvoker(getController().getTransport()).setId(getId())
+                .setIncludeAncestorGroups(includeAncestorGroups).setIncludeDescendantGroups(includeDescendantGroups)
+                .invoke().getControllerServices().stream()
+                .map(controllerServiceEntity -> new ControllerService(getController(), controllerServiceEntity))
                 .collect(Collectors.toSet());
     }
 
     /**
      * Creates a new Process Group scoped Controller Service.
      *
-     * @param type         The fully qualified class name of the controller service to
-     *                     create.
+     * @param type         The fully qualified class name of the controller service
+     *                     to create.
      * @param configurator A consumer that accepts an instance of
-     *                     {@link ControllerServiceDTOBuilder} on which controller service
-     *                     settings may be set.
+     *                     {@link ControllerServiceDTOBuilder} on which controller
+     *                     service settings may be set.
      * @return The new controller service.
      * @throws InvokerException if there is a problem creating the controller
      *                          service.
      * @see Controller#getControllerServiceTypeDTOs()
      */
     public ControllerService createControllerService(final String type,
-                                                     final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
+            final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
     {
-        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder()
-                .setType(type);
+        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder().setType(type);
 
         configurator.accept(controllerServiceDTOBuilder);
 
-        return new ControllerService(getTransport(), new CreateControllerServiceInvoker(getTransport(), 0)
+        return new ControllerService(getController(), new CreateControllerServiceInvoker(getController().getTransport())
                 .setId(getId())
                 .setControllerServiceEntity(new ControllerServiceEntityBuilder()
-                        .setComponent(controllerServiceDTOBuilder.build())
+                        .setComponent(controllerServiceDTOBuilder.build()).setRevision(new RevisionDTOBuilder()
+                                .setClientId(getController().getTransport().getClientId()).setVersion(0L).build())
                         .build())
                 .invoke());
     }
@@ -760,18 +794,18 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     /**
      * Creates a new Process Group scoped Controller Service.
      *
-     * @param type    The fully qualified class name of the type of controller service
-     *                to create.
+     * @param type    The fully qualified class name of the type of controller
+     *                service to create.
      * @param closure A closure that delegates to an instance of
-     *                {@link ControllerServiceDTOBuilder} on which controller service
-     *                settings may be set.
+     *                {@link ControllerServiceDTOBuilder} on which controller
+     *                service settings may be set.
      * @return The new controller service.
      * @throws InvokerException if there is a problem creating the controller
      *                          service.
      * @see Controller#getControllerServiceTypeDTOs()
      */
     public ControllerService createControllerService(final String type,
-                                                     @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
             throws InvokerException
     {
         return createControllerService(type, configurator -> {
@@ -784,40 +818,35 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveProcessGroupInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke();
+        new RemoveProcessGroupInvoker(getController().getTransport()).setId(getId())
+                .setVersion(getRevisionDTO().getVersion()).invoke();
     }
 
     /**
      * Creates a snippet containing components from this process group.
      *
      * @param configurator A consumer that accepts an instance of
-     *                     {@link com.tibtech.nifi.client.Snippet.SnippetDTOBuilder} to which snippet components may be
-     *                     added.
+     *                     {@link com.tibtech.nifi.client.Snippet.SnippetDTOBuilder}
+     *                     to which snippet components may be added.
      * @return The new snippet.
      * @throws InvokerException if there is a problem creating a snippet.
      */
     public Snippet createSnippet(final Consumer<Snippet.SnippetDTOBuilder> configurator) throws InvokerException
     {
-        final Snippet.SnippetDTOBuilder snippetDtoBuilder = new Snippet.SnippetDTOBuilder()
-                .setParentGroup(this);
+        final Snippet.SnippetDTOBuilder snippetDtoBuilder = new Snippet.SnippetDTOBuilder().setParentGroup(this);
 
         configurator.accept(snippetDtoBuilder);
 
-        return new Snippet(this, new CreateSnippetInvoker(getTransport(), 0)
-                .setSnippetEntity(new SnippetEntityBuilder()
-                        .setSnippet(snippetDtoBuilder.build())
-                        .build())
-                .invoke());
+        return new Snippet(this, new CreateSnippetInvoker(getController().getTransport())
+                .setSnippetEntity(new SnippetEntityBuilder().setSnippet(snippetDtoBuilder.build()).build()).invoke());
     }
 
     /**
      * Creates a snippet containing components from this process group.
      *
      * @param closure A closure that delegates to an instance of
-     *                {@link com.tibtech.nifi.client.Snippet.SnippetDTOBuilder} to which snippet components may be
-     *                added.
+     *                {@link com.tibtech.nifi.client.Snippet.SnippetDTOBuilder} to
+     *                which snippet components may be added.
      * @return The new snippet.
      * @throws InvokerException if there is a problem creating a snippet.
      */
@@ -841,10 +870,8 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Template uploadTemplate(final InputStream template) throws InvokerException
     {
-        return new Template(getTransport(), new UploadTemplateInvoker(getTransport(), 0)
-                .setId(getId())
-                .setTemplate(template)
-                .invoke());
+        return new Template(getController(), new UploadTemplateInvoker(getController().getTransport()).setId(getId())
+                .setTemplate(template).invoke());
     }
 
     /**
@@ -858,14 +885,11 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      */
     public Flow instantiateTemplate(final double x, final double y, final Template template) throws InvokerException
     {
-        return new Flow(getTransport(), new InstantiateTemplateInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setInstantiateTemplateRequestEntity(new InstantiateTemplateRequestEntityBuilder()
-                        .setOriginX(x)
-                        .setOriginY(y)
-                        .setTemplateId(template.getId())
-                        .build())
-                .invoke());
+        return new Flow(getController(),
+                new InstantiateTemplateInvoker(getController().getTransport()).setId(getId())
+                        .setInstantiateTemplateRequestEntity(new InstantiateTemplateRequestEntityBuilder().setOriginX(x)
+                                .setOriginY(y).setTemplateId(template.getId()).build())
+                        .invoke());
     }
 
     /**
@@ -914,9 +938,11 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
      * Schedules components within the process group to be run or stopped.
      *
      * @param running Whether the components should be running or not.
-     * @throws InvokerException if the run state of the components could not be changed.
+     * @throws InvokerException if the run state of the components could not be
+     *                          changed.
      */
-    public ProcessGroup setComponentRunStates(final boolean running, final Collection<Component> components) throws InvokerException
+    public ProcessGroup setComponentRunStates(final boolean running, final Collection<Component> components)
+            throws InvokerException
     {
         final Map<String, RevisionDTO> revisionIdsMap = new HashMap<>();
         components.forEach(component -> {
@@ -925,30 +951,31 @@ public class ProcessGroup extends UpdatableComponent<ProcessGroup, ProcessGroupE
 
         final String runState = running ? STATE_RUNNING : STATE_STOPPED;
 
-        new ScheduleComponentsInvoker(getTransport(), 0)
-                .setId(getId())
-                .setScheduleComponentsEntity(new ScheduleComponentsEntityBuilder()
-                        .setId(getId())
-                        .setState(runState)
-                        .setComponents(revisionIdsMap)
-                        .build())
+        new ScheduleComponentsInvoker(getController().getTransport()).setId(getId())
+                .setScheduleComponentsEntity(new ScheduleComponentsEntityBuilder().setId(getId()).setState(runState)
+                        .setComponents(revisionIdsMap).build())
                 .invoke();
 
         return this.refresh();
     }
 
     /**
-     * Gets the process group with a specific ID.
+     * Gets the status for a process group. The status for a process group includes
+     * status for all descendant components. When invoked on the root group with
+     * recursive set to true, it will return the current status of every component
+     * in the flow.
      *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the process group to get.
-     * @return The process group with the specified ID.
-     * @throws InvokerException if there is a problem getting the process group.
+     * @param recursive Optional recursive flag that defaults to false. If set to
+     *                  true, all descendant groups and the status of their content
+     *                  will be included.
      */
-    public static ProcessGroup get(final Transport transport, final String id) throws InvokerException
+    public void getStatus(final boolean recursive) throws InvokerException
     {
-        return new ProcessGroup(transport, new GetProcessGroupInvoker(transport, 0)
-                .setId(id)
-                .invoke());
+        final ProcessGroupStatusDTO processGroupStatusDTO = new GetProcessGroupStatusInvoker(
+                getController().getTransport()).setId(getId()).setRecursive(recursive)
+// TODO: Cluster node support               .setClusterNodeId()
+// TODO: Nodewise support               .setNodewise()
+                        .invoke().getProcessGroupStatus();
+        // TODO: Parse into some sort of usable response.
     }
 }

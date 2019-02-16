@@ -5,25 +5,30 @@ import com.tibtech.nifi.web.api.entity.PortEntityBuilder;
 import com.tibtech.nifi.web.api.outputport.GetOutputPortInvoker;
 import com.tibtech.nifi.web.api.outputport.RemoveOutputPortInvoker;
 import com.tibtech.nifi.web.api.outputport.UpdateOutputPortInvoker;
+
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
 import org.apache.nifi.web.api.entity.PortEntity;
 
 import java.util.function.Consumer;
 
 /**
- * OutputPort represents a NiFi flow output port which provides a mechanism for transferring data from a Process Group
- * to destinations outside of the Process Group.
+ * OutputPort represents a NiFi flow output port which provides a mechanism for
+ * transferring data from a Process Group to destinations outside of the Process
+ * Group.
  */
 public class OutputPort extends Port<OutputPort>
 {
     /**
      * Constructs a new instance of OutputPort.
      *
-     * @param transport  The transport with which to communicate with the NiFi server.
+     * @param controller The controller to which the output port belongs.
      * @param portEntity The entity that represents the output port.
      */
-    public OutputPort(final Transport transport, final PortEntity portEntity)
+    public OutputPort(final Controller controller, final PortEntity portEntity)
     {
-        super(transport, portEntity);
+        super(controller, portEntity);
     }
 
     @Override
@@ -35,16 +40,14 @@ public class OutputPort extends Port<OutputPort>
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveOutputPortInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId());
+        new RemoveOutputPortInvoker(getController().getTransport()).setId(getId())
+                .setVersion(getRevisionDTO().getVersion()).invoke();
     }
 
     @Override
     public OutputPort refresh() throws InvokerException
     {
-        setComponentEntity(new GetOutputPortInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke());
+        setComponentEntity(new GetOutputPortInvoker(getController().getTransport()).setId(getId()).invoke());
 
         return this;
     }
@@ -52,33 +55,22 @@ public class OutputPort extends Port<OutputPort>
     @Override
     public OutputPort update(final Consumer<PortDTOBuilder> configurator) throws InvokerException
     {
-        final PortDTOBuilder portDTOBuilder = new PortDTOBuilder()
-                .setId(getId());
+        final PortDTOBuilder portDTOBuilder = new PortDTOBuilder().setId(getId());
 
         configurator.accept(portDTOBuilder);
 
-        setComponentEntity(new UpdateOutputPortInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setPortEntity(new PortEntityBuilder()
-                        .setComponent(portDTOBuilder.build())
-                        .build())
+        setComponentEntity(new UpdateOutputPortInvoker(getController().getTransport()).setId(getId()).setPortEntity(
+                new PortEntityBuilder().setComponent(portDTOBuilder.build()).setRevision(getRevisionDTO()).build())
                 .invoke());
 
         return this;
     }
 
-    /**
-     * Gets the output port with a specific ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the output port to get.
-     * @return The output port with the specified ID.
-     * @throws InvokerException if there is a problem getting the output port.
-     */
-    public static OutputPort get(final Transport transport, final String id) throws InvokerException
+    @Override
+    public OutputPort update(
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = OutputPort.class) final Closure<PortDTOBuilder> closure)
+            throws InvokerException
     {
-        return new OutputPort(transport, new GetOutputPortInvoker(transport, 0)
-                .setId(id)
-                .invoke());
+        return super.update(closure);
     }
 }

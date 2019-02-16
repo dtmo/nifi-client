@@ -16,13 +16,12 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
     /**
      * Constructs a new instance of Template.
      *
-     * @param transport       The transport with which to communicate with the NiFi
-     *                        server.
+     * @param controller      The controller to which the template belongs.
      * @param componentEntity The component entity.
      */
-    public Template(final Transport transport, final TemplateEntity componentEntity)
+    public Template(final Controller controller, final TemplateEntity componentEntity)
     {
-        super(transport, componentEntity);
+        super(controller, componentEntity);
     }
 
     /**
@@ -48,7 +47,7 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
 
     public ProcessGroup getProcessGroup()
     {
-        return ProcessGroup.get(getTransport(), getTemplateDTO().getGroupId());
+        return getController().getProcessGroup(getTemplateDTO().getGroupId());
     }
 
     public String getName()
@@ -71,8 +70,6 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
         return getTemplateDTO().getEncodingVersion();
     }
 
-//    public FlowSnippetDTO snippet;
-
     /**
      * Exports the template as an XML string.
      *
@@ -81,16 +78,12 @@ public class Template extends AbstractComponent<TemplateEntity> implements Delet
      */
     public String export() throws InvokerException
     {
-        return new ExportTemplateInvoker(getTransport(), 0)
-                .setId(getId())
-                .invoke();
+        return new ExportTemplateInvoker(getController().getTransport()).setId(getId()).invoke();
     }
 
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveTemplateInvoker(getTransport(), 0)
-                .setId(getId())
-                .invoke();
+        new RemoveTemplateInvoker(getController().getTransport()).setId(getId()).invoke();
     }
 }

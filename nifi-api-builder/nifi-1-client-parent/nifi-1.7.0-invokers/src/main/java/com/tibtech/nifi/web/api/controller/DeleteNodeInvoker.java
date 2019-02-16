@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.NodeEntity;
 public final class DeleteNodeInvoker extends AbstractInvoker<NodeEntity> {
   private String id;
 
-  public DeleteNodeInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public DeleteNodeInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

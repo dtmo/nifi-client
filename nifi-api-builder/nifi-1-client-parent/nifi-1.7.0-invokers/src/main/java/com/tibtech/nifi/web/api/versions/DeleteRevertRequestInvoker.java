@@ -19,8 +19,8 @@ public final class DeleteRevertRequestInvoker extends AbstractInvoker<VersionedF
 
   private Boolean disconnectedNodeAcknowledged;
 
-  public DeleteRevertRequestInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public DeleteRevertRequestInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

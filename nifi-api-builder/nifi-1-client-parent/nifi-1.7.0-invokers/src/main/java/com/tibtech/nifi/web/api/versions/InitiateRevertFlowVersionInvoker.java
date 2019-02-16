@@ -20,8 +20,8 @@ public final class InitiateRevertFlowVersionInvoker extends AbstractInvoker<Vers
 
   private VersionControlInformationEntity versionControlInformationEntity;
 
-  public InitiateRevertFlowVersionInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public InitiateRevertFlowVersionInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

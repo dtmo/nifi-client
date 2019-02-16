@@ -14,8 +14,8 @@ import java.util.Set;
  *
  * @param <T> The type of port.
  */
-public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, PortEntity, PortDTOBuilder>
-        implements Connectable, Deletable, Refreshable<T, PortDTOBuilder>
+public abstract class Port<T extends Port<T>> extends AbstractComponent<PortEntity>
+        implements Connectable, Deletable, Refreshable<T>, Updatable<T, PortDTOBuilder>
 {
     public static final String STATE_RUNNING = "RUNNING";
     public static final String STATE_STOPPED = "STOPPED";
@@ -24,12 +24,12 @@ public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, Port
     /**
      * Constructs a new instance of Port.
      *
-     * @param transport  The transport with which to communicate with the NiFi server.
+     * @param controller The controller to which the port belongs.
      * @param portEntity The entity that represents the port.
      */
-    public Port(final Transport transport, final PortEntity portEntity)
+    public Port(final Controller controller, final PortEntity portEntity)
     {
-        super(transport, portEntity);
+        super(controller, portEntity);
     }
 
     /**
@@ -95,9 +95,11 @@ public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, Port
     }
 
     /**
-     * Returns the number of tasks that should be concurrently scheduled for this port.
+     * Returns the number of tasks that should be concurrently scheduled for this
+     * port.
      *
-     * @return The number of tasks that should be concurrently scheduled for this port.
+     * @return The number of tasks that should be concurrently scheduled for this
+     *         port.
      */
     public int getConcurrentlySchedulableTaskCount()
     {
@@ -125,7 +127,8 @@ public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, Port
     }
 
     /**
-     * Returns the state of this port. Possible states are 'RUNNING', 'STOPPED', and 'DISABLED'
+     * Returns the state of this port. Possible states are 'RUNNING', 'STOPPED', and
+     * 'DISABLED'
      *
      * @return The state of this port.
      */
@@ -155,8 +158,9 @@ public abstract class Port<T extends Port<T>> extends UpdatableComponent<T, Port
     }
 
     /**
-     * Returns the validation errors from this port. These validation errors represent the problems with the port that
-     * must be resolved before it can be started.
+     * Returns the validation errors from this port. These validation errors
+     * represent the problems with the port that must be resolved before it can be
+     * started.
      *
      * @return The validation errors from this port.
      */

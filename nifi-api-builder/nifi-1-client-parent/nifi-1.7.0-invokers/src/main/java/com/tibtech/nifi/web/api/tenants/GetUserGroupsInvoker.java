@@ -13,8 +13,8 @@ import org.apache.nifi.web.api.entity.UserGroupsEntity;
  * <p>Note: This endpoint is subject to change as NiFi and it's REST API evolve.</p>
  */
 public final class GetUserGroupsInvoker extends AbstractInvoker<UserGroupsEntity> {
-  public GetUserGroupsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetUserGroupsInvoker(final Transport transport) {
+    super(transport);
   }
 
   public final UserGroupsEntity invoke() throws InvokerException {

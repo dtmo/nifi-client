@@ -1,13 +1,24 @@
 package com.tibtech.nifi.client;
 
+import com.tibtech.nifi.web.api.connection.GetConnectionInvoker;
 import com.tibtech.nifi.web.api.controller.CreateControllerServiceInvoker;
 import com.tibtech.nifi.web.api.controller.CreateReportingTaskInvoker;
+import com.tibtech.nifi.web.api.controllerservice.GetControllerServiceInvoker;
 import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
 import com.tibtech.nifi.web.api.dto.ReportingTaskDTOBuilder;
+import com.tibtech.nifi.web.api.dto.RevisionDTOBuilder;
 import com.tibtech.nifi.web.api.entity.ControllerServiceEntityBuilder;
 import com.tibtech.nifi.web.api.entity.ReportingTaskEntityBuilder;
 import com.tibtech.nifi.web.api.flow.*;
+import com.tibtech.nifi.web.api.funnel.GetFunnelInvoker;
+import com.tibtech.nifi.web.api.inputport.GetInputPortInvoker;
+import com.tibtech.nifi.web.api.label.GetLabelInvoker;
+import com.tibtech.nifi.web.api.outputport.GetOutputPortInvoker;
 import com.tibtech.nifi.web.api.processgroup.GetProcessGroupInvoker;
+import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
+import com.tibtech.nifi.web.api.remoteprocessgroup.GetRemoteProcessGroupInvoker;
+import com.tibtech.nifi.web.api.reportingtask.GetReportingTaskInvoker;
+
 import groovy.lang.Closure;
 import groovy.lang.DelegatesTo;
 import org.apache.nifi.web.api.dto.DocumentedTypeDTO;
@@ -40,6 +51,138 @@ public class Controller
     }
 
     /**
+     * Returns the transport with which to communicate with the NiFi instance.
+     * 
+     * @return The transport with which to communicate with the NiFi instance.
+     */
+    public Transport getTransport()
+    {
+        return transport;
+    }
+
+    /**
+     * Gets the connection with the specified ID.
+     *
+     * @param id The ID of the connection to get.
+     * @return The connection with the specified ID.
+     * @throws InvokerException if there is a problem getting the connection.
+     */
+    public Connection getConnection(final String id) throws InvokerException
+    {
+        return new Connection(this, new GetConnectionInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Returns the controller service with a specific ID.
+     *
+     * @param id The ID of the controller service to return.
+     * @return The controller service with the specified ID.
+     * @throws InvokerException if there is a problem getting the controller
+     *                          service.
+     */
+    public ControllerService getControllerService(final String id) throws InvokerException
+    {
+        return new ControllerService(this, new GetControllerServiceInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Gets the funnel with a specific ID.
+     *
+     * @param id The ID of the funnel to get.
+     * @return The funnel with the specified ID.
+     * @throws InvokerException if there is a problem getting the funnel.
+     */
+    public Funnel getFunnel(final String id) throws InvokerException
+    {
+        return new Funnel(this, new GetFunnelInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Gets the input port with a specific ID.
+     *
+     * @param id The ID of the input port to get.
+     * @return The input port with the specified ID.
+     * @throws InvokerException if there is a problem getting the input port.
+     */
+    public InputPort getInputPort(final String id) throws InvokerException
+    {
+        return new InputPort(this, new GetInputPortInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Gets the label with a specific ID.
+     *
+     * @param id The ID of the label to get.
+     * @return The label with the specified ID.
+     * @throws InvokerException if there is a problem getting the label.
+     */
+    public Label getLabel(final String id) throws InvokerException
+    {
+        return new Label(this, new GetLabelInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Gets the output port with a specific ID.
+     *
+     * @param id The ID of the output port to get.
+     * @return The output port with the specified ID.
+     * @throws InvokerException if there is a problem getting the output port.
+     */
+    public OutputPort getOutputPort(final String id) throws InvokerException
+    {
+        return new OutputPort(this, new GetOutputPortInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Gets the process group with a specific ID.
+     *
+     * @param id The ID of the process group to get.
+     * @return The process group with the specified ID.
+     * @throws InvokerException if there is a problem getting the process group.
+     */
+    public ProcessGroup getProcessGroup(final String id) throws InvokerException
+    {
+        return new ProcessGroup(this, new GetProcessGroupInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Returns the processor with a specific ID.
+     *
+     * @param id The ID of the processor to return.
+     * @return The processor with the specified ID.
+     * @throws InvokerException if there is a problem getting the processor.
+     */
+    public Processor getProcessor(final String id) throws InvokerException
+    {
+        return new Processor(this, new GetProcessorInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Gets the remote process group with a specific ID.
+     *
+     * @param id The ID of the remote process group to get.
+     * @return The remote process group with the specified ID.
+     * @throws InvokerException if there is a problem getting the remote process
+     *                          group.
+     */
+    public RemoteProcessGroup getRemoteProcessGroup(final String id) throws InvokerException
+    {
+        return new RemoteProcessGroup(this, new GetRemoteProcessGroupInvoker(transport).setId(id).invoke());
+    }
+
+    /**
+     * Returns the reporting task with a specific ID.
+     *
+     * @param id The ID of the reporting task to return.
+     * @return The reporting task with the specified ID.
+     * @throws InvokerException if there is a problem getting the reporting task.
+     */
+    public ReportingTask getReportingTask(final String id) throws InvokerException
+    {
+        return new ReportingTask(this, new GetReportingTaskInvoker(transport).setId(id).invoke());
+    }
+
+    /**
      * Returns a reference to the root process group.
      *
      * @return The root process group.
@@ -48,68 +191,66 @@ public class Controller
      */
     public ProcessGroup getRootProcessGroup() throws InvokerException
     {
-        return new ProcessGroup(transport,
-                new GetProcessGroupInvoker(transport, 0).setId(ROOT_PROCESS_GROUP_ID).invoke());
+        return getProcessGroup(ROOT_PROCESS_GROUP_ID);
     }
 
     /**
      * Gets the set of all Reporting Task scope Controller Services.
      *
      * @return The set of all controller services.
-     * @throws InvokerException if there is a problem getting all controller services.
+     * @throws InvokerException if there is a problem getting all controller
+     *                          services.
      */
     public Set<ControllerService> getControllerServices() throws InvokerException
     {
-        return new GetControllerServicesFromControllerInvoker(transport, 0)
-                .invoke()
-                .getControllerServices().stream()
-                .map(controllerServiceEntity -> new ControllerService(transport, controllerServiceEntity))
+        return new GetControllerServicesFromControllerInvoker(transport).invoke().getControllerServices().stream()
+                .map(controllerServiceEntity -> new ControllerService(this, controllerServiceEntity))
                 .collect(Collectors.toSet());
     }
 
     /**
      * Creates a new Reporting Task scoped Controller Service.
      *
-     * @param type         The fully qualified class name of the controller service to
-     *                     create.
+     * @param type         The fully qualified class name of the controller service
+     *                     to create.
      * @param configurator A consumer that accepts an instance of
-     *                     {@link ControllerServiceDTOBuilder} on which controller service
-     *                     settings may be set.
+     *                     {@link ControllerServiceDTOBuilder} on which controller
+     *                     service settings may be set.
      * @return The new controller service.
      * @throws InvokerException if there is a problem creating the controller
      *                          service.
      * @see #getControllerServiceTypeDTOs()
      */
     public ControllerService createControllerService(final String type,
-                                                     final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
+            final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
     {
-        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder()
-                .setType(type);
+        final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder().setType(type);
 
         configurator.accept(controllerServiceDTOBuilder);
 
-        return new ControllerService(transport, new CreateControllerServiceInvoker(transport, 0)
+        return new ControllerService(this, new CreateControllerServiceInvoker(transport)
                 .setControllerServiceEntity(new ControllerServiceEntityBuilder()
-                        .setComponent(controllerServiceDTOBuilder.build())
-                        .build())
+                        .setRevision(
+                                new RevisionDTOBuilder().setClientId(transport.getClientId()).setVersion(0L).build())
+                        .setComponent(controllerServiceDTOBuilder.build()).build())
                 .invoke());
     }
 
     /**
      * Creates a new Reporting Task scoped Controller Service.
      *
-     * @param type    The fully qualified class name of the type of controller service
-     *                to create.
+     * @param type    The fully qualified class name of the type of controller
+     *                service to create.
      * @param closure A closure that delegates to an instance of
-     *                {@link ControllerServiceDTOBuilder} on which controller service
-     *                settings may be set.
+     *                {@link ControllerServiceDTOBuilder} on which controller
+     *                service settings may be set.
      * @return The new controller service.
      * @throws InvokerException if there is a problem creating the controller
      *                          service.
      * @see #getControllerServiceTypeDTOs()
      */
     public ControllerService createControllerService(final String type,
-                                                     @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
             throws InvokerException
     {
         return createControllerService(type, configurator -> {
@@ -127,11 +268,8 @@ public class Controller
      */
     public Set<Template> getTemplates() throws InvokerException
     {
-        return new GetTemplatesInvoker(transport, 0)
-                .invoke()
-                .getTemplates().stream()
-                .map(templateEntity -> new Template(transport, templateEntity))
-                .collect(Collectors.toSet());
+        return new GetTemplatesInvoker(transport).invoke().getTemplates().stream()
+                .map(templateEntity -> new Template(this, templateEntity)).collect(Collectors.toSet());
     }
 
     /**
@@ -144,7 +282,7 @@ public class Controller
      */
     public Set<DocumentedTypeDTO> getControllerServiceTypeDTOs() throws InvokerException
     {
-        return new GetControllerServiceTypesInvoker(transport, 0).invoke().getControllerServiceTypes();
+        return new GetControllerServiceTypesInvoker(transport).invoke().getControllerServiceTypes();
     }
 
     /**
@@ -156,7 +294,7 @@ public class Controller
      */
     public Set<DocumentedTypeDTO> getProcessorTypeDTOs() throws InvokerException
     {
-        return new GetProcessorTypesInvoker(transport, 0).invoke().getProcessorTypes();
+        return new GetProcessorTypesInvoker(transport).invoke().getProcessorTypes();
     }
 
     /**
@@ -168,7 +306,7 @@ public class Controller
      */
     public Set<DocumentedTypeDTO> getReportingTaskTypeDTOs() throws InvokerException
     {
-        return new GetReportingTaskTypesInvoker(transport, 0).invoke().getReportingTaskTypes();
+        return new GetReportingTaskTypesInvoker(transport).invoke().getReportingTaskTypes();
     }
 
     /**
@@ -179,19 +317,18 @@ public class Controller
      */
     public Set<ReportingTask> getReportingTasks() throws InvokerException
     {
-        return new GetReportingTasksInvoker(transport, 0).invoke().getReportingTasks().stream()
-                .map(reportingTaskEntity -> new ReportingTask(transport, reportingTaskEntity))
-                .collect(Collectors.toSet());
+        return new GetReportingTasksInvoker(transport).invoke().getReportingTasks().stream()
+                .map(reportingTaskEntity -> new ReportingTask(this, reportingTaskEntity)).collect(Collectors.toSet());
     }
 
     /**
      * Creates a reporting task.
      *
-     * @param type         The fully qualified class name of the type of reporting task to
-     *                     create.
+     * @param type         The fully qualified class name of the type of reporting
+     *                     task to create.
      * @param configurator A consumer that accepts an instance of
-     *                     {@link ReportingTaskDTOBuilder} on which reporting task settings may
-     *                     be set.
+     *                     {@link ReportingTaskDTOBuilder} on which reporting task
+     *                     settings may be set.
      * @return The new reporting task.
      * @throws InvokerException if there is a problem creating the new reporting
      *                          task.
@@ -203,28 +340,27 @@ public class Controller
 
         configurator.accept(reportingTaskDTOBuilder);
 
-        return new ReportingTask(transport,
-                new CreateReportingTaskInvoker(transport, 0)
-                        .setReportingTaskEntity(new ReportingTaskEntityBuilder()
-                                .setComponent(reportingTaskDTOBuilder.build())
-                                .build())
-                        .invoke());
+        return new ReportingTask(this,
+                new CreateReportingTaskInvoker(transport).setReportingTaskEntity(new ReportingTaskEntityBuilder()
+                        .setRevision(
+                                new RevisionDTOBuilder().setClientId(transport.getClientId()).setVersion(0L).build())
+                        .setComponent(reportingTaskDTOBuilder.build()).build()).invoke());
     }
 
     /**
      * Creates a reporting task.
      *
-     * @param type    The fully qualified class name of the type of reporting task to
-     *                create.
+     * @param type    The fully qualified class name of the type of reporting task
+     *                to create.
      * @param closure A closure that delegates to an instance of
-     *                {@link ReportingTaskDTOBuilder} on which reporting task settings may
-     *                be set.
+     *                {@link ReportingTaskDTOBuilder} on which reporting task
+     *                settings may be set.
      * @return The new reporting task.
      * @throws InvokerException if there is a problem creating the new reporting
      *                          task.
      */
     public ReportingTask createReportingTask(final String type,
-                                             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReportingTaskDTOBuilder.class) final Closure<ReportingTaskDTOBuilder> closure)
+            @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReportingTaskDTOBuilder.class) final Closure<ReportingTaskDTOBuilder> closure)
             throws InvokerException
     {
         return createReportingTask(type, configurator -> {
@@ -237,11 +373,13 @@ public class Controller
     /**
      * Connects to an instance of a NiFi Controller.
      *
-     * @param clientBuilder The client builder with which to create a client to communicate with the NiFi Controller.
-     * @param baseUri       The base URI of the NiFi instance. This is the usual NiFi URL
-     *                      without the '/nifi' suffix.
+     * @param clientBuilder The client builder with which to create a client to
+     *                      communicate with the NiFi Controller.
+     * @param baseUri       The base URI of the NiFi instance. This is the usual
+     *                      NiFi URL without the '/nifi' suffix.
      * @return A new instance of Controller.
-     * @throws InvokerException if there is a problem connecting to the NiFi Controllers.
+     * @throws InvokerException if there is a problem connecting to the NiFi
+     *                          Controllers.
      */
     public static Controller connect(final ClientBuilder clientBuilder, final String baseUri) throws InvokerException
     {
@@ -249,7 +387,7 @@ public class Controller
         final Client client = clientBuilder.build();
         final Transport transport = new Transport(client, baseUri);
 
-        new GenerateClientIdInvoker(transport, 0).invoke();
+        new GenerateClientIdInvoker(transport).invoke();
 
         final Controller controller = new Controller(transport);
         return controller;
@@ -261,7 +399,8 @@ public class Controller
      * @param baseUri The base URI of the NiFi instance. This is the usual NiFi URL
      *                without the '/nifi' suffix.
      * @return A new instance of Controller.
-     * @throws InvokerException if there is a problem connecting to the NiFi Controller.
+     * @throws InvokerException if there is a problem connecting to the NiFi
+     *                          Controller.
      */
     public static Controller connect(final String baseUri) throws InvokerException
     {

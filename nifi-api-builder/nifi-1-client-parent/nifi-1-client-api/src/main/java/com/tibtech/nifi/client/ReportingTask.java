@@ -21,8 +21,8 @@ import java.util.function.Consumer;
  * background to provide statistical reports about what is happening in the NiFi
  * instance.
  */
-public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTaskEntity, ReportingTaskDTOBuilder>
-        implements Deletable, Refreshable<ReportingTask, ReportingTaskDTOBuilder>
+public class ReportingTask extends AbstractComponent<ReportingTaskEntity>
+        implements Deletable, Refreshable<ReportingTask>, Updatable<ReportingTask, ReportingTaskDTOBuilder>
 {
     public static final String STATE_RUNNING = "RUNNING";
     public static final String STATE_STOPPED = "STOPPED";
@@ -33,8 +33,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
      * Examples of "relevant Events" are:
      *
      * <ul>
-     * <li>A FlowFile is added to one of the Component's incoming
-     * Connections</li>
+     * <li>A FlowFile is added to one of the Component's incoming Connections</li>
      * <li>A FlowFile is removed from one of the Component's outgoing
      * Connections</li>
      * <li>The Component is scheduled to run (started)</li>
@@ -46,8 +45,8 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
      * </p>
      *
      * <p>
-     * When using this mode, the maximum number of concurrent tasks can be set
-     * to 0, indicating no maximum.
+     * When using this mode, the maximum number of concurrent tasks can be set to 0,
+     * indicating no maximum.
      * </p>
      *
      * <p>
@@ -58,20 +57,19 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
 
     /**
      * Components should be scheduled to run on a periodic interval that is
-     * user-defined with a user-defined number of concurrent tasks. All
-     * Components support Timer-Driven mode.
+     * user-defined with a user-defined number of concurrent tasks. All Components
+     * support Timer-Driven mode.
      */
     public static final String SCHEDULING_STRATEGY_TIMER_DRIVEN = "TIMER_DRIVEN";
 
     /**
-     * NOTE: This option has been deprecated with the addition of the
-     * execution-node combo box.  It still exists for backward compatibility
-     * with existing flows that still have this value for schedulingStrategy.
-     * *
-     * Indicates that the component will be scheduled via timer only on the
-     * Primary Node. If the instance is not part of a cluster and this
-     * Scheduling Strategy is used, the component will be scheduled in the same
-     * manner as if {@link TIMER_DRIVEN} were used.
+     * NOTE: This option has been deprecated with the addition of the execution-node
+     * combo box. It still exists for backward compatibility with existing flows
+     * that still have this value for schedulingStrategy. * Indicates that the
+     * component will be scheduled via timer only on the Primary Node. If the
+     * instance is not part of a cluster and this Scheduling Strategy is used, the
+     * component will be scheduled in the same manner as if {@link TIMER_DRIVEN}
+     * were used.
      */
     @Deprecated
     public static final String SCHEDULING_STRATEGY_PRIMARY_NODE_ONLY = "PRIMARY_NODE_ONLY";
@@ -85,13 +83,13 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
     /**
      * Constructs a new instance of ReportingTask.
      *
-     * @param transport           The transport with which to communicate with the NiFi
-     *                            server.
+     * @param controller          The controller to whicg the reporting task
+     *                            belongs.
      * @param reportingTaskEntity The entity that describes the reporting task.
      */
-    public ReportingTask(final Transport transport, final ReportingTaskEntity reportingTaskEntity)
+    public ReportingTask(final Controller controller, final ReportingTaskEntity reportingTaskEntity)
     {
-        super(transport, reportingTaskEntity);
+        super(controller, reportingTaskEntity);
     }
 
     /**
@@ -172,8 +170,8 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
     }
 
     /**
-     * Returns the state of the reporting task. Allowable values are: {@value #STATE_RUNNING},
-     * {@value #STATE_STOPPED}, {@value #STATE_DISABLED}.
+     * Returns the state of the reporting task. Allowable values are:
+     * {@value #STATE_RUNNING}, {@value #STATE_STOPPED}, {@value #STATE_DISABLED}.
      *
      * @return The state of the reporting task.
      */
@@ -187,7 +185,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
      * value should be interpreted.
      *
      * @return The scheduling strategy that determines how the scheduling period
-     * value should be interpreted.
+     *         value should be interpreted.
      */
     public String getSchedulingStrategy()
     {
@@ -219,7 +217,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
      * applicable. Null otherwise.
      *
      * @return The URL for this reporting task custom configuration UI if
-     * applicable.
+     *         applicable.
      */
     public String getCustomUiUrl()
     {
@@ -254,7 +252,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
      * strategies.
      *
      * @return The default scheduling period for the different scheduling
-     * strategies.
+     *         strategies.
      */
     public Map<String, String> getDefaultSchedulingPeriod()
     {
@@ -274,9 +272,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
     @Override
     public ReportingTask refresh() throws InvokerException
     {
-        setComponentEntity(new GetReportingTaskInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke());
+        setComponentEntity(new GetReportingTaskInvoker(getController().getTransport()).setId(getId()).invoke());
 
         return this;
     }
@@ -284,17 +280,15 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
     @Override
     public ReportingTask update(final Consumer<ReportingTaskDTOBuilder> configurator) throws InvokerException
     {
-        final ReportingTaskDTOBuilder reportingTaskDTOBuilder = new ReportingTaskDTOBuilder()
-                .setId(getId());
+        final ReportingTaskDTOBuilder reportingTaskDTOBuilder = new ReportingTaskDTOBuilder().setId(getId());
 
         configurator.accept(reportingTaskDTOBuilder);
 
-        setComponentEntity(new UpdateReportingTaskInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .setReportingTaskEntity(new ReportingTaskEntityBuilder()
-                        .setComponent(reportingTaskDTOBuilder.build())
-                        .build())
-                .invoke());
+        setComponentEntity(
+                new UpdateReportingTaskInvoker(getController().getTransport()).setId(getId())
+                        .setReportingTaskEntity(new ReportingTaskEntityBuilder()
+                                .setComponent(reportingTaskDTOBuilder.build()).setRevision(getRevisionDTO()).build())
+                        .invoke());
 
         return this;
     }
@@ -304,7 +298,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ReportingTaskDTOBuilder.class) final Closure<ReportingTaskDTOBuilder> closure)
             throws InvokerException
     {
-        return super.update(closure);
+        return Updatable.super.update(closure);
     }
 
     /**
@@ -331,7 +325,8 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
      * Sets the state of the reporting task.
      *
      * @param running The state to set.
-     * @throws InvokerException if the state of the reporting task could not be changed.
+     * @throws InvokerException if the state of the reporting task could not be
+     *                          changed.
      */
     public ReportingTask setRunning(final boolean running) throws InvokerException
     {
@@ -343,23 +338,7 @@ public class ReportingTask extends UpdatableComponent<ReportingTask, ReportingTa
     @Override
     public void delete() throws InvokerException
     {
-        new RemoveReportingTaskInvoker(getTransport(), getRevisionDTO().getVersion())
-                .setId(getId())
-                .invoke();
-    }
-
-    /**
-     * Returns the reporting task with a specific ID.
-     *
-     * @param transport The transport with which to communicate with the NiFi server.
-     * @param id        The ID of the reporting task to return.
-     * @return The reporting task with the specified ID.
-     * @throws InvokerException if there is a problem getting the reporting task.
-     */
-    public static ReportingTask get(final Transport transport, final String id) throws InvokerException
-    {
-        return new ReportingTask(transport, new GetReportingTaskInvoker(transport, 0)
-                .setId(id)
-                .invoke());
+        new RemoveReportingTaskInvoker(getController().getTransport()).setId(getId())
+                .setVersion(getRevisionDTO().getVersion()).invoke();
     }
 }

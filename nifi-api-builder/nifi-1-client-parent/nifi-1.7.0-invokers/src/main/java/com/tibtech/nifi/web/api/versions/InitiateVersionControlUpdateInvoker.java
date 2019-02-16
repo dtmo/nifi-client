@@ -20,8 +20,8 @@ public final class InitiateVersionControlUpdateInvoker extends AbstractInvoker<V
 
   private VersionControlInformationEntity versionControlInformationEntity;
 
-  public InitiateVersionControlUpdateInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public InitiateVersionControlUpdateInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.NodeEntity;
 public final class GetNodeInvoker extends AbstractInvoker<NodeEntity> {
   private String id;
 
-  public GetNodeInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetNodeInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

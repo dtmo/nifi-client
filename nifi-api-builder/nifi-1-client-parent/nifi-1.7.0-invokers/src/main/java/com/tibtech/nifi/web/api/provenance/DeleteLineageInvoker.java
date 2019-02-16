@@ -17,8 +17,8 @@ public final class DeleteLineageInvoker extends AbstractInvoker<LineageEntity> {
 
   private String clusterNodeId;
 
-  public DeleteLineageInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public DeleteLineageInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

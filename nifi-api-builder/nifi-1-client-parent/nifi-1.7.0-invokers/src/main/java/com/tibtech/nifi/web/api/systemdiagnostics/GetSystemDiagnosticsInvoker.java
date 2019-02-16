@@ -18,8 +18,8 @@ public final class GetSystemDiagnosticsInvoker extends AbstractInvoker<SystemDia
 
   private String clusterNodeId;
 
-  public GetSystemDiagnosticsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetSystemDiagnosticsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

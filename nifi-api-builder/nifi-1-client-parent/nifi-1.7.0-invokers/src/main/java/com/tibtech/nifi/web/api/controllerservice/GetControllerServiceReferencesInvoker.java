@@ -15,8 +15,8 @@ import org.apache.nifi.web.api.entity.ControllerServiceReferencingComponentsEnti
 public final class GetControllerServiceReferencesInvoker extends AbstractInvoker<ControllerServiceReferencingComponentsEntity> {
   private String id;
 
-  public GetControllerServiceReferencesInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetControllerServiceReferencesInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

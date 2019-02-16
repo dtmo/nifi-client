@@ -19,8 +19,8 @@ public final class GetVersionsInvoker extends AbstractInvoker<VersionedFlowSnaps
 
   private String flowId;
 
-  public GetVersionsInvoker(final Transport transport, final long version) {
-    super(transport, version);
+  public GetVersionsInvoker(final Transport transport) {
+    super(transport);
   }
 
   /**

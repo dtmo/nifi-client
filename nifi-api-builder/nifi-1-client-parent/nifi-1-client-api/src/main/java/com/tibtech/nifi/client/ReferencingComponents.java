@@ -3,7 +3,8 @@ package com.tibtech.nifi.client;
 import java.util.Set;
 
 /**
- * ReferencingComponents represents the set of components referencing a controller service.
+ * ReferencingComponents represents the set of components referencing a
+ * controller service.
  */
 public class ReferencingComponents
 {
@@ -18,7 +19,8 @@ public class ReferencingComponents
      * @param processors         The set of referencing processors.
      * @param reportingTasks     The set of referencing reporting tasks.
      */
-    public ReferencingComponents(final Set<ControllerService> controllerServices, final Set<Processor> processors, final Set<ReportingTask> reportingTasks)
+    public ReferencingComponents(final Set<ControllerService> controllerServices, final Set<Processor> processors,
+            final Set<ReportingTask> reportingTasks)
     {
         this.controllerServices = controllerServices;
         this.processors = processors;
