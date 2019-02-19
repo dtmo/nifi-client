@@ -11,6 +11,7 @@ public class TestState
     private Set<ControllerService> gotControllerServices = new HashSet<>();
     private Set<ReportingTask> createdReportingTasks = new HashSet<>();
     private Set<ReportingTask> gotReportingTasks = new HashSet<>();
+    private Set<Processor> createdProcessors = new HashSet<>();
 
     private Snippet createdSnippet = null;
 
@@ -75,6 +76,16 @@ public class TestState
     public Set<ReportingTask> getGotReportingTasks()
     {
         return gotReportingTasks;
+    }
+
+    public void addCreatedProcessor(final Processor processor)
+    {
+        this.createdProcessors.add(processor);
+    }
+
+    public Set<Processor> getCreatedProcessors()
+    {
+        return this.createdProcessors;
     }
 
     public void setCreatedSnippet(final Snippet snippet)
