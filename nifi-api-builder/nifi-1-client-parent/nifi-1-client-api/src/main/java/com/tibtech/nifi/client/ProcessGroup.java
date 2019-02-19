@@ -1,8 +1,10 @@
 package com.tibtech.nifi.client;
 
 import java.io.InputStream;
+import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import org.apache.nifi.web.api.dto.PositionDTO;
 import org.apache.nifi.web.api.dto.ProcessGroupDTO;
 import org.apache.nifi.web.api.dto.RevisionDTO;
 import org.apache.nifi.web.api.dto.status.ProcessGroupStatusDTO;
+import org.apache.nifi.web.api.dto.status.ProcessGroupStatusSnapshotDTO;
 import org.apache.nifi.web.api.entity.ProcessGroupEntity;
 
 import com.tibtech.nifi.web.api.dto.ControllerServiceDTOBuilder;
@@ -899,7 +902,7 @@ public class ProcessGroup extends AbstractComponent<ProcessGroupEntity>
      */
     public ProcessGroup startComponents() throws InvokerException
     {
-        return startComponents(Collections.<Component>emptySet());
+        return startComponents(Collections.emptySet());
     }
 
     /**
@@ -920,7 +923,7 @@ public class ProcessGroup extends AbstractComponent<ProcessGroupEntity>
      */
     public ProcessGroup stopComponents() throws InvokerException
     {
-        return stopComponents(Collections.<Component>emptySet());
+        return stopComponents(Collections.emptySet());
     }
 
     /**
@@ -965,17 +968,39 @@ public class ProcessGroup extends AbstractComponent<ProcessGroupEntity>
      * recursive set to true, it will return the current status of every component
      * in the flow.
      *
-     * @param recursive Optional recursive flag that defaults to false. If set to
-     *                  true, all descendant groups and the status of their content
-     *                  will be included.
+     * @param recursive If set to true, all descendant groups and the status of
+     *                  their content will be included.
      */
-    public void getStatus(final boolean recursive) throws InvokerException
+    public ProcessGroupStatus getStatus(final boolean recursive) throws InvokerException
     {
         final ProcessGroupStatusDTO processGroupStatusDTO = new GetProcessGroupStatusInvoker(
-                getController().getTransport()).setId(getId()).setRecursive(recursive)
-// TODO: Cluster node support               .setClusterNodeId()
-// TODO: Nodewise support               .setNodewise()
-                        .invoke().getProcessGroupStatus();
-        // TODO: Parse into some sort of usable response.
+                getController().getTransport()).setId(getId()).setRecursive(recursive).invoke().getProcessGroupStatus();
+
+        final Deque<ProcessGroupStatusSnapshotDTO> processGroupStatusSnapshotDtos = new ArrayDeque<ProcessGroupStatusSnapshotDTO>();
+        processGroupStatusSnapshotDtos.push(processGroupStatusDTO.getAggregateSnapshot());
+
+        final ProcessGroupStatus.Builder processGroupStatusBuilder = new ProcessGroupStatus.Builder();
+        while (processGroupStatusSnapshotDtos.isEmpty() == false)
+        {
+            final ProcessGroupStatusSnapshotDTO processGroupStatusSnapshotDto = processGroupStatusSnapshotDtos.pop();
+
+            processGroupStatusSnapshotDto.getConnectionStatusSnapshots().forEach(entity -> processGroupStatusBuilder
+                    .addConnectionStatusSnapshotDto(entity.getConnectionStatusSnapshot()));
+            processGroupStatusSnapshotDto.getProcessorStatusSnapshots().forEach(entity -> processGroupStatusBuilder
+                    .addProcessorStatusSnapshotDto(entity.getProcessorStatusSnapshot()));
+            processGroupStatusSnapshotDto.getProcessGroupStatusSnapshots().forEach(entity -> processGroupStatusBuilder
+                    .addProcessGroupStatusSnapshotDto(entity.getProcessGroupStatusSnapshot()));
+            processGroupStatusSnapshotDto.getRemoteProcessGroupStatusSnapshots().forEach(entity -> {
+                processGroupStatusBuilder
+                        .addRemoteProcessGroupStatusSnapshotDto(entity.getRemoteProcessGroupStatusSnapshot());
+                processGroupStatusSnapshotDtos.push(processGroupStatusSnapshotDto);
+            });
+            processGroupStatusSnapshotDto.getInputPortStatusSnapshots().forEach(
+                    entity -> processGroupStatusBuilder.addInputPortStatusSnapshotDto(entity.getPortStatusSnapshot()));
+            processGroupStatusSnapshotDto.getOutputPortStatusSnapshots().forEach(
+                    entity -> processGroupStatusBuilder.addOutputPortStatusSnapshotDto(entity.getPortStatusSnapshot()));
+        }
+
+        return processGroupStatusBuilder.build();
     }
 }

@@ -13,15 +13,8 @@ import java.util.function.Consumer;
  * Connectable represents a component that can be connected to another
  * component.
  */
-public interface Connectable extends Component
+public interface Connectable extends Parented
 {
-    /**
-     * Returns the ID of process group containing the component.
-     * 
-     * @return The ID of process group containing the component.
-     */
-    String getParentGroupId();
-
     /**
      * Returns the connectable type that represents this component.
      * 

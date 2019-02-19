@@ -72,4 +72,14 @@ public class InputPort extends Port<InputPort>
         new RemoveInputPortInvoker(getController().getTransport()).setId(getId())
                 .setVersion(getRevisionDTO().getVersion()).invoke();
     }
+    
+    @Override
+    public SetScheduledStateRequest<InputPort> createSetScheduledStateRequest(final boolean running)
+    {
+        final String scheduledState = running ? ScheduledStates.RUNNING : ScheduledStates.STOPPED;
+        
+        update(portDtoBuilder -> portDtoBuilder.setState(scheduledState));
+        
+        return new SetScheduledStateRequest<InputPort>(this, running);
+    }
 }

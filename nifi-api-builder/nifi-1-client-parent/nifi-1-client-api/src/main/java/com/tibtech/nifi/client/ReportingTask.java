@@ -22,12 +22,8 @@ import java.util.function.Consumer;
  * instance.
  */
 public class ReportingTask extends AbstractComponent<ReportingTaskEntity>
-        implements Deletable, Refreshable<ReportingTask>, Updatable<ReportingTask, ReportingTaskDTOBuilder>
+        implements Deletable, Updatable<ReportingTask, ReportingTaskDTOBuilder>, Schedulable<ReportingTask>
 {
-    public static final String STATE_RUNNING = "RUNNING";
-    public static final String STATE_STOPPED = "STOPPED";
-    public static final String STATE_DISABLED = "DISABLED";
-
     /**
      * Components should be scheduled to run whenever a relevant Event occurs.
      * Examples of "relevant Events" are:
@@ -301,38 +297,20 @@ public class ReportingTask extends AbstractComponent<ReportingTaskEntity>
         return Updatable.super.update(closure);
     }
 
-    /**
-     * Starts the reporting task.
-     *
-     * @throws InvokerException if the reporting task could not be started.
-     */
-    public ReportingTask start() throws InvokerException
+    @Override
+    public String getScheduledState()
     {
-        return setRunning(true);
+        return getReportingTaskDTO().getState();
     }
 
-    /**
-     * Stops the reporting task.
-     *
-     * @throws InvokerException if the reporting task could not be stopped.
-     */
-    public ReportingTask stop() throws InvokerException
+    @Override
+    public SetScheduledStateRequest<ReportingTask> createSetScheduledStateRequest(final boolean running)
     {
-        return setRunning(false);
-    }
-
-    /**
-     * Sets the state of the reporting task.
-     *
-     * @param running The state to set.
-     * @throws InvokerException if the state of the reporting task could not be
-     *                          changed.
-     */
-    public ReportingTask setRunning(final boolean running) throws InvokerException
-    {
-        final String reportingTaskState = running ? STATE_RUNNING : STATE_STOPPED;
-
-        return update(c -> c.setState(reportingTaskState));
+        final String scheduledState = running ? ScheduledStates.RUNNING : ScheduledStates.STOPPED;
+        
+        update(reportingTaskDtoBuilder -> reportingTaskDtoBuilder.setState(scheduledState));
+        
+        return new SetScheduledStateRequest<ReportingTask>(this, running);
     }
 
     @Override

@@ -32,7 +32,7 @@ import groovy.lang.DelegatesTo;
  * Connection represents a connection between two components in a NiFi flow.
  */
 public class Connection extends AbstractComponent<ConnectionEntity>
-        implements Refreshable<Connection>, Updatable<Connection, ConnectionDTOBuilder>, Deletable
+        implements Parented, Refreshable<Connection>, Updatable<Connection, ConnectionDTOBuilder>, Deletable
 {
     /**
      * Creates a new instance of Connection.
@@ -199,11 +199,7 @@ public class Connection extends AbstractComponent<ConnectionEntity>
         return getConnectionDTO().getName();
     }
 
-    /**
-     * Returns the ID of the process group that contains this connection.
-     *
-     * @return The ID of the process group that contains this connection.
-     */
+    @Override
     public String getParentGroupId()
     {
         return getConnectionDTO().getParentGroupId();
@@ -307,6 +303,13 @@ public class Connection extends AbstractComponent<ConnectionEntity>
         return this;
     }
 
+    /**
+     * Creates a {@link DropRequest} with which to drop the flow files queued on the
+     * connection.
+     * 
+     * @return A {@link DropRequest} with which to drop the flow files queued on the
+     *         connection.
+     */
     public DropRequest createDropRequest()
     {
         final DropRequestEntity dropRequestEntity = new CreateDropRequestInvoker(getController().getTransport())
@@ -314,8 +317,18 @@ public class Connection extends AbstractComponent<ConnectionEntity>
         return new DropRequest(this, dropRequestEntity);
     }
 
-    public DropRequestDTO dropContents(final Duration pollingInterval, final Duration pollingDuration)
+    /**
+     * Drops the flow flow files queued on the connection.
+     * 
+     * @param pollingInterval The time to wait between each refresh of the drop
+     *                        request.
+     * @param pollingDuration The time to wait for the drop request to finish before
+     *                        giving up refreshing its state.
+     * @return The {@link DropRequest} with which the queued flow files were
+     *         dropped.
+     */
+    public DropRequest dropContents(final Duration pollingInterval, final Duration pollingDuration)
     {
-        return createDropRequest().pollUntilFinished(pollingInterval, pollingDuration).getDropRequestDto();
+        return createDropRequest().pollUntilFinished(pollingInterval, pollingDuration);
     }
 }

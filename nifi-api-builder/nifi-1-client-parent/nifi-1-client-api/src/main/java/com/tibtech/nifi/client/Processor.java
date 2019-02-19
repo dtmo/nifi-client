@@ -1,34 +1,32 @@
 package com.tibtech.nifi.client;
 
-import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
-import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
-import com.tibtech.nifi.web.api.processor.DeleteProcessorInvoker;
-import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
-import com.tibtech.nifi.web.api.processor.UpdateProcessorInvoker;
-import groovy.lang.Closure;
-import groovy.lang.DelegatesTo;
-import org.apache.nifi.web.api.dto.ProcessorConfigDTO;
-import org.apache.nifi.web.api.dto.ProcessorDTO;
-import org.apache.nifi.web.api.dto.RelationshipDTO;
-import org.apache.nifi.web.api.entity.ProcessorEntity;
-
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import org.apache.nifi.web.api.dto.ProcessorConfigDTO;
+import org.apache.nifi.web.api.dto.ProcessorDTO;
+import org.apache.nifi.web.api.dto.RelationshipDTO;
+import org.apache.nifi.web.api.entity.ProcessorEntity;
+
+import com.tibtech.nifi.web.api.dto.ProcessorDTOBuilder;
+import com.tibtech.nifi.web.api.entity.ProcessorEntityBuilder;
+import com.tibtech.nifi.web.api.processor.DeleteProcessorInvoker;
+import com.tibtech.nifi.web.api.processor.GetProcessorInvoker;
+import com.tibtech.nifi.web.api.processor.UpdateProcessorInvoker;
+
+import groovy.lang.Closure;
+import groovy.lang.DelegatesTo;
+
 /**
  * Processor represents a NiFi processor which is the main component for
  * performing work in a NiFi flow.
  */
 public class Processor extends AbstractComponent<ProcessorEntity>
-        implements Connectable, Deletable, Refreshable<Processor>, Updatable<Processor, ProcessorDTOBuilder>
+        implements Connectable, Deletable, Updatable<Processor, ProcessorDTOBuilder>, Schedulable<Processor>
 {
-    public static final String STATE_RUNNING = "RUNNING";
-    public static final String STATE_STOPPED = "STOPPED";
-    public static final String STATE_DISABLED = "DISABLED";
-
     /**
      * Constructs a new instance of Processor.
      *
@@ -173,6 +171,11 @@ public class Processor extends AbstractComponent<ProcessorEntity>
         return Collections.unmodifiableList(getProcessorDTO().getRelationships());
     }
 
+    /**
+     * Returns the processor configuration details.
+     * 
+     * @return The processor configuration details.
+     */
     public ProcessorConfigDTO getConfig()
     {
         return getProcessorDTO().getConfig();
@@ -245,36 +248,17 @@ public class Processor extends AbstractComponent<ProcessorEntity>
         return Updatable.super.update(closure);
     }
 
-    /**
-     * Starts the processor.
-     *
-     * @throws InvokerException if the processor could not be started.
-     */
-    public Processor start() throws InvokerException
+    @Override
+    public String getScheduledState()
     {
-        return setRunning(true);
+        return getProcessorDTO().getState();
     }
 
-    /**
-     * Stops the processor.
-     *
-     * @throws InvokerException if the processor could not be stopped.
-     */
-    public Processor stop() throws InvokerException
+    @Override
+    public SetScheduledStateRequest<Processor> createSetScheduledStateRequest(final boolean running)
     {
-        return setRunning(false);
-    }
-
-    /**
-     * Sets the state of the processor.
-     *
-     * @param running The state to set.
-     * @throws InvokerException if the state of the processor could not be changed.
-     */
-    public Processor setRunning(final boolean running) throws InvokerException
-    {
-        final String processorState = running ? STATE_RUNNING : STATE_STOPPED;
-
-        return update(c -> c.setState(processorState));
+        final String scheduledState = running ? ScheduledStates.RUNNING : ScheduledStates.STOPPED;
+        update(processorDtoBuilder -> processorDtoBuilder.setState(scheduledState));
+        return new SetProcessorScheduledStateRequest(this, running);
     }
 }

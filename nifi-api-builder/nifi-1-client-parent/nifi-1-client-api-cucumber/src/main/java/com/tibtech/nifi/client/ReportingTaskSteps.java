@@ -24,7 +24,7 @@ public class ReportingTaskSteps
     public void there_are_reporting_task_controller_services() throws Exception
     {
         final Controller controller = testState.getController();
-        final ControllerService controllerService = controller.createControllerService(DistributedMapCacheServer.COMPONENT_TYPE, controllerServiceDTOBuilder -> {
+        final ControllerService controllerService = controller.createReportingTaskControllerService(DistributedMapCacheServer.COMPONENT_TYPE, controllerServiceDTOBuilder -> {
         });
         testState.addCreatedControllerService(controllerService);
     }
@@ -44,7 +44,7 @@ public class ReportingTaskSteps
     public void there_are_no_reporting_task_controller_services() throws Exception
     {
         final Controller controller = testState.getController();
-        controller.getControllerServices().forEach(controllerService -> controllerService.delete());
+        controller.getReportingTaskControllerServices().forEach(controllerService -> controllerService.delete());
     }
 
     @Given("^a Reporting Task has not been created$")
@@ -70,7 +70,7 @@ public class ReportingTaskSteps
     public void create_a_reporting_task_controller_service() throws Exception
     {
         final Controller controller = testState.getController();
-        final ControllerService controllerService = controller.createControllerService(DistributedMapCacheServer.COMPONENT_TYPE, controllerServiceDTOBuilder -> {
+        final ControllerService controllerService = controller.createReportingTaskControllerService(DistributedMapCacheServer.COMPONENT_TYPE, controllerServiceDTOBuilder -> {
         });
         testState.addCreatedControllerService(controllerService);
     }
@@ -88,7 +88,7 @@ public class ReportingTaskSteps
     public void all_reporting_task_controller_services_are_requested() throws Exception
     {
         final Controller controller = testState.getController();
-        controller.getControllerServices().stream()
+        controller.getReportingTaskControllerServices().stream()
                 .forEach(controllerService -> testState.addGotControllerService(controllerService));
     }
 
@@ -186,13 +186,13 @@ public class ReportingTaskSteps
     public void the_reporting_task_is_started() throws Exception
     {
         assertTrue(testState.getCreatedReportingTasks().stream()
-                .allMatch(reportingTask -> reportingTask.refresh().getState().equals(ReportingTask.STATE_RUNNING)));
+                .allMatch(reportingTask -> reportingTask.refresh().getState().equals(ScheduledStates.RUNNING)));
     }
 
     @Then("^the Reporting Task is stopped")
     public void the_reporting_task_is_stopped() throws Exception
     {
         assertTrue(testState.getCreatedReportingTasks().stream()
-                .allMatch(reportingTask -> reportingTask.refresh().getState().equals(ReportingTask.STATE_STOPPED)));
+                .allMatch(reportingTask -> reportingTask.refresh().getState().equals(ScheduledStates.STOPPED)));
     }
 }

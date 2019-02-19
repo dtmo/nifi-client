@@ -15,12 +15,8 @@ import java.util.Set;
  * @param <T> The type of port.
  */
 public abstract class Port<T extends Port<T>> extends AbstractComponent<PortEntity>
-        implements Connectable, Deletable, Refreshable<T>, Updatable<T, PortDTOBuilder>
+        implements Connectable, Deletable, Updatable<T, PortDTOBuilder>, Schedulable<T>
 {
-    public static final String STATE_RUNNING = "RUNNING";
-    public static final String STATE_STOPPED = "STOPPED";
-    public static final String STATE_DISABLED = "DISABLED";
-
     /**
      * Constructs a new instance of Port.
      *
@@ -59,6 +55,11 @@ public abstract class Port<T extends Port<T>> extends AbstractComponent<PortEnti
         return getPortDTO().getParentGroupId();
     }
 
+    /**
+     * Returns the port type name.
+     * 
+     * @return The port type name.
+     */
     public String getPortType()
     {
         return getComponentEntity().getPortType();
@@ -75,9 +76,9 @@ public abstract class Port<T extends Port<T>> extends AbstractComponent<PortEnti
     }
 
     /**
-     * Returns the uri for linking to this component in this NiFi.
+     * Returns the URI for linking to this component in this NiFi.
      *
-     * @return The uri for linking to this component in this NiFi.
+     * @return The URI for linking to this component in this NiFi.
      */
     public String getUri()
     {
@@ -169,36 +170,9 @@ public abstract class Port<T extends Port<T>> extends AbstractComponent<PortEnti
         return Collections.unmodifiableCollection(getPortDTO().getValidationErrors());
     }
 
-    /**
-     * Starts the port.
-     *
-     * @throws InvokerException if the port could not be started.
-     */
-    public T start() throws InvokerException
+    @Override
+    public String getScheduledState()
     {
-        return setRunning(true);
-    }
-
-    /**
-     * Stops the port.
-     *
-     * @throws InvokerException if the processor could not be stopped.
-     */
-    public T stop() throws InvokerException
-    {
-        return setRunning(false);
-    }
-
-    /**
-     * Sets the state of the port.
-     *
-     * @param running The state to set.
-     * @throws InvokerException if the state of the port could not be changed.
-     */
-    public T setRunning(final boolean running) throws InvokerException
-    {
-        final String portState = running ? STATE_RUNNING : STATE_STOPPED;
-
-        return update(c -> c.setState(portState));
+        return getPortDTO().getState();
     }
 }

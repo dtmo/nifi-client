@@ -73,4 +73,14 @@ public class OutputPort extends Port<OutputPort>
     {
         return super.update(closure);
     }
+    
+    @Override
+    public SetScheduledStateRequest<OutputPort> createSetScheduledStateRequest(final boolean running)
+    {
+        final String scheduledState = running ? ScheduledStates.RUNNING : ScheduledStates.STOPPED;
+        
+        update(portDtoBuilder -> portDtoBuilder.setState(scheduledState));
+        
+        return new SetScheduledStateRequest<OutputPort>(this, running);
+    }
 }

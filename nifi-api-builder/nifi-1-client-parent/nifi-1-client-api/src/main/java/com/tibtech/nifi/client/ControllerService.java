@@ -13,6 +13,7 @@ import org.apache.nifi.web.api.dto.PropertyDescriptorDTO;
 import org.apache.nifi.web.api.entity.ControllerServiceEntity;
 import org.apache.nifi.web.api.entity.ControllerServiceReferencingComponentEntity;
 
+import java.time.Duration;
 import java.util.*;
 import java.util.function.Consumer;
 
@@ -25,29 +26,6 @@ import java.util.function.Consumer;
 public class ControllerService extends AbstractComponent<ControllerServiceEntity>
         implements Refreshable<ControllerService>, Updatable<ControllerService, ControllerServiceDTOBuilder>, Deletable
 {
-    /**
-     * Controller Service is disabled and cannot be used.
-     */
-    public static final String STATE_DISABLED = "DISABLED";
-
-    /**
-     * Controller Service has been disabled but has not yet finished its lifecycle
-     * methods.
-     */
-    public static final String STATE_DISABLING = "DISABLING";
-
-    /**
-     * Controller Service has been enabled but has not yet finished its lifecycle
-     * methods.
-     */
-    public static final String STATE_ENABLING = "ENABLING";
-
-    /**
-     * Controller Service has been enabled and has finished its lifecycle methods.
-     * The Controller Service is ready to be used.
-     */
-    public static final String STATE_ENABLED = "ENABLED";
-
     /**
      * Constructs a new instance of ControllerService.
      *
@@ -270,36 +248,82 @@ public class ControllerService extends AbstractComponent<ControllerServiceEntity
     }
 
     /**
-     * Enables the controller service.
+     * Returns the state of this controller service. Possible values are ENABLED,
+     * ENABLING, DISABLED, DISABLING.
      *
-     * @throws InvokerException if the controller service could not be enabled.
+     * @return The state of this controller service.
      */
-    public ControllerService enable() throws InvokerException
+    public String getEnabledState()
     {
-        return setEnabled(true);
+        return getControllerServiceDTO().getState();
+    }
+
+    /**
+     * Creates a request to set the enabled state of the controller service.
+     * 
+     * @param enabled <code>true</code> if the controller service should be enabled
+     *                and <code>false</code> if disabled.
+     * @return The new {@link SetEnabledStateRequest}.
+     */
+    public SetEnabledStateRequest createSetEnabledStateRequest(final boolean enabled)
+    {
+        final String enabledState = enabled ? EnabledStates.ENABLED : EnabledStates.DISABLED;
+
+        update(controllerServiceDtoBuilder -> controllerServiceDtoBuilder.setState(enabledState));
+        return new SetEnabledStateRequest(this, enabled);
+    }
+
+    /**
+     * Enables the controller service.
+     * 
+     * @param pollingInterval The interval to wait between refreshing the state of
+     *                        the controller service until it is enabled.
+     * @param pollingDuration The time to spend waiting for the controller service
+     *                        to become enabled before giving up refreshing its
+     *                        state.
+     * @return This controller service.
+     */
+    public ControllerService enable(final Duration pollingInterval, final Duration pollingDuration)
+    {
+        createSetEnabledStateRequest(true).pollUntilFinished(pollingInterval, pollingDuration);
+        return this;
+    }
+
+    /**
+     * Enables the controller service. This method will wait for up to 2 minutes for
+     * the controller service to become enabled, checking every 500 ms.
+     * 
+     * @return This controller service.
+     */
+    public ControllerService enable()
+    {
+        return enable(Duration.ofMillis(500), Duration.ofMinutes(2));
     }
 
     /**
      * Disables the controller service.
-     *
-     * @throws InvokerException if the controller service could not be disabled.
+     * 
+     * @param pollingInterval The interval to wait between refreshing the state of
+     *                        the controller service until it is disabled.
+     * @param pollingDuration The time to spend waiting for the controller service
+     *                        to become disabled before giving up refreshing its
+     *                        state.
+     * @return This controller service.
      */
-    public ControllerService disable() throws InvokerException
+    public ControllerService disable(final Duration pollingInterval, final Duration pollingDuration)
     {
-        return setEnabled(false);
+        createSetEnabledStateRequest(false).pollUntilFinished(pollingInterval, pollingDuration);
+        return this;
     }
 
     /**
-     * Sets the enabled state of the controller service.
-     *
-     * @param enabled The enabled state to set.
-     * @throws InvokerException if the enabled state of the controller service could
-     *                          not be changed.
+     * Disables the controller service. This method will wait for up to 2 minutes
+     * for the controller service to become disabled, checking every 500 ms.
+     * 
+     * @return This controller service.
      */
-    public ControllerService setEnabled(final boolean enabled) throws InvokerException
+    public ControllerService disable()
     {
-        final String controllerServiceState = enabled ? STATE_ENABLED : STATE_DISABLED;
-
-        return update(c -> c.setState(controllerServiceState));
+        return disable(Duration.ofMillis(500), Duration.ofMinutes(2));
     }
 }
