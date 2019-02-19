@@ -201,7 +201,7 @@ public class Controller
      * @throws InvokerException if there is a problem getting all controller
      *                          services.
      */
-    public Set<ControllerService> getControllerServices() throws InvokerException
+    public Set<ControllerService> getReportingTaskControllerServices() throws InvokerException
     {
         return new GetControllerServicesFromControllerInvoker(transport).invoke().getControllerServices().stream()
                 .map(controllerServiceEntity -> new ControllerService(this, controllerServiceEntity))
@@ -221,7 +221,7 @@ public class Controller
      *                          service.
      * @see #getControllerServiceTypeDTOs()
      */
-    public ControllerService createControllerService(final String type,
+    public ControllerService createReportingTaskControllerService(final String type,
             final Consumer<ControllerServiceDTOBuilder> configurator) throws InvokerException
     {
         final ControllerServiceDTOBuilder controllerServiceDTOBuilder = new ControllerServiceDTOBuilder().setType(type);
@@ -249,11 +249,11 @@ public class Controller
      *                          service.
      * @see #getControllerServiceTypeDTOs()
      */
-    public ControllerService createControllerService(final String type,
+    public ControllerService createReportingTaskControllerService(final String type,
             @DelegatesTo(strategy = Closure.DELEGATE_ONLY, value = ControllerServiceDTOBuilder.class) final Closure<ControllerServiceDTOBuilder> closure)
             throws InvokerException
     {
-        return createControllerService(type, configurator -> {
+        return createReportingTaskControllerService(type, configurator -> {
             final Closure<ControllerServiceDTOBuilder> code = closure.rehydrate(configurator, this, this);
             code.setResolveStrategy(Closure.DELEGATE_ONLY);
             code.call();

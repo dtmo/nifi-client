@@ -24,7 +24,7 @@ public class BeforeAndAfter
     {
         final Controller controller = testState.getController();
         controller.getReportingTasks().forEach(reportingTask -> reportingTask.stop().delete());
-        controller.getControllerServices().forEach(controllerService -> controllerService.disable().delete());
+        controller.getReportingTaskControllerServices().forEach(controllerService -> controllerService.disable().delete());
         final ProcessGroup rootProcessGroup = controller.getRootProcessGroup();
 
         // First, stop anything that's running.

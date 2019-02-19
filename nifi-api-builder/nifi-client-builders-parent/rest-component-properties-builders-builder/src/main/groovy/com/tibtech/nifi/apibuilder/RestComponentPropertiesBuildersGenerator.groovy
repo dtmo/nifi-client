@@ -43,7 +43,7 @@ println "Controller service types:"
 for (DocumentedTypeDTO controllerServiceType : flow.controllerServiceTypeDTOs) {
 	println "\t" + controllerServiceType.type
 	def propertyDescriptorsProducer = {
-		ControllerService controllerService = flow.createControllerService controllerServiceType.getType(), {}
+		ControllerService controllerService = flow.createReportingTaskControllerService controllerServiceType.getType(), {}
 		Collection<PropertyDescriptorDTO> propertyDescriptors = controllerService.descriptors.values()
 		controllerService.delete()
 		propertyDescriptors
