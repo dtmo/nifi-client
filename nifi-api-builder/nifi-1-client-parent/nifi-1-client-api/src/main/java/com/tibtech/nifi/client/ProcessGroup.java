@@ -984,21 +984,44 @@ public class ProcessGroup extends AbstractComponent<ProcessGroupEntity>
         {
             final ProcessGroupStatusSnapshotDTO processGroupStatusSnapshotDto = processGroupStatusSnapshotDtos.pop();
 
-            processGroupStatusSnapshotDto.getConnectionStatusSnapshots().forEach(entity -> processGroupStatusBuilder
-                    .addConnectionStatusSnapshotDto(entity.getConnectionStatusSnapshot()));
-            processGroupStatusSnapshotDto.getProcessorStatusSnapshots().forEach(entity -> processGroupStatusBuilder
-                    .addProcessorStatusSnapshotDto(entity.getProcessorStatusSnapshot()));
-            processGroupStatusSnapshotDto.getProcessGroupStatusSnapshots().forEach(entity -> processGroupStatusBuilder
-                    .addProcessGroupStatusSnapshotDto(entity.getProcessGroupStatusSnapshot()));
-            processGroupStatusSnapshotDto.getRemoteProcessGroupStatusSnapshots().forEach(entity -> {
-                processGroupStatusBuilder
-                        .addRemoteProcessGroupStatusSnapshotDto(entity.getRemoteProcessGroupStatusSnapshot());
-                processGroupStatusSnapshotDtos.push(processGroupStatusSnapshotDto);
-            });
-            processGroupStatusSnapshotDto.getInputPortStatusSnapshots().forEach(
-                    entity -> processGroupStatusBuilder.addInputPortStatusSnapshotDto(entity.getPortStatusSnapshot()));
-            processGroupStatusSnapshotDto.getOutputPortStatusSnapshots().forEach(
-                    entity -> processGroupStatusBuilder.addOutputPortStatusSnapshotDto(entity.getPortStatusSnapshot()));
+            if (processGroupStatusSnapshotDto.getConnectionStatusSnapshots() != null)
+            {
+                processGroupStatusSnapshotDto.getConnectionStatusSnapshots().forEach(entity -> processGroupStatusBuilder
+                        .addConnectionStatusSnapshotDto(entity.getConnectionStatusSnapshot()));
+            }
+
+            if (processGroupStatusSnapshotDto.getInputPortStatusSnapshots() != null)
+            {
+                processGroupStatusSnapshotDto.getInputPortStatusSnapshots().forEach(entity -> processGroupStatusBuilder
+                        .addInputPortStatusSnapshotDto(entity.getPortStatusSnapshot()));
+            }
+
+            if (processGroupStatusSnapshotDto.getOutputPortStatusSnapshots() != null)
+            {
+                processGroupStatusSnapshotDto.getOutputPortStatusSnapshots().forEach(entity -> processGroupStatusBuilder
+                        .addOutputPortStatusSnapshotDto(entity.getPortStatusSnapshot()));
+            }
+
+            if (processGroupStatusSnapshotDto.getProcessorStatusSnapshots() != null)
+            {
+                processGroupStatusSnapshotDto.getProcessorStatusSnapshots().forEach(entity -> processGroupStatusBuilder
+                        .addProcessorStatusSnapshotDto(entity.getProcessorStatusSnapshot()));
+            }
+
+            if (processGroupStatusSnapshotDto.getRemoteProcessGroupStatusSnapshots() != null)
+            {
+                processGroupStatusSnapshotDto.getRemoteProcessGroupStatusSnapshots()
+                        .forEach(entity -> processGroupStatusBuilder
+                                .addRemoteProcessGroupStatusSnapshotDto(entity.getRemoteProcessGroupStatusSnapshot()));
+            }
+
+            if (processGroupStatusSnapshotDto.getProcessGroupStatusSnapshots() != null)
+            {
+                processGroupStatusSnapshotDto.getProcessGroupStatusSnapshots().forEach(entity -> {
+                    processGroupStatusBuilder.addProcessGroupStatusSnapshotDto(entity.getProcessGroupStatusSnapshot());
+                    processGroupStatusSnapshotDtos.push(entity.getProcessGroupStatusSnapshot());
+                });
+            }
         }
 
         return processGroupStatusBuilder.build();
